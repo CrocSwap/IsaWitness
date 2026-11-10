@@ -1,0 +1,11 @@
+{
+  "package": "ArmCert",
+  "source_roots": [
+    "ArmCert.lean",
+    "RuntimeChecks.lean"
+  ],
+  "timing_model": "separate_build_gate_v1",
+  "tool_roots": [
+    "vendor/lean-buildtools/lean_buildtools/lean"
+  ]
+}

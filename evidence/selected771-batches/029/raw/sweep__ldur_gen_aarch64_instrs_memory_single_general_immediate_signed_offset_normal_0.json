@@ -1,0 +1,204 @@
+{
+  "id": "sweep::ldur_gen_aarch64_instrs_memory_single_general_immediate_signed_offset_normal#0",
+  "root": "decode_ldur_gen_aarch64_instrs_memory_single_general_immediate_signed_offset_normal",
+  "fingerprint": {
+    "isla_sha256": "3a5cc65dffa34f149de8289f0249f4703f7f5f9f508cd2e2fff63f46f2596e45",
+    "observer_binary_sha256": "a6a911ed0debe3d887169fe444e62fe4cc78b69ec872a977fe71f7c3fcfacc81",
+    "comparison_algorithm_sha256": "0447f3f346fb498070791f732c62d53940619d5f28245feb0196e938a1c44c6a",
+    "stock_binary_sha256": "9902937effcf981f04dfd4971c00194afb3dd188fb659ef54d621f7627925eb7",
+    "native_receipt_sha256": "6ef266fbb6b1c8cd198a4f24347721f02cde7df0d14074bc0d6758feed1b177e",
+    "evidence_packet_sha256": "28e03f2cb9dad0cd8ee72a6a6e19db152b52ba73be32147d5e50a6689e210538",
+    "transport_sources_sha256": "b733e0680f2698f2441970a97b8e9e5ff46e585e0141a04d2632f3f28ebb8b73",
+    "native_panic_policy": "LEAN_ABORT_ON_PANIC=1",
+    "profile_policy_sha256": "d8f361b9a111cca234f7e4c1c6ab70a2ef470fda0287d700cce596865cc29a87",
+    "case_sha256": "40fc844e4f9bf62c807b9dff407b4388544260595ecca69e3ce032db14b94d70"
+  },
+  "source": "historical-local-reference:sweep__ldur_gen_aarch64_instrs_memory_single_general_immediate_signed_offset_normal_0.json",
+  "profile_preflight": {
+    "cases": 16,
+    "required_edscr_status": 2,
+    "native_and_isla_inputs_pinned": true
+  },
+  "evidence_packet": {
+    "schema": "armcert-selected771-batch-v1",
+    "cases_sha256": "a574761a6d515cd6a27cf84490b72152e6c43e33efc03c33b3880dab03f813c4",
+    "model_sha256": "9902937effcf981f04dfd4971c00194afb3dd188fb659ef54d621f7627925eb7",
+    "ir_sha256": "931b27de043ff5efca19220a39a5c72254b2932108b16490b22e8fe16e1ca3de",
+    "model_receipt_sha256": "8167b9603c37e063f04b7dbf6232dd4c60826d9102fbe0de03cfbc45b16452f7",
+    "final_receipt_sha256": "44ce117369b7c8fe3424133f4a1e4f9df492f2264cb07a79dc9f4a1e0e350f89",
+    "source_reports": "historical-local-reference:isla",
+    "selected_index_sha256": "f5715cbcbb7436c7b80e26e0495d43f61a2a0907faaa908b8197a998bf79d9f5",
+    "post_freeze_diagnostic": true,
+    "frozen_ledger_changed": false
+  },
+  "evidence_packet_sha256": "28e03f2cb9dad0cd8ee72a6a6e19db152b52ba73be32147d5e50a6689e210538",
+  "status_domain": "ordered-events-only",
+  "canonical_equivalence_credit": false,
+  "status": "match",
+  "runs": [
+    {
+      "oracle": "zero",
+      "outcome": "ok",
+      "evaluator_consistency": {
+        "match": true,
+        "entry_edscr_status": 2,
+        "post_edscr_status": 2,
+        "normal_execution_entry": true,
+        "status_frame": true,
+        "predicted_read_bytes": 4,
+        "evaluator_read_bytes": 4
+      },
+      "path_comparisons": [
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        }
+      ],
+      "negative_controls": {
+        "address": true,
+        "size": true,
+        "kind": true,
+        "direction": true
+      },
+      "strict_equal": true
+    },
+    {
+      "oracle": "ones",
+      "outcome": "ok",
+      "evaluator_consistency": {
+        "match": true,
+        "entry_edscr_status": 2,
+        "post_edscr_status": 2,
+        "normal_execution_entry": true,
+        "status_frame": true,
+        "predicted_read_bytes": 4,
+        "evaluator_read_bytes": 4
+      },
+      "path_comparisons": [
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        }
+      ],
+      "negative_controls": {
+        "address": true,
+        "size": true,
+        "kind": true,
+        "direction": true
+      },
+      "strict_equal": true
+    },
+    {
+      "oracle": "hash:1",
+      "outcome": "ok",
+      "evaluator_consistency": {
+        "match": true,
+        "entry_edscr_status": 2,
+        "post_edscr_status": 2,
+        "normal_execution_entry": true,
+        "status_frame": true,
+        "predicted_read_bytes": 4,
+        "evaluator_read_bytes": 4
+      },
+      "path_comparisons": [
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        }
+      ],
+      "negative_controls": {
+        "address": true,
+        "size": true,
+        "kind": true,
+        "direction": true
+      },
+      "strict_equal": true
+    },
+    {
+      "oracle": "hash:2",
+      "outcome": "ok",
+      "evaluator_consistency": {
+        "match": true,
+        "entry_edscr_status": 2,
+        "post_edscr_status": 2,
+        "normal_execution_entry": true,
+        "status_frame": true,
+        "predicted_read_bytes": 4,
+        "evaluator_read_bytes": 4
+      },
+      "path_comparisons": [
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        }
+      ],
+      "negative_controls": {
+        "address": true,
+        "size": true,
+        "kind": true,
+        "direction": true
+      },
+      "strict_equal": true
+    },
+    {
+      "oracle": "one",
+      "outcome": "ok",
+      "evaluator_consistency": {
+        "match": true,
+        "entry_edscr_status": 2,
+        "post_edscr_status": 2,
+        "normal_execution_entry": true,
+        "status_frame": true,
+        "predicted_read_bytes": 4,
+        "evaluator_read_bytes": 4
+      },
+      "path_comparisons": [
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        }
+      ],
+      "negative_controls": {
+        "address": true,
+        "size": true,
+        "kind": true,
+        "direction": true
+      },
+      "strict_equal": true
+    }
+  ],
+  "stock_evaluator_identical": true,
+  "path_count": 1,
+  "path_errors": [
+    []
+  ],
+  "skipped_errors": [],
+  "isla_register_write_sets": [
+    [
+      "InGuardedPage",
+      "R0",
+      "SEE",
+      "_PC"
+    ]
+  ],
+  "expected_oracles": [
+    "zero",
+    "ones",
+    "one",
+    "hash:1",
+    "hash:2"
+  ],
+  "oracle_complete": true,
+  "seconds": 0.9134051569271833,
+  "publication_projection": {
+    "historical": true,
+    "fresh_replay": false,
+    "source_sha256": "b41e36c25e16f735987397455018bf89fae4b82e0ec6bbcef8fe2d2dea3c85ff",
+    "note": "Local host references removed; original retained privately. Comparison outcomes, partials, premises and proof-credit flags preserved."
+  }
+}

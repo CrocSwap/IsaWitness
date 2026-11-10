@@ -1,0 +1,46 @@
+{
+  "schema": "armcert-provider-precommit-evidence-v1",
+  "scope": "Runtime and model fresh owned-package precommit checks; not final fleet consumer registration, complete cold-root acceptance or publication.",
+  "packages": [
+    {
+      "package": "lean-sail",
+      "status": "pass",
+      "fresh_own_build": true,
+      "modules": 15,
+      "total_seconds": 27.511305798077956,
+      "build_seconds": 9.285314024891704,
+      "source_and_raw_gate_seconds": 18.22599177318625,
+      "source_errors": 0,
+      "axiom_errors": 0,
+      "owned_declarations": 1394,
+      "gate_receipt_sha256": "7751ef13c56c428cbe6cce51c79666f63da816c7c9e5817ead2d6c30a54d7302"
+    },
+    {
+      "package": "ArmFull",
+      "status": "pass",
+      "fresh_own_build": true,
+      "modules": 1481,
+      "total_seconds": 397.78446722310036,
+      "build_seconds": 371.08199541806243,
+      "source_and_raw_gate_seconds": 26.70247180503793,
+      "source_errors": 0,
+      "axiom_errors": 0,
+      "owned_declarations": 46177,
+      "gate_receipt_sha256": "3917406a59111d9754dd28f83fcaf59e703ed76572485075f39babdd9a4a5de1"
+    }
+  ],
+  "combined_wall_seconds": 429.02608817000873,
+  "model_artifact_comparison": {
+    "checked": 1481,
+    "missing": 0,
+    "mismatches": 0,
+    "all_1481_identical": true
+  },
+  "frozen_receipt_sha256": "44ce117369b7c8fe3424133f4a1e4f9df492f2264cb07a79dc9f4a1e0e350f89",
+  "gate_tool_commit": "8f6ad8efb8c1931952257b483563b4f7d247d990",
+  "runtime_recipe": "Uniform standard options, no historical monitor plugin. Runtime historical byte differences documented separately.",
+  "lean": "4.35.0",
+  "scheduler_threads": 40,
+  "shared_memory_limit_gib": 110,
+  "swap_enabled": false
+}

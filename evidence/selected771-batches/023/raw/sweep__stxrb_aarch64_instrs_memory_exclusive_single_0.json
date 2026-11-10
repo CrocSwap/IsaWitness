@@ -1,0 +1,296 @@
+{
+  "id": "sweep::stxrb_aarch64_instrs_memory_exclusive_single#0",
+  "root": "decode_stxrb_aarch64_instrs_memory_exclusive_single",
+  "fingerprint": {
+    "isla_sha256": "1b64917c76ba15f96f13cb428e9d2518377d71c2601abbb29146638f09a1c8e0",
+    "observer_binary_sha256": "a6a911ed0debe3d887169fe444e62fe4cc78b69ec872a977fe71f7c3fcfacc81",
+    "comparison_algorithm_sha256": "0447f3f346fb498070791f732c62d53940619d5f28245feb0196e938a1c44c6a",
+    "stock_binary_sha256": "9902937effcf981f04dfd4971c00194afb3dd188fb659ef54d621f7627925eb7",
+    "native_receipt_sha256": "6ef266fbb6b1c8cd198a4f24347721f02cde7df0d14074bc0d6758feed1b177e",
+    "evidence_packet_sha256": "12281ed293e38bd7a619fe4e77597cfeee15d8ccee991c7682632886c8c63aee",
+    "transport_sources_sha256": "b733e0680f2698f2441970a97b8e9e5ff46e585e0141a04d2632f3f28ebb8b73",
+    "native_panic_policy": "LEAN_ABORT_ON_PANIC=1",
+    "profile_policy_sha256": "d8f361b9a111cca234f7e4c1c6ab70a2ef470fda0287d700cce596865cc29a87",
+    "case_sha256": "bfa6e533d82d9ff47405a441084ef04a0a2448deb370585b1f02e73b8b8ad64f"
+  },
+  "source": "historical-local-reference:sweep__stxrb_aarch64_instrs_memory_exclusive_single_0.json",
+  "profile_preflight": {
+    "cases": 16,
+    "required_edscr_status": 2,
+    "native_and_isla_inputs_pinned": true
+  },
+  "evidence_packet": {
+    "schema": "armcert-selected771-batch-v1",
+    "cases_sha256": "5278115f078f24335c5f75e6213a73d33e63ed287caf2afac9ee613f1eac984b",
+    "model_sha256": "9902937effcf981f04dfd4971c00194afb3dd188fb659ef54d621f7627925eb7",
+    "ir_sha256": "931b27de043ff5efca19220a39a5c72254b2932108b16490b22e8fe16e1ca3de",
+    "model_receipt_sha256": "8167b9603c37e063f04b7dbf6232dd4c60826d9102fbe0de03cfbc45b16452f7",
+    "final_receipt_sha256": "44ce117369b7c8fe3424133f4a1e4f9df492f2264cb07a79dc9f4a1e0e350f89",
+    "source_reports": "historical-local-reference:isla",
+    "selected_index_sha256": "f5715cbcbb7436c7b80e26e0495d43f61a2a0907faaa908b8197a998bf79d9f5",
+    "post_freeze_diagnostic": true,
+    "frozen_ledger_changed": false
+  },
+  "evidence_packet_sha256": "12281ed293e38bd7a619fe4e77597cfeee15d8ccee991c7682632886c8c63aee",
+  "status_domain": "ordered-events-only",
+  "canonical_equivalence_credit": false,
+  "status": "partial",
+  "runs": [
+    {
+      "oracle": "zero",
+      "outcome": "ok",
+      "evaluator_consistency": {
+        "match": true,
+        "entry_edscr_status": 2,
+        "post_edscr_status": 2,
+        "normal_execution_entry": true,
+        "status_frame": true,
+        "predicted_read_bytes": 0,
+        "evaluator_read_bytes": 0
+      },
+      "path_comparisons": [
+        {
+          "diffs": [
+            [
+              "event-count",
+              0,
+              1
+            ]
+          ],
+          "unknown": [],
+          "match": false
+        },
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        },
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        }
+      ],
+      "negative_controls": {},
+      "strict_equal": false
+    },
+    {
+      "oracle": "ones",
+      "outcome": "ok",
+      "evaluator_consistency": {
+        "match": true,
+        "entry_edscr_status": 2,
+        "post_edscr_status": 2,
+        "normal_execution_entry": true,
+        "status_frame": true,
+        "predicted_read_bytes": 0,
+        "evaluator_read_bytes": 0
+      },
+      "path_comparisons": [
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        },
+        {
+          "diffs": [
+            [
+              "event-count",
+              1,
+              0
+            ]
+          ],
+          "unknown": [],
+          "match": false
+        },
+        {
+          "diffs": [
+            [
+              "event-count",
+              1,
+              0
+            ]
+          ],
+          "unknown": [],
+          "match": false
+        }
+      ],
+      "negative_controls": {
+        "address": true,
+        "size": true,
+        "kind": true,
+        "direction": true
+      },
+      "strict_equal": false
+    },
+    {
+      "oracle": "hash:1",
+      "outcome": "ok",
+      "evaluator_consistency": {
+        "match": true,
+        "entry_edscr_status": 2,
+        "post_edscr_status": 2,
+        "normal_execution_entry": true,
+        "status_frame": true,
+        "predicted_read_bytes": 0,
+        "evaluator_read_bytes": 0
+      },
+      "path_comparisons": [
+        {
+          "diffs": [
+            [
+              "event-count",
+              0,
+              1
+            ]
+          ],
+          "unknown": [],
+          "match": false
+        },
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        },
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        }
+      ],
+      "negative_controls": {},
+      "strict_equal": false
+    },
+    {
+      "oracle": "hash:2",
+      "outcome": "ok",
+      "evaluator_consistency": {
+        "match": true,
+        "entry_edscr_status": 2,
+        "post_edscr_status": 2,
+        "normal_execution_entry": true,
+        "status_frame": true,
+        "predicted_read_bytes": 0,
+        "evaluator_read_bytes": 0
+      },
+      "path_comparisons": [
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        },
+        {
+          "diffs": [
+            [
+              "event-count",
+              1,
+              0
+            ]
+          ],
+          "unknown": [],
+          "match": false
+        },
+        {
+          "diffs": [
+            [
+              "event-count",
+              1,
+              0
+            ]
+          ],
+          "unknown": [],
+          "match": false
+        }
+      ],
+      "negative_controls": {
+        "address": true,
+        "size": true,
+        "kind": true,
+        "direction": true
+      },
+      "strict_equal": false
+    },
+    {
+      "oracle": "one",
+      "outcome": "ok",
+      "evaluator_consistency": {
+        "match": true,
+        "entry_edscr_status": 2,
+        "post_edscr_status": 2,
+        "normal_execution_entry": true,
+        "status_frame": true,
+        "predicted_read_bytes": 0,
+        "evaluator_read_bytes": 0
+      },
+      "path_comparisons": [
+        {
+          "diffs": [
+            [
+              "event-count",
+              0,
+              1
+            ]
+          ],
+          "unknown": [],
+          "match": false
+        },
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        },
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        }
+      ],
+      "negative_controls": {},
+      "strict_equal": false
+    }
+  ],
+  "stock_evaluator_identical": true,
+  "path_count": 3,
+  "path_errors": [
+    [],
+    [],
+    []
+  ],
+  "skipped_errors": [],
+  "isla_register_write_sets": [
+    [
+      "InGuardedPage",
+      "R5",
+      "SEE",
+      "_PC"
+    ],
+    [
+      "InGuardedPage",
+      "R5",
+      "SEE",
+      "_PC"
+    ],
+    [
+      "InGuardedPage",
+      "R5",
+      "SEE",
+      "_PC"
+    ]
+  ],
+  "expected_oracles": [
+    "zero",
+    "ones",
+    "one",
+    "hash:1",
+    "hash:2"
+  ],
+  "oracle_complete": true,
+  "reason": "Missing, nonunique, differing, infeasible/unknown, or dropped path evidence; inspect runs.",
+  "seconds": 0.6165679038967937,
+  "publication_projection": {
+    "historical": true,
+    "fresh_replay": false,
+    "source_sha256": "4f415ccb75334d5afddeca1ec3e5c3dac8a150913074ababc2b0732c23645167",
+    "note": "Local host references removed; original retained privately. Comparison outcomes, partials, premises and proof-credit flags preserved."
+  }
+}

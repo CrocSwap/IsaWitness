@@ -1,0 +1,8 @@
+{
+  "package": "ArmFull",
+  "source_roots": [
+    "ArmFull.lean",
+    "ArmFull"
+  ],
+  "timing_model": "separate_build_gate_v1"
+}

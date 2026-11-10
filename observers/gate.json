@@ -1,0 +1,8 @@
+{
+  "package": "ArmCertObservers",
+  "source_roots": [
+    "ObsGen.lean",
+    "ObsGen"
+  ],
+  "timing_model": "separate_build_gate_v1"
+}

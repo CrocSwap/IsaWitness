@@ -1,0 +1,221 @@
+{
+  "id": "sweep::stxp_aarch64_instrs_memory_exclusive_pair#0",
+  "root": "decode_stxp_aarch64_instrs_memory_exclusive_pair",
+  "status": "partial",
+  "status_domain": "full-architectural-observations",
+  "contract_signed": false,
+  "ct_credit": false,
+  "interim": true,
+  "canonical_equivalence_credit": false,
+  "evidence_packet": {
+    "schema": "armcert-selected771-batch-v1",
+    "cases_sha256": "5278115f078f24335c5f75e6213a73d33e63ed287caf2afac9ee613f1eac984b",
+    "model_sha256": "9902937effcf981f04dfd4971c00194afb3dd188fb659ef54d621f7627925eb7",
+    "ir_sha256": "931b27de043ff5efca19220a39a5c72254b2932108b16490b22e8fe16e1ca3de",
+    "model_receipt_sha256": "8167b9603c37e063f04b7dbf6232dd4c60826d9102fbe0de03cfbc45b16452f7",
+    "final_receipt_sha256": "44ce117369b7c8fe3424133f4a1e4f9df492f2264cb07a79dc9f4a1e0e350f89",
+    "source_reports": "historical-local-reference:isla",
+    "selected_index_sha256": "f5715cbcbb7436c7b80e26e0495d43f61a2a0907faaa908b8197a998bf79d9f5",
+    "post_freeze_diagnostic": true,
+    "frozen_ledger_changed": false
+  },
+  "fingerprint": {
+    "raw_case_sha256": "4035696f108c41ddb35b67c7d357e196721ee35192702204f7ff637acb1b88a2",
+    "native_case_sha256": "06e07f7302c83a9a00a58d39dd1e02290e4fd63f3e81ef9ba3de4574b372da0a",
+    "algorithm_sha256": "4b3090be941f2356990cbff723b4e3955a3d6c06e94e85d22ece7c4deb72b695",
+    "raw_helpers_sha256": "0447f3f346fb498070791f732c62d53940619d5f28245feb0196e938a1c44c6a",
+    "contract_sha256": "74b0e9b57e3611f31e9d02a7df6e492345985280a1dab9f5158add267ecb9e1a"
+  },
+  "oracle_complete": true,
+  "native_consistent": true,
+  "runs": [
+    {
+      "oracle": "zero",
+      "path_comparisons": [
+        {
+          "match": false,
+          "diffs": [
+            [
+              "event-count",
+              0,
+              1
+            ]
+          ],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        },
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        },
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        }
+      ],
+      "strict_equal": false,
+      "negative_controls": {}
+    },
+    {
+      "oracle": "ones",
+      "path_comparisons": [
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        },
+        {
+          "match": false,
+          "diffs": [
+            [
+              "event-count",
+              1,
+              0
+            ]
+          ],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        },
+        {
+          "match": false,
+          "diffs": [
+            [
+              "event-count",
+              1,
+              0
+            ]
+          ],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        }
+      ],
+      "strict_equal": false,
+      "negative_controls": {}
+    },
+    {
+      "oracle": "hash:1",
+      "path_comparisons": [
+        {
+          "match": false,
+          "diffs": [
+            [
+              "event-count",
+              0,
+              1
+            ]
+          ],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        },
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        },
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        }
+      ],
+      "strict_equal": false,
+      "negative_controls": {}
+    },
+    {
+      "oracle": "hash:2",
+      "path_comparisons": [
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        },
+        {
+          "match": false,
+          "diffs": [
+            [
+              "event-count",
+              1,
+              0
+            ]
+          ],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        },
+        {
+          "match": false,
+          "diffs": [
+            [
+              "event-count",
+              1,
+              0
+            ]
+          ],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        }
+      ],
+      "strict_equal": false,
+      "negative_controls": {}
+    },
+    {
+      "oracle": "one",
+      "path_comparisons": [
+        {
+          "match": false,
+          "diffs": [
+            [
+              "event-count",
+              0,
+              1
+            ]
+          ],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        },
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        },
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        }
+      ],
+      "strict_equal": false,
+      "negative_controls": {}
+    }
+  ],
+  "publication_projection": {
+    "historical": true,
+    "fresh_replay": false,
+    "source_sha256": "86b51153d5f6254aaf2f2be581aaf63f8efa67953ff058d6e7f9f358f00c5e8e",
+    "note": "Local host references removed; original retained privately. Comparison outcomes, partials, premises and proof-credit flags preserved."
+  }
+}

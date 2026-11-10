@@ -1,0 +1,129 @@
+{
+  "id": "sweep::dgh_aarch64_instrs_system_hints#0",
+  "root": "decode_dgh_aarch64_instrs_system_hints",
+  "status": "match",
+  "status_domain": "full-architectural-observations",
+  "contract_signed": false,
+  "ct_credit": false,
+  "interim": true,
+  "canonical_equivalence_credit": false,
+  "evidence_packet": {
+    "schema": "armcert-selected771-batch-v1",
+    "cases_sha256": "623d66b09ef8dc9850e47d74dbcf1cf5cb95e20c38ff8dfde8e1acbda190605d",
+    "model_sha256": "9902937effcf981f04dfd4971c00194afb3dd188fb659ef54d621f7627925eb7",
+    "ir_sha256": "931b27de043ff5efca19220a39a5c72254b2932108b16490b22e8fe16e1ca3de",
+    "model_receipt_sha256": "8167b9603c37e063f04b7dbf6232dd4c60826d9102fbe0de03cfbc45b16452f7",
+    "final_receipt_sha256": "44ce117369b7c8fe3424133f4a1e4f9df492f2264cb07a79dc9f4a1e0e350f89",
+    "source_reports": "historical-local-reference:isla",
+    "selected_index_sha256": "f5715cbcbb7436c7b80e26e0495d43f61a2a0907faaa908b8197a998bf79d9f5",
+    "post_freeze_diagnostic": true,
+    "frozen_ledger_changed": false
+  },
+  "fingerprint": {
+    "raw_case_sha256": "9fcaf96848c0c95f5cc5ad5a799b845aacd77a85e91648f45e34a2b48e3c85d6",
+    "native_case_sha256": "e288c20c06b99c3c18ba3ea1a9f9b73132c264a0d785b0f767a6aa679c6d545b",
+    "algorithm_sha256": "4b3090be941f2356990cbff723b4e3955a3d6c06e94e85d22ece7c4deb72b695",
+    "raw_helpers_sha256": "0447f3f346fb498070791f732c62d53940619d5f28245feb0196e938a1c44c6a",
+    "contract_sha256": "74b0e9b57e3611f31e9d02a7df6e492345985280a1dab9f5158add267ecb9e1a"
+  },
+  "oracle_complete": true,
+  "native_consistent": true,
+  "runs": [
+    {
+      "oracle": "zero",
+      "path_comparisons": [
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        }
+      ],
+      "strict_equal": true,
+      "negative_controls": {
+        "model_pc": true,
+        "dit_after": true,
+        "btype": true
+      }
+    },
+    {
+      "oracle": "ones",
+      "path_comparisons": [
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        }
+      ],
+      "strict_equal": true,
+      "negative_controls": {
+        "model_pc": true,
+        "dit_after": true,
+        "btype": true
+      }
+    },
+    {
+      "oracle": "hash:1",
+      "path_comparisons": [
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        }
+      ],
+      "strict_equal": true,
+      "negative_controls": {
+        "model_pc": true,
+        "dit_after": true,
+        "btype": true
+      }
+    },
+    {
+      "oracle": "hash:2",
+      "path_comparisons": [
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        }
+      ],
+      "strict_equal": true,
+      "negative_controls": {
+        "model_pc": true,
+        "dit_after": true,
+        "btype": true
+      }
+    },
+    {
+      "oracle": "one",
+      "path_comparisons": [
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        }
+      ],
+      "strict_equal": true,
+      "negative_controls": {
+        "model_pc": true,
+        "dit_after": true,
+        "btype": true
+      }
+    }
+  ],
+  "publication_projection": {
+    "historical": true,
+    "fresh_replay": false,
+    "source_sha256": "53d285e4234a8e4c0ab179c9a32dd2e3e9e5c296c26b922b90b35ab94ff5cc7f",
+    "note": "Local host references removed; original retained privately. Comparison outcomes, partials, premises and proof-credit flags preserved."
+  }
+}

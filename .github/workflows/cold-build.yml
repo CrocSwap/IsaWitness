@@ -1,0 +1,23 @@
+name: Complete cold build
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: provider-cold-build
+  cancel-in-progress: false
+jobs:
+  cold:
+    if: github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, linux, ARM64, isawitness-release]
+    environment: release-build
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4; official tag resolved 2026-11-10
+        with:
+          persist-credentials: false
+          clean: true
+      - name: Check frozen sources
+        run: python3 tools/check-model-reproduction.py
+      - name: Complete fresh build and raw gates
+        run: bash tools/run-cold-build.sh

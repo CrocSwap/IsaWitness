@@ -1,0 +1,129 @@
+{
+  "id": "sweep::frintz_advsimd_aarch64_instrs_vector_arithmetic_unary_fp16_round#0",
+  "root": "decode_frintz_advsimd_aarch64_instrs_vector_arithmetic_unary_fp16_round",
+  "status": "match",
+  "status_domain": "full-architectural-observations",
+  "contract_signed": false,
+  "ct_credit": false,
+  "interim": true,
+  "canonical_equivalence_credit": false,
+  "evidence_packet": {
+    "schema": "armcert-selected771-batch-v1",
+    "cases_sha256": "220932bbbe42c3e1b4871e2b7d61d41aed6f6979c0b9e9fba8c76150fdd86ceb",
+    "model_sha256": "9902937effcf981f04dfd4971c00194afb3dd188fb659ef54d621f7627925eb7",
+    "ir_sha256": "931b27de043ff5efca19220a39a5c72254b2932108b16490b22e8fe16e1ca3de",
+    "model_receipt_sha256": "8167b9603c37e063f04b7dbf6232dd4c60826d9102fbe0de03cfbc45b16452f7",
+    "final_receipt_sha256": "44ce117369b7c8fe3424133f4a1e4f9df492f2264cb07a79dc9f4a1e0e350f89",
+    "source_reports": "historical-local-reference:isla",
+    "selected_index_sha256": "f5715cbcbb7436c7b80e26e0495d43f61a2a0907faaa908b8197a998bf79d9f5",
+    "post_freeze_diagnostic": true,
+    "frozen_ledger_changed": false
+  },
+  "fingerprint": {
+    "raw_case_sha256": "9c6c0f5a982c4eb9075e23222a3f65f24f23015b3c6699927683b7fc75762884",
+    "native_case_sha256": "54dacfcb2e4c7731c1ab886fe56c07748c4b94ac6021d9dc393620f343e30b80",
+    "algorithm_sha256": "4b3090be941f2356990cbff723b4e3955a3d6c06e94e85d22ece7c4deb72b695",
+    "raw_helpers_sha256": "0447f3f346fb498070791f732c62d53940619d5f28245feb0196e938a1c44c6a",
+    "contract_sha256": "74b0e9b57e3611f31e9d02a7df6e492345985280a1dab9f5158add267ecb9e1a"
+  },
+  "oracle_complete": true,
+  "native_consistent": true,
+  "runs": [
+    {
+      "oracle": "zero",
+      "path_comparisons": [
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        }
+      ],
+      "strict_equal": true,
+      "negative_controls": {
+        "model_pc": true,
+        "dit_after": true,
+        "btype": true
+      }
+    },
+    {
+      "oracle": "ones",
+      "path_comparisons": [
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        }
+      ],
+      "strict_equal": true,
+      "negative_controls": {
+        "model_pc": true,
+        "dit_after": true,
+        "btype": true
+      }
+    },
+    {
+      "oracle": "hash:1",
+      "path_comparisons": [
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        }
+      ],
+      "strict_equal": true,
+      "negative_controls": {
+        "model_pc": true,
+        "dit_after": true,
+        "btype": true
+      }
+    },
+    {
+      "oracle": "hash:2",
+      "path_comparisons": [
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        }
+      ],
+      "strict_equal": true,
+      "negative_controls": {
+        "model_pc": true,
+        "dit_after": true,
+        "btype": true
+      }
+    },
+    {
+      "oracle": "one",
+      "path_comparisons": [
+        {
+          "match": true,
+          "diffs": [],
+          "unknown": [],
+          "path_errors": [],
+          "feasible": true
+        }
+      ],
+      "strict_equal": true,
+      "negative_controls": {
+        "model_pc": true,
+        "dit_after": true,
+        "btype": true
+      }
+    }
+  ],
+  "publication_projection": {
+    "historical": true,
+    "fresh_replay": false,
+    "source_sha256": "0871d6ed86e1e3e0c159bad193e78aacdc93deb0115e8c3a2d5a15eb259a1a61",
+    "note": "Local host references removed; original retained privately. Comparison outcomes, partials, premises and proof-credit flags preserved."
+  }
+}

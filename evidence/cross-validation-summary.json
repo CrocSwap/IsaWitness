@@ -1,0 +1,45 @@
+{
+  "schema": "armcert-public-cross-validation-summary-v1",
+  "historical_evidence": true,
+  "fresh_publication_replay": false,
+  "scope_forms": 771,
+  "tier2_counts": {
+    "single_category": 300,
+    "both_categories": 30,
+    "partial_with_reason": 441,
+    "gaps": 0
+  },
+  "selected_fixture_counts": {
+    "ordered": {
+      "match": 737,
+      "mismatch": 2,
+      "partial": 32
+    },
+    "architectural": {
+      "match": 706,
+      "partial": 65
+    }
+  },
+  "negative_controls": {
+    "architectural:model_pc": 3530,
+    "architectural:dit_after": 3530,
+    "architectural:btype": 3530,
+    "raw:address": 961,
+    "raw:size": 961,
+    "raw:kind": 961,
+    "raw:direction": 961
+  },
+  "bindings_checked": 3278,
+  "source_fixture_hash_pairs_checked": 771,
+  "source_audit_sha256": "52f0e7d3bde787b4b407b6e3c44955b9de9ac53740c8621a8a2155cb806cb0cb",
+  "frozen_ledger_sha256": "2b50456ff1f65abd1b8410102f23b71c118eef30faf19b2ff25b891ef075c30a",
+  "model_source_context_receipt_sha256": "8167b9603c37e063f04b7dbf6232dd4c60826d9102fbe0de03cfbc45b16452f7",
+  "final_model_rebase_receipt_sha256": "44ce117369b7c8fe3424133f4a1e4f9df492f2264cb07a79dc9f4a1e0e350f89",
+  "qualifications": [
+    "Finite selected fixtures and sampled oracles, not all-input or all-choice equivalence",
+    "Original source contexts retain their original candidate receipt; final-model rebase endorsement is separate",
+    "CSDB/SSBB ordinary traces remain mismatches; observer-only barrier diagnostics do not repair ordinary traces",
+    "No native instruction equivalence, constant-time, exact write-set or consumer-total-correctness theorem is credited",
+    "This aggregate summary is a projection of retained historical receipts; detailed portable evidence packaging remains in preparation"
+  ]
+}

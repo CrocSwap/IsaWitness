@@ -1,0 +1,11 @@
+# Frozen inventory and comparison evidence
+
+[instruction-inventory.json](instruction-inventory.json) lists 771 selected instruction forms, their decode roots, encoding masks, DIT membership metadata, observation theorem names and qualified tier-2 status. It is a projection of the frozen inventory and ledger. DIT membership does not prove secret independence. Observation equations do not establish instruction equivalence or exact write sets.
+
+[cross-validation-summary.json](cross-validation-summary.json) records the historical scope and counts. The owner ledger retains 300 forms with one evidence category, 30 with both, and 441 partial with reasons. The later selected-case comparison has 737 ordered matches, two mismatches and 32 partials; architectural comparison has 706 matches and 65 partials. These are different evidence classifications and must not be added together or treated as all-input coverage.
+
+[selected-cases.json](selected-cases.json) indexes the retained finite selected fixtures. Its report links resolve relative to this directory. The 1,525 comparison report projections retain their outcomes, premises, incompleteness and proof-credit flags. Internal host references are replaced with historical-reference labels. [selected-cases-manifest.json](selected-cases-manifest.json) binds each original report SHA256 and its public projection SHA256. Original unmodified reports, source fixtures and path mapping are retained in private provenance. These public projections are comparison receipts, not a standalone empirical rerun bundle.
+
+Before projection, source intake checked all 49 batch receipt hashes and all 3,278 artifact bindings. This is copy-identity validation; no new native execution, Isla run, hardware measurement or proof acceptance is implied. Original candidate source contexts remain distinct from their later final-model rebase endorsement. The ordinary CSDB/SSBB mismatches remain visible; a separate observer-only barrier diagnostic does not repair them.
+
+[runtime-monitor-diagnostic.json](runtime-monitor-diagnostic.json) records the controlled reconstruction of historical runtime byte differences described in [runtime reproduction](../docs/RUNTIME-REPRODUCTION.md). No monitor plugin is adopted in the public runtime recipe.

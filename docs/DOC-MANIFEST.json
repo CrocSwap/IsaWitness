@@ -1,0 +1,12 @@
+{
+  "status": "LOCAL_DOCUMENTATION_DRAFT_NOT_PUBLIC_RELEASE",
+  "scope": "FROZEN_MODEL_RUNTIME_INVENTORY_OBSERVER",
+  "registry_sha256": "00cb631b049e8d1b3f211d72e4bae17a391ebaf4c24a49abe3021aa849de8451",
+  "generator_sha256": "fbde3c2f10b4d4dc37c6e210563308b5173b6d76e2135badb6367eca129f103a",
+  "files": {
+    "CLAIMS.md": "bfcbd171ea94eb23187f41a3634c31baefa66590300c094808808503ab9380c4",
+    "TRUST-BASE.md": "d8e3ef4bd1df21774f3f0cd831ae9290a36bfbee4d0d555a70a807cdc5b288d2",
+    "LIMITATIONS.md": "fae43ed447f754f5fc9fad959238a02ae7dd88d81cbc624b6362d650af208b14"
+  },
+  "private_provenance_exported": false
+}

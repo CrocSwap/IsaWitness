@@ -1,0 +1,79 @@
+{
+  "schema": "isawitness-source-fetch-cold-v1",
+  "status": "PASS_FOR_RECORDED_SOURCE_AND_CONFIGURATION_INPUTS",
+  "fresh_clone": true,
+  "preseeded_compiled_artifacts": 0,
+  "fetch_seconds": 0.6747599770314991,
+  "fetch_plus_cold_seconds": 465.1277542230673,
+  "within_600_seconds": true,
+  "canonical_model_artifacts": 1481,
+  "packages": [
+    {
+      "package": "lean-sail",
+      "modules": 15,
+      "owned_declarations": 1394,
+      "fresh_own_build": true,
+      "status": "pass",
+      "source_errors": 0,
+      "axiom_errors": 0,
+      "total_seconds": 27.306178922997788,
+      "build_seconds": 9.280462424037978,
+      "checks_seconds": 18.02571649895981,
+      "gate_receipt_sha256": "6312b23c8543f7728c44b0c89232403af92b7764d5f7a078d83363a3848f0194"
+    },
+    {
+      "package": "ArmFull",
+      "modules": 1481,
+      "owned_declarations": 46177,
+      "fresh_own_build": true,
+      "status": "pass",
+      "source_errors": 0,
+      "axiom_errors": 0,
+      "total_seconds": 340.3256857681554,
+      "build_seconds": 313.15829282510094,
+      "checks_seconds": 27.167392943054438,
+      "gate_receipt_sha256": "11c424aff670ed85c1ac5bcf15917692c481ffbf067e3bb21b41d13f2f8314db"
+    },
+    {
+      "package": "ArmCertObservers",
+      "modules": 6,
+      "owned_declarations": 4158,
+      "fresh_own_build": true,
+      "status": "pass",
+      "source_errors": 0,
+      "axiom_errors": 0,
+      "total_seconds": 36.73580752406269,
+      "build_seconds": 14.205364260822535,
+      "checks_seconds": 22.53044326324016,
+      "gate_receipt_sha256": "fdc4a5928e7b006f06bf76c61c735fda85d99ba25d74c416e0ffa8e7f016acf3"
+    },
+    {
+      "package": "ArmCert",
+      "modules": 2,
+      "owned_declarations": 0,
+      "fresh_own_build": true,
+      "status": "pass",
+      "source_errors": 0,
+      "axiom_errors": 0,
+      "total_seconds": 51.96190091990866,
+      "build_seconds": 2.5434989749919623,
+      "checks_seconds": 49.418401944916695,
+      "gate_receipt_sha256": "37754a396f609a645fe2131be6a1a13bb0427d341ec166be4c3aa8bb73ac7adf"
+    }
+  ],
+  "runtime_manifest_sha256": "33b41023df718ecf5c2f043a07241065d338932e41338260084017e95edcb38c",
+  "fetch_script_sha256": "590428fc68fb356fb5604e182f8f9da5bd14fcc205d891f7ffc4eae8a8c88b17",
+  "source_configuration_payload_pins": 23,
+  "all23_pins_match_measured_build": true,
+  "final_fetch_tests": 22,
+  "final_fetch_tests_pass": true,
+  "entrypoint_fetch_failure_stops_before_lake": true,
+  "qualification": "Final fetch safety guards and entrypoint wiring postdate the full measurement. All resulting Lean source/package configuration inputs are byte-identical; final helper wiring has separate tests. No exact-final-entrypoint cold timing claim.",
+  "layouts": {
+    "public_source_only": "Verified fetch then native Lake; enclosing public Git input is not admitted by the unchanged fleet guard for model/observer/root path dependencies.",
+    "private_materialized_source": "Separate source-only private Git input passes all four canonical fleet input checks; no compiled artifacts added."
+  },
+  "cache_policy": "All model/runtime/native caches remain private pending runtime permission; model artifacts embed runtime implementations.",
+  "publication_approved": false,
+  "upstream_license_cleared": false
+}

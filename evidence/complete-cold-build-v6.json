@@ -1,0 +1,64 @@
+{
+  "schema": "isawitness-complete-cold-build-v1",
+  "scope": "Exact final branding/licensing/tool-policy source snapshot, complete four fresh owned builds/gates and all canonical model hashes; no seeded or restored artifacts.",
+  "source_archive_sha256": "88d9684198b075ae00b213b9ca50f6723895d72cc57ae1a0d08a429513afd939",
+  "whole_job_seconds": 450.77882385393605,
+  "within_600_seconds": true,
+  "packages": [
+    {
+      "package": "lean-sail",
+      "modules": 15,
+      "owned_declarations": 1394,
+      "status": "pass",
+      "fresh_own_build": true,
+      "source_errors": 0,
+      "axiom_errors": 0,
+      "total_seconds": 27.271768764825538,
+      "build_seconds": 9.240363504970446,
+      "checks_seconds": 18.03140525985509,
+      "gate_receipt_sha256": "8836b6dac146638b02803968ee12502ca29068fdb275033206ffa33232fb73d9"
+    },
+    {
+      "package": "ArmFull",
+      "modules": 1481,
+      "owned_declarations": 46177,
+      "status": "pass",
+      "fresh_own_build": true,
+      "source_errors": 0,
+      "axiom_errors": 0,
+      "total_seconds": 327.3687978319358,
+      "build_seconds": 300.8514311709441,
+      "checks_seconds": 26.517366660991684,
+      "gate_receipt_sha256": "218cbc155a99e3aba2d20bcf16f3bd3c2d25f1494d6de6827fb707ddc6d3b9a8"
+    },
+    {
+      "package": "ArmCertObservers",
+      "modules": 6,
+      "owned_declarations": 4158,
+      "status": "pass",
+      "fresh_own_build": true,
+      "source_errors": 0,
+      "axiom_errors": 0,
+      "total_seconds": 35.72249623108655,
+      "build_seconds": 13.815791117027402,
+      "checks_seconds": 21.90670511405915,
+      "gate_receipt_sha256": "dfff2b46bb1f8413708556a190ebb159d9a18fa7a441a90b0d6eff2cd2fddd09"
+    },
+    {
+      "package": "ArmCert",
+      "modules": 2,
+      "owned_declarations": 0,
+      "status": "pass",
+      "fresh_own_build": true,
+      "source_errors": 0,
+      "axiom_errors": 0,
+      "total_seconds": 52.70618670596741,
+      "build_seconds": 2.7283978508785367,
+      "checks_seconds": 49.977788855088875,
+      "gate_receipt_sha256": "a4428b3e1ef1e9b7f386001baa78f7a4d829fa393946549fce4b6a85fcef0649"
+    }
+  ],
+  "canonical_model_artifacts": 1481,
+  "model_artifact_check": "PASS",
+  "publication_approved": false
+}

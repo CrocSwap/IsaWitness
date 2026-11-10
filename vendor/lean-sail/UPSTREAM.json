@@ -1,0 +1,53 @@
+{
+  "upstream": {
+    "url": "https://github.com/rems-project/lean-sail",
+    "commit": "c816ea7ad03cce98d51acee252540fd4215fede8",
+    "tree": "dec6a0e5c2f7025517cdaddf02bdf550e3acab04"
+  },
+  "frozen_runtime_commit": "66636e0d6e9101ebbb7e5948b0b10c2cec1634b3",
+  "schema": "isawitness-runtime-fetch-overlay-v2",
+  "scope": "Pinned active runtime/test sources and exact local package configuration; fetched files are not distributed in Git.",
+  "software_heritage": {
+    "swhid": "swh:1:rev:c816ea7ad03cce98d51acee252540fd4215fede8",
+    "resolver_url": "https://archive.softwareheritage.org/browse/revision/c816ea7ad03cce98d51acee252540fd4215fede8/",
+    "lookup_status": "unconfirmed",
+    "lookup_observation": "Read-only revision API returned HTTP404; no archived download availability is promised."
+  },
+  "new_first_party_files": [
+    "Sail/AbstractReal.lean",
+    "Sail/AbstractRealRat.lean"
+  ],
+  "excluded_build_metadata_directories": [".lake"],
+  "license_status": "First-party additions: Apache-2.0, Crocodile Labs Inc. Upstream runtime permissions and patch context/deletion rights remain under review; fetching is not redistribution clearance.",
+  "patches": [
+    {"path": "patches/0001-frozen-runtime-sources.patch", "sha256": "7fa472d1315e49c3a10ab2eb0cc05859393ce0e332548a025eff47b41ea9c021"},
+    {"path": "patches/0002-local-package-configuration.patch", "sha256": "eb06d7701c289c0f459279d61c55aa6fa9f0d22f2aaf0307ee4f6c7db9f90447"}
+  ],
+  "payload": [
+    {"path": "patches/series", "sha256": "65a1b7cb548af8b93b609f4b44bfce266b51f40ab1b452087b4ded70a651c560"}
+  ],
+  "sources": [
+    {"path": "Sail.lean", "sha256": "9ec78514a73be7840fed224dfa9ad0854a7e57102bdd845a43a3b3a972668b3d"},
+    {"path": "Sail/AbstractReal.lean", "sha256": "55247a4d0dfc76a808c1711d9ffe927af157b0d320e90f40c9a795a9b484b71c"},
+    {"path": "Sail/AbstractRealRat.lean", "sha256": "04ccca20cce62f37d673da33e92b1f99e244082c608e8473dd954054f903f14e"},
+    {"path": "Sail/ArchSem.lean", "sha256": "fc340039f5acf1b84beb4d8fde4cf94d3cad80bf063f8f1b1a8821835bcda4aa"},
+    {"path": "Sail/ArchSemSequential.lean", "sha256": "bd4877931ee554d3e999b9311761df0a2e74f48612130b21b65f6e694cbffb79"},
+    {"path": "Sail/Attr.lean", "sha256": "890c8435c6a7e13f07f20b746c88639baf075c6b21808d921f3bec4fda76211e"},
+    {"path": "Sail/BitVec.lean", "sha256": "cd5c41303182d29d16b1e9f832db404b6c3fec2195664ad9097598a7b2153bee"},
+    {"path": "Sail/Common.lean", "sha256": "1a8efa75d3a112ceb9e23f24f7ec391d8f0746d1c20491114693eb6bf451b15f"},
+    {"path": "Sail/ConcurrencyInterfaceV1.lean", "sha256": "fdfab689522b6a2ed4e7da5c6034180e7a761566a21e268255b2b0e1a4b51c02"},
+    {"path": "Sail/IntRange.lean", "sha256": "405efd008ef4811b8dc664ccb982d5d2838a53423875f131450aad139846e4a9"},
+    {"path": "Sail/Sail.lean", "sha256": "6fdd329b22e6273b51ff35441c33ff0330ae93224aeb39d6f04dccb83f3c10bb"},
+    {"path": "SailTests/NatConversions.lean", "sha256": "e0da777e182e5625e4b79c9691fea2f67f246d656b8f389ceb0a1aa7ae4f5903"},
+    {"path": "SailTests/RealPower.lean", "sha256": "284407c60d32141de05afe9b0bb7e64b3cfb3cb961f3dc73ed59a4e64b15fdbb"},
+    {"path": "SailTests/SetSliceInt.lean", "sha256": "ad14d510c9281284169e235c2b9cba64294ef328e8866132d2ba27524babc82f"},
+    {"path": "SailTests/Widths.lean", "sha256": "b0f0bd0389ea17aead4eb1a0d7e4ab07cca123cd3e8efcbe45ad9fd693d714b7"}
+  ],
+  "configuration": [
+    {"path": "lakefile.lean", "sha256": "7f0a252499bab616aab1de95d6f01fcd2fc60eea39680fb4aa0eb18fc925b464"},
+    {"path": "lean-toolchain", "sha256": "ca5f1f601d34c49079e38d7e7041eb0f2a9c227fbc1df0f404820069a052330c"},
+    {"path": "lake-manifest.json", "sha256": "dd042660e06f7f1f154dac0002db837d93bd611a391491d2b9cc4121176df8c7"},
+    {"path": "AXIOMS.md", "sha256": "af8e19b7545a6bb53e99d8802a1dd56087f1bdab14a6504218b060ddd20f6c68"},
+    {"path": "gate.json", "sha256": "6da8dd8e412c2cb01688180f4ca698030648433f3d78fe13d5c232bb17089ad1"}
+  ]
+}

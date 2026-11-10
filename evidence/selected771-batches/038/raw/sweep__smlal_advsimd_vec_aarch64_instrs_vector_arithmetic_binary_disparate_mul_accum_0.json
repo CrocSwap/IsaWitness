@@ -1,0 +1,178 @@
+{
+  "id": "sweep::smlal_advsimd_vec_aarch64_instrs_vector_arithmetic_binary_disparate_mul_accum#0",
+  "root": "decode_smlal_advsimd_vec_aarch64_instrs_vector_arithmetic_binary_disparate_mul_accum",
+  "fingerprint": {
+    "isla_sha256": "da9da9a9f259175a97cd8af8598824865f14a56a526f847b0de12f1bd46f9d8b",
+    "observer_binary_sha256": "a6a911ed0debe3d887169fe444e62fe4cc78b69ec872a977fe71f7c3fcfacc81",
+    "comparison_algorithm_sha256": "0447f3f346fb498070791f732c62d53940619d5f28245feb0196e938a1c44c6a",
+    "stock_binary_sha256": "9902937effcf981f04dfd4971c00194afb3dd188fb659ef54d621f7627925eb7",
+    "native_receipt_sha256": "6ef266fbb6b1c8cd198a4f24347721f02cde7df0d14074bc0d6758feed1b177e",
+    "evidence_packet_sha256": "998ff6b63898e08a56328858af4b6348f92269b303a954b5188a6d1bf5b9918b",
+    "transport_sources_sha256": "b733e0680f2698f2441970a97b8e9e5ff46e585e0141a04d2632f3f28ebb8b73",
+    "native_panic_policy": "LEAN_ABORT_ON_PANIC=1",
+    "profile_policy_sha256": "d8f361b9a111cca234f7e4c1c6ab70a2ef470fda0287d700cce596865cc29a87",
+    "case_sha256": "91c194046d9b4489e7e26355479bc7f00c0e27d5e0eda6c0c0cd86a9a9d4592e"
+  },
+  "source": "historical-local-reference:sweep__smlal_advsimd_vec_aarch64_instrs_vector_arithmetic_binary_disparate_mul_accum_0.json",
+  "profile_preflight": {
+    "cases": 16,
+    "required_edscr_status": 2,
+    "native_and_isla_inputs_pinned": true
+  },
+  "evidence_packet": {
+    "schema": "armcert-selected771-batch-v1",
+    "cases_sha256": "93646989b6b912d63da8c6023a3f485764ba695cc1d4d4e0da8c5ac3b82d0ac0",
+    "model_sha256": "9902937effcf981f04dfd4971c00194afb3dd188fb659ef54d621f7627925eb7",
+    "ir_sha256": "931b27de043ff5efca19220a39a5c72254b2932108b16490b22e8fe16e1ca3de",
+    "model_receipt_sha256": "8167b9603c37e063f04b7dbf6232dd4c60826d9102fbe0de03cfbc45b16452f7",
+    "final_receipt_sha256": "44ce117369b7c8fe3424133f4a1e4f9df492f2264cb07a79dc9f4a1e0e350f89",
+    "source_reports": "historical-local-reference:isla",
+    "selected_index_sha256": "f5715cbcbb7436c7b80e26e0495d43f61a2a0907faaa908b8197a998bf79d9f5",
+    "post_freeze_diagnostic": true,
+    "frozen_ledger_changed": false
+  },
+  "evidence_packet_sha256": "998ff6b63898e08a56328858af4b6348f92269b303a954b5188a6d1bf5b9918b",
+  "status_domain": "ordered-events-only",
+  "canonical_equivalence_credit": false,
+  "status": "match",
+  "runs": [
+    {
+      "oracle": "zero",
+      "outcome": "ok",
+      "evaluator_consistency": {
+        "match": true,
+        "entry_edscr_status": 2,
+        "post_edscr_status": 2,
+        "normal_execution_entry": true,
+        "status_frame": true,
+        "predicted_read_bytes": 0,
+        "evaluator_read_bytes": 0
+      },
+      "path_comparisons": [
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        }
+      ],
+      "negative_controls": {},
+      "strict_equal": true
+    },
+    {
+      "oracle": "ones",
+      "outcome": "ok",
+      "evaluator_consistency": {
+        "match": true,
+        "entry_edscr_status": 2,
+        "post_edscr_status": 2,
+        "normal_execution_entry": true,
+        "status_frame": true,
+        "predicted_read_bytes": 0,
+        "evaluator_read_bytes": 0
+      },
+      "path_comparisons": [
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        }
+      ],
+      "negative_controls": {},
+      "strict_equal": true
+    },
+    {
+      "oracle": "hash:1",
+      "outcome": "ok",
+      "evaluator_consistency": {
+        "match": true,
+        "entry_edscr_status": 2,
+        "post_edscr_status": 2,
+        "normal_execution_entry": true,
+        "status_frame": true,
+        "predicted_read_bytes": 0,
+        "evaluator_read_bytes": 0
+      },
+      "path_comparisons": [
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        }
+      ],
+      "negative_controls": {},
+      "strict_equal": true
+    },
+    {
+      "oracle": "hash:2",
+      "outcome": "ok",
+      "evaluator_consistency": {
+        "match": true,
+        "entry_edscr_status": 2,
+        "post_edscr_status": 2,
+        "normal_execution_entry": true,
+        "status_frame": true,
+        "predicted_read_bytes": 0,
+        "evaluator_read_bytes": 0
+      },
+      "path_comparisons": [
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        }
+      ],
+      "negative_controls": {},
+      "strict_equal": true
+    },
+    {
+      "oracle": "one",
+      "outcome": "ok",
+      "evaluator_consistency": {
+        "match": true,
+        "entry_edscr_status": 2,
+        "post_edscr_status": 2,
+        "normal_execution_entry": true,
+        "status_frame": true,
+        "predicted_read_bytes": 0,
+        "evaluator_read_bytes": 0
+      },
+      "path_comparisons": [
+        {
+          "diffs": [],
+          "unknown": [],
+          "match": true
+        }
+      ],
+      "negative_controls": {},
+      "strict_equal": true
+    }
+  ],
+  "stock_evaluator_identical": true,
+  "path_count": 1,
+  "path_errors": [
+    []
+  ],
+  "skipped_errors": [],
+  "isla_register_write_sets": [
+    [
+      "SEE",
+      "_PC",
+      "_Z"
+    ]
+  ],
+  "expected_oracles": [
+    "zero",
+    "ones",
+    "one",
+    "hash:1",
+    "hash:2"
+  ],
+  "oracle_complete": true,
+  "seconds": 0.26071425015106797,
+  "publication_projection": {
+    "historical": true,
+    "fresh_replay": false,
+    "source_sha256": "8ea50ac3d10de0031564c194dea1fa7f2a7681e4281e081a9c94224201366c36",
+    "note": "Local host references removed; original retained privately. Comparison outcomes, partials, premises and proof-credit flags preserved."
+  }
+}

@@ -1,0 +1,22 @@
+private
+.lake/
+*.olean
+*.ilean
+*.ir
+*.ir.sig
+.DS_Store
+docs/armcert/upstream-batch
+__pycache__/
+*.pyc
+
+# Runtime sources/configuration are fetched and verified locally; do not distribute them.
+/vendor/lean-sail/*
+!/vendor/lean-sail/UPSTREAM.json
+!/vendor/lean-sail/patches/
+!/vendor/lean-sail/Sail/
+/vendor/lean-sail/Sail/*
+!/vendor/lean-sail/Sail/AbstractReal.lean
+!/vendor/lean-sail/Sail/AbstractRealRat.lean
+
+# Private upstream-draft checker alias; draft batch is not part of the provider export.
+/tools/check-upstream-batch.py

@@ -1,0 +1,80 @@
+{
+  "schema": "armcert-vendored-gate-source-v1",
+  "origin": "First-party lean-buildtools",
+  "commit": "8f6ad8efb8c1931952257b483563b4f7d247d990",
+  "scope": "Gate and source-policy/context implementation only; profiler, monitor plugin, native RSS code and development tests omitted.",
+  "license": "Copied Apache-2.0 license; release license decision pending.",
+  "files": [
+    {
+      "path": "tools.py",
+      "sha256": "bb7bac8c5ee3fd46083f3c5f55c5361c44274c413fc3b55073459413f1c8c72b",
+      "change": "exact source copy"
+    },
+    {
+      "path": "lean-toolchain",
+      "sha256": "ca5f1f601d34c49079e38d7e7041eb0f2a9c227fbc1df0f404820069a052330c",
+      "change": "exact source copy"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "change": "exact source copy"
+    },
+    {
+      "path": "lean_buildtools/__init__.py",
+      "sha256": "c748cb6ad72b6d4a9c4a027bc91fb22227c7b9f85aa36cebc9d970b91d3a84ab",
+      "change": "exact source copy"
+    },
+    {
+      "path": "lean_buildtools/cli.py",
+      "sha256": "7962ee3abb497b67ce3dac5f2bc53c0cb5c660b6eeca4764b07931bd44d69a09",
+      "change": "exact source copy"
+    },
+    {
+      "path": "lean_buildtools/gate.py",
+      "sha256": "35414983c9e5d2f1697b04ab0b40ae8ed5a0fe2eb9658b8e912e9698aabdb26c",
+      "change": "exact source copy"
+    },
+    {
+      "path": "lean_buildtools/gate_contexts.py",
+      "sha256": "01ee3743b170f010e88197934f6aca7bf56c8c20e42a7dcd4e15837b5fa86db6",
+      "change": "exact source copy"
+    },
+    {
+      "path": "lean_buildtools/gate_graph.py",
+      "sha256": "c6019e7c3c7fb86554e6842a4b6b3b0bfabaed29197b9ee5b4e9aa93d5ff7711",
+      "change": "exact source copy"
+    },
+    {
+      "path": "lean_buildtools/gate_source.py",
+      "sha256": "3fa6b7d48de448f5fc47377d004a332b5a4f3f6e84f73ebea7f4360203acfd3b",
+      "change": "exact source copy"
+    },
+    {
+      "path": "lean_buildtools/axiom_policy.py",
+      "sha256": "1fdc69e2b4f889eb3748b4b4d3b8eb703930a0d254722f44941b26b05f4b3a00",
+      "change": "exact source copy"
+    },
+    {
+      "path": "lean_buildtools/lean_source.py",
+      "sha256": "2f55b8c66c484e69e66f471153c9ec1db1d4664c825b9b70870e36f9d4563da0",
+      "change": "exact source copy"
+    },
+    {
+      "path": "lean_buildtools/proof_graph.py",
+      "sha256": "718a8a2f1c244eeb4d9c39aea5b8af1d8dd5fbc5ef1003a19f2cd049d7078fcf",
+      "change": "exact source copy"
+    },
+    {
+      "path": "lean_buildtools/lean/AxiomGraph.lean",
+      "sha256": "9b7d9856eadc9b5191d9527974f47c722d331b342462be967d7dfc490ba77971",
+      "change": "exact source copy"
+    },
+    {
+      "path": "lakefile.lean",
+      "sha256": "0043f13f5b51972bf72456ad29a93ee0e41e3295ddb1b5ff73769556ca59f628",
+      "upstream_sha256": "6eca8e16f803a5fca18c68ed2ae7e5d9bb21eb75603f94be72d47ab0f4426e44",
+      "change": "Omit profiling/report commands, RSS/C target and BuildMonitor library; gate/source-scan/context scripts unchanged"
+    }
+  ]
+}

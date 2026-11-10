@@ -1,0 +1,160 @@
+#!/bin/sh
+# Copyright (c) 2026 Crocodile Labs Inc.
+# SPDX-License-Identifier: Apache-2.0
+# Fetch only: POSIX sh, Git, and one standard raw-file SHA256 utility.
+set -eu
+
+fail() { printf '%s\n' "fetch-lean-sail: $*" >&2; exit 1; }
+command -v git >/dev/null 2>&1 || fail 'Git is required'
+if command -v sha256sum >/dev/null 2>&1; then checksum=sha256sum
+elif command -v shasum >/dev/null 2>&1; then checksum=shasum
+elif command -v openssl >/dev/null 2>&1; then checksum=openssl
+else fail 'need sha256sum, shasum -a 256, or openssl dgst -sha256'
+fi
+
+hash_file() {
+    case "$checksum" in
+        sha256sum) result=$(sha256sum < "$1") || fail "cannot hash $1"; result=${result%% *} ;;
+        shasum) result=$(shasum -a 256 < "$1") || fail "cannot hash $1"; result=${result%% *} ;;
+        openssl) result=$(openssl dgst -sha256 < "$1") || fail "cannot hash $1"; result=${result##* } ;;
+    esac
+    [ "${#result}" -eq 64 ] || fail 'invalid checksum output length'
+    case "$result" in *[!0-9a-f]*) fail 'invalid checksum output' ;; esac
+    printf '%s\n' "$result"
+}
+
+case "$0" in */*) script_dir=${0%/*} ;; *) script_dir=. ;; esac
+ROOT=$(CDPATH= cd -P "$script_dir/.." && pwd -P) || fail 'cannot locate checkout'
+VENDOR=$ROOT/vendor/lean-sail
+MANIFEST=$VENDOR/UPSTREAM.json
+REV=c816ea7ad03cce98d51acee252540fd4215fede8
+TREE=dec6a0e5c2f7025517cdaddf02bdf550e3acab04
+SOURCE=https://github.com/rems-project/lean-sail
+case $# in
+    0) ;;
+    2) [ "$1" = --source ] || fail 'usage: fetch-lean-sail [--source GIT_URL_OR_LOCAL_MIRROR]'; SOURCE=$2 ;;
+    *) fail 'usage: fetch-lean-sail [--source GIT_URL_OR_LOCAL_MIRROR]' ;;
+esac
+[ -d "$ROOT/vendor" ] && [ ! -L "$ROOT/vendor" ] || fail 'vendor parent must be a real directory'
+[ ! -L "$ROOT/.lake" ] || fail 'fetch cache parent must not be a symlink'
+[ -f "$MANIFEST" ] && [ ! -L "$MANIFEST" ] || fail 'missing or symlinked UPSTREAM.json'
+[ -d "$VENDOR" ] && [ ! -L "$VENDOR" ] || fail 'runtime directory is not a real directory'
+
+# UPSTREAM.json deliberately uses one path/SHA256 record per line. This parser
+# accepts only that emitted record grammar, never evals JSON and rejects unsafe
+# paths. The enclosing manifest is trusted through the source checkout identity;
+# it cannot contain its own SHA256. All other runtime payload files are pinned.
+manifest_records() {
+    mode=$1
+    records=0
+    revision_seen=0
+    tree_seen=0
+    schema_seen=0
+    while IFS= read -r line || [ -n "$line" ]; do
+        case "$line" in
+            '  "schema": "isawitness-runtime-fetch-overlay-v2",') schema_seen=1 ;;
+            '    "commit": "c816ea7ad03cce98d51acee252540fd4215fede8",') revision_seen=1 ;;
+            '    "tree": "dec6a0e5c2f7025517cdaddf02bdf550e3acab04"') tree_seen=1 ;;
+            '    {"path": '*)
+                IFS='"' read -r opening pathkey colon path comma hashkey hashcolon expected ending <<EOF
+$line
+EOF
+                [ "$opening" = '    {' ] && [ "$pathkey" = path ] &&
+                    [ "$colon" = ': ' ] && [ "$comma" = ', ' ] &&
+                    [ "$hashkey" = sha256 ] && [ "$hashcolon" = ': ' ] || fail 'malformed manifest record'
+                case "$ending" in '}'|'},') ;; *) fail 'unexpected manifest record fields' ;; esac
+                case "$path" in ''|/*|*..*|*[!A-Za-z0-9_./-]*) fail 'unsafe manifest path' ;; esac
+                [ "${#expected}" -eq 64 ] || fail "invalid SHA256 for $path"
+                case "$expected" in *[!0-9a-f]*) fail "invalid SHA256 for $path" ;; esac
+                records=$((records + 1))
+                case "$mode" in
+                    collect)
+                        case "$allowed" in *"|$path|"*) fail "duplicate manifest path $path" ;; esac
+                        allowed=$allowed$path'|'
+                        case "$path" in
+                            patches/*|Sail/AbstractReal.lean|Sail/AbstractRealRat.lean) ;;
+                            *) if [ -f "$VENDOR/$path" ]; then fetched_present=1; fi ;;
+                        esac
+                        ;;
+                    bootstrap)
+                        case "$path" in
+                            patches/*|Sail/AbstractReal.lean|Sail/AbstractRealRat.lean)
+                                [ -f "$VENDOR/$path" ] && [ ! -L "$VENDOR/$path" ] || fail "missing bootstrap file $path"
+                                actual=$(hash_file "$VENDOR/$path")
+                                [ "$actual" = "$expected" ] || fail "bootstrap SHA256 mismatch: $path"
+                                ;;
+                        esac
+                        ;;
+                    verify)
+                        [ -f "$VENDOR/$path" ] && [ ! -L "$VENDOR/$path" ] || fail "missing source/configuration file: $path"
+                        actual=$(hash_file "$VENDOR/$path")
+                        [ "$actual" = "$expected" ] || fail "SHA256 mismatch: $path"
+                        ;;
+                    *) fail 'internal verification mode' ;;
+                esac
+                ;;
+        esac
+    done < "$MANIFEST"
+    [ "$records" -eq 23 ] || fail 'unexpected or incomplete file inventory'
+    [ "$schema_seen$revision_seen$tree_seen" = 111 ] || fail 'manifest schema/revision/tree drift'
+}
+
+walk_payload() {
+    for item in "$1"/* "$1"/.[!.]* "$1"/..?*; do
+        if [ -L "$item" ]; then fail "symlink in runtime payload: $item"; fi
+        if [ -d "$item" ]; then
+            relative=${item#"$VENDOR"/}
+            case "$relative" in
+                .lake) : ;; # package-owned build metadata, never source inventory
+                Sail|SailTests|patches) walk_payload "$item" ;; *) fail "unexpected runtime directory: $relative" ;; esac
+        elif [ -f "$item" ]; then
+            relative=${item#"$VENDOR"/}
+            case "$allowed" in *"|$relative|"*) ;; *) fail "unexpected runtime file: $relative" ;; esac
+        elif [ -e "$item" ]; then fail "non-regular runtime payload: $item"
+        fi
+    done
+}
+
+allowed='|UPSTREAM.json|'
+fetched_present=0
+manifest_records collect
+walk_payload "$VENDOR"
+manifest_records bootstrap
+if [ "$fetched_present" -eq 1 ]; then
+    # Do not overwrite partial fetches or local edits. The manifest explicitly
+    # excludes package-owned .lake build metadata; fresh gates rebuild artifacts.
+    manifest_records verify
+    printf '%s\n' 'lean-sail: existing source payload is complete and SHA256 verified'
+    exit 0
+fi
+
+STAGE=$ROOT/.lake/lean-sail-fetch-$$
+[ ! -e "$STAGE" ] || fail 'private fetch staging path already exists'
+git -c core.hooksPath=/dev/null clone --no-checkout -- "$SOURCE" "$STAGE" || fail 'clone failed; exact revision is required (SWH availability is unconfirmed)'
+if ! git -C "$STAGE" cat-file -e "$REV^{commit}" 2>/dev/null; then
+    git -C "$STAGE" -c core.hooksPath=/dev/null fetch --no-tags origin "$REV" || fail 'pinned upstream commit unavailable'
+fi
+actual_tree=$(git -C "$STAGE" rev-parse "$REV^{tree}") || fail 'cannot resolve pinned tree'
+[ "$actual_tree" = "$TREE" ] || fail 'pinned commit tree mismatch'
+# Select only active runtime inputs and the old package metadata needed by the
+# configuration patch. Original upstream tests/docs/CI are intentionally absent.
+git -C "$STAGE" read-tree --empty
+git -C "$STAGE" -c core.hooksPath=/dev/null -c core.autocrlf=false -c core.attributesFile=/dev/null checkout "$REV" -- \
+    Sail.lean Sail/ArchSem.lean Sail/ArchSemSequential.lean Sail/Attr.lean \
+    Sail/BitVec.lean Sail/Common.lean Sail/ConcurrencyInterfaceV1.lean \
+    Sail/IntRange.lean Sail/Sail.lean lakefile.toml lean-toolchain lake-manifest.json
+patches=0
+while IFS= read -r patch || [ -n "$patch" ]; do
+    case "$patch" in
+        0001-frozen-runtime-sources.patch|0002-local-package-configuration.patch) ;;
+        *) fail 'unexpected patch-series entry' ;;
+    esac
+    git -C "$STAGE" -c core.hooksPath=/dev/null apply --index --unidiff-zero --whitespace=nowarn "$VENDOR/patches/$patch" || fail "patch failed: $patch"
+    patches=$((patches + 1))
+done < "$VENDOR/patches/series"
+[ "$patches" -eq 2 ] || fail 'incomplete patch series'
+git --git-dir="$STAGE/.git" --work-tree="$VENDOR" -c core.hooksPath=/dev/null -c core.autocrlf=false -c core.attributesFile=/dev/null checkout-index --all
+manifest_records verify
+walk_payload "$VENDOR"
+printf '%s\n' "lean-sail: pinned commit $REV / tree $TREE, patches and all 23 raw-file SHA256 pins verified"
+printf '%s\n' 'Only metadata, patches and AbstractReal/AbstractRealRat belong in the distributed Git tree.'

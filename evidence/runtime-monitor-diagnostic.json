@@ -1,0 +1,62 @@
+{
+  "schema": "armcert-runtime-monitor-diagnostic-v1",
+  "scope": "Diagnostic exact historical monitor-plugin reproduction; no production recipe adoption",
+  "plugin_sha256": "fc17da6b06b9aaeb98358a78cf10e6c3d954136482663b5d3dc6c37469394d84",
+  "rows": [
+    {
+      "module": "Sail/Common",
+      "profile": "sync-no-plugin",
+      "exit_code": 0,
+      "secs": 1.0385943369474262,
+      "expected": "e690b572abe962c0be529e33dbe52fa8456bdfc25d501f7c9e70fcfe48a3e08a",
+      "actual": "68e249d69a11b2a06af6c3370a44c24f11e23454a57e7796560c56c818223fae",
+      "byte_identical": false
+    },
+    {
+      "module": "Sail/Common",
+      "profile": "sync-original-monitor",
+      "exit_code": 0,
+      "secs": 1.1460347559768707,
+      "expected": "e690b572abe962c0be529e33dbe52fa8456bdfc25d501f7c9e70fcfe48a3e08a",
+      "actual": "e690b572abe962c0be529e33dbe52fa8456bdfc25d501f7c9e70fcfe48a3e08a",
+      "byte_identical": true
+    },
+    {
+      "module": "Sail/Sail",
+      "profile": "sync-no-plugin",
+      "exit_code": 0,
+      "secs": 0.8188526979647577,
+      "expected": "d020762483e22929f2263c073e2e538ae2a69889d285ee686a1ef9ca01944fc3",
+      "actual": "738312501d08429d01bc202f300f0b316155a7c1148ce0976759f16bd8bb8afe",
+      "byte_identical": false
+    },
+    {
+      "module": "Sail/Sail",
+      "profile": "sync-original-monitor",
+      "exit_code": 0,
+      "secs": 1.0035801359917969,
+      "expected": "d020762483e22929f2263c073e2e538ae2a69889d285ee686a1ef9ca01944fc3",
+      "actual": "d020762483e22929f2263c073e2e538ae2a69889d285ee686a1ef9ca01944fc3",
+      "byte_identical": true
+    },
+    {
+      "module": "SailTests/SetSliceInt",
+      "profile": "sync-no-plugin",
+      "exit_code": 0,
+      "secs": 0.7517058830708265,
+      "expected": "c001c547cc81264950c9ad503b7f9b998e38d1bc540a4e7b62fe9959942d0a89",
+      "actual": "06483962b82cb19df88be3adf5d16556ecb0f31d623ab5800bbd73d2e02e790a",
+      "byte_identical": false
+    },
+    {
+      "module": "SailTests/SetSliceInt",
+      "profile": "sync-original-monitor",
+      "exit_code": 0,
+      "secs": 0.7759791871067137,
+      "expected": "c001c547cc81264950c9ad503b7f9b998e38d1bc540a4e7b62fe9959942d0a89",
+      "actual": "c001c547cc81264950c9ad503b7f9b998e38d1bc540a4e7b62fe9959942d0a89",
+      "byte_identical": true
+    }
+  ],
+  "qualification": "Historical artifact reconstruction only. No monitor plugin is adopted by the public build recipe; no fresh package gate is implied."
+}

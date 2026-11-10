@@ -1,0 +1,75 @@
+{
+  "schema": "isawitness-native-cache-roundtrip-v1",
+  "source_commit": "a8a0eb1892d831fe011bede6e532863717e98c4c",
+  "toolchain": "leanprover/lean4:v4.35.0",
+  "platform": "aarch64-unknown-linux-gnu",
+  "producer": {
+    "full_fresh_build_and_four_owned_gates_pass": true,
+    "elapsed_seconds": 445.94,
+    "model_artifacts_canonical": 1481
+  },
+  "cache_accepted_without_compilation": true,
+  "changed_source_rejected": true,
+  "normalization": "Only trace diagnostic inputs/log, setup metadata and archive ownership; compiled artifacts and dependency/output hashes unchanged.",
+  "packages": [
+    {
+      "package": "lean-sail",
+      "source_dir": "vendor/lean-sail",
+      "file": "lean-sail-aarch64-unknown-linux-gnu.tar.gz",
+      "sha256": "960b48263104c7212aea8566da15b462770cbdcd5eedce76ca4e0c2bff7a9c6c",
+      "bytes": 3134322,
+      "raw_sha256": "054cddb5efcb91877ee3739d75b29147ba06e3343abfdc94ad71a45931b333de",
+      "metadata_changes": {
+        "trace_diagnostics_redacted": 15,
+        "omitted_setup_metadata": 15
+      },
+      "private_build_path_findings": [],
+      "seconds": 0.6775421700440347
+    },
+    {
+      "package": "ArmFull",
+      "source_dir": "model",
+      "file": "ArmFull-aarch64-unknown-linux-gnu.tar.gz",
+      "sha256": "f8c18a83d070fcb954a97379b4516638af5b857fdd64437c67df4c6c68084ab1",
+      "bytes": 441500443,
+      "raw_sha256": "6bc955c09c808e2f13b6225ed0a0480cb20920eed1d1e1a42d87e06d53023306",
+      "metadata_changes": {
+        "trace_diagnostics_redacted": 1481,
+        "omitted_setup_metadata": 1481
+      },
+      "private_build_path_findings": [],
+      "seconds": 45.245638395892456
+    },
+    {
+      "package": "ArmCertObservers",
+      "source_dir": "observers",
+      "file": "ArmCertObservers-aarch64-unknown-linux-gnu.tar.gz",
+      "sha256": "3e7573af49b159f0d539cb57713afa7c328fe1950e70d8baaeba5ab0f17bbf0c",
+      "bytes": 4723881,
+      "raw_sha256": "75fc7e740a07c4c2ad3d4c8d9be95524f3b97de29b5c2f6f8f0701fe1bb47c11",
+      "metadata_changes": {
+        "trace_diagnostics_redacted": 6,
+        "omitted_setup_metadata": 6
+      },
+      "private_build_path_findings": [],
+      "seconds": 0.8552340669557452
+    },
+    {
+      "package": "ArmCert",
+      "source_dir": ".",
+      "file": "ArmCert-aarch64-unknown-linux-gnu.tar.gz",
+      "sha256": "ab56c3e53ed30f18402de227d9eae33bb545630b6945d60907d3a790cf8a6198",
+      "bytes": 2681,
+      "raw_sha256": "0c05847f5ca106cfcdab4dbddcc434a4a301fe3268bebeadcb39e4629eacdfdf",
+      "metadata_changes": {
+        "trace_diagnostics_redacted": 2,
+        "omitted_setup_metadata": 2
+      },
+      "private_build_path_findings": [],
+      "seconds": 0.3775851409882307
+    }
+  ],
+  "publication_approved": false,
+  "runtime_permission_status": "unresolved",
+  "scope": "Technical roundtrip of our own fresh artifacts; no fresh-gate claim for cache consumers. No public download endpoint."
+}

@@ -1,0 +1,761 @@
+diff --git a/Sail.lean b/Sail.lean
+index 0d85a82..b7d56cd 100644
+--- a/Sail.lean
++++ b/Sail.lean
+@@ -3,0 +4 @@ import Sail.Sail
++import Sail.AbstractReal
+diff --git a/Sail/ArchSemSequential.lean b/Sail/ArchSemSequential.lean
+index e57976d..1ddbf2a 100644
+--- a/Sail/ArchSemSequential.lean
++++ b/Sail/ArchSemSequential.lean
+@@ -87 +87,3 @@ def interpretSailEffects : PreSailM ue ty → ArchSemSeqM ue ty :=
+-    | .inr choice => if h : (0 : Nat) < choice then pure (⟨0, h⟩ : Fin choice) else throw .Unreachable)
++    | .inr choice =>
++      letI : Decidable ((0 : Nat) < choice) := Nat.decLt 0 choice
++      if h : (0 : Nat) < choice then pure (⟨0, h⟩ : Fin choice) else throw .Unreachable)
+diff --git a/Sail/BitVec.lean b/Sail/BitVec.lean
+index a379f25..97be673 100644
+--- a/Sail/BitVec.lean
++++ b/Sail/BitVec.lean
+@@ -11 +10,0 @@ import Lean.Meta.Reduce
+-import Std.Tactic.BVDecide
+@@ -231 +230,3 @@ def elabMatchBv : TermElab := fun stx typ? =>
+-          `(fun _ => by try bv_decide -enums)
++          -- SharedISA divergence: a total value fallback never manufactures a
++          -- proof of pattern exhaustivity. Reachable pattern arms are unchanged.
++          `(Function.const _ default)
+diff --git a/Sail/Common.lean b/Sail/Common.lean
+index 3549060..efad6a0 100644
+--- a/Sail/Common.lean
++++ b/Sail/Common.lean
+@@ -16,0 +17,9 @@ namespace Sail
++/-- Convert a Sail integer to a Lean natural only when its value is nonnegative.
++    A violated Sail range is reported, never silently clamped to zero. -/
++def Int.toNatChecked (n : _root_.Int) : Nat :=
++  if 0 ≤ n then n.toNat else panic! "Sail.Int.toNatChecked: negative integer"
++
++@[simp] theorem Int.toNatChecked_of_nonneg (n : _root_.Int) (h : 0 ≤ n) :
++    Int.toNatChecked n = n.toNat := by
++  simp [Int.toNatChecked, h]
++
+@@ -70,0 +80,10 @@ def updateSubrangeBE {w : Nat} (x : BitVec w) (lo hi : Nat) (y : BitVec (hi - lo
++/-- L5 / C13: explicit width cast emitted by the generator where Sail's typechecker proved two
++widths equal from constraints Lean does not see (e.g. `hi - lo + 1` with variable indices vs `n`).
++Identity cast when the widths agree; otherwise it panics (a generator/runtime bug, never a silent
++resize -- run executables with `LEAN_ABORT_ON_PANIC=1` to make it fatal). -/
++@[inline] def castWidth {n m : Nat} (x : BitVec n) : BitVec m :=
++  if h : n = m then h ▸ x else panic! "Sail.BitVec.castWidth: width mismatch"
++
++@[simp] theorem castWidth_eq {n : Nat} (x : BitVec n) : castWidth (m := n) x = x := by
++  simp [castWidth]
++
+@@ -253,0 +273,5 @@ def get_slice_int (len : Nat) (n : Int) (lo : Nat) : BitVec len :=
++/-- Sail `set_slice_int len n lo x`: replace bits `[lo, lo+len)` of the unbounded
++two's-complement integer `n` with `x` (sail.c: `mpz_set` then `mpz_setbit`/`mpz_clrbit`
++for each slice bit). All other bits of `n`, including its sign extension, are kept.
++`(n / 2^lo) % 2^len` is the current field (Int `/` and `%` are Euclidean, i.e. floor for
++the positive divisor, which is the two's-complement view for negative `n`). -/
+@@ -256 +280 @@ def set_slice_int (len : Nat) (n : Int) (lo : Nat) (x : BitVec len) : Int :=
+-  BitVec.toInt (BitVec.updateSubrange' (BitVec.ofInt len n) lo len x)
++  n - ((n / 2 ^ lo) % 2 ^ len) * 2 ^ lo + (x.toNat : Int) * 2 ^ lo
+@@ -307,0 +332,5 @@ inductive Error (ue: Type) where
++  /-- Fork: the fuel bounding an unmeasured loop or recursive function (named by `site`) ran out. -/
++  | FuelExhausted (site : String)
++  /-- Fork (integration): a real operation with no exact result (Isla `RealInexact`): `sqrt_real` of a
++  value whose square root the `SailReal` instance cannot represent exactly. Never an approximation. -/
++  | RealInexact (op : String)
+@@ -316,0 +346,2 @@ def Error.print : Error UE → String
++  | FuelExhausted s => s!"Fuel exhausted: {s}"
++  | RealInexact s => s!"Real result not exact: {s}"
+diff --git a/Sail/ConcurrencyInterfaceV1.lean b/Sail/ConcurrencyInterfaceV1.lean
+index 9b08ca7..0f5c0a2 100644
+--- a/Sail/ConcurrencyInterfaceV1.lean
++++ b/Sail/ConcurrencyInterfaceV1.lean
+@@ -8,0 +9,16 @@ namespace Sail.ConcurrencyInterfaceV1
++/-- Static label of a nondeterministic choice (an `undefined_*` / `internal_pick` call site).
++The Sail-to-Lean backend emits one label per call site, so a labelled draw reads the oracle
++without advancing any state: two control-flow paths that perform different draws still end in
++the same state, which lets a specializer merge them.
++* `site n`    : call site `n`, statically checked to execute at most once per top-level call.
++* `occ n k`   : `k`-th dynamic execution of call site `n` (sites that may execute repeatedly:
++                inside loops, recursive functions, or helpers invoked more than once).
++* `child ℓ i` : `i`-th draw inside a generated `undefined_<T>` initialiser called with label `ℓ`.
++* `anon k`    : `k`-th unlabelled draw (legacy `choose`; hand-written code only). -/
++inductive ChoiceLabel where
++  | site (n : Nat)
++  | occ (n k : Nat)
++  | child (parent : ChoiceLabel) (i : Nat)
++  | anon (k : Nat)
++  deriving DecidableEq, Hashable, Repr, Inhabited
++
+@@ -12,0 +29,15 @@ structure ChoiceSource where
++  /-- Labelled draw: the value chosen at label `ℓ`; does not change the choice state. -/
++  (chooseAt : ∀ p : Sail.Primitive, ChoiceLabel → α → p.reflect)
++
++/-- An arbitrary oracle: one value for every (label, primitive type). -/
++abbrev Oracle := ChoiceLabel → (p : Sail.Primitive) → p.reflect
++
++/-- The universal choice source. Its state is an arbitrary oracle (plus the counter of legacy
++unlabelled draws), so a statement quantified over the machine state is quantified over every
++resolution of every nondeterministic choice. Generated models use this source; nothing fixes a
++choice to a constant. -/
++def oracleChoiceSource : ChoiceSource where
++  α := Oracle × Nat
++  nextState _ s := (s.1, s.2 + 1)
++  choose p s := s.1 (.anon s.2) p
++  chooseAt p ℓ s := s.1 ℓ p
+@@ -25,0 +57,9 @@ def trivialChoiceSource : ChoiceSource where
++  chooseAt p _ _ :=
++    match p with
++    | .bool => false
++    | .bit => 0
++    | .int => 0
++    | .nat => 0
++    | .string => ""
++    | .fin _ => 0
++    | .bitvector _ => 0
+@@ -92,0 +133,38 @@ structure Mem_write_request
++/-- The trivial architecture (every parameter `Unit`), for models without `instantiation`s. -/
++def Arch.trivial : Arch where
++  va_size := 64
++  pa := Unit
++  arch_ak := Unit
++  translation := Unit
++  trans_start := Unit
++  trans_end := Unit
++  abort := Unit
++  barrier := Unit
++  cache_op := Unit
++  tlb_op := Unit
++  fault := Unit
++  sys_reg_id := Unit
++
++/-- Fork (H3, effects as events): an architectural side effect of the sequential model, appended to
++`SequentialState.events` in program order. Payloads are the model's own `Arch` types, so for Arm a
++barrier event carries the full `Barrier` value (`Barrier_DMB`/`Barrier_DSB` with domain, types and
++nXS, `Barrier_ISB`, `Barrier_SSBB`, `Barrier_PSSBB`, `Barrier_SB`, and any constructor a splice adds,
++e.g. CSDB). Memory events record the physical address, the size in bytes, the virtual address (if
++any), the access kind and the tag request; a write also records the value written. A memory event is
++logged when the request is issued, before the access, so a faulting access still leaves its event. -/
++inductive Event [Arch] where
++  | barrier (b : Arch.barrier)
++  /-- Fork (integration): a barrier with no constructor in the model's (non-scattered) barrier union,
++  added by a splice through its own extension union (Arm: `BarrierExt.Barrier_CSDB`); carries the
++  constructor's `repr`, so it stays distinct from every `Arch.barrier` value. -/
++  | barrierExt (desc : String)
++  | cacheOp (op : Arch.cache_op)
++  | tlbi (op : Arch.tlb_op)
++  | translationStart (ts : Arch.trans_start)
++  | translationEnd (te : Arch.trans_end)
++  | takeException (f : Arch.fault)
++  | returnException (pa : Arch.pa)
++  | memRead (pa : Nat) (size : Nat) (va : Option Nat) (kind : Access_kind Arch.arch_ak) (tag : Bool)
++  | memWrite (pa : Nat) (size : Nat) (va : Option Nat) (kind : Access_kind Arch.arch_ak)
++      (value : Option (BitVec (8 * size))) (tag : Option Bool)
++
+@@ -99 +177,5 @@ open Sail (Result)
+-variable {Register : Type} {RegisterType : Register → Type} [DecidableEq Register] [Hashable Register]
++variable {Regs : Type}
++
++section
++-- Fork (H3): scoped so that `[Arch]` is not auto-included in theorems that do not need it.
++variable [Arch]
+@@ -101,2 +183,5 @@ variable {Register : Type} {RegisterType : Register → Type} [DecidableEq Regis
+-structure SequentialState (RegisterType : Register → Type) (c : ChoiceSource) where
+-  regs : Std.ExtDHashMap Register RegisterType
++/-- Fork (structured registers): `Regs` is the model's generated register-file structure
++(banks of same-typed registers as total maps `RegMap`, plus named fields). Reads are total.
++Fork (H3): `events` is the append-only log of architectural side effects (see `Event`). -/
++structure SequentialState (Regs : Type) (c : ChoiceSource) [Arch] where
++  regs : Regs
+@@ -103,0 +189,2 @@ structure SequentialState (RegisterType : Register → Type) (c : ChoiceSource)
++  /-- Per-site occurrence counters for labelled sites that may execute more than once. -/
++  choiceOcc : Std.ExtHashMap Nat Nat
+@@ -108,10 +195,69 @@ structure SequentialState (RegisterType : Register → Type) (c : ChoiceSource)
+-
+-abbrev PreSailM (RegisterType : Register → Type) (c : ChoiceSource) (ue: Type) :=
+-  EStateM (Sail.Error ue) (SequentialState RegisterType c)
+-
+-variable (RegisterType) in
+-abbrev PreSailME c ue α := ExceptT (Sail.Error ue ⊕ α) (PreSailM RegisterType c ue)
+-
+-inductive RegisterRef (RegisterType : Register → Type) : Type → Type where
+-  | Reg (r : Register) : RegisterRef _ (RegisterType r)
+-export RegisterRef (Reg)
++  /-- Fork (H3): side-effect events, oldest first. Nothing in the model reads this field. -/
++  events : Array Event
++
++/-- The state with its event log cleared. Proofs that do not care about events compare states up to
++`eraseEvents`; appending events never changes it (`eraseEvents_pushEvent`). -/
++def SequentialState.eraseEvents (s : SequentialState Regs c) : SequentialState Regs c :=
++  { s with events := #[] }
++
++@[simp] theorem SequentialState.eraseEvents_pushEvent (s : SequentialState Regs c) (e : Event) :
++    SequentialState.eraseEvents { s with events := s.events.push e } = SequentialState.eraseEvents s := rfl
++
++@[simp] theorem SequentialState.eraseEvents_setEvents (s : SequentialState Regs c) (es : Array Event) :
++    SequentialState.eraseEvents { s with events := es } = SequentialState.eraseEvents s := rfl
++
++@[simp] theorem SequentialState.eraseEvents_idem (s : SequentialState Regs c) :
++    SequentialState.eraseEvents (SequentialState.eraseEvents s) = SequentialState.eraseEvents s := rfl
++
++/-! Every non-event field of the state is a field of `eraseEvents` (definitionally). -/
++@[simp] theorem SequentialState.eraseEvents_regs (s : SequentialState Regs c) : s.eraseEvents.regs = s.regs := rfl
++@[simp] theorem SequentialState.eraseEvents_mem (s : SequentialState Regs c) : s.eraseEvents.mem = s.mem := rfl
++@[simp] theorem SequentialState.eraseEvents_choiceState (s : SequentialState Regs c) :
++    s.eraseEvents.choiceState = s.choiceState := rfl
++@[simp] theorem SequentialState.eraseEvents_choiceOcc (s : SequentialState Regs c) :
++    s.eraseEvents.choiceOcc = s.choiceOcc := rfl
++@[simp] theorem SequentialState.eraseEvents_cycleCount (s : SequentialState Regs c) :
++    s.eraseEvents.cycleCount = s.cycleCount := rfl
++@[simp] theorem SequentialState.eraseEvents_sailOutput (s : SequentialState Regs c) :
++    s.eraseEvents.sailOutput = s.sailOutput := rfl
++@[simp] theorem SequentialState.eraseEvents_events (s : SequentialState Regs c) : s.eraseEvents.events = #[] := rfl
++
++/-- Two states agree except for their event logs iff their `eraseEvents` agree. -/
++theorem SequentialState.eraseEvents_eq_iff (s t : SequentialState Regs c) :
++    s.eraseEvents = t.eraseEvents ↔
++      s.regs = t.regs ∧ s.choiceState = t.choiceState ∧ s.choiceOcc = t.choiceOcc ∧ s.mem = t.mem ∧
++      s.tags = t.tags ∧ s.cycleCount = t.cycleCount ∧ s.sailOutput = t.sailOutput := by
++  cases s; cases t
++  simp only [SequentialState.eraseEvents, SequentialState.mk.injEq, and_true]
++
++abbrev PreSailM (Regs : Type) (c : ChoiceSource) (ue: Type) :=
++  EStateM (Sail.Error ue) (SequentialState Regs c)
++
++variable (Regs) in
++abbrev PreSailME c ue α := ExceptT (Sail.Error ue ⊕ α) (PreSailM Regs c ue)
++
++end
++
++/-- Fork (structured registers): one bank of same-typed registers, a total map from the bank's
++key enum. `RegMap.set` is the only update; `set_same`/`set_ne` are the read-after-write lemmas. -/
++abbrev RegMap (κ : Type) (α : Type) := κ → α
++
++namespace RegMap
++variable {κ α : Type} [DecidableEq κ]
++/-- Update one register of a bank. -/
++@[inline] def set (f : RegMap κ α) (k : κ) (v : α) : RegMap κ α := fun k' => if k' = k then v else f k'
++@[simp] theorem set_same (f : RegMap κ α) (k : κ) (v : α) : set f k v k = v := by simp [set]
++@[simp] theorem set_ne (f : RegMap κ α) {k k' : κ} (v : α) (h : k' ≠ k) : set f k v k' = f k' := by
++  simp [set, h]
++theorem set_apply (f : RegMap κ α) (k : κ) (v : α) (k' : κ) :
++    set f k v k' = if k' = k then v else f k' := rfl
++@[simp] theorem set_set_same (f : RegMap κ α) (k : κ) (v w : α) : set (set f k v) k w = set f k w := by
++  funext k'; simp only [set]; split <;> rfl
++end RegMap
++
++/-- Fork (structured registers): a typed register reference is a lens into the register file.
++The generated model defines one per register (`Register.<name>`); `get`/`set` are a bank lookup /
++`RegMap.set` or a structure field projection / update. -/
++structure RegisterRef (Regs : Type) (α : Type) where
++  get : Regs → α
++  set : α → Regs → Regs
+@@ -120,0 +267,2 @@ namespace PreSail
++variable [Arch]
++
+@@ -122,2 +270,2 @@ namespace PreSail
+-def sailTryCatch (e : PreSailM RegisterType c ue α) (h : ue → PreSailM RegisterType c ue α) :
+-    PreSailM RegisterType c ue α :=
++def sailTryCatch (e : PreSailM Regs c ue α) (h : ue → PreSailM Regs c ue α) :
++    PreSailM Regs c ue α :=
+@@ -130 +278 @@ def sailTryCatch (e : PreSailM RegisterType c ue α) (h : ue → PreSailM Regist
+-def sailThrow (e : ue) : PreSailM RegisterType c ue α := EStateM.throw (.User e)
++def sailThrow (e : ue) : PreSailM Regs c ue α := EStateM.throw (.User e)
+@@ -132 +280 @@ def sailThrow (e : ue) : PreSailM RegisterType c ue α := EStateM.throw (.User e
+-def choose (p : Sail.Primitive) : PreSailM RegisterType c ue p.reflect :=
++def choose (p : Sail.Primitive) : PreSailM Regs c ue p.reflect :=
+@@ -136 +284,12 @@ def choose (p : Sail.Primitive) : PreSailM RegisterType c ue p.reflect :=
+-def undefined_unit (_ : Unit) : PreSailM RegisterType c ue Unit := pure ()
++/-- Labelled draw: reads the choice at `ℓ`; the state is unchanged (path independent). -/
++def chooseAt (p : Sail.Primitive) (ℓ : ChoiceLabel) : PreSailM Regs c ue p.reflect :=
++  do pure (c.chooseAt p ℓ (← get).choiceState)
++
++/-- Label of the next dynamic execution of multi-draw site `n` (`occ n k`, `k` counted per site). -/
++def occLabel (n : Nat) : PreSailM Regs c ue ChoiceLabel :=
++  modifyGet fun σ =>
++    let k := σ.choiceOcc.getD n 0
++    (.occ n k, { σ with choiceOcc := σ.choiceOcc.insert n (k + 1) })
++
++def undefined_bit_at (ℓ : ChoiceLabel) (_ : Unit) : PreSailM Regs c ue (BitVec 1) :=
++  chooseAt .bit ℓ
+@@ -138 +297,31 @@ def undefined_unit (_ : Unit) : PreSailM RegisterType c ue Unit := pure ()
+-def undefined_bit (_ : Unit) : PreSailM RegisterType c ue (BitVec 1) :=
++def undefined_bool_at (ℓ : ChoiceLabel) (_ : Unit) : PreSailM Regs c ue Bool :=
++  chooseAt .bool ℓ
++
++def undefined_int_at (ℓ : ChoiceLabel) (_ : Unit) : PreSailM Regs c ue Int :=
++  chooseAt .int ℓ
++
++def undefined_nat_at (ℓ : ChoiceLabel) (_ : Unit) : PreSailM Regs c ue Nat :=
++  chooseAt .nat ℓ
++
++def undefined_string_at (ℓ : ChoiceLabel) (_ : Unit) : PreSailM Regs c ue String :=
++  chooseAt .string ℓ
++
++def undefined_bitvector_at (ℓ : ChoiceLabel) (n : Nat) : PreSailM Regs c ue (BitVec n) :=
++  chooseAt (.bitvector n) ℓ
++
++/-- Any value of the inclusive range `[low, high]` (Sail `range('n, 'm)`); empty range is unreachable. -/
++def undefined_range_at (ℓ : ChoiceLabel) (low high : Int) : PreSailM Regs c ue Int :=
++  if low ≤ high then do
++    let i ← chooseAt (.fin (high - low).toNat) ℓ
++    pure (low + i.val)
++  else throw .Unreachable
++
++def internal_pick_at {α : Type} (ℓ : ChoiceLabel) : List α → PreSailM Regs c ue α
++  | [] => throw .Unreachable
++  | (a :: as) => do
++    let idx ← chooseAt (.fin as.length) ℓ
++    pure <| (a :: as).get idx
++
++def undefined_unit (_ : Unit) : PreSailM Regs c ue Unit := pure ()
++
++def undefined_bit (_ : Unit) : PreSailM Regs c ue (BitVec 1) :=
+@@ -141 +330 @@ def undefined_bit (_ : Unit) : PreSailM RegisterType c ue (BitVec 1) :=
+-def undefined_bool (_ : Unit) : PreSailM RegisterType c ue Bool :=
++def undefined_bool (_ : Unit) : PreSailM Regs c ue Bool :=
+@@ -144 +333 @@ def undefined_bool (_ : Unit) : PreSailM RegisterType c ue Bool :=
+-def undefined_int (_ : Unit) : PreSailM RegisterType c ue Int :=
++def undefined_int (_ : Unit) : PreSailM Regs c ue Int :=
+@@ -147 +336 @@ def undefined_int (_ : Unit) : PreSailM RegisterType c ue Int :=
+-def undefined_range (low high : Int) : PreSailM RegisterType c ue Int := do
++def undefined_range (low high : Int) : PreSailM Regs c ue Int := do
+@@ -150 +339 @@ def undefined_range (low high : Int) : PreSailM RegisterType c ue Int := do
+-def undefined_nat (_ : Unit) : PreSailM RegisterType c ue Nat :=
++def undefined_nat (_ : Unit) : PreSailM Regs c ue Nat :=
+@@ -153 +342 @@ def undefined_nat (_ : Unit) : PreSailM RegisterType c ue Nat :=
+-def undefined_string (_ : Unit) : PreSailM RegisterType c ue String :=
++def undefined_string (_ : Unit) : PreSailM Regs c ue String :=
+@@ -156 +345 @@ def undefined_string (_ : Unit) : PreSailM RegisterType c ue String :=
+-def undefined_bitvector (n : Nat) : PreSailM RegisterType c ue (BitVec n) :=
++def undefined_bitvector (n : Nat) : PreSailM Regs c ue (BitVec n) :=
+@@ -159 +348 @@ def undefined_bitvector (n : Nat) : PreSailM RegisterType c ue (BitVec n) :=
+-def undefined_vector (n : Nat) (a : α) : PreSailM RegisterType c ue (Vector α n) :=
++def undefined_vector (n : Nat) (a : α) : PreSailM Regs c ue (Vector α n) :=
+@@ -162 +351 @@ def undefined_vector (n : Nat) (a : α) : PreSailM RegisterType c ue (Vector α
+-def internal_pick {α : Type} : List α → PreSailM RegisterType c ue α
++def internal_pick {α : Type} : List α → PreSailM Regs c ue α
+@@ -169,2 +358,2 @@ def internal_pick {α : Type} : List α → PreSailM RegisterType c ue α
+-def writeReg (r : Register) (v : RegisterType r) : PreSailM RegisterType c ue PUnit :=
+-  modify fun s => { s with regs := s.regs.insert r v }
++def writeReg (r : RegisterRef Regs α) (v : α) : PreSailM Regs c ue PUnit :=
++  modify fun s => { s with regs := r.set v s.regs }
+@@ -171,0 +361 @@ def writeReg (r : Register) (v : RegisterType r) : PreSailM RegisterType c ue PU
++/-- Total: every register always has a value (the structured register file has no missing keys). -/
+@@ -173,4 +363,2 @@ def writeReg (r : Register) (v : RegisterType r) : PreSailM RegisterType c ue PU
+-def readReg (r : Register) : PreSailM RegisterType c ue (RegisterType r) := do
+-  let .some s := (← get).regs.get? r
+-    | throw .Unreachable
+-  pure s
++def readReg (r : RegisterRef Regs α) : PreSailM Regs c ue α := do
++  pure (r.get (← get).regs)
+@@ -179,2 +367,2 @@ def readReg (r : Register) : PreSailM RegisterType c ue (RegisterType r) := do
+-def readRegRef (reg_ref : @RegisterRef Register RegisterType α) : PreSailM RegisterType c ue α :=
+-  match reg_ref with | .Reg r => readReg r
++def readRegRef (reg_ref : RegisterRef Regs α) : PreSailM Regs c ue α :=
++  readReg reg_ref
+@@ -183,3 +371,3 @@ def readRegRef (reg_ref : @RegisterRef Register RegisterType α) : PreSailM Regi
+-def writeRegRef (reg_ref : @RegisterRef Register RegisterType α) (a : α) :
+-  PreSailM RegisterType c ue Unit :=
+-  match reg_ref with | .Reg r => writeReg r a
++def writeRegRef (reg_ref : RegisterRef Regs α) (a : α) :
++  PreSailM Regs c ue Unit :=
++  writeReg reg_ref a
+@@ -188 +376 @@ def writeRegRef (reg_ref : @RegisterRef Register RegisterType α) (a : α) :
+-def reg_deref (reg_ref : @RegisterRef Register RegisterType α) : PreSailM RegisterType c ue α :=
++def reg_deref (reg_ref : RegisterRef Regs α) : PreSailM Regs c ue α :=
+@@ -190,0 +379,6 @@ def reg_deref (reg_ref : @RegisterRef Register RegisterType α) : PreSailM Regis
++/-- State-passing evaluation of register accesses (used by specializers). -/
++theorem readReg_apply (r : RegisterRef Regs α) (s : SequentialState Regs c) :
++    (readReg r : PreSailM Regs c ue α) s = .ok (r.get s.regs) s := rfl
++theorem writeReg_apply (r : RegisterRef Regs α) (v : α) (s : SequentialState Regs c) :
++    (writeReg r v : PreSailM Regs c ue PUnit) s = .ok ⟨⟩ { s with regs := r.set v s.regs } := rfl
++
+@@ -192 +386 @@ def reg_deref (reg_ref : @RegisterRef Register RegisterType α) : PreSailM Regis
+-def assert (p : Bool) (s : String) : PreSailM RegisterType c ue Unit :=
++def assert (p : Bool) (s : String) : PreSailM Regs c ue Unit :=
+@@ -196 +390 @@ def assert (p : Bool) (s : String) : PreSailM RegisterType c ue Unit :=
+-def writeByte (addr : Nat) (value : BitVec 8) : PreSailM RegisterType c ue PUnit := do
++def writeByte (addr : Nat) (value : BitVec 8) : PreSailM Regs c ue PUnit := do
+@@ -200 +394 @@ def writeByte (addr : Nat) (value : BitVec 8) : PreSailM RegisterType c ue PUnit
+-def writeBytes (addr : Nat) (value : BitVec (8 * n)) : PreSailM RegisterType c ue Bool := do
++def writeBytes (addr : Nat) (value : BitVec (8 * n)) : PreSailM Regs c ue Bool := do
+@@ -206 +400 @@ def writeBytes (addr : Nat) (value : BitVec (8 * n)) : PreSailM RegisterType c u
+-def writeByteVec (addr : Nat) (value : Vector (BitVec 8) n) : PreSailM RegisterType c ue Bool := do
++def writeByteVec (addr : Nat) (value : Vector (BitVec 8) n) : PreSailM Regs c ue Bool := do
+@@ -213 +407 @@ def write_ram (addr_size data_size : Nat) (_hex_ram addr : BitVec addr_size) (va
+-    PreSailM RegisterType c ue Unit := do
++    PreSailM Regs c ue Unit := do
+@@ -218 +412 @@ def write_ram (addr_size data_size : Nat) (_hex_ram addr : BitVec addr_size) (va
+-def readByte (addr : Nat) : PreSailM RegisterType c ue (BitVec 8) := do
++def readByte (addr : Nat) : PreSailM Regs c ue (BitVec 8) := do
+@@ -224 +418 @@ def readByte (addr : Nat) : PreSailM RegisterType c ue (BitVec 8) := do
+-def readBytes (size : Nat) (addr : Nat) : PreSailM RegisterType c ue ((BitVec (8 * size)) × Option Bool) :=
++def readBytes (size : Nat) (addr : Nat) : PreSailM Regs c ue ((BitVec (8 * size)) × Option Bool) :=
+@@ -236,0 +431,29 @@ def readBytes (size : Nat) (addr : Nat) : PreSailM RegisterType c ue ((BitVec (8
++/-- Byte reads never change the state (in particular they log no event). -/
++theorem readByte_state (addr : Nat) (s : SequentialState Regs c) :
++    (∃ v, (readByte addr : PreSailM Regs c ue _) s = .ok v s) ∨
++    (∃ e, (readByte addr : PreSailM Regs c ue _) s = .error e s) := by
++  unfold readByte
++  simp only [bind, EStateM.bind, get, getThe, MonadStateOf.get, EStateM.get]
++  cases s.mem.get? addr with
++  | some b => exact .inl ⟨b, rfl⟩
++  | none => exact .inr ⟨_, rfl⟩
++
++theorem readBytes_state (n addr : Nat) (s : SequentialState Regs c) :
++    (∃ v, (readBytes n addr : PreSailM Regs c ue _) s = .ok v s) ∨
++    (∃ e, (readBytes n addr : PreSailM Regs c ue _) s = .error e s) := by
++  induction n generalizing addr with
++  | zero => exact .inl ⟨_, rfl⟩
++  | succ n ih =>
++    rcases n with _ | n
++    · unfold readBytes
++      simp only [bind, EStateM.bind]
++      rcases readByte_state (ue := ue) addr s with ⟨v, h⟩ | ⟨e, h⟩ <;> rw [h]
++      · exact .inl ⟨_, rfl⟩
++      · exact .inr ⟨_, rfl⟩
++    · unfold readBytes
++      simp only [bind, EStateM.bind]
++      rcases readByte_state (ue := ue) addr s with ⟨v, h⟩ | ⟨e, h⟩ <;> rw [h]
++      · rcases ih (addr + 1) with ⟨w, h'⟩ | ⟨e', h'⟩ <;> simp only [h']
++        · exact .inl ⟨_, rfl⟩
++        · exact .inr ⟨_, rfl⟩
++      · exact .inr ⟨_, rfl⟩
+@@ -239 +462 @@ def readBytesVec (size : Nat) (addr : Nat) :
+-    PreSailM RegisterType c ue ((Vector (BitVec 8) size) × Vector Bool nt) :=
++    PreSailM Regs c ue ((Vector (BitVec 8) size) × Vector Bool nt) :=
+@@ -249,0 +473 @@ def readBytesVec (size : Nat) (addr : Nat) :
++/-- Fork (H3): append an event to the log; nothing else changes. -/
+@@ -251 +475,5 @@ def readBytesVec (size : Nat) (addr : Nat) :
+-def sail_mem_write [Arch] (req : Mem_write_request n vasize (BitVec pa_size) ts arch) : PreSailM RegisterType c ue (Result (Option Bool) Arch.abort) := do
++def logEvent (e : Event) : PreSailM Regs c ue Unit :=
++  modify fun s => { s with events := s.events.push e }
++
++@[simp_sail]
++def sail_mem_write (req : Mem_write_request n vasize (BitVec pa_size) ts Arch.arch_ak) : PreSailM Regs c ue (Result (Option Bool) Arch.abort) := do
+@@ -252,0 +481 @@ def sail_mem_write [Arch] (req : Mem_write_request n vasize (BitVec pa_size) ts
++  logEvent (.memWrite addr n (req.va.map (·.toNat)) req.access_kind req.value req.tag)
+@@ -259 +488 @@ def sail_mem_write [Arch] (req : Mem_write_request n vasize (BitVec pa_size) ts
+-def sail_mem_read [Arch] (req : Mem_read_request n vasize (BitVec pa_size) ts arch) : PreSailM RegisterType c ue (Result ((BitVec (8 * n)) × (Option Bool)) Arch.abort) := do
++def sail_mem_read (req : Mem_read_request n vasize (BitVec pa_size) ts Arch.arch_ak) : PreSailM Regs c ue (Result ((BitVec (8 * n)) × (Option Bool)) Arch.abort) := do
+@@ -260,0 +490 @@ def sail_mem_read [Arch] (req : Mem_read_request n vasize (BitVec pa_size) ts ar
++  logEvent (.memRead addr n (req.va.map (·.toNat)) req.access_kind req.tag)
+@@ -265 +495 @@ def sail_mem_read [Arch] (req : Mem_read_request n vasize (BitVec pa_size) ts ar
+-def sail_barrier (_ : α) : PreSailM RegisterType c ue Unit := pure ()
++def sail_barrier (b : Arch.barrier) : PreSailM Regs c ue Unit := logEvent (.barrier b)
+@@ -267 +497 @@ def sail_barrier (_ : α) : PreSailM RegisterType c ue Unit := pure ()
+-def sail_cache_op [Arch] (_ : Arch.cache_op) : PreSailM RegisterType c ue Unit := pure ()
++def sail_barrier_ext {β : Type} [Repr β] (b : β) : PreSailM Regs c ue Unit := logEvent (.barrierExt (reprStr b))
+@@ -269 +499 @@ def sail_cache_op [Arch] (_ : Arch.cache_op) : PreSailM RegisterType c ue Unit :
+-def sail_tlbi [Arch] (_ : Arch.tlb_op) : PreSailM RegisterType c ue Unit := pure ()
++def sail_cache_op (op : Arch.cache_op) : PreSailM Regs c ue Unit := logEvent (.cacheOp op)
+@@ -271 +501 @@ def sail_tlbi [Arch] (_ : Arch.tlb_op) : PreSailM RegisterType c ue Unit := pure
+-def sail_translation_start [Arch] (_ : Arch.trans_start) : PreSailM RegisterType c ue Unit := pure ()
++def sail_tlbi (op : Arch.tlb_op) : PreSailM Regs c ue Unit := logEvent (.tlbi op)
+@@ -273 +503 @@ def sail_translation_start [Arch] (_ : Arch.trans_start) : PreSailM RegisterType
+-def sail_translation_end [Arch] (_ : Arch.trans_end) : PreSailM RegisterType c ue Unit := pure ()
++def sail_translation_start (ts : Arch.trans_start) : PreSailM Regs c ue Unit := logEvent (.translationStart ts)
+@@ -275 +505 @@ def sail_translation_end [Arch] (_ : Arch.trans_end) : PreSailM RegisterType c u
+-def sail_take_exception [Arch] (_ : Arch.fault) : PreSailM RegisterType c ue Unit := pure ()
++def sail_translation_end (te : Arch.trans_end) : PreSailM Regs c ue Unit := logEvent (.translationEnd te)
+@@ -277 +507,40 @@ def sail_take_exception [Arch] (_ : Arch.fault) : PreSailM RegisterType c ue Uni
+-def sail_return_exception [Arch] (_ : Arch.pa) : PreSailM RegisterType c ue Unit := pure ()
++def sail_take_exception (f : Arch.fault) : PreSailM Regs c ue Unit := logEvent (.takeException f)
++@[simp_sail]
++def sail_return_exception (pa : Arch.pa) : PreSailM Regs c ue Unit := logEvent (.returnException pa)
++
++/-! Fork (H3): state-passing equations. Each hook only appends its event, so `eraseEvents` of the
++result is the input's: proofs that ignore events rewrite with these and `eraseEvents_pushEvent`. -/
++theorem logEvent_apply (e : Event) (s : SequentialState Regs c) :
++    (logEvent e : PreSailM Regs c ue Unit) s = .ok () { s with events := s.events.push e } := rfl
++theorem sail_barrier_apply (b : Arch.barrier) (s : SequentialState Regs c) :
++    (sail_barrier b : PreSailM Regs c ue Unit) s = .ok () { s with events := s.events.push (.barrier b) } := rfl
++theorem sail_cache_op_apply (op : Arch.cache_op) (s : SequentialState Regs c) :
++    (sail_cache_op op : PreSailM Regs c ue Unit) s = .ok () { s with events := s.events.push (.cacheOp op) } := rfl
++theorem sail_tlbi_apply (op : Arch.tlb_op) (s : SequentialState Regs c) :
++    (sail_tlbi op : PreSailM Regs c ue Unit) s = .ok () { s with events := s.events.push (.tlbi op) } := rfl
++theorem sail_translation_start_apply (ts : Arch.trans_start) (s : SequentialState Regs c) :
++    (sail_translation_start ts : PreSailM Regs c ue Unit) s =
++      .ok () { s with events := s.events.push (.translationStart ts) } := rfl
++theorem sail_translation_end_apply (te : Arch.trans_end) (s : SequentialState Regs c) :
++    (sail_translation_end te : PreSailM Regs c ue Unit) s =
++      .ok () { s with events := s.events.push (.translationEnd te) } := rfl
++theorem sail_take_exception_apply (f : Arch.fault) (s : SequentialState Regs c) :
++    (sail_take_exception f : PreSailM Regs c ue Unit) s =
++      .ok () { s with events := s.events.push (.takeException f) } := rfl
++theorem sail_return_exception_apply (pa : Arch.pa) (s : SequentialState Regs c) :
++    (sail_return_exception pa : PreSailM Regs c ue Unit) s =
++      .ok () { s with events := s.events.push (.returnException pa) } := rfl
++/-- A memory read is its event followed by the unchanged byte read. -/
++theorem sail_mem_read_eq (req : Mem_read_request n vasize (BitVec pa_size) ts Arch.arch_ak) :
++    (sail_mem_read req : PreSailM Regs c ue _) =
++      (do logEvent (.memRead req.pa.toNat n (req.va.map (·.toNat)) req.access_kind req.tag)
++          let value ← readBytes n req.pa.toNat
++          pure (.Ok value)) := rfl
++/-- A memory write is its event followed by the unchanged byte writes. -/
++theorem sail_mem_write_eq (req : Mem_write_request n vasize (BitVec pa_size) ts Arch.arch_ak) :
++    (sail_mem_write req : PreSailM Regs c ue _) =
++      (do logEvent (.memWrite req.pa.toNat n (req.va.map (·.toNat)) req.access_kind req.value req.tag)
++          let b ← match req.value with
++            | some v => writeBytes req.pa.toNat v
++            | none => pure true
++          pure (.Ok (some b))) := rfl
+@@ -280 +549 @@ def sail_return_exception [Arch] (_ : Arch.pa) : PreSailM RegisterType c ue Unit
+-def read_ram (addr_size data_size : Nat) (_hex_ram addr : BitVec addr_size) : PreSailM RegisterType c ue (BitVec (8 * data_size)) := do
++def read_ram (addr_size data_size : Nat) (_hex_ram addr : BitVec addr_size) : PreSailM Regs c ue (BitVec (8 * data_size)) := do
+@@ -285 +554 @@ def read_ram (addr_size data_size : Nat) (_hex_ram addr : BitVec addr_size) : Pr
+-def cycle_count (_ : Unit) : PreSailM RegisterType c ue Unit :=
++def cycle_count (_ : Unit) : PreSailM Regs c ue Unit :=
+@@ -289 +558 @@ def cycle_count (_ : Unit) : PreSailM RegisterType c ue Unit :=
+-def get_cycle_count (_ : Unit) : PreSailM RegisterType c ue Nat := do
++def get_cycle_count (_ : Unit) : PreSailM Regs c ue Nat := do
+@@ -292 +561 @@ def get_cycle_count (_ : Unit) : PreSailM RegisterType c ue Nat := do
+-def print_effect (str : String) : PreSailM RegisterType c ue Unit :=
++def print_effect (str : String) : PreSailM Regs c ue Unit :=
+@@ -295 +564 @@ def print_effect (str : String) : PreSailM RegisterType c ue Unit :=
+-def print_int_effect (str : String) (n : Int) : PreSailM RegisterType c ue Unit :=
++def print_int_effect (str : String) (n : Int) : PreSailM Regs c ue Unit :=
+@@ -298 +567 @@ def print_int_effect (str : String) (n : Int) : PreSailM RegisterType c ue Unit
+-def print_bits_effect {w : Nat} (str : String) (x : BitVec w) : PreSailM RegisterType c ue Unit :=
++def print_bits_effect {w : Nat} (str : String) (x : BitVec w) : PreSailM Regs c ue Unit :=
+@@ -301 +570 @@ def print_bits_effect {w : Nat} (str : String) (x : BitVec w) : PreSailM Registe
+-def print_endline_effect (str : String) : PreSailM RegisterType c ue Unit :=
++def print_endline_effect (str : String) : PreSailM Regs c ue Unit :=
+@@ -305 +574 @@ def print_endline_effect (str : String) : PreSailM RegisterType c ue Unit :=
+-def sailTryCatchE (e : ExceptT β (PreSailM RegisterType c ue) α) (h : ue → ExceptT β (PreSailM RegisterType c ue) α) : ExceptT β (PreSailM RegisterType c ue) α :=
++def sailTryCatchE (e : ExceptT β (PreSailM Regs c ue) α) (h : ue → ExceptT β (PreSailM Regs c ue) α) : ExceptT β (PreSailM Regs c ue) α :=
+@@ -313 +582 @@ section SailME
+-variable {Register : Type} {RT : Register → Type} [DecidableEq Register] [Hashable Register]
++variable {Regs : Type}
+@@ -315 +584 @@ variable {Register : Type} {RT : Register → Type} [DecidableEq Register] [Hash
+-instance: MonadExceptOf (Sail.Error ue) (PreSailME RT c ue α) where
++instance: MonadExceptOf (Sail.Error ue) (PreSailME Regs c ue α) where
+@@ -319 +588 @@ instance: MonadExceptOf (Sail.Error ue) (PreSailME RT c ue α) where
+-def PreSailME.run (m : PreSailME RT c ue α α) : PreSailM RT c ue α := do
++def PreSailME.run (m : PreSailME Regs c ue α α) : PreSailM Regs c ue α := do
+@@ -332 +601 @@ instance [∀ x, CoeT α x α'] :
+-    CoeT (PreSailME RT c ue α β) e (PreSailME RT c ue α' β) where
++    CoeT (PreSailME Regs c ue α β) e (PreSailME Regs c ue α' β) where
+@@ -335 +604 @@ instance [∀ x, CoeT α x α'] :
+-def PreSailME.throw (e : α) : PreSailME RT c ue α β :=
++def PreSailME.throw (e : α) : PreSailME Regs c ue α β :=
+@@ -338,2 +607,7 @@ def PreSailME.throw (e : α) : PreSailME RT c ue α β :=
+-instance : Inhabited (SequentialState RT trivialChoiceSource) where
+-  default := ⟨default, (), default, default, default, default⟩
++instance [Inhabited Regs] : Inhabited (SequentialState Regs trivialChoiceSource) where
++  default := ⟨default, (), default, default, default, default, default, #[]⟩
++
++/-- Only for running code (e.g. `unwrapValue`); proofs quantify over the state, hence the oracle. -/
++instance [Inhabited Regs] : Inhabited (SequentialState Regs oracleChoiceSource) where
++  default := ⟨default, (fun _ p => trivialChoiceSource.chooseAt p default (), 0), default, default, default,
++    default, default, #[]⟩
+diff --git a/Sail/Sail.lean b/Sail/Sail.lean
+index e53f6a1..0d51ca5 100644
+--- a/Sail/Sail.lean
++++ b/Sail/Sail.lean
+@@ -37 +37 @@ open PreSail
+-variable {Register : Type} {RegisterType : Register → Type} [DecidableEq Register] [Hashable Register]
++variable {Regs : Type} [Arch]
+@@ -39,2 +39,2 @@ variable {Register : Type} {RegisterType : Register → Type} [DecidableEq Regis
+-def main_of_sail_main (initialState : SequentialState RegisterType trivialChoiceSource)
+-    (main : Unit → PreSailM RegisterType trivialChoiceSource ue Unit) : IO UInt32 := do
++def main_of_sail_main (initialState : SequentialState Regs trivialChoiceSource)
++    (main : Unit → PreSailM Regs trivialChoiceSource ue Unit) : IO UInt32 := do
+@@ -73 +73,5 @@ def untilFuelM {α} [Monad m] (fuel : Nat) (cond : α → m Bool) (init : α) (f
+-instance : CoeT Int x Nat where
++/- L1 / C13: importing Sail never clamps an Int into Nat implicitly.
++   Legacy callers must opt in explicitly; generated code uses checked conversions. -/
++namespace Sail.LossyInt
++
++scoped instance instCoeTIntToNat : CoeT Int x Nat where
+@@ -76 +80,9 @@ instance : CoeT Int x Nat where
+-instance : CoeT (BitVec n) x (BitVec m) where
++end Sail.LossyInt
++
++/-! L5 / C13: lossy width coercions are NOT in scope for generated model code (`open Sail` does not
++enable them), so a width mismatch between generated terms is a type error instead of a silent
++`setWidth` (which masked S22: `BitVec (31 - (0 - 1))` = `BitVec 31` truncating a 32-bit value).
++Code that really wants implicit resizing opts in with `open scoped Sail.LossyWidth`. -/
++namespace Sail.LossyWidth
++
++scoped instance instCoeTBitVecSetWidth : CoeT (BitVec n) x (BitVec m) where
+@@ -79 +91 @@ instance : CoeT (BitVec n) x (BitVec m) where
+-instance: CoeT (Vector (BitVec n₁) m) x (Vector (BitVec n₂) m) where
++scoped instance instCoeTVectorBitVecSetWidth : CoeT (Vector (BitVec n₁) m) x (Vector (BitVec n₂) m) where
+@@ -81,0 +94,2 @@ instance: CoeT (Vector (BitVec n₁) m) x (Vector (BitVec n₂) m) where
++end Sail.LossyWidth
++
+@@ -94,2 +108,10 @@ instance {α α' : Type u} [∀ x, CoeT α x α'] (xs : List α) : CoeT (List α
+-instance (priority := low) : HAdd (BitVec n) (BitVec m) (BitVec n) where
+-  hAdd x y := x + y
++/-! L5 / C13: mixed-width bitvector operators (second operand resized to the first operand's width)
++are likewise opt-in (`open scoped Sail.MixedWidth`), not in scope for generated model code: Sail's
++`add_bits` etc. require equal widths, so a mixed-width operation in generated code is a bug. -/
++namespace Sail.MixedWidth
++
++scoped instance (priority := low) instHAddBitVecMixed : HAdd (BitVec n) (BitVec m) (BitVec n) where
++  hAdd x y := x + y.setWidth n
++
++scoped instance (priority := low) instHSubBitVecMixed : HSub (BitVec n) (BitVec m) (BitVec n) where
++  hSub x y := x - y.setWidth n
+@@ -97,2 +119,2 @@ instance (priority := low) : HAdd (BitVec n) (BitVec m) (BitVec n) where
+-instance (priority := low) : HSub (BitVec n) (BitVec m) (BitVec n) where
+-  hSub x y := x - y
++scoped instance (priority := low) instHAndBitVecMixed : HAnd (BitVec n) (BitVec m) (BitVec n) where
++  hAnd x y := x &&& y.setWidth n
+@@ -100,2 +122,2 @@ instance (priority := low) : HSub (BitVec n) (BitVec m) (BitVec n) where
+-instance (priority := low) : HAnd (BitVec n) (BitVec m) (BitVec n) where
+-  hAnd x y := x &&& y
++scoped instance (priority := low) instHOrBitVecMixed : HOr (BitVec n) (BitVec m) (BitVec n) where
++  hOr x y := x ||| y.setWidth n
+@@ -103,2 +125,2 @@ instance (priority := low) : HAnd (BitVec n) (BitVec m) (BitVec n) where
+-instance (priority := low) : HOr (BitVec n) (BitVec m) (BitVec n) where
+-  hOr x y := x ||| y
++scoped instance (priority := low) instHXorBitVecMixed : HXor (BitVec n) (BitVec m) (BitVec n) where
++  hXor x y := x ^^^ y.setWidth n
+@@ -106,2 +128 @@ instance (priority := low) : HOr (BitVec n) (BitVec m) (BitVec n) where
+-instance (priority := low) : HXor (BitVec n) (BitVec m) (BitVec n) where
+-  hXor x y := x ^^^ y
++end Sail.MixedWidth
+diff --git a/SailTests/NatConversions.lean b/SailTests/NatConversions.lean
+new file mode 100644
+index 0000000..32b1ec8
+--- /dev/null
++++ b/SailTests/NatConversions.lean
+@@ -0,0 +1,17 @@
++import Sail
++
++namespace SailTests.NatConversions
++
++def Mixed (n : Nat) (z : Int) : Prop := n - z = z
++example : ¬ Mixed 0 (-1) := by unfold Mixed; decide
++example : Sail.Int.toNatChecked (37 : Int) = 37 := by decide
++example (n : Int) (h : 0 ≤ n) : Sail.Int.toNatChecked n = n.toNat :=
++  Sail.Int.toNatChecked_of_nonneg n h
++
++namespace OptIn
++open scoped Sail.LossyInt
++def LegacyMixed (n : Nat) (z : Int) : Prop := n - z = z
++example : LegacyMixed 0 (-1) := by unfold LegacyMixed; decide
++end OptIn
++
++end SailTests.NatConversions
+diff --git a/SailTests/RealPower.lean b/SailTests/RealPower.lean
+new file mode 100644
+index 0000000..b64abde
+--- /dev/null
++++ b/SailTests/RealPower.lean
+@@ -0,0 +1,17 @@
++import Sail.AbstractRealRat
++
++namespace SailTests.RealPower
++open Sail
++
++example (x : Rat) (n : Nat) : SailReal.npow x n = x ^ n := rfl
++example (x : Rat) (n : Nat) :
++    SailReal.npow x n = realNpowSpec SailReal.mul SailReal.one x n :=
++  SailReal.npow_eq_spec x n
++example : SailReal.npow (2 : Rat) 10 = 1024 := by decide
++example : SailReal.zpow (2 : Rat) (-3) = (8 : Rat)⁻¹ := by
++  change (SailReal.npow (2 : Rat) 3)⁻¹ = (8 : Rat)⁻¹
++  congr 1
++
++#print axioms Sail.SailReal.npow_eq_spec
++#print axioms Sail.SailReal.rat_npow
++end SailTests.RealPower
+diff --git a/SailTests/SetSliceInt.lean b/SailTests/SetSliceInt.lean
+new file mode 100644
+index 0000000..89a62c6
+--- /dev/null
++++ b/SailTests/SetSliceInt.lean
+@@ -0,0 +1,54 @@
++import Sail
++/-! Unit tests for `Sail.set_slice_int` / `Sail.get_slice_int` against Sail's reference
++semantics (lib/sail.c `set_slice_int`: `mpz_set` then per-bit `mpz_setbit`/`mpz_clrbit`,
++GMP's infinite two's-complement view for negative integers). Regression for L4
++(the old definition truncated `n` to `len` bits first: `set_slice_int 1 8388608 0 1#1 = -1`). -/
++
++namespace SailTests.SetSliceInt
++open Sail
++set_option maxRecDepth 100000
++
++/-- Bit `k` of `n` in the infinite two's-complement view (GMP `mpz_tstbit`). -/
++def refTstBit (n : Int) (k : Nat) : Bool := (n / 2 ^ k) % 2 == 1
++
++/-- GMP `mpz_setbit` / `mpz_clrbit`. -/
++def refPutBit (n : Int) (k : Nat) (b : Bool) : Int :=
++  if refTstBit n k == b then n else if b then n + 2 ^ k else n - 2 ^ k
++
++/-- Literal transcription of sail.c `set_slice_int`. -/
++def refSetSliceInt (len : Nat) (n : Int) (lo : Nat) (x : BitVec len) : Int :=
++  (List.range len).foldl (fun r i => refPutBit r (lo + i) (x.getLsbD i)) n
++
++-- The L4 regression (FPRoundBase odd rounding: `int_mant[0] = '1'` on 2^23).
++example : set_slice_int 1 8388608 0 1#1 = 8388609 := by rfl
++example : set_slice_int 1 8388609 0 0#1 = 8388608 := by rfl
++-- Field in the middle, wider than the old truncation width.
++example : set_slice_int 4 0x12345 4 0xA#4 = 0x123A5 := by rfl
++-- Negative integers: two's-complement view, sign extension preserved.
++example : set_slice_int 1 (-1) 0 0#1 = -2 := by rfl
++example : set_slice_int 8 (-1) 8 0#8 = -65281 := by rfl
++example : set_slice_int 4 (-16) 0 0xF#4 = -1 := by rfl
++example : set_slice_int 3 (-5) 2 0#3 = -29 := by rfl
++-- Zero-length slice is the identity.
++example : set_slice_int 0 (-12345) 7 0#0 = -12345 := by rfl
++
++-- Exhaustive small-range agreement with the sail.c transcription.
++#guard Id.run do
++  let mut ok := true
++  for len in List.range 5 do
++    for lo in List.range 6 do
++      for k in List.range 141 do
++        let n : Int := (k : Int) - 70
++        for v in List.range (2 ^ len) do
++          let x := BitVec.ofNat len v
++          if set_slice_int len n lo x != refSetSliceInt len n lo x then ok := false
++          -- round trip through get_slice_int
++          if get_slice_int len (set_slice_int len n lo x) lo != x then ok := false
++  return ok
++
++-- Large magnitudes (beyond 64 bits), both signs.
++#guard [((2 : Int) ^ 100 + 12345), -((2 : Int) ^ 100) - 77, (2 : Int) ^ 70 - 1, -1].all fun n =>
++  [(0, 0xFF#8), (60, 0x5A#8), (95, 0x81#8)].all fun (lo, x) =>
++    set_slice_int 8 n lo x == refSetSliceInt 8 n lo x
++
++end SailTests.SetSliceInt
+diff --git a/SailTests/Widths.lean b/SailTests/Widths.lean
+new file mode 100644
+index 0000000..ba5616b
+--- /dev/null
++++ b/SailTests/Widths.lean
+@@ -0,0 +1,28 @@
++import Sail
++/-! L5 / C13: width coercions are not in scope with `open Sail` (what generated model code does), so
++width mismatches are elaboration errors; `Sail.BitVec.castWidth` is the explicit, checked cast. -/
++
++namespace SailTests.Widths
++open Sail
++
++-- No implicit resize between different widths (was `CoeT (BitVec n) x (BitVec m) := x.setWidth m`).
++#check_failure (fun (x : BitVec 32) => (x : BitVec 31))
++#check_failure (fun (x : BitVec 8) => (x : BitVec 16))
++-- No mixed-width operators (were `HAdd (BitVec n) (BitVec m) (BitVec n)` etc. via the coercion).
++#check_failure (fun (x : BitVec 8) (y : BitVec 4) => x + y)
++#check_failure (fun (x : BitVec 8) (y : BitVec 4) => x ^^^ y)
++
++-- Explicit opt-in still available to hand-written code.
++section
++open scoped Sail.LossyWidth
++example (x : BitVec 8) : BitVec 4 := x
++end
++
++-- castWidth is the identity when the widths agree (definitionally, and as a simp lemma).
++example (x : BitVec 8) : Sail.BitVec.castWidth (m := 8) x = x := by simp
++example (n : Nat) (x : BitVec n) : Sail.BitVec.castWidth (m := n) x = x := Sail.BitVec.castWidth_eq x
++#guard Sail.BitVec.castWidth (m := 8) (0xAB#8) == 0xAB#8
++-- widths equal but written differently (the generator's use): Lean checks them by evaluation
++example (x : BitVec (31 - 0 + 1)) : Sail.BitVec.castWidth (m := 32) x = x := by simp
++
++end SailTests.Widths
