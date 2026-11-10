@@ -1,8 +1,8 @@
 ![IsaWitness wordmark with gold circuit traces branching from a green silicon die](docs/assets/isawitness-banner.jpg)
 
-**Reason about Arm instructions in Lean with evidence you can inspect.**
+**A Sail-derived Arm model in Lean for downstream machine-code verification.**
 
-A machine-code proof depends on what the model says each instruction does. IsaWitness gives that work a reproducible starting point in Lean, with a frozen Sail-derived Arm® model and equations for its architectural and event-log observations.
+A machine-code proof depends on the behavior assigned to each instruction. IsaWitness provides a frozen Sail-derived Arm® model in Lean, reproducible builds, and equations for architectural and event-log observations. The evidence records which selected observations agree with Isla and where comparisons found differences or left gaps.
 
 - Look up any of the 771 instruction forms in the selected inventory. [Instruction inventory](evidence/instruction-inventory.json)
 - See where selected observations agree with Isla and where comparisons found differences or left gaps. [Cross-validation evidence](evidence/README.md)
@@ -32,7 +32,16 @@ The standard Lake packages under `model/`, `vendor/lean-sail/` and `observers/` 
 
 Generated assertion diagnostics retain 2,244 inert path string literals. They do not read files. The full model reproduces its canonical artifact hashes, and normalization is queued for the [next planned model revision](NEXT-REVISION.md).
 
-The per-form step layer is a planned later addition. Its class and pipeline dependencies are still changing. Value, physical-memory and walk-cleanup layers remain outside this first-release scope.
+## Scope and roadmap
+
+This release provides the model semantics and observation equations. Program proofs over those semantics are outside this release. The per-instruction step layer, instruction-class library and generator, value layer, and memory proof layers are under development privately. We plan to release them later with a worked example that goes from machine code to an end-to-end proof. [Current claims](docs/CLAIMS.md) · [Next model revision](NEXT-REVISION.md)
+
+## Related work
+
+- **Islaris** (PLDI 2022) verifies concrete Armv8-A and RISC-V machine code using Isla to generate instruction traces from Sail and an Iris program logic in Coq to reason about them. Its published Arm examples use configurations with address translation turned off, although the underlying ISA model includes translation-table walks. Isla and the SMT solver are in the trusted chain for the basic approach. The paper demonstrates optional validation of traces against Sail-generated Coq semantics for RISC-V. IsaWitness makes the Sail-derived model available directly in Lean and records finite Isla comparisons as validation evidence. [Islaris paper, §§1–2 and 5](https://www.cl.cam.ac.uk/~jp622/islaris.pdf)
+- **Sail in Isabelle/HOL and HOL4.** The Sail work presented at POPL 2019 generates Armv8-A theorem-prover definitions for Isabelle/HOL and HOL4. Its Isabelle case study proves a functional characterization of address translation under stated preconditions. IsaWitness brings a frozen Sail-derived Arm model into Lean with a reproducible build and documented observation evidence. [Armstrong et al., POPL 2019, §§4 and 8](https://www.cl.cam.ac.uk/users/pes20/sail/sail-popl2019.pdf)
+- **LNSym** provides a Lean symbolic simulator for Armv8 machine code, with its own Arm model, program specifications, proofs, and conformance tests. IsaWitness focuses on making a frozen Sail-derived model and its observation evidence available in Lean. [LNSym repository](https://github.com/leanprover/LNSym#readme)
+- **s2n-bignum** verifies concrete arithmetic routines in HOL Light against formal AArch64 and x86-64 machine models. Its documented model scope is sequential, single-core user-mode execution with a flat address space. IsaWitness supplies a Sail-derived model with system-level architectural semantics as a basis for later verification work in Lean. [s2n-bignum repository](https://github.com/awslabs/s2n-bignum#readme) · [Model assumptions](https://github.com/awslabs/s2n-bignum/blob/main/SOUNDNESS.md#b3-what-the-model-omits)
 
 Arm is a registered trademark of Arm Limited (or its subsidiaries or affiliates) in the US and/or elsewhere. This independent project is not sponsored, endorsed or certified by Arm. The public project name is IsaWitness. Canonical Lean package/module identifiers such as `ArmCert` and `ArmFull` remain unchanged for reproducibility.
 
