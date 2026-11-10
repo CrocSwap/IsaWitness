@@ -1,12 +1,20 @@
-# IsaWitness
+![IsaWitness wordmark with gold circuit traces branching from a green silicon die](docs/assets/isawitness-banner.jpg)
 
-This repository assembles a frozen Sail translation of an Arm® architecture model in Lean, together with a selected 771-form instruction inventory, observation equations and qualified cross-validation evidence. It does not establish full instruction equivalence, constant-time behavior, hardware certification or consumer total correctness.
+**Reason about Arm instructions in Lean with evidence you can inspect.**
 
-The frozen model's 1,481 artifacts reproduce the canonical hashes after fresh builds and complete raw-body axiom gates. A clean source-only fetch-and-build test on GB10 passed all four owned-package gates in about 465 seconds, including verified runtime materialization. The final fetch wiring has separate integration tests against byte-identical Lean source/package configuration; this is not an exact-final-entrypoint timing claim. Publication still requires owner approval and final source-export review. See the [source-only measurement](evidence/source-fetch-cold.json), [provider status](docs/PROVIDER-STATUS.md), [build instructions](docs/BUILD.md), [evidence](evidence/README.md) and [limitations](docs/LIMITATIONS.md).
+A machine-code proof depends on what the model says each instruction does. IsaWitness gives that work a reproducible starting point in Lean, with a frozen Sail-derived Arm® model and equations for its architectural and event-log observations.
+
+- Look up any of the 771 instruction forms in the selected inventory. [Instruction inventory](evidence/instruction-inventory.json)
+- See where selected observations agree with Isla and where comparisons found differences or left gaps. [Cross-validation evidence](evidence/README.md)
+- Rebuild the model from pinned sources and check the canonical hashes of all 1,481 model artifacts. [Build and validation guide](docs/BUILD.md)
+
+The model, observation equations and finite comparisons have distinct scopes. Those boundaries matter for claims about instruction equivalence, constant-time behavior, hardware certification and consumer correctness. [Claims](docs/CLAIMS.md) · [Limitations](docs/LIMITATIONS.md)
+
+A clean source-only fetch and build on GB10 passed all four owned-package axiom gates in about 465 seconds. The final fetch wiring was tested separately against identical Lean source and package configuration. [Source-only measurement](evidence/source-fetch-cold.json) · [Provider status](docs/PROVIDER-STATUS.md)
 
 ## Getting started
 
-From an approved source checkout, fetch and verify the pinned runtime **before** Lake resolves local path dependencies:
+With Lean 4.35.0 installed, fetch and verify the pinned runtime from your checkout **before** Lake resolves local path dependencies.
 
 ```sh
 ./scripts/fetch-lean-sail
@@ -28,6 +36,6 @@ The per-form step layer is a planned later addition. Its class and pipeline depe
 
 Arm is a registered trademark of Arm Limited (or its subsidiaries or affiliates) in the US and/or elsewhere. This independent project is not sponsored, endorsed or certified by Arm. The public project name is IsaWitness. Canonical Lean package/module identifiers such as `ArmCert` and `ArmFull` remain unchanged for reproducibility.
 
-First-party material is licensed under Apache-2.0; see [LICENSE](LICENSE) and [NOTICE](NOTICE). Third-party terms remain separate, and the runtime patch-distribution/export review and explicit owner approval remain prerequisites for publication. The confirmed first-party copyright holder is Crocodile Labs Inc. Runtime, model and native caches remain private until runtime permission is resolved.
+Apache-2.0 covers first-party material, with copyright held by Crocodile Labs Inc. Third-party terms apply separately. Upstream runtime permissions and patch-distribution rights remain open, and the source preview uses local builds while those questions are unresolved. [License](LICENSE) · [Notice](NOTICE) · [Upstream licensing inquiry](https://github.com/rems-project/lean-sail/issues/24)
 
 The artifact reader is tool-only and outside every proof closure, enforced by the gate. Run the gate on your own fresh builds, not as an auditor of downloaded or untrusted `.olean` files; the reader memory-maps artifact regions using unsafe reads.
