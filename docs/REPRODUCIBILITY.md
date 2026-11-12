@@ -28,7 +28,7 @@ IsaWitness pins the model by its exact bytes. A fresh build from the pinned sour
 
 Byte identity holds only within one recipe. A downstream project that compiles the same sources a different way gets different `.olean` bytes. For example, Lake adds package metadata, and a per-module `lean` driver does not. In that case, compare the kernel content instead: every constant's name, type hash and value hash, for every `ArmFull` and `Sail` module.
 
-Both packages now compile with `-j1 -DElab.async=false`, so auxiliary declaration numbering no longer depends on the recipe. We compared this Lake build against an independent per-module build of the same sources, made with direct `lean` invocations from a different source root. All 50,157 constants in the model and runtime were identical. The `.olean` bytes differ only by Lake's package metadata.
+Both packages now compile with `-j1 -DElab.async=false`, so auxiliary declaration numbering no longer depends on the recipe. We compared this Lake build against an independent per-module build of the same sources, made with direct `lean` invocations from a different source root. All 50,157 constants in the model and runtime were identical. The `.olean` bytes differ between the two recipes, as expected (Lake records package metadata, for example), so compare kernel content across recipes and bytes within one.
 
 ## What is and is not covered
 - The model's canonical hashes cover the 1,481 `ArmFull` artifacts.
