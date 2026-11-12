@@ -22,7 +22,7 @@ lake update
 lake build
 ```
 
-For full fresh validation, follow [the build instructions](docs/BUILD.md), which gate each owned package and check every model artifact hash.
+For full fresh validation, follow [the build instructions](docs/BUILD.md), which gate each owned package and check every model artifact hash. The exact recipe for reproducing the model bit for bit is in [REPRODUCIBILITY](docs/REPRODUCIBILITY.md).
 
 The fetch step needs POSIX `sh`, Git, and one of `sha256sum`, `shasum -a 256`, or `openssl dgst -sha256`. It verifies the exact upstream commit and tree, the ordered patch series, every resulting source/configuration SHA256 and the complete file set. Only `UPSTREAM.json`, patches and the first-party `AbstractReal`/`AbstractRealRat` files are distributed in the runtime directory. Lake still sees the local package ID `lean-sail`. The cold-build entrypoint performs this verified fetch before any Lake update and includes fetch time in the measurement. Package-owned .lake build metadata is outside the source inventory; all extra source/payload files, partial fetches and local edits are refused rather than overwritten.
 
