@@ -2,6 +2,7 @@
 
 IsaWitness is a frozen, Sail-derived Arm® model in Lean, built for downstream machine-code verification. The release covers four things:
 - reproducible builds;
+- axiom hygiene: only the three standard Lean axioms;
 - equations for architectural and event-log observations;
 - an accounting of how much evidence supports each part.
 
