@@ -21,12 +21,10 @@
 - Architectural comparisons keep 65 partials.
 - These are historical, finite report projections. They are not all-input or all-oracle-choice equivalence.
 
-## Frozen diagnostic strings
-The generated model keeps 2,244 build-path string literals across 306 modules. They are inert assertion-message data:
-- a comment-aware scan found no file read, include, initialization or evaluation hook that uses them;
-- builds do not need the original directories to exist.
-
-Normalizing them would change model bytes, so it is deferred to the next model revision.
+## Diagnostic strings
+Generated assertion messages carry source locations as stable relative paths (`sail-arm/…`, `armcert/…`).
+- This revision regenerated 306 model modules from the same frozen generator and inputs, changing only those 2,244 literals.
+- The messages are inert data: no file read, include or evaluation hook uses them.
 
 ## Distribution
 - Upstream runtime permissions are still unresolved ([lean-sail#24](https://github.com/rems-project/lean-sail/issues/24)).

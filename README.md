@@ -30,7 +30,7 @@ For a previously obtained Git mirror, use `./scripts/fetch-lean-sail --source /p
 
 The standard Lake packages under `model/`, `vendor/lean-sail/` and `observers/` use relative dependencies within the materialized checkout. The enclosing Git revision pins the first-party files and overlay metadata; the fetched runtime is pinned by its upstream commit/tree and verified resulting file hashes. The source-only gate implementation is vendored separately from proof modules. Model declarations retain their frozen bytes. The runtime and observer public copies normalize internal labels in comments, with original and public source hashes retained in provenance; their declarations are unchanged.
 
-Generated assertion diagnostics retain 2,244 inert path string literals. They do not read files. The full model reproduces its canonical artifact hashes, and normalization is queued for the [next planned model revision](NEXT-REVISION.md).
+Generated assertion diagnostics name their source locations by stable relative paths (for example `sail-arm/v8_base.sail:L.C-L.C`). This revision regenerated the 306 affected model modules from the same frozen generator and inputs. Only those 2,244 string literals changed. Every other declaration is kernel-identical to the previous revision.
 
 ## Scope and roadmap
 

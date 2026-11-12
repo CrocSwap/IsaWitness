@@ -12,4 +12,4 @@ The source tree uses the canonical `ArmFull` package with six model libraries an
 
 The first-release scope also includes the 771-form inventory and reviewed observation equations/evidence. A per-form step layer is planned later because its class/pipeline dependencies are still changing. Value, physical-memory and walk-cleanup layers remain outside this tree.
 
-The release owner approved retaining the frozen assertion diagnostic paths. All 2,244 literals in 306 files are inert assertion-message data. A different-directory M0155 spot build reproduced its canonical bytes, and the complete model now also reproduces its canonical artifacts. Normalization is queued for the next planned model revision. See [limitations](LIMITATIONS.md) and [next revision](../NEXT-REVISION.md).
+Assertion diagnostic paths were normalized to stable relative source names in this revision: 2,244 literals in 306 regenerated files, with all other declarations kernel-identical to the previous revision. See [limitations](LIMITATIONS.md) and [reproducibility](REPRODUCIBILITY.md).
