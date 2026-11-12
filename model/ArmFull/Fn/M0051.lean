@@ -235,12 +235,12 @@ def AArch64_IASize (txsz : (BitVec 6)) : Int :=
 
 /-- Type quantifiers: k_N : Nat, List.elem k_N [64, 128] -/
 def AArch64_S1AMECFault (walkparams : S1TTWParams) (paspace : PASpace) (regime : Regime) (descriptor : (BitVec k_N)) : SailM Bool := do
-  ArmFull.assert (((Sail.BitVec.length descriptor) == 64) || ((Sail.BitVec.length descriptor) == 128)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25140.31-25140.32"
+  ArmFull.assert (((Sail.BitVec.length descriptor) == 64) || ((Sail.BitVec.length descriptor) == 128)) "sail-arm/v8_base.sail:25140.31-25140.32"
   let descriptor_amec ← (( do
     if ((walkparams.d128 == 1#1) : Bool)
     then
       (do
-        ArmFull.assert (103 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25142.35-25142.36"
+        ArmFull.assert (103 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25142.35-25142.36"
         (pure ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 103)])))))
     else (pure ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 63)])))) ) : SailM
     (BitVec 1) )
@@ -257,7 +257,7 @@ def AArch64_ContiguousBit (tgx : TGx) (d128 : (BitVec 1)) (level : Int) (descrip
       then (pure (0#1))
       else
         (do
-          ArmFull.assert (111 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25301.39-25301.40"
+          ArmFull.assert (111 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25301.39-25301.40"
           (pure ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 111)]))))))
   else
     (pure (if (((BEq.beq tgx TGx_64KB) && (level == 1)) : Bool)
@@ -460,17 +460,17 @@ def IsExclusiveLocal (paddress : FullAddress) (processorid : Int) (size : Int) :
 
 /-- Type quantifiers: k_N : Nat, e : Int, esize : Int, k_N ≥ 0 -/
 def ActivePredicateElement (pred : (BitVec k_N)) (e : Int) (esize : Int) : SailM Bool := do
-  ArmFull.assert ((esize == 8) || ((esize == 16) || ((esize == 32) || ((esize == 64) || (esize == 128))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:29766.78-29766.79"
+  ArmFull.assert ((esize == 8) || ((esize == 16) || ((esize == 32) || ((esize == 64) || (esize == 128))))) "sail-arm/v8_base.sail:29766.78-29766.79"
   let n : Int := (e *i (Int.ediv (Sail.Int.toNatChecked (esize)) 8))
-  ArmFull.assert ((n ≥b 0) && (n <b (Sail.BitVec.length pred))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:29768.26-29768.27"
+  ArmFull.assert ((n ≥b 0) && (n <b (Sail.BitVec.length pred))) "sail-arm/v8_base.sail:29768.26-29768.27"
   (pure (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access pred (Sail.Int.toNatChecked (n)))])) == 1#1)))
 
 
 /-- Type quantifiers: k_N : Nat, e : Int, esize : Int, k_N ≥ 0 -/
 def PredicateElement (pred : (BitVec k_N)) (e : Int) (esize : Int) : SailM (BitVec 1) := do
-  ArmFull.assert ((esize == 8) || ((esize == 16) || ((esize == 32) || ((esize == 64) || (esize == 128))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:29776.78-29776.79"
+  ArmFull.assert ((esize == 8) || ((esize == 16) || ((esize == 32) || ((esize == 64) || (esize == 128))))) "sail-arm/v8_base.sail:29776.78-29776.79"
   let n : Int := (e *i (Int.ediv (Sail.Int.toNatChecked (esize)) 8))
-  ArmFull.assert ((n ≥b 0) && (n <b (Sail.BitVec.length pred))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:29778.26-29778.27"
+  ArmFull.assert ((n ≥b 0) && (n <b (Sail.BitVec.length pred))) "sail-arm/v8_base.sail:29778.26-29778.27"
   (pure ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access pred (Sail.Int.toNatChecked (n)))]))))
 
 
@@ -527,7 +527,7 @@ def ShiftSat (shift : Int) (esize : Int) : Int :=
 
 /-- Type quantifiers: width : Nat, width = 512 -/
 def ZT0_read (width : Nat) : SailM (BitVec width) := do
-  ArmFull.assert (width == 512) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31298.23-31298.24"
+  ArmFull.assert (width == 512) "sail-arm/v8_base.sail:31298.23-31298.24"
   let w__0 ← (( do readReg _ZT0 ) : SailM (BitVec 512) )
   (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb w__0 (Sail.Int.toNatChecked ((width -i 1)))
       0))))
@@ -535,7 +535,7 @@ def ZT0_read (width : Nat) : SailM (BitVec width) := do
 
 /-- Type quantifiers: width : Nat, width = 512 -/
 def ZT0_set (width : Nat) (value_name : (BitVec width)) : SailM Unit := do
-  ArmFull.assert (width == 512) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31305.23-31305.24"
+  ArmFull.assert (width == 512) "sail-arm/v8_base.sail:31305.23-31305.24"
   let w__0 ← (( do readReg _ZT0 ) : SailM (BitVec 512) )
   writeReg _ZT0 (Sail.BitVec.castWidth (m := 512) (Sail.BitVec.updateSubrange w__0
     (Sail.Int.toNatChecked ((width -i 1))) 0 (Sail.BitVec.castWidth value_name)))

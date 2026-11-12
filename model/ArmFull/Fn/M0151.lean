@@ -171,7 +171,7 @@ def getCacheID (level : Int) (data_cache : Bool) : SailM (BitVec 64) := do
           (__UNKNOWN_bits 64))
       else
         (do
-          ArmFull.assert ((0 ≤b level) && (level <b 7)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:222.59-222.60"
+          ArmFull.assert ((0 ≤b level) && (level <b 7)) "sail-arm/sysregs.sail:222.59-222.60"
           let w__3 ← (( do readReg __ICACHE_CCSIDR_RESET ) : SailM (Vector (BitVec 64) 7) )
           (pure ((GetElem?.getElem! w__3 (Sail.Int.toNatChecked (level)))))))
   | 0b010 =>
@@ -182,7 +182,7 @@ def getCacheID (level : Int) (data_cache : Bool) : SailM (BitVec 64) := do
           (__UNKNOWN_bits 64))
       else
         (do
-          ArmFull.assert ((0 ≤b level) && (level <b 7)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:228.59-228.60"
+          ArmFull.assert ((0 ≤b level) && (level <b 7)) "sail-arm/sysregs.sail:228.59-228.60"
           let w__6 ← (( do readReg __DCACHE_CCSIDR_RESET ) : SailM (Vector (BitVec 64) 7) )
           (pure ((GetElem?.getElem! w__6 (Sail.Int.toNatChecked (level)))))))
   | 0b011 =>
@@ -190,17 +190,17 @@ def getCacheID (level : Int) (data_cache : Bool) : SailM (BitVec 64) := do
       if (data_cache : Bool)
       then
         (do
-          ArmFull.assert ((0 ≤b level) && (level <b 7)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:234.59-234.60"
+          ArmFull.assert ((0 ≤b level) && (level <b 7)) "sail-arm/sysregs.sail:234.59-234.60"
           let w__8 ← (( do readReg __DCACHE_CCSIDR_RESET ) : SailM (Vector (BitVec 64) 7) )
           (pure ((GetElem?.getElem! w__8 (Sail.Int.toNatChecked (level))))))
       else
         (do
-          ArmFull.assert ((0 ≤b level) && (level <b 7)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:237.59-237.60"
+          ArmFull.assert ((0 ≤b level) && (level <b 7)) "sail-arm/sysregs.sail:237.59-237.60"
           let w__9 ← (( do readReg __ICACHE_CCSIDR_RESET ) : SailM (Vector (BitVec 64) 7) )
           (pure ((GetElem?.getElem! w__9 (Sail.Int.toNatChecked (level)))))))
   | 0b100 =>
     (do
-      ArmFull.assert ((0 ≤b level) && (level <b 7)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:242.55-242.56"
+      ArmFull.assert ((0 ≤b level) && (level <b 7)) "sail-arm/sysregs.sail:242.55-242.56"
       let w__11 ← (( do readReg __DCACHE_CCSIDR_RESET ) : SailM (Vector (BitVec 64) 7) )
       let ccsidr_val := ((GetElem?.getElem! w__11 (Sail.Int.toNatChecked (level))) : (BitVec 64))
       (pure (ccsidr_val)))
@@ -230,7 +230,7 @@ def decode_aarch32_instrs_DBG_A1enc_A_txt (cond : (BitVec 4)) (option_name : (Bi
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:2824.29-2824.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:2824.29-2824.30"
       (pure ((execute_aarch32_instrs_DBG_Op_A_txt ()))))
   else (pure (()))
 
@@ -267,7 +267,7 @@ def decode_aarch32_instrs_NOP_A1enc_A_txt (cond : (BitVec 4)) : SailM Unit := do
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:8241.29-8241.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:8241.29-8241.30"
       (pure ((execute_aarch32_instrs_NOP_Op_A_txt ()))))
   else (pure (()))
 
@@ -304,7 +304,7 @@ def decode_aarch32_instrs_SEV_A1enc_A_txt (cond : (BitVec 4)) : SailM Unit := do
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:11377.29-11377.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:11377.29-11377.30"
       (pure ((execute_aarch32_instrs_SEV_Op_A_txt ()))))
   else (pure (()))
 
@@ -362,7 +362,7 @@ def decode_aarch32_instrs_YIELD_A1enc_A_txt (cond : (BitVec 4)) : SailM Unit := 
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:40636.29-40636.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:40636.29-40636.30"
       (pure ((execute_aarch32_instrs_YIELD_Op_A_txt ()))))
   else (pure (()))
 
@@ -390,7 +390,7 @@ def decode_aarch32_instrs_SEVL_A1enc_A_txt (cond : (BitVec 4)) : SailM Unit := d
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:43243.29-43243.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:43243.29-43243.30"
       (execute_aarch32_instrs_SEVL_Op_A_txt ()))
   else (pure (()))
 
@@ -418,7 +418,7 @@ def decode_aarch32_instrs_CSDB_A1enc_A_txt (cond : (BitVec 4)) : SailM Unit := d
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:46109.29-46109.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:46109.29-46109.30"
       if ((cond != 0b1110#4) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))

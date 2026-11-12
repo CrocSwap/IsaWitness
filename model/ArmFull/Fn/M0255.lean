@@ -162,7 +162,7 @@ def AArch32_TakeHypTrapException__1 (except : ExceptionRecord) : SailM Unit := d
       (do
         (ELUsingAArch32 EL2))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__3 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:41513.87-41513.88"
+  ArmFull.assert w__3 "sail-arm/v8_base.sail:41513.87-41513.88"
   let preferred_exception_return ← (( do (ThisInstrAddr 32) ) : SailM (BitVec 32) )
   let vect_offset : Int := (BitVec.toNat 0x14#8)
   (AArch32_EnterHypMode except preferred_exception_return vect_offset)
@@ -188,7 +188,7 @@ def ALUExceptionReturn (address : (BitVec 32)) : SailM Unit := do
         (do
           let c ← (( do (ConstrainUnpredictable Unpredictable_ALUEXCEPTIONRETURN) ) : SailM
             Constraint )
-          ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42343.58-42343.59"
+          ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-arm/v8_base.sail:42343.58-42343.59"
           match c with
           | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
           | .Constraint_NOP =>
@@ -208,7 +208,7 @@ def AArch32_TakeSMCException (_ : Unit) : SailM Unit := do
       (do
         (ELUsingAArch32 EL3))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42900.44-42900.45"
+  ArmFull.assert w__1 "sail-arm/v8_base.sail:42900.44-42900.45"
   (AArch32_ITAdvance ())
   (SSAdvance ())
   let preferred_exception_return ← (( do (NextInstrAddr 32) ) : SailM (BitVec 32) )
@@ -224,7 +224,7 @@ def AArch32_TakeHVCException (immediate : (BitVec 16)) : SailM Unit := do
       (do
         (ELUsingAArch32 EL2))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42912.44-42912.45"
+  ArmFull.assert w__1 "sail-arm/v8_base.sail:42912.44-42912.45"
   (AArch32_ITAdvance ())
   (SSAdvance ())
   let preferred_exception_return ← (( do (NextInstrAddr 32) ) : SailM (BitVec 32) )
@@ -295,7 +295,7 @@ def AArch32_TakeMonitorTrapException (_ : Unit) : SailM Unit := do
       (do
         (ELUsingAArch32 EL3))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42977.44-42977.45"
+  ArmFull.assert w__1 "sail-arm/v8_base.sail:42977.44-42977.45"
   let preferred_exception_return ← (( do (ThisInstrAddr 32) ) : SailM (BitVec 32) )
   let vect_offset : Int := (BitVec.toNat 0x04#8)
   let w__2 ← (( do (CurrentInstrSet ()) ) : SailM InstrSet )
@@ -417,20 +417,20 @@ def AArch32_PMUCycle (_ : Unit) : SailM Unit := do
                     for idx in [loop_idx_lower:loop_idx_upper:1]i do
                       let () := loop_vars
                       loop_vars ← do
-                        ArmFull.assert ((0 ≤b idx) && (idx ≤b 32)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43597.65-43597.66"
+                        ArmFull.assert ((0 ≤b idx) && (idx ≤b 32)) "sail-arm/v8_base.sail:43597.65-43597.66"
                         let w__6 ← (( do (CountPMUEvents (Sail.Int.toNatChecked (idx))) ) : SailM
                           Bool )
                         if (w__6 : Bool)
                         then
                           (do
-                            ArmFull.assert ((0 ≤b idx) && (idx <b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43599.68-43599.69"
+                            ArmFull.assert ((0 ≤b idx) && (idx <b 31)) "sail-arm/v8_base.sail:43599.68-43599.69"
                             let w__7 ← (( do readReg PMUEventAccumulator ) : SailM (Vector Int 31)
                               )
                             let accumulated : Int :=
                               (GetElem?.getElem! w__7 (Sail.Int.toNatChecked (idx)))
                             (AArch32_IncrementEventCounter (Sail.Int.toNatChecked (idx)) accumulated))
                         else (pure (()))
-                        ArmFull.assert ((0 ≤b idx) && (idx <b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43603.64-43603.65"
+                        ArmFull.assert ((0 ≤b idx) && (idx <b 31)) "sail-arm/v8_base.sail:43603.64-43603.65"
                         let w__8 ← (( do readReg PMUEventAccumulator ) : SailM (Vector Int 31) )
                         writeReg PMUEventAccumulator (vectorUpdate w__8
                           (Sail.Int.toNatChecked (idx)) 0)
@@ -496,7 +496,7 @@ def BranchTargetCheck (_ : Unit) : SailM Unit := do
         let w__1 ← (( do (UsingAArch32 ()) ) : SailM Bool )
         (pure (((! w__1) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:10588.50-10588.51"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:10588.50-10588.51"
   let w__9 ← (( do
     if ((← do
          if ((← do
@@ -533,7 +533,7 @@ def BranchTargetCheck (_ : Unit) : SailM Unit := do
 
 
 def AArch64_CheckForWFxTrap (target_el : (BitVec 2)) (wfxtype : WFxType) : SailM Unit := do
-  ArmFull.assert (HaveEL target_el) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:10675.28-10675.29"
+  ArmFull.assert (HaveEL target_el) "sail-arm/v8_base.sail:10675.28-10675.29"
   let is_wfe : Bool := ((BEq.beq wfxtype WFxType_WFE) || (BEq.beq wfxtype WFxType_WFET))
   let trap ← (( do (undefined_bool_at (← occLabel 727) ()) ) : SailM Bool )
   let questionMark := target_el
@@ -670,8 +670,8 @@ def Auth (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data :
         if (tbi : Bool)
         then
           (do
-            ArmFull.assert ((0 ≤b ((56 -i bottom_PAC_bit) -i 1)) && (((56 -i bottom_PAC_bit) -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21616.90-21616.91"
-            ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21617.80-21617.81"
+            ArmFull.assert ((0 ≤b ((56 -i bottom_PAC_bit) -i 1)) && (((56 -i bottom_PAC_bit) -i 1) <b 64)) "sail-arm/v8_base.sail:21616.90-21616.91"
+            ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "sail-arm/v8_base.sail:21617.80-21617.81"
             let original_ptr : (BitVec 64) :=
               (Sail.BitVec.castWidth (((Sail.BitVec.extractLsb ptr 63 56) +++ (Sail.BitVec.extractLsb
                     extfield (Sail.Int.toNatChecked (((56 -i bottom_PAC_bit) -i 1))) 0)) +++ (Sail.BitVec.extractLsb
@@ -682,8 +682,8 @@ def Auth (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data :
             if (mtx : Bool)
             then
               (do
-                ArmFull.assert ((0 ≤b ((56 -i bottom_PAC_bit) -i 1)) && (((56 -i bottom_PAC_bit) -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21620.90-21620.91"
-                ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21621.80-21621.81"
+                ArmFull.assert ((0 ≤b ((56 -i bottom_PAC_bit) -i 1)) && (((56 -i bottom_PAC_bit) -i 1) <b 64)) "sail-arm/v8_base.sail:21620.90-21620.91"
+                ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "sail-arm/v8_base.sail:21621.80-21621.81"
                 let original_ptr : (BitVec 64) :=
                   (Sail.BitVec.castWidth ((((Sail.BitVec.extractLsb extfield 63 60) +++ (Sail.BitVec.extractLsb
                           ptr 59 56)) +++ (Sail.BitVec.extractLsb extfield
@@ -692,8 +692,8 @@ def Auth (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data :
                 (pure (original_ptr)))
             else
               (do
-                ArmFull.assert ((0 ≤b ((64 -i bottom_PAC_bit) -i 1)) && (((64 -i bottom_PAC_bit) -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21624.90-21624.91"
-                ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21625.80-21625.81"
+                ArmFull.assert ((0 ≤b ((64 -i bottom_PAC_bit) -i 1)) && (((64 -i bottom_PAC_bit) -i 1) <b 64)) "sail-arm/v8_base.sail:21624.90-21624.91"
+                ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "sail-arm/v8_base.sail:21625.80-21625.81"
                 let original_ptr : (BitVec 64) :=
                   (Sail.BitVec.castWidth ((Sail.BitVec.extractLsb extfield
                       (Sail.Int.toNatChecked (((64 -i bottom_PAC_bit) -i 1))) 0) +++ (Sail.BitVec.extractLsb
@@ -709,7 +709,7 @@ def Auth (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data :
           if ((! w__4) : Bool)
           then
             (do
-              ArmFull.assert ((0 ≤b bottom_PAC_bit) && (bottom_PAC_bit ≤b 54)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21631.77-21631.78"
+              ArmFull.assert ((0 ≤b bottom_PAC_bit) && (bottom_PAC_bit ≤b 54)) "sail-arm/v8_base.sail:21631.77-21631.78"
               let result : (BitVec 64) :=
                 if (((Sail.BitVec.castWidth (m := (Sail.Int.toNatChecked (((54 : Int) -i (bottom_PAC_bit : Int)) +i (1 : Int)))) (Sail.BitVec.extractLsb
                        PAC 54 (Sail.Int.toNatChecked (bottom_PAC_bit)))) == (Sail.BitVec.castWidth (Sail.BitVec.extractLsb
@@ -724,7 +724,7 @@ def Auth (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data :
           else
             (do
               let result : (BitVec 64) := ptr
-              ArmFull.assert ((0 ≤b bottom_PAC_bit) && (bottom_PAC_bit ≤b 54)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21640.77-21640.78"
+              ArmFull.assert ((0 ≤b bottom_PAC_bit) && (bottom_PAC_bit ≤b 54)) "sail-arm/v8_base.sail:21640.77-21640.78"
               let result : (BitVec 64) :=
                 (Sail.BitVec.castWidth (Sail.BitVec.updateSubrange result 54
                   (Sail.Int.toNatChecked (bottom_PAC_bit))
@@ -762,9 +762,9 @@ def Auth (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data :
           then
             (do
               let w__9 ← (( do (HaveEnhancedPAC2 ()) ) : SailM Bool )
-              ArmFull.assert w__9 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21652.33-21652.34"
+              ArmFull.assert w__9 "sail-arm/v8_base.sail:21652.33-21652.34"
               let result : (BitVec 64) := ptr
-              ArmFull.assert ((0 ≤b bottom_PAC_bit) && (bottom_PAC_bit ≤b 54)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21654.73-21654.74"
+              ArmFull.assert ((0 ≤b bottom_PAC_bit) && (bottom_PAC_bit ≤b 54)) "sail-arm/v8_base.sail:21654.73-21654.74"
               let result : (BitVec 64) :=
                 (Sail.BitVec.castWidth (Sail.BitVec.updateSubrange result 54
                   (Sail.Int.toNatChecked (bottom_PAC_bit))
@@ -808,7 +808,7 @@ def Auth (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data :
               if ((! w__14) : Bool)
               then
                 (do
-                  ArmFull.assert ((0 ≤b bottom_PAC_bit) && (bottom_PAC_bit ≤b 54)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21667.77-21667.78"
+                  ArmFull.assert ((0 ≤b bottom_PAC_bit) && (bottom_PAC_bit ≤b 54)) "sail-arm/v8_base.sail:21667.77-21667.78"
                   let result : (BitVec 64) :=
                     if ((((Sail.BitVec.castWidth (m := (Sail.Int.toNatChecked (((54 : Int) -i (bottom_PAC_bit : Int)) +i (1 : Int)))) (Sail.BitVec.extractLsb
                              PAC 54 (Sail.Int.toNatChecked (bottom_PAC_bit)))) == (Sail.BitVec.castWidth (Sail.BitVec.extractLsb
@@ -825,7 +825,7 @@ def Auth (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data :
               else
                 (do
                   let result : (BitVec 64) := ptr
-                  ArmFull.assert ((0 ≤b bottom_PAC_bit) && (bottom_PAC_bit ≤b 54)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21676.77-21676.78"
+                  ArmFull.assert ((0 ≤b bottom_PAC_bit) && (bottom_PAC_bit ≤b 54)) "sail-arm/v8_base.sail:21676.77-21676.78"
                   let result : (BitVec 64) :=
                     (Sail.BitVec.castWidth (Sail.BitVec.updateSubrange result 54
                       (Sail.Int.toNatChecked (bottom_PAC_bit))

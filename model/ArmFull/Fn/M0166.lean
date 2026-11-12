@@ -158,7 +158,7 @@ def ELStateUsingAArch32 (el : (BitVec 2)) (secure : Bool) : SailM Bool := do
   let (tup__0, tup__1) := (w__0 : (Bool × Bool))
   let known : Bool := tup__0
   let aarch32 : Bool := tup__1
-  ArmFull.assert known "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:3453.16-3453.17"
+  ArmFull.assert known "sail-arm/v8_base.sail:3453.16-3453.17"
   (pure (aarch32))
 
 
@@ -192,7 +192,7 @@ def PMUEvent__2 (pmuevent : (BitVec 16)) (increment_name : Int) (idx : Int) : Sa
       if (w__1 : Bool)
       then
         (do
-          ArmFull.assert ((0 ≤b idx) && (idx <b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:5380.50-5380.51"
+          ArmFull.assert ((0 ≤b idx) && (idx <b 31)) "sail-arm/v8_base.sail:5380.50-5380.51"
           let w__2 ← (( do (PMEVTYPER_read (Sail.Int.toNatChecked (idx))) ) : SailM (BitVec 32) )
           if (((_get_PMEVTYPER_Type_evtCount w__2) == pmuevent) : Bool)
           then
@@ -204,13 +204,13 @@ def PMUEvent__2 (pmuevent : (BitVec 16)) (increment_name : Int) (idx : Int) : Sa
           else (pure (())))
       else
         (do
-          ArmFull.assert ((0 ≤b idx) && (idx <b 32)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:5386.50-5386.51"
+          ArmFull.assert ((0 ≤b idx) && (idx <b 32)) "sail-arm/v8_base.sail:5386.50-5386.51"
           let w__5 ← (( do readReg PMEVTYPER_EL0 ) : SailM (Vector (BitVec 64) 32) )
           if (((_get_PMEVTYPER_EL0_Type_evtCount
                  (GetElem?.getElem! w__5 (Sail.Int.toNatChecked (idx)))) == pmuevent) : Bool)
           then
             (do
-              ArmFull.assert ((0 ≤b idx) && (idx <b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:5388.54-5388.55"
+              ArmFull.assert ((0 ≤b idx) && (idx <b 31)) "sail-arm/v8_base.sail:5388.54-5388.55"
               let w__6 ← (( do readReg PMUEventAccumulator ) : SailM (Vector Int 31) )
               let w__7 ← (( do readReg PMUEventAccumulator ) : SailM (Vector Int 31) )
               writeReg PMUEventAccumulator (vectorUpdate w__6 (Sail.Int.toNatChecked (idx))
@@ -228,7 +228,7 @@ def ConstrainUnpredictableBits (which : Unpredictable) (width : Nat) : SailM (Co
   if (bounded : Bool)
   then
     (do
-      ArmFull.assert (width ≤b 8) "/home/doug/boss-scratch/armcert-defects/c27b-accepted/armcert_c27b.sail:632.25-632.26"
+      ArmFull.assert (width ≤b 8) "armcert/armcert_c27b.sail:632.25-632.26"
       let allowed : (BitVec 256) := (Zeros (n := 256))
       let allowed ← (( do
         let loop_i_lower : Nat := 0
@@ -339,10 +339,10 @@ def GetPSRFromPSTATE (targetELState : ExceptionalOccurrenceTargetState) (N : Nat
   if (w__1 : Bool)
   then
     (do
-      ArmFull.assert (N == 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7671.22-7671.23")
+      ArmFull.assert (N == 32) "sail-arm/v8_base.sail:7671.22-7671.23")
   else
     (do
-      ArmFull.assert (N == 64) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7673.22-7673.23")
+      ArmFull.assert (N == 64) "sail-arm/v8_base.sail:7673.22-7673.23")
   let spsr : (BitVec N) := (Sail.BitVec.castWidth (Zeros (n := N)))
   let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
   let w__3 ← (( do readReg PSTATE ) : SailM ProcState )
@@ -420,7 +420,7 @@ def GetPSRFromPSTATE (targetELState : ExceptionalOccurrenceTargetState) (N : Nat
       let spsr := ((BitVec.update spsr 5 (Bit w__24.T)) : (BitVec N))
       let w__25 ← (( do readReg PSTATE ) : SailM ProcState )
       let w__26 ← (( do readReg PSTATE ) : SailM ProcState )
-      ArmFull.assert ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access w__25.M 4)])) == w__26.nRW) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7702.42-7702.43"
+      ArmFull.assert ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access w__25.M 4)])) == w__26.nRW) "sail-arm/v8_base.sail:7702.42-7702.43"
       let w__27 ← (( do readReg PSTATE ) : SailM ProcState )
       let spsr := ((Sail.BitVec.updateSubrange spsr 4 0 w__27.M) : (BitVec N))
       (pure (spsr)))
@@ -440,7 +440,7 @@ def GetPSRFromPSTATE (targetELState : ExceptionalOccurrenceTargetState) (N : Nat
         if (w__30 : Bool)
         then
           (do
-            ArmFull.assert (34 <b N) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7709.38-7709.39"
+            ArmFull.assert (34 <b N) "sail-arm/v8_base.sail:7709.38-7709.39"
             let w__31 ← (( do readReg PSTATE ) : SailM ProcState )
             let spsr := ((BitVec.update spsr 34 (Bit w__31.EXLOCK)) : (BitVec N))
             (pure (spsr)))
@@ -519,7 +519,7 @@ def ThisInstrAddr (N : Nat) : SailM (BitVec N) := do
           (do
             (UsingAArch32 ()))
         else (pure false)) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7747.45-7747.46"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:7747.45-7747.46"
   let w__3 ← (( do readReg _PC ) : SailM (BitVec 64) )
   (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb w__3 (Sail.Int.toNatChecked ((N -i 1))) 0))))
 
@@ -540,22 +540,22 @@ def AArch64_ExceptionClass (exceptype : Exception) (target_el : (BitVec 2)) : Sa
     | .Exception_CP15RTTrap =>
       (do
         let ec : Int := (BitVec.toNat 0x03#8)
-        ArmFull.assert from_32 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9037.24-9037.25"
+        ArmFull.assert from_32 "sail-arm/v8_base.sail:9037.24-9037.25"
         (pure ((ec, il_is_valid))))
     | .Exception_CP15RRTTrap =>
       (do
         let ec : Int := (BitVec.toNat 0x04#8)
-        ArmFull.assert from_32 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9041.24-9041.25"
+        ArmFull.assert from_32 "sail-arm/v8_base.sail:9041.24-9041.25"
         (pure ((ec, il_is_valid))))
     | .Exception_CP14RTTrap =>
       (do
         let ec : Int := (BitVec.toNat 0x05#8)
-        ArmFull.assert from_32 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9045.24-9045.25"
+        ArmFull.assert from_32 "sail-arm/v8_base.sail:9045.24-9045.25"
         (pure ((ec, il_is_valid))))
     | .Exception_CP14DTTrap =>
       (do
         let ec : Int := (BitVec.toNat 0x06#8)
-        ArmFull.assert from_32 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9049.24-9049.25"
+        ArmFull.assert from_32 "sail-arm/v8_base.sail:9049.24-9049.25"
         (pure ((ec, il_is_valid))))
     | .Exception_AdvSIMDFPAccessTrap =>
       (let ec : Int := (BitVec.toNat 0x07#8)
@@ -578,7 +578,7 @@ def AArch64_ExceptionClass (exceptype : Exception) (target_el : (BitVec 2)) : Sa
     | .Exception_CP14RRTTrap =>
       (do
         let ec : Int := (BitVec.toNat 0x0C#8)
-        ArmFull.assert from_32 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9071.24-9071.25"
+        ArmFull.assert from_32 "sail-arm/v8_base.sail:9071.24-9071.25"
         (pure ((ec, il_is_valid))))
     | .Exception_BranchTarget =>
       (let ec : Int := (BitVec.toNat 0x0D#8)
@@ -599,32 +599,32 @@ def AArch64_ExceptionClass (exceptype : Exception) (target_el : (BitVec 2)) : Sa
     | .Exception_SystemRegisterTrap =>
       (do
         let ec : Int := (BitVec.toNat 0x18#8)
-        ArmFull.assert (! from_32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9091.34-9091.35"
+        ArmFull.assert (! from_32) "sail-arm/v8_base.sail:9091.34-9091.35"
         (pure ((ec, il_is_valid))))
     | .Exception_SystemRegister128Trap =>
       (do
         let ec : Int := (BitVec.toNat 0x14#8)
-        ArmFull.assert (! from_32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9095.34-9095.35"
+        ArmFull.assert (! from_32) "sail-arm/v8_base.sail:9095.34-9095.35"
         (pure ((ec, il_is_valid))))
     | .Exception_SVEAccessTrap =>
       (do
         let ec : Int := (BitVec.toNat 0x19#8)
-        ArmFull.assert (! from_32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9099.34-9099.35"
+        ArmFull.assert (! from_32) "sail-arm/v8_base.sail:9099.34-9099.35"
         (pure ((ec, il_is_valid))))
     | .Exception_ERetTrap =>
       (do
         let ec : Int := (BitVec.toNat 0x1A#8)
-        ArmFull.assert (! from_32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9103.34-9103.35"
+        ArmFull.assert (! from_32) "sail-arm/v8_base.sail:9103.34-9103.35"
         (pure ((ec, il_is_valid))))
     | .Exception_PACFail =>
       (do
         let ec : Int := (BitVec.toNat 0x1C#8)
-        ArmFull.assert (! from_32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9107.34-9107.35"
+        ArmFull.assert (! from_32) "sail-arm/v8_base.sail:9107.34-9107.35"
         (pure ((ec, il_is_valid))))
     | .Exception_SMEAccessTrap =>
       (do
         let ec : Int := (BitVec.toNat 0x1D#8)
-        ArmFull.assert (! from_32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9111.34-9111.35"
+        ArmFull.assert (! from_32) "sail-arm/v8_base.sail:9111.34-9111.35"
         (pure ((ec, il_is_valid))))
     | .Exception_InstructionAbort =>
       (let ec : Int := (BitVec.toNat 0x20#8)
@@ -644,7 +644,7 @@ def AArch64_ExceptionClass (exceptype : Exception) (target_el : (BitVec 2)) : Sa
       (do
         let ec : Int := (BitVec.toNat 0x26#8)
         let il_is_valid : Bool := false
-        ArmFull.assert (! from_32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9130.34-9130.35"
+        ArmFull.assert (! from_32) "sail-arm/v8_base.sail:9130.34-9130.35"
         (pure ((ec, il_is_valid))))
     | .Exception_MemCpyMemSet =>
       (let ec : Int := (BitVec.toNat 0x27#8)
@@ -652,7 +652,7 @@ def AArch64_ExceptionClass (exceptype : Exception) (target_el : (BitVec 2)) : Sa
     | .Exception_GCSFail =>
       (do
         let ec : Int := (BitVec.toNat 0x2D#8)
-        ArmFull.assert (! from_32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9137.34-9137.35"
+        ArmFull.assert (! from_32) "sail-arm/v8_base.sail:9137.34-9137.35"
         (pure ((ec, il_is_valid))))
     | .Exception_FPTrappedException =>
       (let ec : Int := (BitVec.toNat 0x28#8)
@@ -684,7 +684,7 @@ def AArch64_ExceptionClass (exceptype : Exception) (target_el : (BitVec 2)) : Sa
       (do
         let ec : Int := (BitVec.toNat 0x3A#8)
         let il_is_valid : Bool := false
-        ArmFull.assert from_32 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9168.24-9168.25"
+        ArmFull.assert from_32 "sail-arm/v8_base.sail:9168.24-9168.25"
         (pure ((ec, il_is_valid))))
     | _ =>
       (do
@@ -720,7 +720,7 @@ def AArch64_ExceptionClass (exceptype : Exception) (target_el : (BitVec 2)) : Sa
           else 0#1
         (pure ((w__3 : (BitVec 1)))))
     else (pure (1#1)) ) : SailM (BitVec 1) )
-  ArmFull.assert (from_32 || (il == 1#1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9187.30-9187.31"
+  ArmFull.assert (from_32 || (il == 1#1)) "sail-arm/v8_base.sail:9187.30-9187.31"
   (pure ((ec, il)))
 
 
@@ -730,7 +730,7 @@ def SPSR_set {N : _} (value_name : (BitVec N)) : SailM Unit := do
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (N == 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9811.22-9811.23"
+      ArmFull.assert (N == 32) "sail-arm/v8_base.sail:9811.22-9811.23"
       let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
       let questionMark := w__1.M
       if ((questionMark == M32_FIQ) : Bool)
@@ -810,7 +810,7 @@ def SPSR_set {N : _} (value_name : (BitVec N)) : SailM Unit := do
                                   (Unreachable ())))))))))
   else
     (do
-      ArmFull.assert (N == 64) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9839.22-9839.23"
+      ArmFull.assert (N == 64) "sail-arm/v8_base.sail:9839.22-9839.23"
       let w__9 ← (( do readReg PSTATE ) : SailM ProcState )
       let questionMark := w__9.EL
       if ((questionMark == EL1) : Bool)

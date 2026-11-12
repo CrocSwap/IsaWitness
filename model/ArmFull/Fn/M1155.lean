@@ -265,7 +265,7 @@ def execute_FTSMUL_Z_ZZ__ (VL : Nat) (d : Nat) (esize : Nat) (m : Nat) (n : Nat)
             SailM (BitVec esize) )
           let element2 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 e esize)) ) :
             SailM (BitVec esize) )
-          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:7303.49-7303.50"
+          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:7303.49-7303.50"
           let w__0 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
           let w__1 ← (( do (FPTrigSMul element1 element2 w__0) ) : SailM (BitVec esize) )
           (Elem_set result e esize (Sail.BitVec.castWidth w__1))
@@ -426,7 +426,7 @@ def execute_FTMAD_Z_ZZI__ (VL : Nat) (dn : Nat) (esize : Nat) (imm : Nat) (m : N
             SailM (BitVec esize) )
           let element2 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 e esize)) ) :
             SailM (BitVec esize) )
-          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:7619.49-7619.50"
+          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:7619.49-7619.50"
           let w__0 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
           let w__1 ← (( do (FPTrigMAdd imm element1 element2 w__0) ) : SailM (BitVec esize) )
           (Elem_set result e esize (Sail.BitVec.castWidth w__1))

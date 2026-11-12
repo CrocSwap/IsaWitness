@@ -372,7 +372,7 @@ def AArch32_CheckCP15InstrCoarseTraps (CRn : Int) (nreg : Int) (CRm : Int) : Sai
         if ((nreg == 1) : Bool)
         then CRn
         else CRm
-      ArmFull.assert ((0 ≤b major) && (major <b 32)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:41574.54-41574.55"
+      ArmFull.assert ((0 ≤b major) && (major <b 32)) "sail-arm/v8_base.sail:41574.54-41574.55"
       let w__17 ← (( do
         if ((← do
              if (((! ((major == 4) || (major == 14))) : Bool) : Bool)

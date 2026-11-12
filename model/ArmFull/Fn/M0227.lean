@@ -180,7 +180,7 @@ def MaybeZeroSVEUppers (target_el : (BitVec 2)) : SailM Unit := do
             then
               (do
                 let w__6 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                ArmFull.assert (! w__6) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9451.44-9451.45"
+                ArmFull.assert (! w__6) "sail-arm/v8_base.sail:9451.44-9451.45"
                 let w__7 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
                 if (((_get_HCR_EL2_Type_TGE w__7) == 0#1) : Bool)
                 then
@@ -198,7 +198,7 @@ def MaybeZeroSVEUppers (target_el : (BitVec 2)) : SailM Unit := do
                       let w__10 ← (( do (ELUsingAArch32 EL1) ) : SailM Bool )
                       (pure (((! w__10) : Bool))))
                   else (pure false) ) : SailM Bool )
-                ArmFull.assert w__11 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9458.63-9458.64"
+                ArmFull.assert w__11 "sail-arm/v8_base.sail:9458.63-9458.64"
                 (IsFPEnabled EL0))) ) : SailM Bool )
       if (lower_enabled : Bool)
       then
@@ -309,7 +309,7 @@ def MaybeZeroSVEUppers (target_el : (BitVec 2)) : SailM Unit := do
                     if (w__30 : Bool)
                     then
                       (do
-                        ArmFull.assert ((0 ≤b n) && (n <b 256)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9491.69-9491.70"
+                        ArmFull.assert ((0 ≤b n) && (n <b 256)) "sail-arm/v8_base.sail:9491.69-9491.70"
                         let w__31 ← (( do readReg _ZA ) : SailM (Vector (BitVec 2048) 256) )
                         writeReg _ZA (vectorUpdate w__31 (Sail.Int.toNatChecked (n))
                           (Sail.BitVec.castWidth (m := 2048) (Zeros (n := MAX_VL)))))
@@ -525,17 +525,17 @@ def AArch64_GetS1TTWParams (regime : Regime) (ss : SecurityState) (va : (BitVec 
 
 /-- Type quantifiers: n : Int, part : Int, width : Nat, width ≥ 0 -/
 def Vpart_set (n : Int) (part : Int) (width : Nat) (value_name : (BitVec width)) : SailM Unit := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22361.27-22361.28"
-  ArmFull.assert ((part == 0) || (part == 1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22362.32-22362.33"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-arm/v8_base.sail:22361.27-22361.28"
+  ArmFull.assert ((part == 0) || (part == 1)) "sail-arm/v8_base.sail:22362.32-22362.33"
   if ((part == 0) : Bool)
   then
     (do
-      ArmFull.assert (width <b 128) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22364.26-22364.27"
-      ArmFull.assert (((((width == 8) || (width == 16)) || (width == 32)) || (width == 64)) || (width == 128)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22365.57-22365.58"
+      ArmFull.assert (width <b 128) "sail-arm/v8_base.sail:22364.26-22364.27"
+      ArmFull.assert (((((width == 8) || (width == 16)) || (width == 32)) || (width == 64)) || (width == 128)) "sail-arm/v8_base.sail:22365.57-22365.58"
       (V_set n width (Sail.BitVec.castWidth value_name)))
   else
     (do
-      ArmFull.assert (width == 64) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22368.26-22368.27"
+      ArmFull.assert (width == 64) "sail-arm/v8_base.sail:22368.26-22368.27"
       let vreg ← (( do (V_read n 64) ) : SailM (BitVec 64) )
       (V_set n 128 ((Sail.BitVec.extractLsb value_name 63 0) +++ vreg)))
 
@@ -686,7 +686,7 @@ def ZAvslice_read (tile : Int) (esize : Nat) (slice_name : Int) (width : Nat) : 
       loop_vars ← do
         let hslice ← (( do ((Sail.BitVec.castWidth ) <$> (ZAhslice_read tile esize s width)) ) :
           SailM (BitVec width) )
-        ArmFull.assert (((s *i esize) ≤b (((s +i 1) *i esize) -i 1)) || (! ((s ≥b 0) && (((s +i 1) *i esize) ≤b width)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31191.132-31191.133"
+        ArmFull.assert (((s *i esize) ≤b (((s +i 1) *i esize) -i 1)) || (! ((s ≥b 0) && (((s +i 1) *i esize) ≤b width)))) "sail-arm/v8_base.sail:31191.132-31191.133"
         let w__0 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read hslice slice_name esize)) ) :
           SailM (BitVec esize) )
         (Elem_set result s esize (Sail.BitVec.castWidth w__0))
@@ -707,7 +707,7 @@ def ZAvslice_set (tile : Int) (esize : Nat) (slice_name : Int) (width : Nat) (va
       loop_vars ← do
         let hslice ← (( do ((Sail.BitVec.castWidth ) <$> (ZAhslice_read tile esize s width)) ) :
           SailM (BitVec width) )
-        ArmFull.assert (((s *i esize) ≤b (((s *i esize) +i esize) -i 1)) || (! ((s ≥b 0) && (((s +i 1) *i esize) ≤b width)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31206.135-31206.136"
+        ArmFull.assert (((s *i esize) ≤b (((s *i esize) +i esize) -i 1)) || (! ((s ≥b 0) && (((s +i 1) *i esize) ≤b width)))) "sail-arm/v8_base.sail:31206.135-31206.136"
         let w__0 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read value_name s esize)) ) : SailM
           (BitVec esize) )
         let w__1 ← (( do (Elem_set hslice slice_name esize (Sail.BitVec.castWidth w__0)) ) : SailM
@@ -720,7 +720,7 @@ def ZAvslice_set (tile : Int) (esize : Nat) (slice_name : Int) (width : Nat) (va
 /-- Type quantifiers: SVL : Int, esize : Int, tile : Int, width : Nat, width ≥ 0 -/
 def ZAtile_read (SVL : Int) (tile : Int) (esize : Int) (width : Nat) : SailM (BitVec width) := do
   let slices : Int := (fdiv_int SVL esize)
-  ArmFull.assert (width == (SVL *i slices)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31249.32-31249.33"
+  ArmFull.assert (width == (SVL *i slices)) "sail-arm/v8_base.sail:31249.32-31249.33"
   let result ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1753)
       (Sail.Int.toNatChecked (width)))) ) : SailM (BitVec width) )
@@ -731,7 +731,7 @@ def ZAtile_read (SVL : Int) (tile : Int) (esize : Int) (width : Nat) : SailM (Bi
     for slice_name in [loop_slice_name_lower:loop_slice_name_upper:1]i do
       let result := loop_vars
       loop_vars ← do
-        ArmFull.assert (((slice_name *i SVL) ≤b (((slice_name +i 1) *i SVL) -i 1)) || (! ((slice_name ≥b 0) && (((slice_name +i 1) *i SVL) ≤b width)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31252.162-31252.163"
+        ArmFull.assert (((slice_name *i SVL) ≤b (((slice_name +i 1) *i SVL) -i 1)) || (! ((slice_name ≥b 0) && (((slice_name +i 1) *i SVL) ≤b width)))) "sail-arm/v8_base.sail:31252.162-31252.163"
         let w__0 ← (( do
           ((Sail.BitVec.castWidth ) <$> (ZAhslice_read tile esize slice_name
             (Sail.Int.toNatChecked (SVL)))) ) : SailM (BitVec (Sail.Int.toNatChecked (SVL : Int))) )
@@ -742,7 +742,7 @@ def ZAtile_read (SVL : Int) (tile : Int) (esize : Int) (width : Nat) : SailM (Bi
 /-- Type quantifiers: SVL : Int, esize : Int, tile : Int, width : Nat, width ≥ 0 -/
 def ZAtile_set (SVL : Int) (tile : Int) (esize : Int) (width : Nat) (value_name : (BitVec width)) : SailM Unit := do
   let slices : Int := (fdiv_int SVL esize)
-  ArmFull.assert (width == (SVL *i slices)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31264.32-31264.33"
+  ArmFull.assert (width == (SVL *i slices)) "sail-arm/v8_base.sail:31264.32-31264.33"
   let loop_slice_name_lower : Nat := 0
   let loop_slice_name_upper : Int := (slices -i 1)
   (do
@@ -750,7 +750,7 @@ def ZAtile_set (SVL : Int) (tile : Int) (esize : Int) (width : Nat) (value_name 
     for slice_name in [loop_slice_name_lower:loop_slice_name_upper:1]i do
       let () := loop_vars
       loop_vars ← do
-        ArmFull.assert (((slice_name *i SVL) ≤b (((slice_name *i SVL) +i SVL) -i 1)) || (! ((slice_name ≥b 0) && (((slice_name +i 1) *i SVL) ≤b width)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31266.163-31266.164"
+        ArmFull.assert (((slice_name *i SVL) ≤b (((slice_name *i SVL) +i SVL) -i 1)) || (! ((slice_name ≥b 0) && (((slice_name +i 1) *i SVL) ≤b width)))) "sail-arm/v8_base.sail:31266.163-31266.164"
         let w__0 ← (( do
           ((Sail.BitVec.castWidth ) <$> (Elem_read value_name slice_name
             (Sail.Int.toNatChecked (SVL)))) ) : SailM (BitVec (Sail.Int.toNatChecked (SVL : Int))) )

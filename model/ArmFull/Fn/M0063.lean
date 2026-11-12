@@ -573,7 +573,7 @@ def AArch32_MarkExclusiveVA (address : (BitVec 32)) (processorid : Int) (size : 
 
 /-- Type quantifiers: n : Int -/
 def Din_read (n : Int) : SailM (BitVec 64) := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42439.27-42439.28"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-arm/v8_base.sail:42439.27-42439.28"
   let w__0 ← (( do readReg _Dclone ) : SailM (Vector (BitVec 64) 32) )
   (pure ((GetElem?.getElem! w__0 (Sail.Int.toNatChecked (n)))))
 

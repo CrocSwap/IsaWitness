@@ -314,7 +314,7 @@ def AArch32_S1WalkLD (fault_in : FaultRecord) (regime : Regime) (walkparams : S1
                   let ttbr1 := (w__12 : (BitVec 64))
                   (pure ((ttbcr, ttbr0, ttbr1))))) ) : SailME (FaultRecord × TTWState)
           ((BitVec 32) × (BitVec 64) × (BitVec 64)) )
-        ArmFull.assert ((_get_TTBCR_Type_EAE ttbcr) == 1#1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:38080.32-38080.33"
+        ArmFull.assert ((_get_TTBCR_Type_EAE ttbcr) == 1#1) "sail-arm/v8_base.sail:38080.32-38080.33"
         let (epd, ttbr, txsz) : ((BitVec 1) × (BitVec 64) × (BitVec 3)) :=
           if ((BEq.beq varange VARange_LOWER) : Bool)
           then
@@ -360,7 +360,7 @@ def AArch32_S1WalkLD (fault_in : FaultRecord) (regime : Regime) (walkparams : S1
             { baseaddress with paspace := if ((BEq.beq accdesc.ss SS_Secure) : Bool)
               then PAS_Secure
               else PAS_NonSecure }
-          ArmFull.assert ((0 ≤b baselsb) && (baselsb ≤b 39)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:38110.55-38110.56"
+          ArmFull.assert ((0 ≤b baselsb) && (baselsb ≤b 39)) "sail-arm/v8_base.sail:38110.55-38110.56"
           let baseaddress : FullAddress :=
             { baseaddress with address := (Sail.BitVec.zeroExtend
                 ((Sail.BitVec.extractLsb ttbr 39 (Sail.Int.toNatChecked (baselsb))) +++ (Zeros
@@ -458,7 +458,7 @@ def AArch32_S1WalkLD (fault_in : FaultRecord) (regime : Regime) (walkparams : S1
                 let indexlsb : Int := (((FINAL_LEVEL -i walkstate.level) *i stride) +i granulebits)
                 let indexmsb : Int := indexmsb
                 let indexlsb : Int := indexlsb
-                ArmFull.assert ((0 ≤b indexlsb) && ((indexlsb ≤b indexmsb) && (indexmsb <b 32))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:38147.91-38147.92"
+                ArmFull.assert ((0 ≤b indexlsb) && ((indexlsb ≤b indexmsb) && (indexmsb <b 32))) "sail-arm/v8_base.sail:38147.91-38147.92"
                 let index : (BitVec 40) :=
                   (Sail.BitVec.zeroExtend
                     ((Sail.BitVec.extractLsb va (Sail.Int.toNatChecked (indexmsb))
@@ -642,7 +642,7 @@ def AArch32_S1WalkLD (fault_in : FaultRecord) (regime : Regime) (walkparams : S1
                       else
                         { walkstate with nG := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                               descriptor 11)])) })
-                  ArmFull.assert ((0 ≤b indexlsb) && (indexlsb ≤b 39)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:38226.57-38226.58"
+                  ArmFull.assert ((0 ≤b indexlsb) && (indexlsb ≤b 39)) "sail-arm/v8_base.sail:38226.57-38226.58"
                   let walkstate : TTWState :=
                     { walkstate with baseaddress := { walkstate.baseaddress with address := (Sail.BitVec.zeroExtend
                           ((Sail.BitVec.extractLsb descriptor 39 (Sail.Int.toNatChecked (indexlsb))) +++ (Zeros
@@ -775,7 +775,7 @@ def AArch32_S1WalkSD (fault_in : FaultRecord) (regime : Regime) (accdesc : Acces
             let ttbr1 := (w__13 : (BitVec 64))
             (pure ((sctlr, ttbcr, ttbr0, ttbr1))))) ) : SailME (FaultRecord × TTWState)
     ((BitVec 32) × (BitVec 32) × (BitVec 64) × (BitVec 64)) )
-  ArmFull.assert ((_get_TTBCR_Type_EAE ttbcr) == 0#1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:38758.28-38758.29"
+  ArmFull.assert ((_get_TTBCR_Type_EAE ttbcr) == 0#1) "sail-arm/v8_base.sail:38758.28-38758.29"
   let ee : (BitVec 1) := (_get_SCTLR_Type_EE sctlr)
   let afe : (BitVec 1) := (_get_SCTLR_Type_AFE sctlr)
   let tre : (BitVec 1) := (_get_SCTLR_Type_TRE sctlr)

@@ -1027,7 +1027,7 @@ def AArch32_SysRegRead__1 (cp_num : Int) (instr : (BitVec 32)) (t : Int) : SailM
             (do
               let w__76 ← (( do (PMSELR_read ()) ) : SailM (BitVec 32) )
               let pmselr : Int := (BitVec.toNat (_get_PMSELR_Type_SEL w__76))
-              ArmFull.assert (pmselr <b 31) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:1058.34-1058.35"
+              ArmFull.assert (pmselr <b 31) "sail-arm/sysregs.sail:1058.34-1058.35"
               let w__77 ← (( do (PMEVCNTR_read (Sail.Int.toNatChecked (pmselr))) ) : SailM
                 (BitVec 32) )
               (R_set t (Sail.BitVec.extractLsb w__77 31 0))))
@@ -1216,14 +1216,14 @@ def AArch32_SysRegRead__1 (cp_num : Int) (instr : (BitVec 32)) (t : Int) : SailM
                           if ((opc2 == 0b000#3) : Bool)
                           then
                             (do
-                              ArmFull.assert ((0 ≤b index) && (index <b 4)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:1125.61-1125.62"
+                              ArmFull.assert ((0 ≤b index) && (index <b 4)) "sail-arm/sysregs.sail:1125.61-1125.62"
                               let w__116 ← (( do readReg ERRnFR ) : SailM (Vector (BitVec 64) 4) )
                               (R_set t
                                 (Sail.BitVec.extractLsb
                                   (GetElem?.getElem! w__116 (Sail.Int.toNatChecked (index))) 31 0)))
                           else
                             (do
-                              ArmFull.assert ((0 ≤b index) && (index <b 4)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:1128.61-1128.62"
+                              ArmFull.assert ((0 ≤b index) && (index <b 4)) "sail-arm/sysregs.sail:1128.61-1128.62"
                               let w__117 ← (( do readReg ERRnFR ) : SailM (Vector (BitVec 64) 4) )
                               (R_set t
                                 (Sail.BitVec.extractLsb

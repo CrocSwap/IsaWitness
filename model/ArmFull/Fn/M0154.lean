@@ -177,7 +177,7 @@ def PFAR_set (regime : (BitVec 2)) (value_name : (BitVec 64)) : SailM Unit := do
       (do
         (pure ((← do
               (HaveRME ())) && ((regime == EL3) : Bool)))) ) : SailM Bool )
-  ArmFull.assert w__3 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9300.49-9300.50"
+  ArmFull.assert w__3 "sail-arm/v8_base.sail:9300.49-9300.50"
   let questionMark := regime
   if ((questionMark == EL1) : Bool)
   then
@@ -360,7 +360,7 @@ def MAP_vPARTID (vpartid : (BitVec 16)) : SailM ((BitVec 16) × Bool) := do
     then (fmod_int virt (vpartid_max +i 1))
     else virt
   let virt : Int := virt
-  ArmFull.assert ((0 ≤b virt) && (virt <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:11606.48-11606.49"
+  ArmFull.assert ((0 ≤b virt) && (virt <b 64)) "sail-arm/v8_base.sail:11606.48-11606.49"
   let w__1 ← (( do readReg MPAMVPMV_EL2 ) : SailM (BitVec 64) )
   let (err, ret) ← (( do
     if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access w__1 (Sail.Int.toNatChecked (virt)))])) == 1#1) : Bool)
@@ -412,7 +412,7 @@ def InStreamingMode (_ : Unit) : SailM Bool := do
 def UnsignedRSqrtEstimate (operand : (BitVec k_N)) : SailM (BitVec k_N) := do
   let estimate ← (( do (undefined_int_at (← occLabel 818) ()) ) : SailM Int )
   let increasedprecision_name ← (( do (undefined_bool_at (← occLabel 819) ()) ) : SailM Bool )
-  ArmFull.assert ((Sail.BitVec.length operand) == 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13158.19-13158.20"
+  ArmFull.assert ((Sail.BitVec.length operand) == 32) "sail-arm/v8_base.sail:13158.19-13158.20"
   let result ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 820)
       (Sail.BitVec.length operand))) ) : SailM (BitVec k_N) )
@@ -481,10 +481,10 @@ def HandleExternalTTWAbort (memretstatus : PhysMemRetStatus) (iswrite : Bool) (m
 
 def ReportAsGPCException (fault : FaultRecord) : SailM Bool := do
   let w__0 ← (( do (HaveRME ()) ) : SailM Bool )
-  ArmFull.assert w__0 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:15078.20-15078.21"
+  ArmFull.assert w__0 "sail-arm/v8_base.sail:15078.20-15078.21"
   ArmFull.assert ((BEq.beq fault.statuscode Fault_GPCFOnWalk) || (BEq.beq fault.statuscode
-      Fault_GPCFOnOutput)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:15079.88-15079.89"
-  ArmFull.assert (bne fault.gpcf.gpf GPCF_None) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:15080.38-15080.39"
+      Fault_GPCFOnOutput)) "sail-arm/v8_base.sail:15079.88-15079.89"
+  ArmFull.assert (bne fault.gpcf.gpf GPCF_None) "sail-arm/v8_base.sail:15080.38-15080.39"
   match fault.gpcf.gpf with
   | .GPCF_Walk => (pure (true))
   | .GPCF_AddressSize => (pure (true))

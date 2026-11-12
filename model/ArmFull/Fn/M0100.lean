@@ -486,7 +486,7 @@ def _set_MDCR_EL2_Type_TPMS (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1))
 
 /-- Type quantifiers: high : Int, low : Int -/
 def ConstrainUnpredictableInteger (low : Int) (high : Int) (which : Unpredictable) : SailM (Constraint × Int) := do
-  ArmFull.assert (low ≤b high) "/home/doug/boss-scratch/armcert-defects/c27b-accepted/armcert_c27b.sail:424.22-424.23"
+  ArmFull.assert (low ≤b high) "armcert/armcert_c27b.sail:424.22-424.23"
   let c ← (( do (undefined_Constraint (← occLabel 496) ()) ) : SailM Constraint )
   let c ← (( do
     if ((BEq.beq which Unpredictable_BPNOTIMPL) : Bool)

@@ -629,7 +629,7 @@ def LSR_C (x : (BitVec k_N)) (shift : Int) : ((BitVec k_N) × (BitVec 1)) :=
 
 /-- Type quantifiers: k_N : Nat, shift : Int, k_N > 0 -/
 def ROR_C (x : (BitVec k_N)) (shift : Int) : SailM ((BitVec k_N) × (BitVec 1)) := do
-  ArmFull.assert (shift >b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/builtins.sail:100.20-100.21"
+  ArmFull.assert (shift >b 0) "sail-arm/builtins.sail:100.20-100.21"
   let m : Nat := (Nat.mod (Sail.Int.toNatChecked (shift)) (Sail.BitVec.length x))
   let result : (BitVec k_N) := ((x >>> m) ||| (x <<< ((Sail.BitVec.length x) -i m)))
   let carry_out : (BitVec 1) :=
@@ -654,7 +654,7 @@ def asl_Int (x : (BitVec k_N)) (is_unsigned : Bool) : SailM Int := do
     then (pure ((BitVec.toNat x)))
     else
       (do
-        ArmFull.assert ((Sail.BitVec.length x) >b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/builtins.sail:134.33-134.34"
+        ArmFull.assert ((Sail.BitVec.length x) >b 0) "sail-arm/builtins.sail:134.33-134.34"
         (pure ((BitVec.toInt x)))) ) : SailM Int )
   (pure (result))
 
@@ -667,7 +667,7 @@ def asl_Int (x : (BitVec k_N)) (is_unsigned : Bool) : SailM Int := do
   ((Sail.Int.toNatChecked (e : Int)) ≥ 0 ∧
   (Sail.Int.toNatChecked (((e : Int) +i (1 : Int)) *i (size : Int))) ≤ k_N)) -/
 def Elem_read (vector_name : (BitVec k_N)) (e : Int) (size : Nat) : SailM (BitVec size) := do
-  ArmFull.assert ((e ≥b 0) && (((e +i 1) *i size) ≤b (Sail.BitVec.length vector_name))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/builtins.sail:195.40-195.41"
+  ArmFull.assert ((e ≥b 0) && (((e +i 1) *i size) ≤b (Sail.BitVec.length vector_name))) "sail-arm/builtins.sail:195.40-195.41"
   (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb vector_name
       (Sail.Int.toNatChecked ((((e *i size) +i size) -i 1))) (Sail.Int.toNatChecked ((e *i size)))))))
 
@@ -681,7 +681,7 @@ def Elem_read (vector_name : (BitVec k_N)) (e : Int) (size : Nat) : SailM (BitVe
   (Sail.Int.toNatChecked (((e : Int) +i (1 : Int)) *i (size : Int))) ≤ k_N)) -/
 def Elem_set (vector_name__arg : (BitVec k_N)) (e : Int) (size : Nat) (value_name : (BitVec size)) : SailM (BitVec k_N) := do
   let vector_name : (BitVec k_N) := vector_name__arg
-  ArmFull.assert ((e ≥b 0) && (((e +i 1) *i size) ≤b (Sail.BitVec.length vector_name__arg))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/builtins.sail:205.40-205.41"
+  ArmFull.assert ((e ≥b 0) && (((e +i 1) *i size) ≤b (Sail.BitVec.length vector_name__arg))) "sail-arm/builtins.sail:205.40-205.41"
   let vector_name : (BitVec k_N) :=
     (Sail.BitVec.updateSubrange vector_name (Sail.Int.toNatChecked ((((e +i 1) *i size) -i 1)))
       (Sail.Int.toNatChecked ((e *i size))) (Sail.BitVec.castWidth value_name))

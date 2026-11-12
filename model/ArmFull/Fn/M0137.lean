@@ -172,14 +172,14 @@ def _set_FPSID_Type_Subarchitecture (r_ref : (RegisterRef (BitVec 32))) (v : (Bi
 def __get_selected_PMEVCNTR (_ : Unit) : SailM (BitVec 32) := do
   let w__0 ← (( do (PMSELR_read ()) ) : SailM (BitVec 32) )
   let idx : Int := (BitVec.toNat (_get_PMSELR_Type_SEL w__0))
-  ArmFull.assert (idx ≤b 30) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:49451.20-49451.21"
+  ArmFull.assert (idx ≤b 30) "sail-arm/v8_base.sail:49451.20-49451.21"
   (PMEVCNTR_read (Sail.Int.toNatChecked (idx)))
 
 
 def __set_selected_PMEVCNTR (value_name : (BitVec 32)) : SailM Unit := do
   let w__0 ← (( do (PMSELR_read ()) ) : SailM (BitVec 32) )
   let idx : Int := (BitVec.toNat (_get_PMSELR_Type_SEL w__0))
-  ArmFull.assert (idx ≤b 30) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:49459.20-49459.21"
+  ArmFull.assert (idx ≤b 30) "sail-arm/v8_base.sail:49459.20-49459.21"
   (PMEVCNTR_set (Sail.Int.toNatChecked (idx)) value_name)
 
 
@@ -289,14 +289,14 @@ def IFAR_S_read (_ : Unit) : SailM (BitVec 32) := do
 def __get_selected_PMEVTYPER (_ : Unit) : SailM (BitVec 32) := do
   let w__0 ← (( do (PMSELR_read ()) ) : SailM (BitVec 32) )
   let idx : Int := (BitVec.toNat (_get_PMSELR_Type_SEL w__0))
-  ArmFull.assert (idx ≤b 30) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:51572.20-51572.21"
+  ArmFull.assert (idx ≤b 30) "sail-arm/v8_base.sail:51572.20-51572.21"
   (PMEVTYPER_read (Sail.Int.toNatChecked (idx)))
 
 
 def __set_selected_PMEVTYPER (value_name : (BitVec 32)) : SailM Unit := do
   let w__0 ← (( do (PMSELR_read ()) ) : SailM (BitVec 32) )
   let idx : Int := (BitVec.toNat (_get_PMSELR_Type_SEL w__0))
-  ArmFull.assert (idx ≤b 30) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:51580.20-51580.21"
+  ArmFull.assert (idx ≤b 30) "sail-arm/v8_base.sail:51580.20-51580.21"
   (PMEVTYPER_set (Sail.Int.toNatChecked (idx)) value_name)
 
 

@@ -20,8 +20,8 @@
   "excluded_build_metadata_directories": [".lake"],
   "license_status": "First-party additions: Apache-2.0, Crocodile Labs Inc. Upstream runtime permissions and patch context/deletion rights remain under review; fetching is not redistribution clearance.",
   "patches": [
-    {"path": "patches/0001-frozen-runtime-sources.patch", "sha256": "7fa472d1315e49c3a10ab2eb0cc05859393ce0e332548a025eff47b41ea9c021"},
-    {"path": "patches/0002-local-package-configuration.patch", "sha256": "eb06d7701c289c0f459279d61c55aa6fa9f0d22f2aaf0307ee4f6c7db9f90447"}
+    {"path": "patches/0001-frozen-runtime-sources.patch", "sha256": "ddbf6b01441032d9705af39bfc1c90ca1b29692ce824afdcdfc022b78551a40e"},
+    {"path": "patches/0002-local-package-configuration.patch", "sha256": "b44e62294fa9c15bc031317bd491d417b6f143eee55db98ec04cf9c442cd1661"}
   ],
   "payload": [
     {"path": "patches/series", "sha256": "65a1b7cb548af8b93b609f4b44bfce266b51f40ab1b452087b4ded70a651c560"}
@@ -37,14 +37,14 @@
     {"path": "Sail/Common.lean", "sha256": "1a8efa75d3a112ceb9e23f24f7ec391d8f0746d1c20491114693eb6bf451b15f"},
     {"path": "Sail/ConcurrencyInterfaceV1.lean", "sha256": "fdfab689522b6a2ed4e7da5c6034180e7a761566a21e268255b2b0e1a4b51c02"},
     {"path": "Sail/IntRange.lean", "sha256": "405efd008ef4811b8dc664ccb982d5d2838a53423875f131450aad139846e4a9"},
-    {"path": "Sail/Sail.lean", "sha256": "6fdd329b22e6273b51ff35441c33ff0330ae93224aeb39d6f04dccb83f3c10bb"},
+    {"path": "Sail/Sail.lean", "sha256": "fdc8074a6c6ef5f1041b6781f0ee4008656f9e5a386547fd0f1df598aa0f4ed0"},
     {"path": "SailTests/NatConversions.lean", "sha256": "e0da777e182e5625e4b79c9691fea2f67f246d656b8f389ceb0a1aa7ae4f5903"},
     {"path": "SailTests/RealPower.lean", "sha256": "284407c60d32141de05afe9b0bb7e64b3cfb3cb961f3dc73ed59a4e64b15fdbb"},
     {"path": "SailTests/SetSliceInt.lean", "sha256": "ad14d510c9281284169e235c2b9cba64294ef328e8866132d2ba27524babc82f"},
     {"path": "SailTests/Widths.lean", "sha256": "b0f0bd0389ea17aead4eb1a0d7e4ab07cca123cd3e8efcbe45ad9fd693d714b7"}
   ],
   "configuration": [
-    {"path": "lakefile.lean", "sha256": "7f0a252499bab616aab1de95d6f01fcd2fc60eea39680fb4aa0eb18fc925b464"},
+    {"path": "lakefile.lean", "sha256": "7376d5793fdea37feb37228f3262d6a07586ea513ad8f5f1ad4a0fc8adb44e7c"},
     {"path": "lean-toolchain", "sha256": "ca5f1f601d34c49079e38d7e7041eb0f2a9c227fbc1df0f404820069a052330c"},
     {"path": "lake-manifest.json", "sha256": "dd042660e06f7f1f154dac0002db837d93bd611a391491d2b9cc4121176df8c7"},
     {"path": "AXIOMS.md", "sha256": "af8e19b7545a6bb53e99d8802a1dd56087f1bdab14a6504218b060ddd20f6c68"},

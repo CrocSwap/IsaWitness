@@ -200,7 +200,7 @@ def execute_aarch64_instrs_branch_conditional_test (bit_pos : Nat) (bit_val : (B
   let operand ← (( do ((Sail.BitVec.castWidth ) <$> (X_read t datasize)) ) : SailM
     (BitVec datasize) )
   let branch_conditional : Bool := true
-  ArmFull.assert (bit_pos <b datasize) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:52130.43-52130.44"
+  ArmFull.assert (bit_pos <b datasize) "sail-arm/instrs64.sail:52130.43-52130.44"
   if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access operand bit_pos)])) == bit_val) : Bool)
   then
     (do
@@ -269,9 +269,9 @@ def AArch64_BreakpointMatch (n : Nat) (vaddress : (BitVec 64)) (accdesc : Access
   let value_match_name ← (( do (undefined_bool_at (← occLabel 1391) ()) ) : SailM Bool )
   let w__0 ← (( do (S1TranslationRegime__1 ()) ) : SailM (BitVec 2) )
   let w__1 ← (( do (ELUsingAArch32 w__0) ) : SailM Bool )
-  ArmFull.assert (! w__1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23603.61-23603.62"
+  ArmFull.assert (! w__1) "sail-arm/v8_base.sail:23603.61-23603.62"
   let w__2 ← (( do (NumBreakpointsImplemented ()) ) : SailM Int )
-  ArmFull.assert (n <b w__2) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23604.42-23604.43"
+  ArmFull.assert (n <b w__2) "sail-arm/v8_base.sail:23604.42-23604.43"
   let linking_enabled ← (( do
     if ((← do
          let w__3 ← (( do readReg DBGBCR_EL1 ) : SailM (Vector (BitVec 64) 64) )
@@ -380,9 +380,9 @@ def AArch64_BreakpointMatch (n : Nat) (vaddress : (BitVec 64)) (accdesc : Access
 def AArch64_WatchpointMatch (n : Nat) (vaddress : (BitVec 64)) (size : Int) (accdesc : AccessDescriptor) : SailM Bool := do
   let w__0 ← (( do (S1TranslationRegime__1 ()) ) : SailM (BitVec 2) )
   let w__1 ← (( do (ELUsingAArch32 w__0) ) : SailM Bool )
-  ArmFull.assert (! w__1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23776.61-23776.62"
+  ArmFull.assert (! w__1) "sail-arm/v8_base.sail:23776.61-23776.62"
   let w__2 ← (( do (NumWatchpointsImplemented ()) ) : SailM Int )
-  ArmFull.assert (n <b w__2) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23777.42-23777.43"
+  ArmFull.assert (n <b w__2) "sail-arm/v8_base.sail:23777.42-23777.43"
   let enabled ← (( do (IsWatchpointEnabled n) ) : SailM Bool )
   let w__3 ← (( do readReg DBGWCR_EL1 ) : SailM (Vector (BitVec 64) 64) )
   let linked : Bool := ((_get_DBGWCR_EL1_Type_WT (GetElem?.getElem! w__3 n)) == 1#1)
@@ -451,9 +451,9 @@ def AArch32_BreakpointMatch (n : Nat) (vaddress : (BitVec 32)) (accdesc : Access
   let value_mismatch_name ← (( do (undefined_bool_at (← occLabel 2662) ()) ) : SailM Bool )
   let w__0 ← (( do (S1TranslationRegime__1 ()) ) : SailM (BitVec 2) )
   let w__1 ← (( do (ELUsingAArch32 w__0) ) : SailM Bool )
-  ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40445.51-40445.52"
+  ArmFull.assert w__1 "sail-arm/v8_base.sail:40445.51-40445.52"
   let w__2 ← (( do (NumBreakpointsImplemented ()) ) : SailM Int )
-  ArmFull.assert (n <b w__2) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40446.42-40446.43"
+  ArmFull.assert (n <b w__2) "sail-arm/v8_base.sail:40446.42-40446.43"
   let w__3 ← (( do (DBGBCR_read n) ) : SailM (BitVec 32) )
   let enabled : Bool := ((_get_DBGBCR_Type_E w__3) == 1#1)
   let isbreakpnt : Bool := true
@@ -534,9 +534,9 @@ def AArch32_BreakpointMatch (n : Nat) (vaddress : (BitVec 32)) (accdesc : Access
 def AArch32_WatchpointMatch (n : Nat) (vaddress : (BitVec 32)) (size : Int) (accdesc : AccessDescriptor) : SailM Bool := do
   let w__0 ← (( do (S1TranslationRegime__1 ()) ) : SailM (BitVec 2) )
   let w__1 ← (( do (ELUsingAArch32 w__0) ) : SailM Bool )
-  ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40722.51-40722.52"
+  ArmFull.assert w__1 "sail-arm/v8_base.sail:40722.51-40722.52"
   let w__2 ← (( do (NumWatchpointsImplemented ()) ) : SailM Int )
-  ArmFull.assert (n <b w__2) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40723.42-40723.43"
+  ArmFull.assert (n <b w__2) "sail-arm/v8_base.sail:40723.42-40723.43"
   let w__3 ← (( do (DBGWCR_read n) ) : SailM (BitVec 32) )
   let enabled : Bool := ((_get_DBGWCR_Type_E w__3) == 1#1)
   let w__4 ← (( do (DBGWCR_read n) ) : SailM (BitVec 32) )
@@ -594,7 +594,7 @@ def LoadWritePC (address : (BitVec 32)) : SailM Unit := do
 
 /-- Type quantifiers: k_cold : Bool -/
 def TakeReset (cold : Bool) : SailM Unit := do
-  ArmFull.assert (((HighestEL ()) == EL1) || (((HighestEL ()) == EL2) || ((HighestEL ()) == EL3))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/reset.sail:1400.71-1400.72"
+  ArmFull.assert (((HighestEL ()) == EL1) || (((HighestEL ()) == EL2) || ((HighestEL ()) == EL3))) "sail-arm/reset.sail:1400.71-1400.72"
   writeReg FEAT_DoubleLock_IMPLEMENTED false
   writeReg FEAT_EPAC_IMPLEMENTED false
   (InitVariantImplemented ())
@@ -631,21 +631,21 @@ def TakeReset (cold : Bool) : SailM Unit := do
       then
         (do
           let w__9 ← (( do readReg ID_AA64PFR0_EL1 ) : SailM (BitVec 64) )
-          ArmFull.assert ((_get_ID_AA64PFR0_EL1_Type_EL3 w__9) == 0b0010#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/reset.sail:1420.51-1420.52")
+          ArmFull.assert ((_get_ID_AA64PFR0_EL1_Type_EL3 w__9) == 0b0010#4) "sail-arm/reset.sail:1420.51-1420.52")
       else
         (do
           if ((questionMark == EL2) : Bool)
           then
             (do
               let w__10 ← (( do readReg ID_AA64PFR0_EL1 ) : SailM (BitVec 64) )
-              ArmFull.assert ((_get_ID_AA64PFR0_EL1_Type_EL2 w__10) == 0b0010#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/reset.sail:1423.51-1423.52")
+              ArmFull.assert ((_get_ID_AA64PFR0_EL1_Type_EL2 w__10) == 0b0010#4) "sail-arm/reset.sail:1423.51-1423.52")
           else
             (do
               if ((questionMark == EL1) : Bool)
               then
                 (do
                   let w__11 ← (( do readReg ID_AA64PFR0_EL1 ) : SailM (BitVec 64) )
-                  ArmFull.assert ((_get_ID_AA64PFR0_EL1_Type_EL1 w__11) == 0b0010#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/reset.sail:1426.51-1426.52")
+                  ArmFull.assert ((_get_ID_AA64PFR0_EL1_Type_EL1 w__11) == 0b0010#4) "sail-arm/reset.sail:1426.51-1426.52")
               else (pure (()))))
       writeReg __highest_el_aarch32 true
       let w__12 ← (( do readReg FeatureImpl ) : SailM (Vector Bool 259) )

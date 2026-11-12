@@ -189,7 +189,7 @@ def AArch64_SettingDirtyStatePermitted (fault : FaultRecord) : SailM Bool := do
 
 /-- Type quantifiers: counter_index : Nat, 0 ≤ counter_index ∨ (not (counter_index < 32)) -/
 def SPEStartCounter (counter_index : Nat) : SailM Unit := do
-  ArmFull.assert (counter_index <b SPEMaxCounters) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:27796.41-27796.42"
+  ArmFull.assert (counter_index <b SPEMaxCounters) "sail-arm/v8_base.sail:27796.41-27796.42"
   let w__0 ← (( do readReg SPESampleCounterPending ) : SailM (Vector Bool 32) )
   writeReg SPESampleCounterPending (vectorUpdate w__0 counter_index true)
 
@@ -324,7 +324,7 @@ def Reverse (word : (BitVec k_N)) (M : Int) : SailM (BitVec k_N) := do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1735)
       (Sail.BitVec.length word))) ) : SailM (BitVec k_N) )
   let sw : Int := (fdiv_int (Sail.BitVec.length word) M)
-  ArmFull.assert ((Sail.BitVec.length word) == (sw *i M)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:29989.23-29989.24"
+  ArmFull.assert ((Sail.BitVec.length word) == (sw *i M)) "sail-arm/v8_base.sail:29989.23-29989.24"
   let loop_s_lower : Nat := 0
   let loop_s_upper : Int := (sw -i 1)
   (do
@@ -333,7 +333,7 @@ def Reverse (word : (BitVec k_N)) (M : Int) : SailM (BitVec k_N) := do
       let result := loop_vars
       loop_vars ← do
         ArmFull.assert (((s *i M) ≤b (((s *i M) +i M) -i 1)) || (! ((s ≥b 0) && (((s +i 1) *i M) ≤b (Sail.BitVec.length
-                  word))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:29991.115-29991.116"
+                  word))))) "sail-arm/v8_base.sail:29991.115-29991.116"
         let w__0 ← (( do
           ((Sail.BitVec.castWidth ) <$> (Elem_read word s (Sail.Int.toNatChecked (M)))) ) : SailM
           (BitVec (Sail.Int.toNatChecked (M : Int))) )
@@ -343,7 +343,7 @@ def Reverse (word : (BitVec k_N)) (M : Int) : SailM (BitVec k_N) := do
 
 /-- Type quantifiers: N : Nat, index : Int, List.elem N [16, 32, 64] -/
 def FPTrigMAddCoefficient_read (index : Int) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:30034.38-30034.39"
+  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-arm/v8_base.sail:30034.38-30034.39"
   let result ← (( do (undefined_int_at (← occLabel 1740) ()) ) : SailM Int )
   let result : Int :=
     if ((N == 16) : Bool)
@@ -412,7 +412,7 @@ def FPTrigMAddCoefficient_read (index : Int) (N : Nat) : SailM (BitVec N) := do
 
 /-- Type quantifiers: N : Nat, index : Int, List.elem N [16, 32, 64] -/
 def FPExpCoefficient_read (index : Int) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:30222.38-30222.39"
+  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-arm/v8_base.sail:30222.38-30222.39"
   let result ← (( do (undefined_int_at (← occLabel 1741) ()) ) : SailM Int )
   let result : Int :=
     if ((N == 16) : Bool)
@@ -607,7 +607,7 @@ def BitDeposit (data : (BitVec k_N)) (mask : (BitVec k_N)) : SailM (BitVec k_N) 
           then
             (do
               let db : Int := db
-              ArmFull.assert ((0 ≤b db) && (db <b (Sail.BitVec.length res))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31027.58-31027.59"
+              ArmFull.assert ((0 ≤b db) && (db <b (Sail.BitVec.length res))) "sail-arm/v8_base.sail:31027.58-31027.59"
               let res : (BitVec k_N) :=
                 (BitVec.update res (Sail.Int.toNatChecked (rb))
                   (Bit
@@ -636,7 +636,7 @@ def BitExtract (data : (BitVec k_N)) (mask : (BitVec k_N)) : SailM (BitVec k_N) 
           then
             (do
               let rb : Int := rb
-              ArmFull.assert ((0 ≤b rb) && (rb <b (Sail.BitVec.length res))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31046.58-31046.59"
+              ArmFull.assert ((0 ≤b rb) && (rb <b (Sail.BitVec.length res))) "sail-arm/v8_base.sail:31046.58-31046.59"
               let res : (BitVec k_N) :=
                 (BitVec.update res (Sail.Int.toNatChecked (rb))
                   (Bit
@@ -667,7 +667,7 @@ def BitGroup (data : (BitVec k_N)) (mask : (BitVec k_N)) : SailM (BitVec k_N) :=
           then
             (do
               let rb : Int := rb
-              ArmFull.assert ((0 ≤b rb) && (rb <b (Sail.BitVec.length res))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31065.58-31065.59"
+              ArmFull.assert ((0 ≤b rb) && (rb <b (Sail.BitVec.length res))) "sail-arm/v8_base.sail:31065.58-31065.59"
               let res : (BitVec k_N) :=
                 (BitVec.update res (Sail.Int.toNatChecked (rb))
                   (Bit
@@ -689,7 +689,7 @@ def BitGroup (data : (BitVec k_N)) (mask : (BitVec k_N)) : SailM (BitVec k_N) :=
           then
             (do
               let rb : Int := rb
-              ArmFull.assert ((0 ≤b rb) && (rb <b (Sail.BitVec.length res))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31076.58-31076.59"
+              ArmFull.assert ((0 ≤b rb) && (rb <b (Sail.BitVec.length res))) "sail-arm/v8_base.sail:31076.58-31076.59"
               let res : (BitVec k_N) :=
                 (BitVec.update res (Sail.Int.toNatChecked (rb))
                   (Bit

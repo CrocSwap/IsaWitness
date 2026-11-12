@@ -216,14 +216,14 @@ def __FetchInstr (pc : (BitVec 64)) : SailM (__InstrEnc × (BitVec 32)) := do
 def Mem_read (address : (BitVec 64)) (size : Nat) (accdesc : AccessDescriptor) : SailM (BitVec (size * 8)) := do
   let ispair : Bool := false
   let highestAddressfirst : Bool := false
-  ArmFull.assert (((((size == 1) || (size == 2)) || (size == 4)) || (size == 8)) || (size == 16)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28168.48-28168.49"
+  ArmFull.assert (((((size == 1) || (size == 2)) || (size == 4)) || (size == 8)) || (size == 16)) "sail-arm/v8_base.sail:28168.48-28168.49"
   ((Sail.BitVec.castWidth ) <$> (Mem_read__2 address size accdesc ispair highestAddressfirst))
 
 
 /-- Type quantifiers: k_ispair : Bool, size : Nat, (size * 8) ≥ 0 -/
 def Mem_read__1 (address : (BitVec 64)) (size : Nat) (accdesc : AccessDescriptor) (ispair : Bool) : SailM (BitVec (size * 8)) := do
   let highestAddressfirst : Bool := false
-  ArmFull.assert (((((size == 1) || (size == 2)) || (size == 4)) || (size == 8)) || (size == 16)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28174.48-28174.49"
+  ArmFull.assert (((((size == 1) || (size == 2)) || (size == 4)) || (size == 8)) || (size == 16)) "sail-arm/v8_base.sail:28174.48-28174.49"
   ((Sail.BitVec.castWidth ) <$> (Mem_read__2 address size accdesc ispair highestAddressfirst))
 
 
@@ -733,7 +733,7 @@ def AArch32_SysRegWrite (cp_num : Int) (instr : (BitVec 32)) (t : Int) : SailM U
       if ((opc2 == 0b010#3) : Bool)
       then
         (do
-          ArmFull.assert (pmselr <b 31) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:1330.30-1330.31"
+          ArmFull.assert (pmselr <b 31) "sail-arm/sysregs.sail:1330.30-1330.31"
           (PMEVCNTR_set (Sail.Int.toNatChecked (pmselr)) temprt))
       else (pure (())))
   else (pure (()))

@@ -142,12 +142,12 @@ def EncodePARange (_ : Unit) : SailM (BitVec 4) := do
   | 52 =>
     (do
       let w__1 ← (( do (Have52BitPAExt ()) ) : SailM Bool )
-      ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/reset.sail:79.33-79.34"
+      ArmFull.assert w__1 "sail-arm/reset.sail:79.33-79.34"
       (pure (0b0110#4)))
   | 56 =>
     (do
       let w__2 ← (( do (Have56BitPAExt ()) ) : SailM Bool )
-      ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/reset.sail:83.33-83.34"
+      ArmFull.assert w__2 "sail-arm/reset.sail:83.33-83.34"
       (pure (0b0111#4)))
   | _ => (pure (0b0110#4))
 
@@ -159,12 +159,12 @@ def EncodeVARange (_ : Unit) : SailM (BitVec 4) := do
   | 52 =>
     (do
       let w__1 ← (( do (Have52BitVAExt ()) ) : SailM Bool )
-      ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/reset.sail:98.33-98.34"
+      ArmFull.assert w__1 "sail-arm/reset.sail:98.33-98.34"
       (pure (0b0001#4)))
   | 56 =>
     (do
       let w__2 ← (( do (Have56BitVAExt ()) ) : SailM Bool )
-      ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/reset.sail:102.33-102.34"
+      ArmFull.assert w__2 "sail-arm/reset.sail:102.33-102.34"
       (pure (0b0001#4)))
   | _ =>
     (do
@@ -270,7 +270,7 @@ def SPECycle (_ : Unit) : SailM Unit := do
   N = 64 ∨
   (not ((Sail.Int.toNatChecked (shift : Int)) ≥ 0 ∧ (Sail.Int.toNatChecked (shift : Int)) ≤ 4)) -/
 def ExtendReg (reg : Int) (exttype : ExtendType) (shift : Int) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert ((shift ≥b 0) && (shift ≤b 4)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:35781.34-35781.35"
+  ArmFull.assert ((shift ≥b 0) && (shift ≤b 4)) "sail-arm/v8_base.sail:35781.34-35781.35"
   let val_name ← (( do ((Sail.BitVec.castWidth ) <$> (X_read reg N)) ) : SailM (BitVec N) )
   let is_unsigned ← (( do (undefined_bool_at (← occLabel 2457) ()) ) : SailM Bool )
   let len ← (( do (undefined_int_at (← occLabel 2458) ()) ) : SailM Int )
@@ -310,7 +310,7 @@ def ExtendReg (reg : Int) (exttype : ExtendType) (shift : Int) (N : Nat) : SailM
       (is_unsigned, len))
   let is_unsigned := is_unsigned
   let len : Int := (Min.min len (N -i shift))
-  ArmFull.assert ((0 ≤b (len -i 1)) || (! ((shift ≥b 0) && (shift ≤b 4)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:35821.73-35821.74"
+  ArmFull.assert ((0 ≤b (len -i 1)) || (! ((shift ≥b 0) && (shift ≤b 4)))) "sail-arm/v8_base.sail:35821.73-35821.74"
   ((Sail.BitVec.castWidth ) <$> (Extend
     ((Sail.BitVec.extractLsb val_name (Sail.Int.toNatChecked ((len -i 1))) 0) +++ (Zeros
         (n := (Sail.Int.toNatChecked (shift))))) N is_unsigned))
@@ -331,7 +331,7 @@ def ShiftReg (reg : Int) (shiftype : ShiftType) (amount : Int) (N : Nat) : SailM
     (pure (result)))
   | .ShiftType_ROR =>
     (do
-      ArmFull.assert ((N >b 0) && (amount ≥b 0)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:35864.52-35864.53"
+      ArmFull.assert ((N >b 0) && (amount ≥b 0)) "sail-arm/v8_base.sail:35864.52-35864.53"
       let result : (BitVec N) := (ROR result (Sail.Int.toNatChecked (amount)))
       (pure (result)))
 
@@ -381,7 +381,7 @@ def AArch64_TLBIP_RVA (security : SecurityState) (regime : Regime) (vmid : (BitV
           (do
             let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
             (pure (((w__2.EL == EL1) : Bool))))) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36325.65-36325.66"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:36325.65-36325.66"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2474) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_RVA }
   let r : TLBIRecord := { r with from_aarch64 := true }
@@ -433,7 +433,7 @@ def AArch64_TLBIP_RVAA (security : SecurityState) (regime : Regime) (vmid : (Bit
           (do
             let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
             (pure (((w__2.EL == EL1) : Bool))))) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36384.65-36384.66"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:36384.65-36384.66"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2478) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_RVAA }
   let r : TLBIRecord := { r with from_aarch64 := true }
@@ -488,7 +488,7 @@ def AArch64_TLBIP_RIPAS2 (security : SecurityState) (regime : Regime) (vmid : (B
           (do
             let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
             (pure (((w__2.EL == EL1) : Bool))))) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36460.65-36460.66"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:36460.65-36460.66"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2482) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_RIPAS2 }
   let r : TLBIRecord := { r with from_aarch64 := true }
@@ -554,7 +554,7 @@ def AArch64_TLBI_RPA (level : TLBILevel) (Xt : (BitVec 64)) (shareability : Shar
         let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
         (pure (((w__1.EL == EL3) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36505.39-36505.40"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:36505.39-36505.40"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2484) ()) ) : SailM TLBIRecord )
   let range_bits ← (( do (undefined_int_at (← occLabel 2485) ()) ) : SailM Int )
   let p : Int := 12
@@ -595,8 +595,8 @@ def AArch64_TLBI_RPA (level : TLBILevel) (Xt : (BitVec 64)) (shareability : Shar
     | 0b10 => (Sail.BitVec.updateSubrange BaseADDR 51 14 (Sail.BitVec.extractLsb Xt 39 2))
     | 0b01 => (Sail.BitVec.updateSubrange BaseADDR 51 16 (Sail.BitVec.extractLsb Xt 39 4))
     | _ => BaseADDR
-  ArmFull.assert (range_bits ≥b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36576.39-36576.40"
-  ArmFull.assert (52 ≥b range_bits) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36577.40-36577.41"
+  ArmFull.assert (range_bits ≥b 0) "sail-arm/v8_base.sail:36576.39-36576.40"
+  ArmFull.assert (52 ≥b range_bits) "sail-arm/v8_base.sail:36577.40-36577.41"
   let start_addr : (BitVec 52) :=
     (BaseADDR &&& (Sail.BitVec.castWidth (m := 52) (Complement.complement
         (Sail.BitVec.zeroExtend (Ones (n := (Sail.Int.toNatChecked (range_bits)))) 52))))
@@ -622,7 +622,7 @@ def AArch64_TLBI_PAALL (shareability : Shareability) : SailM Unit := do
         let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
         (pure (((w__1.EL == EL3) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36592.39-36592.40"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:36592.39-36592.40"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2486) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_PAALL }
   let r : TLBIRecord := { r with level := TLBILevel_Any }

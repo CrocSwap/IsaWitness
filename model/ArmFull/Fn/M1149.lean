@@ -383,7 +383,7 @@ def decode_fcmla_advsimd_elt_aarch64_instrs_vector_arithmetic_binary_element_mul
   if ((((size == 0b01#2) && (H == 1#1)) && (Q == 0#1)) : Bool)
   then sailThrow ((Error_Undefined ()))
   else (pure (()))
-  ArmFull.assert ((((index == 0) || (index == 1)) || (index == 2)) || (index == 3)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:13687.45-13687.46"
+  ArmFull.assert ((((index == 0) || (index == 1)) || (index == 2)) || (index == 3)) "sail-arm/instrs64.sail:13687.45-13687.46"
   (execute_aarch64_instrs_vector_arithmetic_binary_element_mul_acc_complex
     (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (datasize)) elements
     (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (index)) (Sail.Int.toNatChecked (m))
@@ -423,7 +423,7 @@ def decode_fcvtl_advsimd_aarch64_instrs_vector_arithmetic_unary_float_widen (Rd 
   let datasize : Nat := 64
   let part : Int := (BitVec.toNat Q)
   let elements : Int := (fdiv_int datasize esize)
-  ArmFull.assert ((esize == 16) || (esize == 32)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:15869.41-15869.42"
+  ArmFull.assert ((esize == 16) || (esize == 32)) "sail-arm/instrs64.sail:15869.41-15869.42"
   (execute_aarch64_instrs_vector_arithmetic_unary_float_widen (Sail.Int.toNatChecked (d)) datasize
     elements (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (n))
     (Sail.Int.toNatChecked (part)))
@@ -436,7 +436,7 @@ def decode_fcvtn_advsimd_aarch64_instrs_vector_arithmetic_unary_float_narrow (Rd
   let datasize : Nat := 64
   let part : Int := (BitVec.toNat Q)
   let elements : Int := (fdiv_int datasize esize)
-  ArmFull.assert ((esize == 16) || (esize == 32)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:16763.41-16763.42"
+  ArmFull.assert ((esize == 16) || (esize == 32)) "sail-arm/instrs64.sail:16763.41-16763.42"
   (execute_aarch64_instrs_vector_arithmetic_unary_float_narrow (Sail.Int.toNatChecked (d)) datasize
     elements (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (n))
     (Sail.Int.toNatChecked (part)))

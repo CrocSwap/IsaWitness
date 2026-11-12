@@ -273,7 +273,7 @@ def execute_FRECPE_Z_Z__ (VL : Nat) (d : Nat) (esize : Nat) (n : Nat) : SailM Un
         loop_vars ← do
           let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) : SailM
             (BitVec esize) )
-          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:3116.49-3116.50"
+          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:3116.49-3116.50"
           let w__0 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
           let w__1 ← (( do (FPRecipEstimate element w__0) ) : SailM (BitVec esize) )
           (Elem_set result e esize (Sail.BitVec.castWidth w__1))
@@ -302,7 +302,7 @@ def execute_FRSQRTE_Z_Z__ (VL : Nat) (d : Nat) (esize : Nat) (n : Nat) : SailM U
         loop_vars ← do
           let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) : SailM
             (BitVec esize) )
-          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:3176.49-3176.50"
+          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:3176.49-3176.50"
           let w__0 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
           let w__1 ← (( do (FPRSqrtEstimate element w__0) ) : SailM (BitVec esize) )
           (Elem_set result e esize (Sail.BitVec.castWidth w__1))
@@ -343,7 +343,7 @@ def execute_FRECPX_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (n : Nat
             (do
               let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
                 SailM (BitVec esize) )
-              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:3241.53-3241.54"
+              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:3241.53-3241.54"
               let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
               let w__4 ← (( do (FPRecpX element w__3) ) : SailM (BitVec esize) )
               (Elem_set result e esize (Sail.BitVec.castWidth w__4)))
@@ -385,7 +385,7 @@ def execute_FRINTA_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (exact : Bool) (g 
             (do
               let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
                 SailM (BitVec esize) )
-              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:3379.53-3379.54"
+              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:3379.53-3379.54"
               let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
               let w__4 ← (( do (FPRoundInt element w__3 rounding exact) ) : SailM (BitVec esize) )
               (Elem_set result e esize (Sail.BitVec.castWidth w__4)))
@@ -427,7 +427,7 @@ def execute_FRINTI_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (exact : Bool) (g 
             (do
               let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
                 SailM (BitVec esize) )
-              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:3450.53-3450.54"
+              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:3450.53-3450.54"
               let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
               let w__4 ← (( do (FPRoundInt element w__3 rounding exact) ) : SailM (BitVec esize) )
               (Elem_set result e esize (Sail.BitVec.castWidth w__4)))
@@ -469,7 +469,7 @@ def execute_FRINTM_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (exact : Bool) (g 
             (do
               let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
                 SailM (BitVec esize) )
-              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:3521.53-3521.54"
+              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:3521.53-3521.54"
               let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
               let w__4 ← (( do (FPRoundInt element w__3 rounding exact) ) : SailM (BitVec esize) )
               (Elem_set result e esize (Sail.BitVec.castWidth w__4)))
@@ -511,7 +511,7 @@ def execute_FRINTN_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (exact : Bool) (g 
             (do
               let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
                 SailM (BitVec esize) )
-              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:3592.53-3592.54"
+              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:3592.53-3592.54"
               let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
               let w__4 ← (( do (FPRoundInt element w__3 rounding exact) ) : SailM (BitVec esize) )
               (Elem_set result e esize (Sail.BitVec.castWidth w__4)))
@@ -553,7 +553,7 @@ def execute_FRINTP_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (exact : Bool) (g 
             (do
               let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
                 SailM (BitVec esize) )
-              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:3663.53-3663.54"
+              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:3663.53-3663.54"
               let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
               let w__4 ← (( do (FPRoundInt element w__3 rounding exact) ) : SailM (BitVec esize) )
               (Elem_set result e esize (Sail.BitVec.castWidth w__4)))
@@ -595,7 +595,7 @@ def execute_FRINTX_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (exact : Bool) (g 
             (do
               let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
                 SailM (BitVec esize) )
-              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:3734.53-3734.54"
+              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:3734.53-3734.54"
               let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
               let w__4 ← (( do (FPRoundInt element w__3 rounding exact) ) : SailM (BitVec esize) )
               (Elem_set result e esize (Sail.BitVec.castWidth w__4)))
@@ -637,7 +637,7 @@ def execute_FRINTZ_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (exact : Bool) (g 
             (do
               let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
                 SailM (BitVec esize) )
-              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:3805.53-3805.54"
+              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:3805.53-3805.54"
               let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
               let w__4 ← (( do (FPRoundInt element w__3 rounding exact) ) : SailM (BitVec esize) )
               (Elem_set result e esize (Sail.BitVec.castWidth w__4)))

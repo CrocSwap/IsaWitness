@@ -252,7 +252,7 @@ def SPEConstructRecord (_ : Unit) : SailM Unit := do
         let w__22 ← (( do (SPEGetDataSourcePayloadSize ()) ) : SailM Int )
         let payload_size : Int := (w__22 : Int)
         let payload_size : Int := payload_size
-        ArmFull.assert ((0 ≤b ((8 *i payload_size) -i 1)) && (((8 *i payload_size) -i 1) <b 16)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:35364.84-35364.85"
+        ArmFull.assert ((0 ≤b ((8 *i payload_size) -i 1)) && (((8 *i payload_size) -i 1) <b 16)) "sail-arm/v8_base.sail:35364.84-35364.85"
         let w__23 ← (( do readReg SPESampleDataSource ) : SailM (BitVec 16) )
         (SPEAddPacketToRecord 0b01#2 0b0011#4
           (Sail.BitVec.extractLsb w__23 (Sail.Int.toNatChecked (((8 *i payload_size) -i 1))) 0))
@@ -262,8 +262,8 @@ def SPEConstructRecord (_ : Unit) : SailM Unit := do
   let w__25 ← (( do readReg SPESampleSubclass ) : SailM (BitVec 8) )
   (SPEAddPacketToRecord 0b01#2 (0b10#2 +++ w__24) w__25)
   let payload_size ← (( do (SPEGetEventsPayloadSize ()) ) : SailM Int )
-  ArmFull.assert ((0 ≤b ((8 *i payload_size) -i 1)) && (((8 *i payload_size) -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:35369.80-35369.81"
-  ArmFull.assert ((((((8 *i payload_size) -i 1) -i 0) +i 1) == 8) || ((((((8 *i payload_size) -i 1) -i 0) +i 1) == 16) || ((((((8 *i payload_size) -i 1) -i 0) +i 1) == 32) || (((((8 *i payload_size) -i 1) -i 0) +i 1) == 64)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:35370.173-35370.174"
+  ArmFull.assert ((0 ≤b ((8 *i payload_size) -i 1)) && (((8 *i payload_size) -i 1) <b 64)) "sail-arm/v8_base.sail:35369.80-35369.81"
+  ArmFull.assert ((((((8 *i payload_size) -i 1) -i 0) +i 1) == 8) || ((((((8 *i payload_size) -i 1) -i 0) +i 1) == 16) || ((((((8 *i payload_size) -i 1) -i 0) +i 1) == 32) || (((((8 *i payload_size) -i 1) -i 0) +i 1) == 64)))) "sail-arm/v8_base.sail:35370.173-35370.174"
   let w__26 ← (( do readReg SPESampleEvents ) : SailM (BitVec 64) )
   (SPEAddPacketToRecord 0b01#2 0b0010#4
     (Sail.BitVec.extractLsb w__26 (Sail.Int.toNatChecked (((8 *i payload_size) -i 1))) 0))

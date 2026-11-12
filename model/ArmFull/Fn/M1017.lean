@@ -178,7 +178,7 @@ def execute_aarch64_instrs_integer_tags_mcgettagarray (n : Nat) (t : Nat) : Sail
         loop_vars ← do
           let tag ← (( do (AArch64_MemTag_read address accdesc) ) : SailM (BitVec 4) )
           let index : Int := index
-          ArmFull.assert ((0 ≤b (index *i 4)) && (((index *i 4) +i 3) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:30614.72-30614.73"
+          ArmFull.assert ((0 ≤b (index *i 4)) && (((index *i 4) +i 3) <b 64)) "sail-arm/instrs64.sail:30614.72-30614.73"
           let data : (BitVec 64) :=
             (Sail.BitVec.updateSubrange data (Sail.Int.toNatChecked (((index *i 4) +i 3)))
               (Sail.Int.toNatChecked ((index *i 4))) (Sail.BitVec.castWidth tag))
@@ -547,7 +547,7 @@ def decode_rshrn_advsimd_aarch64_instrs_vector_shift_right_narrow_logical (Rd : 
   let elements : Int := (fdiv_int datasize esize)
   let shift : Int := ((2 *i esize) -i (BitVec.toNat (immh +++ immb)))
   let round : Bool := (op == 1#1)
-  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:41451.51-41451.52"
+  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:41451.51-41451.52"
   (execute_aarch64_instrs_vector_shift_right_narrow_logical (Sail.Int.toNatChecked (d)) datasize
     elements (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (n))
     (Sail.Int.toNatChecked (part)) round shift)
@@ -568,7 +568,7 @@ def decode_shrn_advsimd_aarch64_instrs_vector_shift_right_narrow_logical (Rd : (
   let elements : Int := (fdiv_int datasize esize)
   let shift : Int := ((2 *i esize) -i (BitVec.toNat (immh +++ immb)))
   let round : Bool := (op == 1#1)
-  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:41483.51-41483.52"
+  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:41483.51-41483.52"
   (execute_aarch64_instrs_vector_shift_right_narrow_logical (Sail.Int.toNatChecked (d)) datasize
     elements (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (n))
     (Sail.Int.toNatChecked (part)) round shift)

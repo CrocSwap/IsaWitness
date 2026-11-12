@@ -445,7 +445,7 @@ def execute_aarch32_instrs_UASX_Op_A_txt (d : Nat) (m : Nat) (n : Nat) : SailM U
 /-- Type quantifiers: d : Nat, lsbit : Nat, msbit : Int, n : Nat, 0 ≤ n ∧
   n ≤ 15 ∧ 0 ≤ lsbit ∧ lsbit ≤ 31 ∧ 0 ≤ d ∧ d ≤ 15 -/
 def execute_aarch32_instrs_UBFX_Op_A_txt (d : Nat) (lsbit : Nat) (msbit : Int) (n : Nat) : SailM Unit := do
-  ArmFull.assert ((lsbit ≤b msbit) && (msbit <b 32)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:17195.55-17195.56"
+  ArmFull.assert ((lsbit ≤b msbit) && (msbit <b 32)) "sail-arm/instrs32.sail:17195.55-17195.56"
   let w__0 ← (( do (R_read n) ) : SailM (BitVec 32) )
   (R_set d
     (Sail.BitVec.zeroExtend (Sail.BitVec.extractLsb w__0 (Sail.Int.toNatChecked (msbit)) lsbit) 32))

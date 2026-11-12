@@ -506,7 +506,7 @@ def HandleExternalAbort (memretstatus : PhysMemRetStatus) (iswrite : Bool) (mema
               let w__0 ← (( do (HaveRASExt ()) ) : SailM Bool )
               (pure (((! w__0) : Bool)))) && (((BEq.beq memretstatus.statuscode Fault_SyncParity) || (BEq.beq
                 memretstatus.statuscode Fault_AsyncParity)) : Bool)))) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:15300.227-15300.228"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:15300.227-15300.228"
   let fault ← (( do (NoFault__1 accdesc) ) : SailM FaultRecord )
   let fault : FaultRecord := { fault with statuscode := memretstatus.statuscode }
   let fault : FaultRecord := { fault with write := iswrite }
@@ -636,7 +636,7 @@ def AArch64_FullTranslate (va : (BitVec 64)) (accdesc : AccessDescriptor) (align
   else
     (do
       let w__2 ← (( do (EL2Enabled ()) ) : SailM Bool )
-      ArmFull.assert (implies (BEq.beq accdesc.ss SS_Realm) w__2) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:27774.54-27774.55"
+      ArmFull.assert (implies (BEq.beq accdesc.ss SS_Realm) w__2) "sail-arm/v8_base.sail:27774.54-27774.55"
       let w__4 ← (( do
         if (((BEq.beq regime Regime_EL10) : Bool) : Bool)
         then

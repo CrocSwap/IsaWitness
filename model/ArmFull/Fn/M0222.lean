@@ -116,7 +116,7 @@ open ATAccess
 /-- Type quantifiers: d : Nat, lsbit : Nat, msbit : Nat, 0 ≤ msbit ∧
   msbit ≤ 31 ∧ 0 ≤ lsbit ∧ lsbit ≤ 31 ∧ 0 ≤ d ∧ d ≤ 15 -/
 def execute_aarch32_instrs_BFC_Op_A_txt (d : Nat) (lsbit : Nat) (msbit : Nat) : SailM Unit := do
-  ArmFull.assert (lsbit ≤b msbit) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:1519.39-1519.40"
+  ArmFull.assert (lsbit ≤b msbit) "sail-arm/instrs32.sail:1519.39-1519.40"
   let w__0 ← (( do (R_read d) ) : SailM (BitVec 32) )
   (R_set d
     (Sail.BitVec.castWidth (Sail.BitVec.updateSubrange w__0 msbit lsbit
@@ -128,7 +128,7 @@ def execute_aarch32_instrs_BFC_Op_A_txt (d : Nat) (lsbit : Nat) (msbit : Nat) : 
   n ≤ 15 ∧
   0 ≤ msbit ∧ msbit ≤ 31 ∧ 0 ≤ lsbit ∧ lsbit ≤ 31 ∧ 0 ≤ d ∧ d ≤ 15 -/
 def execute_aarch32_instrs_BFI_Op_A_txt (d : Nat) (lsbit : Nat) (msbit : Nat) (n : Nat) : SailM Unit := do
-  ArmFull.assert (0 ≤b (msbit -i lsbit)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:1587.43-1587.44"
+  ArmFull.assert (0 ≤b (msbit -i lsbit)) "sail-arm/instrs32.sail:1587.43-1587.44"
   let w__0 ← (( do (R_read d) ) : SailM (BitVec 32) )
   let w__1 ← (( do (R_read n) ) : SailM (BitVec 32) )
   (R_set d

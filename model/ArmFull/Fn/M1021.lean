@@ -712,7 +712,7 @@ def decode_sqrshrn_advsimd_aarch64_instrs_vector_shift_right_narrow_uniform_sisd
   let shift : Int := ((2 *i esize) -i (BitVec.toNat (immh +++ immb)))
   let round : Bool := (op == 1#1)
   let is_unsigned : Bool := (U == 1#1)
-  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && (((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:48572.87-48572.88"
+  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && (((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64))) "sail-arm/instrs64.sail:48572.87-48572.88"
   (execute_aarch64_instrs_vector_shift_right_narrow_uniform_sisd (Sail.Int.toNatChecked (d))
     (Sail.Int.toNatChecked (datasize)) elements (Sail.Int.toNatChecked (esize))
     (Sail.Int.toNatChecked (n)) part round shift is_unsigned)
@@ -734,7 +734,7 @@ def decode_sqrshrn_advsimd_aarch64_instrs_vector_shift_right_narrow_uniform_simd
   let shift : Int := ((2 *i esize) -i (BitVec.toNat (immh +++ immb)))
   let round : Bool := (op == 1#1)
   let is_unsigned : Bool := (U == 1#1)
-  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:48605.51-48605.52"
+  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:48605.51-48605.52"
   (execute_aarch64_instrs_vector_shift_right_narrow_uniform_sisd (Sail.Int.toNatChecked (d))
     datasize elements (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (n))
     (Sail.Int.toNatChecked (part)) round shift is_unsigned)

@@ -185,8 +185,8 @@ def AArch32_ClearEventCounters (_ : Unit) : SailM Unit := do
             for idx in [loop_idx_lower:loop_idx_upper:1]i do
               let () := loop_vars
               loop_vars ← do
-                ArmFull.assert (0 ≤b idx) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43512.45-43512.46"
-                ArmFull.assert (idx <b 31) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43513.45-43513.46"
+                ArmFull.assert (0 ≤b idx) "sail-arm/v8_base.sail:43512.45-43512.46"
+                ArmFull.assert (idx <b 31) "sail-arm/v8_base.sail:43513.45-43513.46"
                 (PMEVCNTR_set (Sail.Int.toNatChecked (idx)) (Zeros (n := 32)))
             (pure loop_vars)))
       else (pure (())))
@@ -206,13 +206,13 @@ def ICC_AP1R_EL1_read (n : Int) : SailM (BitVec 64) := do
   if (w__2 : Bool)
   then
     (do
-      ArmFull.assert ((0 ≤b n) && (n <b 4)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:44767.45-44767.46"
+      ArmFull.assert ((0 ≤b n) && (n <b 4)) "sail-arm/v8_base.sail:44767.45-44767.46"
       let w__3 ← (( do readReg ICC_AP1R_EL1_S ) : SailM (Vector (BitVec 64) 4) )
       let r := ((GetElem?.getElem! w__3 (Sail.Int.toNatChecked (n))) : (BitVec 64))
       (pure (r)))
   else
     (do
-      ArmFull.assert ((0 ≤b n) && (n <b 4)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:44770.45-44770.46"
+      ArmFull.assert ((0 ≤b n) && (n <b 4)) "sail-arm/v8_base.sail:44770.45-44770.46"
       let w__4 ← (( do readReg ICC_AP1R_EL1_NS ) : SailM (Vector (BitVec 64) 4) )
       let r := ((GetElem?.getElem! w__4 (Sail.Int.toNatChecked (n))) : (BitVec 64))
       (pure (r)))
@@ -232,12 +232,12 @@ def ICC_AP1R_EL1_set (n : Int) (value_name : (BitVec 64)) : SailM Unit := do
   if (w__2 : Bool)
   then
     (do
-      ArmFull.assert ((0 ≤b n) && (n <b 4)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:44781.45-44781.46"
+      ArmFull.assert ((0 ≤b n) && (n <b 4)) "sail-arm/v8_base.sail:44781.45-44781.46"
       let w__3 ← (( do readReg ICC_AP1R_EL1_S ) : SailM (Vector (BitVec 64) 4) )
       writeReg ICC_AP1R_EL1_S (vectorUpdate w__3 (Sail.Int.toNatChecked (n)) r))
   else
     (do
-      ArmFull.assert ((0 ≤b n) && (n <b 4)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:44784.45-44784.46"
+      ArmFull.assert ((0 ≤b n) && (n <b 4)) "sail-arm/v8_base.sail:44784.45-44784.46"
       let w__4 ← (( do readReg ICC_AP1R_EL1_NS ) : SailM (Vector (BitVec 64) 4) )
       writeReg ICC_AP1R_EL1_NS (vectorUpdate w__4 (Sail.Int.toNatChecked (n)) r))
 
@@ -484,11 +484,11 @@ def ICC_AP1R_read (n : Int) : SailM (BitVec 32) := do
   if (w__2 : Bool)
   then
     (do
-      ArmFull.assert ((0 ≤b n) && (n <b 4)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:49731.45-49731.46"
+      ArmFull.assert ((0 ≤b n) && (n <b 4)) "sail-arm/v8_base.sail:49731.45-49731.46"
       (ICC_AP1R_S_read (Sail.Int.toNatChecked (n))))
   else
     (do
-      ArmFull.assert ((0 ≤b n) && (n <b 4)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:49734.45-49734.46"
+      ArmFull.assert ((0 ≤b n) && (n <b 4)) "sail-arm/v8_base.sail:49734.45-49734.46"
       (ICC_AP1R_NS_read (Sail.Int.toNatChecked (n))))
 
 
@@ -506,11 +506,11 @@ def ICC_AP1R_set (n : Int) (value_name : (BitVec 32)) : SailM Unit := do
   if (w__2 : Bool)
   then
     (do
-      ArmFull.assert ((0 ≤b n) && (n <b 4)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:49745.45-49745.46"
+      ArmFull.assert ((0 ≤b n) && (n <b 4)) "sail-arm/v8_base.sail:49745.45-49745.46"
       (ICC_AP1R_S_set (Sail.Int.toNatChecked (n)) r))
   else
     (do
-      ArmFull.assert ((0 ≤b n) && (n <b 4)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:49748.45-49748.46"
+      ArmFull.assert ((0 ≤b n) && (n <b 4)) "sail-arm/v8_base.sail:49748.45-49748.46"
       (ICC_AP1R_NS_set (Sail.Int.toNatChecked (n)) r))
 
 

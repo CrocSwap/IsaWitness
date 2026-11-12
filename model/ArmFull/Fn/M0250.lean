@@ -195,19 +195,19 @@ def AArch64_PMUCycle (_ : Unit) : SailM Unit := do
                 for idx in [loop_idx_lower:loop_idx_upper:1]i do
                   let () := loop_vars
                   loop_vars ← do
-                    ArmFull.assert ((0 ≤b idx) && (idx ≤b 32)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34466.65-34466.66"
+                    ArmFull.assert ((0 ≤b idx) && (idx ≤b 32)) "sail-arm/v8_base.sail:34466.65-34466.66"
                     let w__5 ← (( do (CountPMUEvents (Sail.Int.toNatChecked (idx))) ) : SailM Bool
                       )
                     if (w__5 : Bool)
                     then
                       (do
-                        ArmFull.assert ((0 ≤b idx) && (idx <b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34468.68-34468.69"
+                        ArmFull.assert ((0 ≤b idx) && (idx <b 31)) "sail-arm/v8_base.sail:34468.68-34468.69"
                         let w__6 ← (( do readReg PMUEventAccumulator ) : SailM (Vector Int 31) )
                         let accumulated : Int :=
                           (GetElem?.getElem! w__6 (Sail.Int.toNatChecked (idx)))
                         (AArch64_IncrementEventCounter (Sail.Int.toNatChecked (idx)) accumulated))
                     else (pure (()))
-                    ArmFull.assert ((0 ≤b idx) && (idx <b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34472.64-34472.65"
+                    ArmFull.assert ((0 ≤b idx) && (idx <b 31)) "sail-arm/v8_base.sail:34472.64-34472.65"
                     let w__7 ← (( do readReg PMUEventAccumulator ) : SailM (Vector Int 31) )
                     writeReg PMUEventAccumulator (vectorUpdate w__7 (Sail.Int.toNatChecked (idx)) 0)
                 (pure loop_vars)))
@@ -392,7 +392,7 @@ def AArch32_S2Walk (fault_in : FaultRecord) (walkparams : S2TTWParams) (s1level 
             (FaultRecord × TTWState) FullAddress )
           let baselsb : Int := ((iasize -i ((levels *i stride) +i granulebits)) +i 3)
           let baseaddress : FullAddress := { baseaddress with paspace := PAS_NonSecure }
-          ArmFull.assert ((0 ≤b baselsb) && (baselsb ≤b 39)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:37878.55-37878.56"
+          ArmFull.assert ((0 ≤b baselsb) && (baselsb ≤b 39)) "sail-arm/v8_base.sail:37878.55-37878.56"
           let w__5 ← (( do readReg VTTBR ) : SailME (FaultRecord × TTWState) (BitVec 64) )
           let baseaddress :=
             ({ baseaddress with address := (Sail.BitVec.zeroExtend
@@ -444,8 +444,8 @@ def AArch32_S2Walk (fault_in : FaultRecord) (walkparams : S2TTWParams) (s1level 
                 let indexlsb : Int := (((FINAL_LEVEL -i walkstate.level) *i stride) +i granulebits)
                 let indexmsb : Int := indexmsb
                 let indexlsb : Int := indexlsb
-                ArmFull.assert ((0 ≤b indexlsb) && ((indexlsb ≤b indexmsb) && (indexmsb <b 56))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:37905.91-37905.92"
-                ArmFull.assert (40 ≥b (((indexmsb -i indexlsb) +i 1) +i 3)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:37906.68-37906.69"
+                ArmFull.assert ((0 ≤b indexlsb) && ((indexlsb ≤b indexmsb) && (indexmsb <b 56))) "sail-arm/v8_base.sail:37905.91-37905.92"
+                ArmFull.assert (40 ≥b (((indexmsb -i indexlsb) +i 1) +i 3)) "sail-arm/v8_base.sail:37906.68-37906.69"
                 let index : (BitVec 40) :=
                   (Sail.BitVec.zeroExtend
                     ((Sail.BitVec.extractLsb ipa.paddress.address (Sail.Int.toNatChecked (indexmsb))
@@ -543,7 +543,7 @@ def AArch32_S2Walk (fault_in : FaultRecord) (walkparams : S2TTWParams) (s1level 
                   (pure ((fault, w__14))))
               else
                 (do
-                  ArmFull.assert ((0 ≤b indexlsb) && (indexlsb ≤b 39)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:37955.57-37955.58"
+                  ArmFull.assert ((0 ≤b indexlsb) && (indexlsb ≤b 39)) "sail-arm/v8_base.sail:37955.57-37955.58"
                   let walkstate : TTWState :=
                     { walkstate with baseaddress := { walkstate.baseaddress with address := (Sail.BitVec.zeroExtend
                           ((Sail.BitVec.extractLsb descriptor 39 (Sail.Int.toNatChecked (indexlsb))) +++ (Zeros
@@ -724,7 +724,7 @@ def AArch64_BranchTargetException (vaddress : (BitVec 52)) : SailM Unit := do
 
 def AArch64_WFxTrap (wfxtype : WFxType) (target_el : (BitVec 2)) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  ArmFull.assert ((BitVec.toNat target_el) >b (BitVec.toNat w__0.EL)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:10642.44-10642.45"
+  ArmFull.assert ((BitVec.toNat target_el) >b (BitVec.toNat w__0.EL)) "sail-arm/v8_base.sail:10642.44-10642.45"
   let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
   let vect_offset : Int := (BitVec.toNat 0x0#4)
   let except ← (( do (ExceptionSyndrome Exception_WFxTrap) ) : SailM ExceptionRecord )

@@ -701,7 +701,7 @@ def T32ExpandImm_C (imm12 : (BitVec 12)) (carry_in : (BitVec 1)) : SailM ((BitVe
 
 /-- Type quantifiers: n : Int -/
 def D_read (n : Int) : SailM (BitVec 64) := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:41714.27-41714.28"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-arm/v8_base.sail:41714.27-41714.28"
   let base : Nat := (Sail.Int.toNatChecked (((Nat.mod (Sail.Int.toNatChecked (n)) 2) *i 64)))
   let vreg ← (( do (V_read (Int.ediv (Sail.Int.toNatChecked (n)) 2) 128) ) : SailM (BitVec 128) )
   (pure ((Sail.BitVec.castWidth (m := 64) (Sail.BitVec.extractLsb vreg
@@ -715,7 +715,7 @@ def AArch32_IsExclusiveVA (address : (BitVec 32)) (processorid : Int) (size : In
 
 /-- Type quantifiers: n : Int -/
 def S_read (n : Int) : SailM (BitVec 32) := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42210.27-42210.28"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-arm/v8_base.sail:42210.27-42210.28"
   let base : Nat := (Sail.Int.toNatChecked (((Nat.mod (Sail.Int.toNatChecked (n)) 4) *i 32)))
   let vreg ← (( do (V_read (Int.ediv (Sail.Int.toNatChecked (n)) 4) 128) ) : SailM (BitVec 128) )
   (pure ((Sail.BitVec.castWidth (m := 32) (Sail.BitVec.extractLsb vreg
@@ -724,13 +724,13 @@ def S_read (n : Int) : SailM (BitVec 32) := do
 
 /-- Type quantifiers: n : Int -/
 def Q_read (n : Int) : SailM (BitVec 128) := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 15)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42241.27-42241.28"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 15)) "sail-arm/v8_base.sail:42241.27-42241.28"
   (V_read n 128)
 
 
 /-- Type quantifiers: n : Int -/
 def Qin_read (n : Int) : SailM (BitVec 128) := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 15)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42446.27-42446.28"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 15)) "sail-arm/v8_base.sail:42446.27-42446.28"
   let w__0 ← (( do (Din_read ((2 *i n) +i 1)) ) : SailM (BitVec 64) )
   let w__1 ← (( do (Din_read (2 *i n)) ) : SailM (BitVec 64) )
   (pure ((w__0 +++ w__1)))

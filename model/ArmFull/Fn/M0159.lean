@@ -215,7 +215,7 @@ def AArch32_S2HasPermissionsFault (walkparams : S2TTWParams) (perms : Permission
 
 
 def AArch32_GetS2TLBContext (ipa : FullAddress) : SailM TLBContext := do
-  ArmFull.assert (BEq.beq ipa.paspace PAS_NonSecure) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:37808.39-37808.40"
+  ArmFull.assert (BEq.beq ipa.paspace PAS_NonSecure) "sail-arm/v8_base.sail:37808.39-37808.40"
   let tlbcontext ← (( do (undefined_TLBContext (← occLabel 2541) ()) ) : SailM TLBContext )
   let tlbcontext : TLBContext := { tlbcontext with ss := SS_NonSecure }
   let tlbcontext : TLBContext := { tlbcontext with regime := Regime_EL10 }
@@ -382,7 +382,7 @@ def AArch32_WatchpointByteMatch (n : Nat) (vaddress : (BitVec 32)) : SailM Bool 
         let c : Constraint := tup__0
         let mask : Int := tup__1
         ArmFull.assert ((BEq.beq c Constraint_DISABLED) || ((BEq.beq c Constraint_NONE) || (BEq.beq
-              c Constraint_UNKNOWN))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40692.88-40692.89"
+              c Constraint_UNKNOWN))) "sail-arm/v8_base.sail:40692.88-40692.89"
         match c with
         | .Constraint_DISABLED =>
           (do
@@ -397,7 +397,7 @@ def AArch32_WatchpointByteMatch (n : Nat) (vaddress : (BitVec 32)) : SailM Bool 
     if ((mask >b bottom) : Bool)
     then
       (do
-        ArmFull.assert ((0 ≤b mask) && ((mask ≤b top) && (top <b 32))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40706.67-40706.68"
+        ArmFull.assert ((0 ≤b mask) && ((mask ≤b top) && (top <b 32))) "sail-arm/v8_base.sail:40706.67-40706.68"
         let w__11 ← (( do (DBGWVR_read n) ) : SailME Bool (BitVec 32) )
         let WVR_match :=
           (((Sail.BitVec.castWidth (m := (Sail.Int.toNatChecked (((top : Int) -i (mask : Int)) +i (1 : Int)))) (Sail.BitVec.extractLsb
@@ -455,11 +455,11 @@ def Sat (i : Int) (N : Nat) (is_unsigned : Bool) : SailM (BitVec N) := do
   if (is_unsigned : Bool)
   then
     (do
-      ArmFull.assert (0 ≤b (N -i 1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42744.38-42744.39"
+      ArmFull.assert (0 ≤b (N -i 1)) "sail-arm/v8_base.sail:42744.38-42744.39"
       ((Sail.BitVec.castWidth ) <$> (UnsignedSat i N)))
   else
     (do
-      ArmFull.assert (0 ≤b (N -i 1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42747.38-42747.39"
+      ArmFull.assert (0 ≤b (N -i 1)) "sail-arm/v8_base.sail:42747.38-42747.39"
       ((Sail.BitVec.castWidth ) <$> (SignedSat i N)))
 
 

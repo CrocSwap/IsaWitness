@@ -433,7 +433,7 @@ def DCPSInstruction (target_el : (BitVec 2)) : SailM Unit := do
           writeReg SCR (Sail.BitVec.updateSubrange w__20 0 0 0#1))
       else (pure (()))
       let w__21 ← (( do (UsingAArch32 ()) ) : SailM Bool )
-      ArmFull.assert w__21 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:39523.29-39523.30"
+      ArmFull.assert w__21 "sail-arm/v8_base.sail:39523.29-39523.30"
       let questionMark := handle_el
       if ((questionMark == EL1) : Bool)
       then
@@ -795,7 +795,7 @@ def AArch32_ReservedBreakpointType (n : Int) (bt_in : (BitVec 4)) : SailM (Const
           (Constraint × (BitVec 4)) (Constraint × (BitVec 5)) )
         let c : Constraint := choice
         let bt : (BitVec 4) := (Sail.BitVec.extractLsb raw 3 0)
-        ArmFull.assert ((BEq.beq c Constraint_DISABLED) || (BEq.beq c Constraint_UNKNOWN)) "/home/doug/boss-scratch/armcert-defects/c27b-accepted/armcert_c27b.sail:410.65-410.66"
+        ArmFull.assert ((BEq.beq c Constraint_DISABLED) || (BEq.beq c Constraint_UNKNOWN)) "armcert/armcert_c27b.sail:410.65-410.66"
         if ((BEq.beq c Constraint_DISABLED) : Bool)
         then
           (do

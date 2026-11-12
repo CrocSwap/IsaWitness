@@ -638,7 +638,7 @@ def AArch64_CheckCP15InstrCoarseTraps (CRn : Int) (nreg : Int) (CRm : Int) : Sai
         if ((nreg == 1) : Bool)
         then CRn
         else CRm
-      ArmFull.assert ((0 ≤b major) && (major <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34133.54-34133.55"
+      ArmFull.assert ((0 ≤b major) && (major <b 64)) "sail-arm/v8_base.sail:34133.54-34133.55"
       let w__33 ← (( do
         if ((← do
              if ((← do
@@ -690,7 +690,7 @@ def AArch64_CheckPCAlignment (_ : Unit) : SailM Unit := do
 def AArch32_S2Translate (fault_in : FaultRecord) (ipa : AddressDescriptor) (s1level : (Option Int)) (aligned : Bool) (accdesc : AccessDescriptor) : SailM (FaultRecord × AddressDescriptor) := do
   let s1aarch64 ← (( do (undefined_bool_at (← occLabel 2551) ()) ) : SailM Bool )
   let fault : FaultRecord := fault_in
-  ArmFull.assert (IsZero (Sail.BitVec.extractLsb ipa.paddress.address 55 40)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:37992.49-37992.50"
+  ArmFull.assert (IsZero (Sail.BitVec.extractLsb ipa.paddress.address 55 40)) "sail-arm/v8_base.sail:37992.49-37992.50"
   let w__0 ← (( do (ELStateUsingAArch32 EL2 (BEq.beq accdesc.ss SS_Secure)) ) : SailM Bool )
   if ((! w__0) : Bool)
   then

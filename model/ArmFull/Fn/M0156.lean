@@ -255,13 +255,13 @@ def AArch64_S1TTBaseAddress (walkparams : S1TTWParams) (regime : Regime) (ttbr :
           if ((BEq.beq regime Regime_EL3) : Bool)
           then
             (do
-              ArmFull.assert (55 <b (Sail.BitVec.length ttbr)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25229.38-25229.39"
+              ArmFull.assert (55 <b (Sail.BitVec.length ttbr)) "sail-arm/v8_base.sail:25229.38-25229.39"
               let tablebase : (BitVec 56) :=
                 (Sail.BitVec.updateSubrange tablebase 55 5 (Sail.BitVec.extractLsb ttbr 55 5))
               (pure (tablebase)))
           else
             (do
-              ArmFull.assert (87 <b (Sail.BitVec.length ttbr)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25232.38-25232.39"
+              ArmFull.assert (87 <b (Sail.BitVec.length ttbr)) "sail-arm/v8_base.sail:25232.38-25232.39"
               let tablebase : (BitVec 56) :=
                 (Sail.BitVec.updateSubrange tablebase 55 5
                   ((Sail.BitVec.extractLsb ttbr 87 80) +++ (Sail.BitVec.extractLsb ttbr 47 5)))
@@ -279,15 +279,15 @@ def AArch64_S1TTBaseAddress (walkparams : S1TTWParams) (regime : Regime) (ttbr :
         then
           (do
             let tsize : Int := (Max.max tsize 6)
-            ArmFull.assert (5 <b (Sail.BitVec.length ttbr)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25237.33-25237.34"
-            ArmFull.assert (47 <b (Sail.BitVec.length ttbr)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25238.34-25238.35"
+            ArmFull.assert (5 <b (Sail.BitVec.length ttbr)) "sail-arm/v8_base.sail:25237.33-25237.34"
+            ArmFull.assert (47 <b (Sail.BitVec.length ttbr)) "sail-arm/v8_base.sail:25238.34-25238.35"
             let tablebase : (BitVec 56) :=
               (Sail.BitVec.updateSubrange tablebase 51 6
                 ((Sail.BitVec.extractLsb ttbr 5 2) +++ (Sail.BitVec.extractLsb ttbr 47 6)))
             (pure ((tablebase, tsize))))
         else
           (do
-            ArmFull.assert (47 <b (Sail.BitVec.length ttbr)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25241.34-25241.35"
+            ArmFull.assert (47 <b (Sail.BitVec.length ttbr)) "sail-arm/v8_base.sail:25241.34-25241.35"
             let tablebase : (BitVec 56) :=
               (Sail.BitVec.updateSubrange tablebase 47 1 (Sail.BitVec.extractLsb ttbr 47 1))
             (pure ((tablebase, tsize))))) ) : SailM ((BitVec 56) × Int) )
@@ -306,7 +306,7 @@ def AArch64_LeafBase (descriptor : (BitVec k_N)) (d128 : (BitVec 1)) (ds : (BitV
     else 3
   let stride : Int := (granulebits -i descsizelog2)
   let leafsize : Int := (granulebits +i (stride *i (FINAL_LEVEL -i level)))
-  ArmFull.assert ((0 ≤b leafsize) && ((leafsize ≤b 47) && (47 <b (Sail.BitVec.length descriptor)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25326.67-25326.68"
+  ArmFull.assert ((0 ≤b leafsize) && ((leafsize ≤b 47) && (47 <b (Sail.BitVec.length descriptor)))) "sail-arm/v8_base.sail:25326.67-25326.68"
   let leafbase : (BitVec 56) :=
     (Sail.BitVec.updateSubrange leafbase 47 0
       (Sail.BitVec.castWidth ((Sail.BitVec.extractLsb descriptor 47
@@ -317,7 +317,7 @@ def AArch64_LeafBase (descriptor : (BitVec k_N)) (d128 : (BitVec 1)) (ds : (BitV
   if (w__1 : Bool)
   then
     (do
-      ArmFull.assert (55 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25329.34-25329.35"
+      ArmFull.assert (55 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25329.34-25329.35"
       let leafbase : (BitVec 56) :=
         (Sail.BitVec.updateSubrange leafbase 55 48 (Sail.BitVec.extractLsb descriptor 55 48))
       (pure (leafbase)))
@@ -336,7 +336,7 @@ def AArch64_LeafBase (descriptor : (BitVec k_N)) (d128 : (BitVec 1)) (ds : (BitV
           if ((ds == 1#1) : Bool)
           then
             (do
-              ArmFull.assert (49 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25336.34-25336.35"
+              ArmFull.assert (49 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25336.34-25336.35"
               let leafbase : (BitVec 56) :=
                 (Sail.BitVec.updateSubrange leafbase 51 48
                   ((Sail.BitVec.extractLsb descriptor 9 8) +++ (Sail.BitVec.extractLsb descriptor 49
@@ -355,18 +355,18 @@ def AArch64_MAIRAttr (index : Int) (mair2 : (BitVec 64)) (mair : (BitVec 64)) : 
       (do
         (pure ((← do
               (HaveAIEExt ())) && ((index <b 16) : Bool)))) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25347.48-25347.49"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:25347.48-25347.49"
   if ((index >b 7) : Bool)
   then
     (do
       let bit_index : Int := (bit_index -i 64)
-      ArmFull.assert ((0 ≤b bit_index) && ((bit_index ≤b (bit_index +i 7)) && ((bit_index +i 7) <b 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25350.97-25350.98"
+      ArmFull.assert ((0 ≤b bit_index) && ((bit_index ≤b (bit_index +i 7)) && ((bit_index +i 7) <b 64))) "sail-arm/v8_base.sail:25350.97-25350.98"
       (pure ((Sail.BitVec.castWidth (m := 8) (Sail.BitVec.extractLsb mair2
           (Sail.Int.toNatChecked ((bit_index +i 7))) (Sail.Int.toNatChecked (bit_index)))))))
   else
     (do
       let bit_index : Int := bit_index
-      ArmFull.assert ((0 ≤b bit_index) && ((bit_index ≤b (bit_index +i 7)) && ((bit_index +i 7) <b 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25354.97-25354.98"
+      ArmFull.assert ((0 ≤b bit_index) && ((bit_index ≤b (bit_index +i 7)) && ((bit_index +i 7) <b 64))) "sail-arm/v8_base.sail:25354.97-25354.98"
       (pure ((Sail.BitVec.castWidth (m := 8) (Sail.BitVec.extractLsb mair
           (Sail.Int.toNatChecked ((bit_index +i 7))) (Sail.Int.toNatChecked (bit_index)))))))
 
@@ -378,19 +378,19 @@ def AArch64_NextTableBase (descriptor : (BitVec k_N)) (d128 : (BitVec 1)) (ds : 
     match tgx with
     | .TGx_4KB =>
       (do
-        ArmFull.assert (47 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25539.36-25539.37"
+        ArmFull.assert (47 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25539.36-25539.37"
         let tablebase : (BitVec 56) :=
           (Sail.BitVec.updateSubrange tablebase 47 12 (Sail.BitVec.extractLsb descriptor 47 12))
         (pure (tablebase)))
     | .TGx_16KB =>
       (do
-        ArmFull.assert (47 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25543.36-25543.37"
+        ArmFull.assert (47 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25543.36-25543.37"
         let tablebase : (BitVec 56) :=
           (Sail.BitVec.updateSubrange tablebase 47 14 (Sail.BitVec.extractLsb descriptor 47 14))
         (pure (tablebase)))
     | .TGx_64KB =>
       (do
-        ArmFull.assert (47 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25547.36-25547.37"
+        ArmFull.assert (47 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25547.36-25547.37"
         let tablebase : (BitVec 56) :=
           (Sail.BitVec.updateSubrange tablebase 47 16 (Sail.BitVec.extractLsb descriptor 47 16))
         (pure (tablebase))) ) : SailM (BitVec 56) )
@@ -400,7 +400,7 @@ def AArch64_NextTableBase (descriptor : (BitVec k_N)) (d128 : (BitVec 1)) (ds : 
   if (w__1 : Bool)
   then
     (do
-      ArmFull.assert (55 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25552.34-25552.35"
+      ArmFull.assert (55 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25552.34-25552.35"
       let tablebase : (BitVec 56) :=
         (Sail.BitVec.updateSubrange tablebase 55 48 (Sail.BitVec.extractLsb descriptor 55 48))
       (pure (tablebase)))
@@ -412,7 +412,7 @@ def AArch64_NextTableBase (descriptor : (BitVec k_N)) (d128 : (BitVec 1)) (ds : 
       if (w__3 : Bool)
       then
         (do
-          ArmFull.assert (15 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25557.34-25557.35"
+          ArmFull.assert (15 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25557.34-25557.35"
           let tablebase : (BitVec 56) :=
             (Sail.BitVec.updateSubrange tablebase 51 48 (Sail.BitVec.extractLsb descriptor 15 12))
           (pure (tablebase)))
@@ -421,8 +421,8 @@ def AArch64_NextTableBase (descriptor : (BitVec k_N)) (d128 : (BitVec 1)) (ds : 
           if ((ds == 1#1) : Bool)
           then
             (do
-              ArmFull.assert (9 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25562.33-25562.34"
-              ArmFull.assert (49 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25563.34-25563.35"
+              ArmFull.assert (9 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25562.33-25562.34"
+              ArmFull.assert (49 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25563.34-25563.35"
               let tablebase : (BitVec 56) :=
                 (Sail.BitVec.updateSubrange tablebase 51 48
                   ((Sail.BitVec.extractLsb descriptor 9 8) +++ (Sail.BitVec.extractLsb descriptor 49
@@ -538,13 +538,13 @@ def AArch64_S2TTBaseAddress (walkparams : S2TTWParams) (paspace : PASpace) (ttbr
           if ((BEq.beq paspace PAS_Secure) : Bool)
           then
             (do
-              ArmFull.assert (55 <b (Sail.BitVec.length ttbr)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26712.38-26712.39"
+              ArmFull.assert (55 <b (Sail.BitVec.length ttbr)) "sail-arm/v8_base.sail:26712.38-26712.39"
               let tablebase : (BitVec 56) :=
                 (Sail.BitVec.updateSubrange tablebase 55 5 (Sail.BitVec.extractLsb ttbr 55 5))
               (pure (tablebase)))
           else
             (do
-              ArmFull.assert (87 <b (Sail.BitVec.length ttbr)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26715.38-26715.39"
+              ArmFull.assert (87 <b (Sail.BitVec.length ttbr)) "sail-arm/v8_base.sail:26715.38-26715.39"
               let tablebase : (BitVec 56) :=
                 (Sail.BitVec.updateSubrange tablebase 55 5
                   ((Sail.BitVec.extractLsb ttbr 87 80) +++ (Sail.BitVec.extractLsb ttbr 47 5)))
@@ -562,15 +562,15 @@ def AArch64_S2TTBaseAddress (walkparams : S2TTWParams) (paspace : PASpace) (ttbr
         then
           (do
             let tsize : Int := (Max.max tsize 6)
-            ArmFull.assert (5 <b (Sail.BitVec.length ttbr)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26720.33-26720.34"
-            ArmFull.assert (47 <b (Sail.BitVec.length ttbr)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26721.34-26721.35"
+            ArmFull.assert (5 <b (Sail.BitVec.length ttbr)) "sail-arm/v8_base.sail:26720.33-26720.34"
+            ArmFull.assert (47 <b (Sail.BitVec.length ttbr)) "sail-arm/v8_base.sail:26721.34-26721.35"
             let tablebase : (BitVec 56) :=
               (Sail.BitVec.updateSubrange tablebase 51 6
                 ((Sail.BitVec.extractLsb ttbr 5 2) +++ (Sail.BitVec.extractLsb ttbr 47 6)))
             (pure ((tablebase, tsize))))
         else
           (do
-            ArmFull.assert (47 <b (Sail.BitVec.length ttbr)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26724.34-26724.35"
+            ArmFull.assert (47 <b (Sail.BitVec.length ttbr)) "sail-arm/v8_base.sail:26724.34-26724.35"
             let tablebase : (BitVec 56) :=
               (Sail.BitVec.updateSubrange tablebase 47 1 (Sail.BitVec.extractLsb ttbr 47 1))
             (pure ((tablebase, tsize))))) ) : SailM ((BitVec 56) × Int) )
@@ -592,12 +592,12 @@ def AArch64_S2ApplyOutputPerms (descriptor : (BitVec k_N)) (walkparams : S2TTWPa
           if ((walkparams.d128 == 1#1) : Bool)
           then
             (do
-              ArmFull.assert (118 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26764.39-26764.40"
+              ArmFull.assert (118 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26764.39-26764.40"
               let s2pi_index : (BitVec 4) := (Sail.BitVec.extractLsb descriptor 118 115)
               (pure (s2pi_index)))
           else
             (do
-              ArmFull.assert (54 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26767.38-26767.39"
+              ArmFull.assert (54 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26767.38-26767.39"
               let s2pi_index : (BitVec 4) :=
                 ((Sail.BitVec.extractLsb descriptor 54 53) +++ ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                         descriptor 51)])) +++ (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
@@ -608,28 +608,28 @@ def AArch64_S2ApplyOutputPerms (descriptor : (BitVec k_N)) (walkparams : S2TTWPa
           { permissions with s2pi := (Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
               walkparams.s2pir (Sail.Int.toNatChecked ((bit_index +i 3)))
               (Sail.Int.toNatChecked (bit_index)))) }
-        ArmFull.assert (7 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26772.33-26772.34"
+        ArmFull.assert (7 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26772.33-26772.34"
         let permissions : Permissions :=
           { permissions with s2dirty := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor
                 7)])) }
         (pure (permissions)))
     else
       (do
-        ArmFull.assert (7 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26775.33-26775.34"
+        ArmFull.assert (7 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26775.33-26775.34"
         let permissions : Permissions :=
           { permissions with s2ap := (Sail.BitVec.extractLsb descriptor 7 6) }
         let permissions ← (( do
           if ((walkparams.d128 == 1#1) : Bool)
           then
             (do
-              ArmFull.assert (118 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26778.39-26778.40"
+              ArmFull.assert (118 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26778.39-26778.40"
               let permissions : Permissions :=
                 { permissions with s2xn := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                       descriptor 118)])) }
               (pure (permissions)))
           else
             (do
-              ArmFull.assert (54 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26781.38-26781.39"
+              ArmFull.assert (54 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26781.38-26781.39"
               let permissions : Permissions :=
                 { permissions with s2xn := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                       descriptor 54)])) }
@@ -642,14 +642,14 @@ def AArch64_S2ApplyOutputPerms (descriptor : (BitVec k_N)) (walkparams : S2TTWPa
               if ((walkparams.d128 == 1#1) : Bool)
               then
                 (do
-                  ArmFull.assert (117 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26786.43-26786.44"
+                  ArmFull.assert (117 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26786.43-26786.44"
                   let permissions : Permissions :=
                     { permissions with s2xnx := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                           descriptor 117)])) }
                   (pure (permissions)))
               else
                 (do
-                  ArmFull.assert (53 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26789.42-26789.43"
+                  ArmFull.assert (53 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26789.42-26789.43"
                   let permissions : Permissions :=
                     { permissions with s2xnx := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                           descriptor 53)])) }
@@ -662,13 +662,13 @@ def AArch64_S2ApplyOutputPerms (descriptor : (BitVec k_N)) (walkparams : S2TTWPa
           if ((walkparams.d128 == 1#1) : Bool)
           then
             (do
-              ArmFull.assert (115 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26797.39-26797.40"
+              ArmFull.assert (115 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26797.39-26797.40"
               let desc_dbm : (BitVec 1) :=
                 (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 115)]))
               (pure (desc_dbm)))
           else
             (do
-              ArmFull.assert (51 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26800.38-26800.39"
+              ArmFull.assert (51 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26800.38-26800.39"
               let desc_dbm : (BitVec 1) :=
                 (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 51)]))
               (pure (desc_dbm))) ) : SailM (BitVec 1) )
@@ -695,13 +695,13 @@ def AArch64_S2ApplyOutputPerms (descriptor : (BitVec k_N)) (walkparams : S2TTWPa
       if ((walkparams.d128 == 1#1) : Bool)
       then
         (do
-          ArmFull.assert (124 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26810.39-26810.40"
+          ArmFull.assert (124 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26810.39-26810.40"
           let permissions : Permissions :=
             { permissions with s2po_index := (Sail.BitVec.extractLsb descriptor 124 121) }
           (pure (permissions)))
       else
         (do
-          ArmFull.assert (62 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26813.38-26813.39"
+          ArmFull.assert (62 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26813.38-26813.39"
           let permissions : Permissions :=
             { permissions with s2po_index := (Sail.BitVec.extractLsb descriptor 62 59) }
           (pure (permissions))))

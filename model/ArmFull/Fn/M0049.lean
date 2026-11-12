@@ -392,13 +392,13 @@ def ContiguousSize (d128 : (BitVec 1)) (tgx : TGx) (level : Int) : SailM Int := 
       match tgx with
       | .TGx_4KB =>
         (do
-          ArmFull.assert ((level == 1) || ((level == 2) || (level == 3))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19968.57-19968.58"
+          ArmFull.assert ((level == 1) || ((level == 2) || (level == 3))) "sail-arm/v8_base.sail:19968.57-19968.58"
           (pure (if ((level == 1) : Bool)
             then 2
             else 4)))
       | .TGx_16KB =>
         (do
-          ArmFull.assert ((level == 1) || ((level == 2) || (level == 3))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19972.57-19972.58"
+          ArmFull.assert ((level == 1) || ((level == 2) || (level == 3))) "sail-arm/v8_base.sail:19972.57-19972.58"
           (pure (if ((level == 1) : Bool)
             then 2
             else
@@ -407,7 +407,7 @@ def ContiguousSize (d128 : (BitVec 1)) (tgx : TGx) (level : Int) : SailM Int := 
               else 6))))
       | .TGx_64KB =>
         (do
-          ArmFull.assert ((level == 2) || (level == 3)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19982.44-19982.45"
+          ArmFull.assert ((level == 2) || (level == 3)) "sail-arm/v8_base.sail:19982.44-19982.45"
           (pure (if ((level == 2) : Bool)
             then 6
             else 4))))
@@ -416,17 +416,17 @@ def ContiguousSize (d128 : (BitVec 1)) (tgx : TGx) (level : Int) : SailM Int := 
       match tgx with
       | .TGx_4KB =>
         (do
-          ArmFull.assert ((level == 1) || ((level == 2) || (level == 3))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19992.57-19992.58"
+          ArmFull.assert ((level == 1) || ((level == 2) || (level == 3))) "sail-arm/v8_base.sail:19992.57-19992.58"
           (pure (4)))
       | .TGx_16KB =>
         (do
-          ArmFull.assert ((level == 2) || (level == 3)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19996.44-19996.45"
+          ArmFull.assert ((level == 2) || (level == 3)) "sail-arm/v8_base.sail:19996.44-19996.45"
           (pure (if ((level == 2) : Bool)
             then 5
             else 7)))
       | .TGx_64KB =>
         (do
-          ArmFull.assert ((level == 2) || (level == 3)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:20000.44-20000.45"
+          ArmFull.assert ((level == 2) || (level == 3)) "sail-arm/v8_base.sail:20000.44-20000.45"
           (pure (5))))
 
 
@@ -703,8 +703,8 @@ def RotCell (incell_name : (BitVec 4)) (amount : Nat) : SailM (BitVec 4) := do
 
 /-- Type quantifiers: n : Int, width : Nat, List.elem width [8, 16, 32, 64, 128] -/
 def V_read (n : Int) (width : Nat) : SailM (BitVec width) := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22333.27-22333.28"
-  ArmFull.assert ((width == 8) || ((width == 16) || ((width == 32) || ((width == 64) || (width == 128))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22334.78-22334.79"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-arm/v8_base.sail:22333.27-22333.28"
+  ArmFull.assert ((width == 8) || ((width == 16) || ((width == 32) || ((width == 64) || (width == 128))))) "sail-arm/v8_base.sail:22334.78-22334.79"
   let w__0 ← (( do readReg _Z ) : SailM (Vector (BitVec 2048) 32) )
   (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb
       (GetElem?.getElem! w__0 (Sail.Int.toNatChecked (n))) (Sail.Int.toNatChecked ((width -i 1))) 0))))

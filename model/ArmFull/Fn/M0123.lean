@@ -475,7 +475,7 @@ def _set_PMBIDR_EL1_Type_Align (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 
 
 def SPEAddByteToRecord (b : (BitVec 8)) : SailM Unit := do
   let size ← (( do readReg SPERecordSize ) : SailM Int )
-  ArmFull.assert ((0 ≤b size) && (size <b SPEMaxRecordSize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:35106.46-35106.47"
+  ArmFull.assert ((0 ≤b size) && (size <b SPEMaxRecordSize)) "sail-arm/v8_base.sail:35106.46-35106.47"
   let w__0 ← (( do readReg SPERecordData ) : SailM (Vector (BitVec 8) 64) )
   writeReg SPERecordData (vectorUpdate w__0 (Sail.Int.toNatChecked (size)) b)
   writeReg SPERecordSize (size +i 1)
@@ -770,9 +770,9 @@ def AArch32_DecodeDescriptorTypeLD (descriptor : (BitVec 64)) (level : Int) : De
 
 /-- Type quantifiers: index : Int -/
 def AArch32_MAIRAttr (index : Int) (mair : (BitVec 64)) : SailM (BitVec 8) := do
-  ArmFull.assert (index <b 8) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:37686.20-37686.21"
+  ArmFull.assert (index <b 8) "sail-arm/v8_base.sail:37686.20-37686.21"
   let bit_index : Int := (8 *i index)
-  ArmFull.assert ((0 ≤b bit_index) || (! (index <b 8))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:37688.58-37688.59"
+  ArmFull.assert ((0 ≤b bit_index) || (! (index <b 8))) "sail-arm/v8_base.sail:37688.58-37688.59"
   (pure ((Sail.BitVec.castWidth (m := 8) (Sail.BitVec.extractLsb mair
       (Sail.Int.toNatChecked ((bit_index +i 7))) (Sail.Int.toNatChecked (bit_index))))))
 

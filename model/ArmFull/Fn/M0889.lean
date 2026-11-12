@@ -609,7 +609,7 @@ def execute_XAR_Z_ZZI__ (VL : Nat) (dn : Nat) (esize : Nat) (m : Nat) (rot : Int
             SailM (BitVec esize) )
           let element2 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 e esize)) ) :
             SailM (BitVec esize) )
-          ArmFull.assert (rot ≥b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:52632.36-52632.37"
+          ArmFull.assert (rot ≥b 0) "sail-arm/instrs64_sve.sail:52632.36-52632.37"
           (Elem_set result e esize
             (Sail.BitVec.castWidth (ROR (element1 ^^^ element2) (Sail.Int.toNatChecked (rot)))))
       (pure loop_vars)) ) : SailM (BitVec VL) )

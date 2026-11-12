@@ -123,7 +123,7 @@ def decode_aarch32_instrs_VCMP_A2enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1)) 
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:22361.29-22361.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:22361.29-22361.30"
       let m ← (( do (undefined_int_at (← occLabel 3386) ()) ) : SailM Int )
       if (((size == 0b00#2) || ((size == 0b01#2) && (! (HaveFP16Ext ())))) : Bool)
       then sailThrow ((Error_Undefined ()))
@@ -451,7 +451,7 @@ def decode_aarch32_instrs_VCVT_iv_A1enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:22999.29-22999.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:22999.29-22999.30"
       if (((opc2 != 0b000#3) && (let b__0 := opc2
            (! (if (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb b__0 2 1)) == (0b10#2 : (BitVec 2))) : Bool)
              then true

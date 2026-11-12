@@ -324,7 +324,7 @@ def execute_aarch64_instrs_memory_atomicops_cas_single (acquire : Bool) (datasiz
       (do
         (X_read n 64)) ) : SailM (BitVec 64) )
   let data ← (( do (MemAtomic address comparevalue newvalue accdesc) ) : SailM (BitVec datasize) )
-  ArmFull.assert (regsize ≥b datasize) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:6398.44-6398.45"
+  ArmFull.assert (regsize ≥b datasize) "sail-arm/instrs64.sail:6398.44-6398.45"
   (X_set s regsize (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend data regsize)))
   let w__2 ← (( do readReg SPESampleInFlight ) : SailM Bool )
   if (w__2 : Bool)

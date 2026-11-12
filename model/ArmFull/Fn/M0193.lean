@@ -166,7 +166,7 @@ def __SetConfig (arg : String) (value_name : Int) : SailM Unit := do
             (String.append " can accept a value between 0 and 15. Value provided is "
               (dec_str value_name))
           let _ : Unit := (print_endline (String.append arg msg))
-          ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/map_clauses.sail:47.20-47.21"
+          ArmFull.assert false "sail-arm/map_clauses.sail:47.20-47.21"
           throw Error.Exit))
   else
     (do
@@ -183,7 +183,7 @@ def __SetConfig (arg : String) (value_name : Int) : SailM Unit := do
                 (String.append " can accept a value between 0 and 1. Value provided is "
                   (dec_str value_name))
               let _ : Unit := (print_endline (String.append arg msg))
-              ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/map_clauses.sail:56.20-56.21"
+              ArmFull.assert false "sail-arm/map_clauses.sail:56.20-56.21"
               throw Error.Exit))
       else
         (do
@@ -200,7 +200,7 @@ def __SetConfig (arg : String) (value_name : Int) : SailM Unit := do
                     (String.append " can accept a value between 0 and 1. Value provided is "
                       (dec_str value_name))
                   let _ : Unit := (print_endline (String.append arg msg))
-                  ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/map_clauses.sail:65.20-65.21"
+                  ArmFull.assert false "sail-arm/map_clauses.sail:65.20-65.21"
                   throw Error.Exit))
           else
             (do
@@ -217,7 +217,7 @@ def __SetConfig (arg : String) (value_name : Int) : SailM Unit := do
                         (String.append " can accept a value between 0 and 1. Value provided is "
                           (dec_str value_name))
                       let _ : Unit := (print_endline (String.append arg msg))
-                      ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/map_clauses.sail:74.20-74.21"
+                      ArmFull.assert false "sail-arm/map_clauses.sail:74.20-74.21"
                       throw Error.Exit))
               else
                 (do

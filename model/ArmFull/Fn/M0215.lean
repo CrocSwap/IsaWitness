@@ -203,13 +203,13 @@ def PMUEvent__1 (pmuevent : (BitVec 16)) (increment_name : Int) : SailM Unit := 
 
 def AArch64_BranchAddr (vaddress : (BitVec 64)) (el : (BitVec 2)) : SailM (BitVec 64) := do
   let w__0 ← (( do (UsingAArch32 ()) ) : SailM Bool )
-  ArmFull.assert (! w__0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6150.35-6150.36"
+  ArmFull.assert (! w__0) "sail-arm/v8_base.sail:6150.35-6150.36"
   let msbit ← (( do (AddrTop vaddress true el) ) : SailM Int )
   if ((msbit == 63) : Bool)
   then (pure (vaddress))
   else
     (do
-      ArmFull.assert ((0 ≤b msbit) && (msbit <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6155.54-6155.55"
+      ArmFull.assert ((0 ≤b msbit) && (msbit <b 64)) "sail-arm/v8_base.sail:6155.54-6155.55"
       let w__3 ← (( do
         (pure ((← do
               if ((((el == EL0) || (el == EL1)) : Bool) : Bool)
@@ -240,7 +240,7 @@ def SPEBranch (target : (BitVec k_N)) (branch_type : BranchType) (conditional : 
 /-- Type quantifiers: width : Nat, width ≥ 0 -/
 def FFR_set (width : Nat) (value_name : (BitVec width)) : SailM Unit := do
   let VL ← (( do (CurrentVL_read ()) ) : SailM Int )
-  ArmFull.assert (width == (Int.ediv (Sail.Int.toNatChecked (VL)) 8)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7006.30-7006.31"
+  ArmFull.assert (width == (Int.ediv (Sail.Int.toNatChecked (VL)) 8)) "sail-arm/v8_base.sail:7006.30-7006.31"
   let w__0 ← (( do (ConstrainUnpredictableBool Unpredictable_SVEZEROUPPER) ) : SailM Bool )
   if (w__0 : Bool)
   then
@@ -267,19 +267,19 @@ def IsFPEnabled (el : (BitVec 2)) : SailM Bool := do
 /-- Type quantifiers: n : Int, width : Nat, width ≥ 0 -/
 def P_set (n : Int) (width : Nat) (value_name : (BitVec width)) : SailM Unit := do
   let VL ← (( do (CurrentVL_read ()) ) : SailM Int )
-  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7362.27-7362.28"
-  ArmFull.assert (width == (Int.ediv (Sail.Int.toNatChecked (VL)) 8)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7363.30-7363.31"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-arm/v8_base.sail:7362.27-7362.28"
+  ArmFull.assert (width == (Int.ediv (Sail.Int.toNatChecked (VL)) 8)) "sail-arm/v8_base.sail:7363.30-7363.31"
   let w__0 ← (( do (ConstrainUnpredictableBool Unpredictable_SVEZEROUPPER) ) : SailM Bool )
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert ((0 ≤b n) && (n <b 16)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7365.46-7365.47"
+      ArmFull.assert ((0 ≤b n) && (n <b 16)) "sail-arm/v8_base.sail:7365.46-7365.47"
       let w__1 ← (( do readReg _P ) : SailM (Vector (BitVec 256) 16) )
       writeReg _P (vectorUpdate w__1 (Sail.Int.toNatChecked (n))
         (Sail.BitVec.castWidth (m := 256) (Sail.BitVec.zeroExtend value_name MAX_PL))))
   else
     (do
-      ArmFull.assert ((0 ≤b n) && (n <b 16)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7368.46-7368.47"
+      ArmFull.assert ((0 ≤b n) && (n <b 16)) "sail-arm/v8_base.sail:7368.46-7368.47"
       let w__2 ← (( do readReg _P ) : SailM (Vector (BitVec 256) 16) )
       let w__3 ← (( do readReg _P ) : SailM (Vector (BitVec 256) 16) )
       writeReg _P (vectorUpdate w__2 (Sail.Int.toNatChecked (n))
@@ -291,8 +291,8 @@ def P_set (n : Int) (width : Nat) (value_name : (BitVec width)) : SailM Unit := 
 /-- Type quantifiers: n : Int, width : Nat, List.elem width [8, 16, 32, 64, 128] -/
 def V_set (n : Int) (width : Nat) (value_name : (BitVec width)) : SailM Unit := do
   let VL ← (( do (CurrentVL_read ()) ) : SailM Int )
-  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7420.27-7420.28"
-  ArmFull.assert ((width == 8) || ((width == 16) || ((width == 32) || ((width == 64) || (width == 128))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7421.78-7421.79"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-arm/v8_base.sail:7420.27-7420.28"
+  ArmFull.assert ((width == 8) || ((width == 16) || ((width == 32) || ((width == 64) || (width == 128))))) "sail-arm/v8_base.sail:7421.78-7421.79"
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
   let w__1 ← (( do (IsSVEEnabled w__0.EL) ) : SailM Bool )
   let vlen : Int :=
@@ -320,8 +320,8 @@ def V_set (n : Int) (width : Nat) (value_name : (BitVec width)) : SailM Unit := 
 /-- Type quantifiers: n : Int, width : Nat, width ≥ 0 -/
 def Z_set (n : Int) (width : Nat) (value_name : (BitVec width)) : SailM Unit := do
   let VL ← (( do (CurrentVL_read ()) ) : SailM Int )
-  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7448.27-7448.28"
-  ArmFull.assert (width == VL) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7449.22-7449.23"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-arm/v8_base.sail:7448.27-7448.28"
+  ArmFull.assert (width == VL) "sail-arm/v8_base.sail:7449.22-7449.23"
   let w__0 ← (( do (ConstrainUnpredictableBool Unpredictable_SVEZEROUPPER) ) : SailM Bool )
   if (w__0 : Bool)
   then
@@ -395,7 +395,7 @@ def SetPSTATEFromPSR__1 (spsr_in : (BitVec k_N)) (illegal_psr_state : Bool) : Sa
       else (pure (())))
   else
     (do
-      ArmFull.assert (20 <b (Sail.BitVec.length spsr_in)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8854.34-8854.35"
+      ArmFull.assert (20 <b (Sail.BitVec.length spsr_in)) "sail-arm/v8_base.sail:8854.34-8854.35"
       let w__19 ← (( do readReg PSTATE ) : SailM ProcState )
       writeReg PSTATE { w__19 with IL := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access spsr 20)])) }
       if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access spsr 4)])) == 1#1) : Bool)
@@ -406,7 +406,7 @@ def SetPSTATEFromPSR__1 (spsr_in : (BitVec k_N)) (illegal_psr_state : Bool) : Sa
           if (w__20 : Bool)
           then
             (do
-              ArmFull.assert (23 <b (Sail.BitVec.length spsr_in)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8859.42-8859.43"
+              ArmFull.assert (23 <b (Sail.BitVec.length spsr_in)) "sail-arm/v8_base.sail:8859.42-8859.43"
               let w__21 ← (( do readReg PSTATE ) : SailM ProcState )
               writeReg PSTATE { w__21 with SSBS := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                     spsr 23)])) })
@@ -438,7 +438,7 @@ def SetPSTATEFromPSR__1 (spsr_in : (BitVec k_N)) (illegal_psr_state : Bool) : Sa
           if (w__29 : Bool)
           then
             (do
-              ArmFull.assert (23 <b (Sail.BitVec.length spsr_in)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8874.42-8874.43"
+              ArmFull.assert (23 <b (Sail.BitVec.length spsr_in)) "sail-arm/v8_base.sail:8874.42-8874.43"
               let w__30 ← (( do readReg PSTATE ) : SailM ProcState )
               writeReg PSTATE { w__30 with UAO := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                     spsr 23)])) })
@@ -447,7 +447,7 @@ def SetPSTATEFromPSR__1 (spsr_in : (BitVec k_N)) (illegal_psr_state : Bool) : Sa
           if (w__31 : Bool)
           then
             (do
-              ArmFull.assert (24 <b (Sail.BitVec.length spsr_in)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8878.42-8878.43"
+              ArmFull.assert (24 <b (Sail.BitVec.length spsr_in)) "sail-arm/v8_base.sail:8878.42-8878.43"
               let w__32 ← (( do readReg PSTATE ) : SailM ProcState )
               writeReg PSTATE { w__32 with DIT := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                     spsr 24)])) })
@@ -456,7 +456,7 @@ def SetPSTATEFromPSR__1 (spsr_in : (BitVec k_N)) (illegal_psr_state : Bool) : Sa
           if (w__33 : Bool)
           then
             (do
-              ArmFull.assert (25 <b (Sail.BitVec.length spsr_in)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8882.42-8882.43"
+              ArmFull.assert (25 <b (Sail.BitVec.length spsr_in)) "sail-arm/v8_base.sail:8882.42-8882.43"
               let w__34 ← (( do readReg PSTATE ) : SailM ProcState )
               writeReg PSTATE { w__34 with TCO := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                     spsr 25)])) })
@@ -465,7 +465,7 @@ def SetPSTATEFromPSR__1 (spsr_in : (BitVec k_N)) (illegal_psr_state : Bool) : Sa
           if (w__35 : Bool)
           then
             (do
-              ArmFull.assert (34 <b (Sail.BitVec.length spsr_in)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8886.42-8886.43"
+              ArmFull.assert (34 <b (Sail.BitVec.length spsr_in)) "sail-arm/v8_base.sail:8886.42-8886.43"
               let w__36 ← (( do readReg PSTATE ) : SailM ProcState )
               writeReg PSTATE { w__36 with EXLOCK := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                     spsr 34)])) })
@@ -487,7 +487,7 @@ def SetPSTATEFromPSR__1 (spsr_in : (BitVec k_N)) (illegal_psr_state : Bool) : Sa
         if (w__40 : Bool)
         then
           (do
-            ArmFull.assert (5 <b (Sail.BitVec.length spsr_in)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8894.37-8894.38"
+            ArmFull.assert (5 <b (Sail.BitVec.length spsr_in)) "sail-arm/v8_base.sail:8894.37-8894.38"
             let spsr : (BitVec k_N) := (BitVec.update spsr 5 (Bit 0#1))
             (pure (spsr)))
         else (pure (spsr)))

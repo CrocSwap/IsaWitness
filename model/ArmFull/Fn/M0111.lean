@@ -407,7 +407,7 @@ def RBankSelect (mode : (BitVec 5)) (usr : Int) (fiq : Int) (irq : Int) (svc : I
                               then (pure (usr))
                               else
                                 (do
-                                  ArmFull.assert false "Pattern match failure at /home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6328.4-6337.5"
+                                  ArmFull.assert false "Pattern match failure at sail-arm/v8_base.sail:6328.4-6337.5"
                                   throw Error.Exit))))))))
 
 

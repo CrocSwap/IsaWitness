@@ -443,7 +443,7 @@ def AArch64_S2CheckPermissions (fault_in : FaultRecord) (walkstate : TTWState) (
 def MaxBlockSizeCopiedBytes (_ : Unit) : SailM Nat := do
   let nbytes ← (( do (__IMPDEF_integer "Maximum bytes used in a single block of a copy") ) : SailM
     Int )
-  ArmFull.assert (nbytes ≥b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31968.22-31968.23"
+  ArmFull.assert (nbytes ≥b 0) "sail-arm/v8_base.sail:31968.22-31968.23"
   (pure ((Sail.Int.toNatChecked (nbytes))))
 
 
@@ -459,7 +459,7 @@ def BFMulH (op1 : (BitVec k_N)) (op2 : (BitVec k_N)) : SailM (BitVec (2 * k_N)) 
   let value2_name ← (( do (undefined_real_at (← occLabel 1779) ()) ) : SailM real )
   let zero1 ← (( do (undefined_bool_at (← occLabel 1780) ()) ) : SailM Bool )
   let zero2 ← (( do (undefined_bool_at (← occLabel 1781) ()) ) : SailM Bool )
-  ArmFull.assert ((Sail.BitVec.length op2) == 16) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:32106.19-32106.20"
+  ArmFull.assert ((Sail.BitVec.length op2) == 16) "sail-arm/v8_base.sail:32106.19-32106.20"
   let result ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1782)
       (Sail.Int.toNatChecked ((2 *i (Sail.BitVec.length op2)))))) ) : SailM (BitVec (2 * k_N)) )
@@ -523,7 +523,7 @@ def FPAdd_BF16 (op1 : (BitVec k_N)) (op2 : (BitVec k_N)) : SailM (BitVec k_N) :=
   let value2_name ← (( do (undefined_real_at (← occLabel 1791) ()) ) : SailM real )
   let zero1 ← (( do (undefined_bool_at (← occLabel 1792) ()) ) : SailM Bool )
   let zero2 ← (( do (undefined_bool_at (← occLabel 1793) ()) ) : SailM Bool )
-  ArmFull.assert ((Sail.BitVec.length op2) == 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:32145.19-32145.20"
+  ArmFull.assert ((Sail.BitVec.length op2) == 32) "sail-arm/v8_base.sail:32145.19-32145.20"
   let result ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1794)
       (Sail.BitVec.length op2))) ) : SailM (BitVec k_N) )
@@ -685,7 +685,7 @@ def UpdateBranchRecordBuffer (ccu : (BitVec 1)) (cc : (BitVec 14)) (lastfailed :
     for i in [loop_i_upper:loop_i_lower:-1]i do
       let () := loop_vars
       loop_vars ← do
-        ArmFull.assert (i <b 64) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6440.39-6440.40"
+        ArmFull.assert (i <b 64) "sail-arm/v8_base.sail:6440.39-6440.40"
         let w__1 ← (( do readReg Records_SRC ) : SailM (Vector (BitVec 64) 64) )
         let w__2 ← (( do readReg Records_SRC ) : SailM (Vector (BitVec 64) 64) )
         writeReg Records_SRC (vectorUpdate w__1 (Sail.Int.toNatChecked (i))

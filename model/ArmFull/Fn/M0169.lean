@@ -206,9 +206,9 @@ def A32ExpandImm (imm12 : (BitVec 12)) : SailM (BitVec 32) := do
 /-- Type quantifiers: cp_num : Int -/
 def AArch32_SysRegReadCanWriteAPSR (cp_num : Int) (instr : (BitVec 32)) : SailM Bool := do
   let w__0 ← (( do (UsingAArch32 ()) ) : SailM Bool )
-  ArmFull.assert w__0 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42703.25-42703.26"
-  ArmFull.assert ((cp_num == 14) || (cp_num == 15)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42704.38-42704.39"
-  ArmFull.assert (cp_num == (BitVec.toNat (Sail.BitVec.extractLsb instr 11 8))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42705.41-42705.42"
+  ArmFull.assert w__0 "sail-arm/v8_base.sail:42703.25-42703.26"
+  ArmFull.assert ((cp_num == 14) || (cp_num == 15)) "sail-arm/v8_base.sail:42704.38-42704.39"
+  ArmFull.assert (cp_num == (BitVec.toNat (Sail.BitVec.extractLsb instr 11 8))) "sail-arm/v8_base.sail:42705.41-42705.42"
   let opc1 : Int := (BitVec.toNat (Sail.BitVec.extractLsb instr 23 21))
   let opc2 : Int := (BitVec.toNat (Sail.BitVec.extractLsb instr 7 5))
   let CRn : Int := (BitVec.toNat (Sail.BitVec.extractLsb instr 19 16))

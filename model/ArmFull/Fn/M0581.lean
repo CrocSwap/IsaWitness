@@ -806,7 +806,7 @@ def AArch64_S1Translate (fault_in : FaultRecord) (regime : Regime) (va : (BitVec
                                   (do
                                     let tlbentry ← (( do (S1TLBLookup descipaddr.tlbcontext) ) :
                                       SailME (FaultRecord × AddressDescriptor) TLBLine )
-                                    ArmFull.assert tlbentry.valid_name "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:27700.38-27700.39"
+                                    ArmFull.assert tlbentry.valid_name "sail-arm/v8_base.sail:27700.38-27700.39"
                                     let tlbrecord : TLBRecord := tlbentry.tlbrecord
                                     (pure (tlbrecord)))
                                 else

@@ -364,7 +364,7 @@ def CollectTimeStamp (_ : Unit) : SailM TimeStamp := SailME.run do
           | 0b11 =>
             (do
               let w__12 ← (( do (HaveECVExt ()) ) : SailME TimeStamp Bool )
-              ArmFull.assert w__12 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34626.33-34626.34"
+              ArmFull.assert w__12 "sail-arm/v8_base.sail:34626.33-34626.34"
               let w__15 ← (( do
                 if (((owning_el == EL1) && (PCT_el1 == 0b00#2)) : Bool)
                 then
@@ -394,7 +394,7 @@ def CollectTimeStamp (_ : Unit) : SailM TimeStamp := SailME.run do
       | 0b11 =>
         (do
           let w__18 ← (( do (HaveECVExt ()) ) : SailME TimeStamp Bool )
-          ArmFull.assert w__18 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34647.29-34647.30"
+          ArmFull.assert w__18 "sail-arm/v8_base.sail:34647.29-34647.30"
           (pure (TimeStamp_OffsetPhysical)))
       | _ =>
         (do

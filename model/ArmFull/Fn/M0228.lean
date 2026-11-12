@@ -211,7 +211,7 @@ def TakeTransactionCheckpoint (vl : Int) (pl : Int) : SailM Unit := do
             for n in [loop_n_lower:loop_n_upper:1]i do
               let () := loop_vars
               loop_vars ← do
-                ArmFull.assert ((0 ≤b (vl -i 1)) && ((vl -i 1) <b 2048)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:33408.66-33408.67"
+                ArmFull.assert ((0 ≤b (vl -i 1)) && ((vl -i 1) <b 2048)) "sail-arm/v8_base.sail:33408.66-33408.67"
                 let w__24 ← (( do readReg TSTATE ) : SailM TMState )
                 let w__25 ← (( do readReg TSTATE ) : SailM TMState )
                 let w__26 ← (( do readReg TSTATE ) : SailM TMState )
@@ -230,7 +230,7 @@ def TakeTransactionCheckpoint (vl : Int) (pl : Int) : SailM Unit := do
             for n in [loop_n_lower:loop_n_upper:1]i do
               let () := loop_vars
               loop_vars ← do
-                ArmFull.assert ((0 ≤b (pl -i 1)) && ((pl -i 1) <b 256)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:33412.65-33412.66"
+                ArmFull.assert ((0 ≤b (pl -i 1)) && ((pl -i 1) <b 256)) "sail-arm/v8_base.sail:33412.65-33412.66"
                 let w__28 ← (( do readReg TSTATE ) : SailM TMState )
                 let w__29 ← (( do readReg TSTATE ) : SailM TMState )
                 let w__30 ← (( do readReg TSTATE ) : SailM TMState )
@@ -242,7 +242,7 @@ def TakeTransactionCheckpoint (vl : Int) (pl : Int) : SailM Unit := do
                       (GetElem?.getElem! w__30.P (Sail.Int.toNatChecked (n)))
                       (Sail.Int.toNatChecked ((pl -i 1))) 0 (Sail.BitVec.castWidth w__31)))) }
             (pure loop_vars))
-          ArmFull.assert ((0 ≤b (pl -i 1)) && ((pl -i 1) <b 256)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:33415.61-33415.62"
+          ArmFull.assert ((0 ≤b (pl -i 1)) && ((pl -i 1) <b 256)) "sail-arm/v8_base.sail:33415.61-33415.62"
           let w__32 ← (( do readReg TSTATE ) : SailM TMState )
           let w__33 ← (( do readReg TSTATE ) : SailM TMState )
           let w__34 ← (( do ((Sail.BitVec.castWidth ) <$> (FFR_read (Sail.Int.toNatChecked (pl))))
@@ -559,7 +559,7 @@ def AArch32_S1TTWParamsEL10 (va : (BitVec 32)) : SailM S1TTWParams := do
         let sif := (w__13 : (BitVec 1))
         (pure ((mair, sctlr, sif, ttbcr, ttbcr2)))) ) : SailM
     ((BitVec 64) × (BitVec 32) × (BitVec 1) × (BitVec 32) × (BitVec 32)) )
-  ArmFull.assert ((_get_TTBCR_Type_EAE ttbcr) == 1#1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:37139.28-37139.29"
+  ArmFull.assert ((_get_TTBCR_Type_EAE ttbcr) == 1#1) "sail-arm/v8_base.sail:37139.28-37139.29"
   let walkparams ← (( do (undefined_S1TTWParams (← occLabel 2502) ()) ) : SailM S1TTWParams )
   let walkparams : S1TTWParams := { walkparams with t0sz := (_get_TTBCR_Type_T0SZ ttbcr) }
   let walkparams : S1TTWParams := { walkparams with t1sz := (_get_TTBCR_Type_T1SZ ttbcr) }
@@ -621,7 +621,7 @@ def AArch32_GetTranslationStartInfo (regime : Regime) (ss : SecurityState) (accd
 def AArch32_CheckVectorCatch (fault_in : FaultRecord) (vaddress : (BitVec 32)) (size : Int) : SailM FaultRecord := do
   let w__0 ← (( do (S1TranslationRegime__1 ()) ) : SailM (BitVec 2) )
   let w__1 ← (( do (ELUsingAArch32 w__0) ) : SailM Bool )
-  ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40616.51-40616.52"
+  ArmFull.assert w__1 "sail-arm/v8_base.sail:40616.51-40616.52"
   let fault : FaultRecord := fault_in
   let val_match ← (( do (AArch32_VCRMatch vaddress) ) : SailM Bool )
   let w__3 ← (( do
@@ -726,7 +726,7 @@ def AArch32_RestrictPrediction (val_name : (BitVec 32)) (restriction : RestrictT
 
 /-- Type quantifiers: n : Int -/
 def S_set (n : Int) (value_name : (BitVec 32)) : SailM Unit := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42219.27-42219.28"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-arm/v8_base.sail:42219.27-42219.28"
   let base : Nat := (Sail.Int.toNatChecked (((Nat.mod (Sail.Int.toNatChecked (n)) 4) *i 32)))
   let vreg ← (( do (V_read (Int.ediv (Sail.Int.toNatChecked (n)) 4) 128) ) : SailM (BitVec 128) )
   let vreg : (BitVec 128) :=
@@ -737,7 +737,7 @@ def S_set (n : Int) (value_name : (BitVec 32)) : SailM Unit := do
 
 /-- Type quantifiers: n : Int -/
 def D_set (n : Int) (value_name : (BitVec 64)) : SailM Unit := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42230.27-42230.28"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-arm/v8_base.sail:42230.27-42230.28"
   let base : Nat := (Sail.Int.toNatChecked (((Nat.mod (Sail.Int.toNatChecked (n)) 2) *i 64)))
   let vreg ← (( do (V_read (Int.ediv (Sail.Int.toNatChecked (n)) 2) 128) ) : SailM (BitVec 128) )
   let vreg : (BitVec 128) :=
@@ -748,7 +748,7 @@ def D_set (n : Int) (value_name : (BitVec 64)) : SailM Unit := do
 
 /-- Type quantifiers: n : Int -/
 def Q_set (n : Int) (value_name : (BitVec 128)) : SailM Unit := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 15)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42248.27-42248.28"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 15)) "sail-arm/v8_base.sail:42248.27-42248.28"
   (V_set n 128 value_name)
 
 

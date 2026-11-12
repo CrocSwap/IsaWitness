@@ -205,27 +205,27 @@ def decode_SQCVTN_Z_MZ4__ (sz : (BitVec 1)) (Zn : (BitVec 3)) (N : (BitVec 1)) (
   match VL with
   | 128 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34431.103-34431.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048))))))) "sail-arm/instrs64_sme.sail:34431.103-34431.104"
       (execute_SQCVTN_Z_MZ4__ 128 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 256 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34435.103-34435.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048))))))) "sail-arm/instrs64_sme.sail:34435.103-34435.104"
       (execute_SQCVTN_Z_MZ4__ 256 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 512 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34439.103-34439.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048))))))) "sail-arm/instrs64_sme.sail:34439.103-34439.104"
       (execute_SQCVTN_Z_MZ4__ 512 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 1024 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34443.104-34443.105"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048))))))) "sail-arm/instrs64_sme.sail:34443.104-34443.105"
       (execute_SQCVTN_Z_MZ4__ 1024 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 2048 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34447.104-34447.105"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048))))))) "sail-arm/instrs64_sme.sail:34447.104-34447.105"
       (execute_SQCVTN_Z_MZ4__ 2048 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | _ => (pure (()))
@@ -243,27 +243,27 @@ def decode_UQCVTN_Z_MZ4__ (sz : (BitVec 1)) (Zn : (BitVec 3)) (N : (BitVec 1)) (
   match VL with
   | 128 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34495.103-34495.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048))))))) "sail-arm/instrs64_sme.sail:34495.103-34495.104"
       (execute_UQCVTN_Z_MZ4__ 128 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 256 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34499.103-34499.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048))))))) "sail-arm/instrs64_sme.sail:34499.103-34499.104"
       (execute_UQCVTN_Z_MZ4__ 256 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 512 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34503.103-34503.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048))))))) "sail-arm/instrs64_sme.sail:34503.103-34503.104"
       (execute_UQCVTN_Z_MZ4__ 512 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 1024 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34507.104-34507.105"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048))))))) "sail-arm/instrs64_sme.sail:34507.104-34507.105"
       (execute_UQCVTN_Z_MZ4__ 1024 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 2048 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34511.104-34511.105"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048))))))) "sail-arm/instrs64_sme.sail:34511.104-34511.105"
       (execute_UQCVTN_Z_MZ4__ 2048 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | _ => (pure (()))
@@ -281,27 +281,27 @@ def decode_SQCVTUN_Z_MZ4__ (sz : (BitVec 1)) (Zn : (BitVec 3)) (N : (BitVec 1)) 
   match VL with
   | 128 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34559.103-34559.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048))))))) "sail-arm/instrs64_sme.sail:34559.103-34559.104"
       (execute_SQCVTUN_Z_MZ4__ 128 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 256 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34563.103-34563.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048))))))) "sail-arm/instrs64_sme.sail:34563.103-34563.104"
       (execute_SQCVTUN_Z_MZ4__ 256 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 512 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34567.103-34567.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048))))))) "sail-arm/instrs64_sme.sail:34567.103-34567.104"
       (execute_SQCVTUN_Z_MZ4__ 512 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 1024 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34571.104-34571.105"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048))))))) "sail-arm/instrs64_sme.sail:34571.104-34571.105"
       (execute_SQCVTUN_Z_MZ4__ 1024 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 2048 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34575.104-34575.105"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048))))))) "sail-arm/instrs64_sme.sail:34575.104-34575.105"
       (execute_SQCVTUN_Z_MZ4__ 2048 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | _ => (pure (()))
@@ -319,27 +319,27 @@ def decode_SQCVT_Z_MZ4__ (sz : (BitVec 1)) (Zn : (BitVec 3)) (N : (BitVec 1)) (U
   match VL with
   | 128 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34623.103-34623.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048))))))) "sail-arm/instrs64_sme.sail:34623.103-34623.104"
       (execute_SQCVT_Z_MZ4__ 128 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 256 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34627.103-34627.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048))))))) "sail-arm/instrs64_sme.sail:34627.103-34627.104"
       (execute_SQCVT_Z_MZ4__ 256 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 512 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34631.103-34631.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048))))))) "sail-arm/instrs64_sme.sail:34631.103-34631.104"
       (execute_SQCVT_Z_MZ4__ 512 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 1024 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34635.104-34635.105"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048))))))) "sail-arm/instrs64_sme.sail:34635.104-34635.105"
       (execute_SQCVT_Z_MZ4__ 1024 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 2048 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34639.104-34639.105"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048))))))) "sail-arm/instrs64_sme.sail:34639.104-34639.105"
       (execute_SQCVT_Z_MZ4__ 2048 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | _ => (pure (()))
@@ -357,27 +357,27 @@ def decode_UQCVT_Z_MZ4__ (sz : (BitVec 1)) (Zn : (BitVec 3)) (N : (BitVec 1)) (U
   match VL with
   | 128 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34687.103-34687.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048))))))) "sail-arm/instrs64_sme.sail:34687.103-34687.104"
       (execute_UQCVT_Z_MZ4__ 128 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 256 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34691.103-34691.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048))))))) "sail-arm/instrs64_sme.sail:34691.103-34691.104"
       (execute_UQCVT_Z_MZ4__ 256 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 512 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34695.103-34695.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048))))))) "sail-arm/instrs64_sme.sail:34695.103-34695.104"
       (execute_UQCVT_Z_MZ4__ 512 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 1024 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34699.104-34699.105"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048))))))) "sail-arm/instrs64_sme.sail:34699.104-34699.105"
       (execute_UQCVT_Z_MZ4__ 1024 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 2048 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34703.104-34703.105"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048))))))) "sail-arm/instrs64_sme.sail:34703.104-34703.105"
       (execute_UQCVT_Z_MZ4__ 2048 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | _ => (pure (()))
@@ -395,27 +395,27 @@ def decode_SQCVTU_Z_MZ4__ (sz : (BitVec 1)) (Zn : (BitVec 3)) (N : (BitVec 1)) (
   match VL with
   | 128 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34751.103-34751.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048))))))) "sail-arm/instrs64_sme.sail:34751.103-34751.104"
       (execute_SQCVTU_Z_MZ4__ 128 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 256 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34755.103-34755.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048))))))) "sail-arm/instrs64_sme.sail:34755.103-34755.104"
       (execute_SQCVTU_Z_MZ4__ 256 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 512 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34759.103-34759.104"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048))))))) "sail-arm/instrs64_sme.sail:34759.103-34759.104"
       (execute_SQCVTU_Z_MZ4__ 512 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 1024 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34763.104-34763.105"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048))))))) "sail-arm/instrs64_sme.sail:34763.104-34763.105"
       (execute_SQCVTU_Z_MZ4__ 1024 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | 2048 =>
     (do
-      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:34767.104-34767.105"
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 31) && (((esize == 8) || (esize == 16)) && ((0 ≤b d) && ((d ≤b 31) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048))))))) "sail-arm/instrs64_sme.sail:34767.104-34767.105"
       (execute_SQCVTU_Z_MZ4__ 2048 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n))))
   | _ => (pure (()))

@@ -385,7 +385,7 @@ def execute_aarch32_instrs_VNEG_Op_A_txt (advsimd : Bool) (d__arg : Nat) (elemen
                     if (floating_point : Bool)
                     then
                       (do
-                        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:30507.61-30507.62"
+                        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs32.sail:30507.61-30507.62"
                         let w__0 ← (( do (D_read (d +i r)) ) : SailM (BitVec 64) )
                         let w__1 ← (( do (D_read (m +i r)) ) : SailM (BitVec 64) )
                         let w__2 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read w__1 e esize)) )
@@ -470,7 +470,7 @@ def execute_aarch32_instrs_VRECPE_Op_A_txt (d__arg : Nat) (elements : Nat) (esiz
                   (D_set (d +i r) w__5))
               else
                 (do
-                  ArmFull.assert (esize == 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:34614.47-34614.48"
+                  ArmFull.assert (esize == 32) "sail-arm/instrs32.sail:34614.47-34614.48"
                   let w__6 ← (( do (D_read (d +i r)) ) : SailM (BitVec 64) )
                   let w__7 ← (( do (D_read (m +i r)) ) : SailM (BitVec 64) )
                   let w__8 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read w__7 e esize)) ) :
@@ -521,7 +521,7 @@ def execute_aarch32_instrs_VRSQRTE_Op_A_txt (d__arg : Nat) (elements : Nat) (esi
                   (D_set (d +i r) w__5))
               else
                 (do
-                  ArmFull.assert (esize == 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:35439.47-35439.48"
+                  ArmFull.assert (esize == 32) "sail-arm/instrs32.sail:35439.47-35439.48"
                   let w__6 ← (( do (D_read (d +i r)) ) : SailM (BitVec 64) )
                   let w__7 ← (( do (D_read (m +i r)) ) : SailM (BitVec 64) )
                   let w__8 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read w__7 e esize)) ) :

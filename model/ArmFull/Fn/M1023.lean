@@ -507,7 +507,7 @@ def decode_sshll_advsimd_aarch64_instrs_vector_shift_left_long (Rd : (BitVec 5))
   let elements : Int := (fdiv_int datasize esize)
   let shift : Int := ((BitVec.toNat (immh +++ immb)) -i esize)
   let is_unsigned : Bool := (U == 1#1)
-  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:50352.51-50352.52"
+  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:50352.51-50352.52"
   (execute_aarch64_instrs_vector_shift_left_long (Sail.Int.toNatChecked (d)) datasize elements
     (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (part)) shift
     is_unsigned)
@@ -528,7 +528,7 @@ def decode_ushll_advsimd_aarch64_instrs_vector_shift_left_long (Rd : (BitVec 5))
   let elements : Int := (fdiv_int datasize esize)
   let shift : Int := ((BitVec.toNat (immh +++ immb)) -i esize)
   let is_unsigned : Bool := (U == 1#1)
-  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:50384.51-50384.52"
+  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:50384.51-50384.52"
   (execute_aarch64_instrs_vector_shift_left_long (Sail.Int.toNatChecked (d)) datasize elements
     (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (part)) shift
     is_unsigned)
@@ -570,7 +570,7 @@ def execute_aarch64_instrs_integer_tags_mcsettagarray (n : Nat) (t : Nat) : Sail
         let (address, index) := loop_vars
         loop_vars ← do
           let index : Int := index
-          ArmFull.assert ((0 ≤b (index *i 4)) && (((index *i 4) +i 3) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:50826.72-50826.73"
+          ArmFull.assert ((0 ≤b (index *i 4)) && (((index *i 4) +i 3) <b 64)) "sail-arm/instrs64.sail:50826.72-50826.73"
           let tag : (BitVec 4) :=
             (Sail.BitVec.castWidth (Sail.BitVec.extractLsb data
               (Sail.Int.toNatChecked (((index *i 4) +i 3))) (Sail.Int.toNatChecked ((index *i 4)))))

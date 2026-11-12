@@ -204,7 +204,7 @@ def decode_aarch32_instrs_VMOV_d_A1enc_A_txt (cond : (BitVec 4)) (op : (BitVec 1
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:28225.29-28225.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:28225.29-28225.30"
       let to_arm_registers : Bool := (op == 1#1)
       let t : Int := (BitVec.toNat Rt)
       let t2 : Int := (BitVec.toNat Rt2)
@@ -276,7 +276,7 @@ def decode_aarch32_instrs_VMOV_i_A2enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1)
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:28338.29-28338.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:28338.29-28338.30"
       let w__3 ← (( do
         if ((← do
              let w__1 ← (( do (FPSCR_read__1 ()) ) : SailM (BitVec 32) )
@@ -712,7 +712,7 @@ def decode_aarch32_instrs_VMOV_h_A1enc_A_txt (cond : (BitVec 4)) (op : (BitVec 1
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:28889.29-28889.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:28889.29-28889.30"
       if ((! (HaveFP16Ext ())) : Bool)
       then sailThrow ((Error_Undefined ()))
       else (pure (()))

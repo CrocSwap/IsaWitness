@@ -407,7 +407,7 @@ def ConstrainUnpredictable (which : Unpredictable) : SailM Constraint := do
       (C47PickWBOVERLAPST ()))
   | _ =>
     (do
-      ArmFull.assert false "/home/doug/boss-scratch/armcert-defects/c47-accepted/armcert-c47.sail:156.25-156.26"
+      ArmFull.assert false "armcert/armcert-c47.sail:156.25-156.26"
       throw Error.Exit)
 
 

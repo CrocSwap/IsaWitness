@@ -210,7 +210,7 @@ def C27bSelect (allowed : (BitVec 256)) : SailM Int := SailME.run do
           else count
       (pure loop_vars)) ) : SailME Int Int )
   let count : Int := count
-  ArmFull.assert (count ≥b 1) "/home/doug/boss-scratch/armcert-defects/c27b-accepted/armcert_c27b.sail:70.21-70.22"
+  ArmFull.assert (count ≥b 1) "armcert/armcert_c27b.sail:70.21-70.22"
   let w__0 ← (( do
     ((fun n => Sail.Int.toNatChecked n) <$> ((undefined_range_at (← occLabel 541) 0 (count -i 1))))
     ) : SailME Int Nat )
@@ -550,7 +550,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
   if ((x == "Coresight timestamp") : Bool)
   then
     (do
-      ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:759.54-759.55"
+      ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 64)) "sail-arm/impdefs.sail:759.54-759.55"
       let w__0 ← (( do (PhysicalCountInt ()) ) : SailM (BitVec 64) )
       (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb w__0 (Sail.Int.toNatChecked ((N -i 1)))
           0)))))
@@ -559,7 +559,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
       if ((x == "Synchronous Error") : Bool)
       then
         (do
-          ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 2)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:762.53-762.54"
+          ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 2)) "sail-arm/impdefs.sail:762.53-762.54"
           (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb 0b00#2
               (Sail.Int.toNatChecked ((N -i 1))) 0)))))
       else
@@ -567,7 +567,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
           if ((x == "Asynchronous Error") : Bool)
           then
             (do
-              ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 2)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:765.53-765.54"
+              ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 2)) "sail-arm/impdefs.sail:765.53-765.54"
               (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb 0b11#2
                   (Sail.Int.toNatChecked ((N -i 1))) 0)))))
           else
@@ -579,14 +579,14 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
                   if ((x == "FPEXC.EN value when TGE==1 and RW==0") : Bool)
                   then
                     (do
-                      ArmFull.assert (0 ≤b (N -i 1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:770.38-770.39"
+                      ArmFull.assert (0 ≤b (N -i 1)) "sail-arm/impdefs.sail:770.38-770.39"
                       (pure ((Sail.BitVec.castWidth (integer_subrange 1 (N -i 1) 0)))))
                   else
                     (do
                       if ((x == "reset vector address") : Bool)
                       then
                         (do
-                          ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:773.54-773.55"
+                          ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 64)) "sail-arm/impdefs.sail:773.54-773.55"
                           let w__1 ← (( do readReg CFG_RVBAR ) : SailM (BitVec 64) )
                           (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb w__1
                               (Sail.Int.toNatChecked ((N -i 1))) 0)))))
@@ -595,7 +595,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
                           if ((x == "TG0 encoded granule size") : Bool)
                           then
                             (do
-                              ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 2)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:776.53-776.54"
+                              ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 2)) "sail-arm/impdefs.sail:776.53-776.54"
                               let w__2 ← (( do readReg __impdef_TG0 ) : SailM (BitVec 2) )
                               (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb w__2
                                   (Sail.Int.toNatChecked ((N -i 1))) 0)))))
@@ -604,7 +604,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
                               if ((x == "TG1 encoded granule size") : Bool)
                               then
                                 (do
-                                  ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 2)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:779.53-779.54"
+                                  ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 2)) "sail-arm/impdefs.sail:779.53-779.54"
                                   let w__3 ← (( do readReg __impdef_TG1 ) : SailM (BitVec 2) )
                                   (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb w__3
                                       (Sail.Int.toNatChecked ((N -i 1))) 0)))))
@@ -613,7 +613,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
                                   if ((x == "Reserved short descriptor AP encoding") : Bool)
                                   then
                                     (do
-                                      ArmFull.assert (0 ≤b (N -i 1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:782.38-782.39"
+                                      ArmFull.assert (0 ≤b (N -i 1)) "sail-arm/impdefs.sail:782.38-782.39"
                                       (pure ((Sail.BitVec.castWidth (integer_subrange
                                           (BitVec.toNat 0b101#3) (N -i 1) 0)))))
                                   else
@@ -621,7 +621,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
                                       if ((x == "Non-Faulting PAR") : Bool)
                                       then
                                         (do
-                                          ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:785.53-785.54"
+                                          ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 1)) "sail-arm/impdefs.sail:785.53-785.54"
                                           (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb 0#1
                                               (Sail.Int.toNatChecked ((N -i 1))) 0)))))
                                       else
@@ -633,7 +633,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
                                               if ((x == "SPE mask 10:8,4,2") : Bool)
                                               then
                                                 (do
-                                                  ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 5)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:790.53-790.54"
+                                                  ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 5)) "sail-arm/impdefs.sail:790.53-790.54"
                                                   (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb
                                                       0b11111#5 (Sail.Int.toNatChecked ((N -i 1))) 0)))))
                                               else
@@ -641,7 +641,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
                                                   if ((x == "MPAM version") : Bool)
                                                   then
                                                     (do
-                                                      ArmFull.assert (0 ≤b (N -i 1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:793.38-793.39"
+                                                      ArmFull.assert (0 ≤b (N -i 1)) "sail-arm/impdefs.sail:793.38-793.39"
                                                       let w__4 ← (( do readReg __mpam_major ) :
                                                         SailM (BitVec 4) )
                                                       (pure ((Sail.BitVec.castWidth (integer_subrange
@@ -651,7 +651,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
                                                       if ((x == "MPAM maximum PARTID") : Bool)
                                                       then
                                                         (do
-                                                          ArmFull.assert (0 ≤b (N -i 1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:796.38-796.39"
+                                                          ArmFull.assert (0 ≤b (N -i 1)) "sail-arm/impdefs.sail:796.38-796.39"
                                                           let w__5 ← (( do
                                                             readReg __mpam_partid_max ) : SailM
                                                             (BitVec 16) )
@@ -662,7 +662,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
                                                           if ((x == "MPAM maximum PMG") : Bool)
                                                           then
                                                             (do
-                                                              ArmFull.assert (0 ≤b (N -i 1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:799.38-799.39"
+                                                              ArmFull.assert (0 ≤b (N -i 1)) "sail-arm/impdefs.sail:799.38-799.39"
                                                               let w__6 ← (( do
                                                                 readReg __mpam_pmg_max ) : SailM
                                                                 (BitVec 8) )
@@ -679,7 +679,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
                                                                   if (w__7 : Bool)
                                                                   then
                                                                     (do
-                                                                      ArmFull.assert (0 ≤b (N -i 1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:803.42-803.43"
+                                                                      ArmFull.assert (0 ≤b (N -i 1)) "sail-arm/impdefs.sail:803.42-803.43"
                                                                       (pure ((Sail.BitVec.castWidth (integer_subrange
                                                                           1 (N -i 1) 0)))))
                                                                   else
@@ -690,7 +690,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
                                                                   if ((x == "MPAM maximum VPMR") : Bool)
                                                                   then
                                                                     (do
-                                                                      ArmFull.assert (0 ≤b (N -i 1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:807.38-807.39"
+                                                                      ArmFull.assert (0 ≤b (N -i 1)) "sail-arm/impdefs.sail:807.38-807.39"
                                                                       let w__9 ← (( do
                                                                         readReg __mpam_vpmr_max ) :
                                                                         SailM (BitVec 3) )
@@ -738,7 +738,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
                                                                                               if ((x == "Default Memory Map XNX bit") : Bool)
                                                                                               then
                                                                                                 (do
-                                                                                                  ArmFull.assert (0 ≤b (N -i 1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:822.38-822.39"
+                                                                                                  ArmFull.assert (0 ≤b (N -i 1)) "sail-arm/impdefs.sail:822.38-822.39"
                                                                                                   (pure ((Sail.BitVec.castWidth (integer_subrange
                                                                                                       0
                                                                                                       (N -i 1)
@@ -748,7 +748,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
                                                                                                   if ((x == "0") : Bool)
                                                                                                   then
                                                                                                     (do
-                                                                                                      ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:825.53-825.54"
+                                                                                                      ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 1)) "sail-arm/impdefs.sail:825.53-825.54"
                                                                                                       (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb
                                                                                                           0#1
                                                                                                           (Sail.Int.toNatChecked ((N -i 1)))
@@ -758,7 +758,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
                                                                                                       if ((x == "1") : Bool)
                                                                                                       then
                                                                                                         (do
-                                                                                                          ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:828.53-828.54"
+                                                                                                          ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 1)) "sail-arm/impdefs.sail:828.53-828.54"
                                                                                                           (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb
                                                                                                               1#1
                                                                                                               (Sail.Int.toNatChecked ((N -i 1)))
@@ -788,7 +788,7 @@ def ImpDefBits (x : String) (N : Nat) : SailM (BitVec N) := do
                                                                                                                           (String.append
                                                                                                                             x
                                                                                                                             " is not among the strings in the above list."))
-                                                                                                                      ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:838.20-838.21"
+                                                                                                                      ArmFull.assert false "sail-arm/impdefs.sail:838.20-838.21"
                                                                                                                       throw Error.Exit)))))))))))))))))))))))))))))
 
 

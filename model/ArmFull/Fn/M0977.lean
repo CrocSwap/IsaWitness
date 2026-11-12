@@ -245,7 +245,7 @@ def decode_URSRA_Z_ZI__ (tszh : (BitVec 2)) (tszl : (BitVec 2)) (imm3 : (BitVec 
       | _ => (pure (())))
   | _ =>
     (do
-      ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:52036.22-52036.23"
+      ArmFull.assert false "sail-arm/instrs64_sve.sail:52036.22-52036.23"
       throw Error.Exit)
 
 
@@ -367,7 +367,7 @@ def decode_USRA_Z_ZI__ (tszh : (BitVec 2)) (tszl : (BitVec 2)) (imm3 : (BitVec 3
       | _ => (pure (())))
   | _ =>
     (do
-      ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:52183.22-52183.23"
+      ArmFull.assert false "sail-arm/instrs64_sve.sail:52183.22-52183.23"
       throw Error.Exit)
 
 
@@ -769,7 +769,7 @@ def decode_XAR_Z_ZZI__ (tszh : (BitVec 2)) (tszl : (BitVec 2)) (imm3 : (BitVec 3
       | _ => (pure (())))
   | _ =>
     (do
-      ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:52750.22-52750.23"
+      ArmFull.assert false "sail-arm/instrs64_sve.sail:52750.22-52750.23"
       throw Error.Exit)
 
 

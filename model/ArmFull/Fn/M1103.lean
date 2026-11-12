@@ -234,7 +234,7 @@ def decode_ucvtf_float_int_aarch64_instrs_float_convert_int (Rd : (BitVec 5)) (R
         (Sail.Int.toNatChecked (part)) rounding is_unsigned))
   | _ =>
     (do
-      ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:15830.22-15830.23"
+      ArmFull.assert false "sail-arm/instrs64.sail:15830.22-15830.23"
       throw Error.Exit)
 
 

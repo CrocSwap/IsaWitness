@@ -202,7 +202,7 @@ def execute_CLASTA_R_P_Z__ (VL : Nat) (csize : Nat) (dn : Nat) (esize : Nat) (g 
     if ((last <b 0) : Bool)
     then
       (do
-        ArmFull.assert ((esize ≥b 0) && (csize ≥b esize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:27154.59-27154.60"
+        ArmFull.assert ((esize ≥b 0) && (csize ≥b esize)) "sail-arm/instrs64_sve.sail:27154.59-27154.60"
         let result : (BitVec csize) :=
           (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend operand1 csize))
         (pure (result)))
@@ -217,7 +217,7 @@ def execute_CLASTA_R_P_Z__ (VL : Nat) (csize : Nat) (dn : Nat) (esize : Nat) (g 
             else last)
           else last
         let last : Int := last
-        ArmFull.assert ((esize ≥b 0) && (csize ≥b esize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:27165.59-27165.60"
+        ArmFull.assert ((esize ≥b 0) && (csize ≥b esize)) "sail-arm/instrs64_sve.sail:27165.59-27165.60"
         let w__0 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 last esize)) ) : SailM
           (BitVec esize) )
         let result := ((Sail.BitVec.castWidth (Sail.BitVec.zeroExtend w__0 csize)) : (BitVec csize))
@@ -248,7 +248,7 @@ def execute_CLASTB_R_P_Z__ (VL : Nat) (csize : Nat) (dn : Nat) (esize : Nat) (g 
     if ((last <b 0) : Bool)
     then
       (do
-        ArmFull.assert ((esize ≥b 0) && (csize ≥b esize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:27229.59-27229.60"
+        ArmFull.assert ((esize ≥b 0) && (csize ≥b esize)) "sail-arm/instrs64_sve.sail:27229.59-27229.60"
         let result : (BitVec csize) :=
           (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend operand1 csize))
         (pure (result)))
@@ -263,7 +263,7 @@ def execute_CLASTB_R_P_Z__ (VL : Nat) (csize : Nat) (dn : Nat) (esize : Nat) (g 
             else last)
           else last
         let last : Int := last
-        ArmFull.assert ((esize ≥b 0) && (csize ≥b esize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:27240.59-27240.60"
+        ArmFull.assert ((esize ≥b 0) && (csize ≥b esize)) "sail-arm/instrs64_sve.sail:27240.59-27240.60"
         let w__0 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 last esize)) ) : SailM
           (BitVec esize) )
         let result := ((Sail.BitVec.castWidth (Sail.BitVec.zeroExtend w__0 csize)) : (BitVec csize))
@@ -628,7 +628,7 @@ def execute_EXT_Z_ZI_Des (VL : Nat) (dst : Nat) (esize : Nat) (position__arg : N
     else position
   let position : Int := (Int.shiftl position 3)
   let concat : (BitVec (VL * 2)) := (Sail.BitVec.castWidth (operand2 +++ operand1))
-  ArmFull.assert ((0 ≤b (Sail.Int.toNatChecked (position))) && ((((Sail.Int.toNatChecked (position)) +i VL) -i 1) <b (VL *i 2))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:27842.71-27842.72"
+  ArmFull.assert ((0 ≤b (Sail.Int.toNatChecked (position))) && ((((Sail.Int.toNatChecked (position)) +i VL) -i 1) <b (VL *i 2))) "sail-arm/instrs64_sve.sail:27842.71-27842.72"
   let result : (BitVec VL) :=
     (Sail.BitVec.castWidth (Sail.BitVec.extractLsb concat
       (Sail.Int.toNatChecked ((((Sail.Int.toNatChecked (position)) +i VL) -i 1)))
@@ -655,7 +655,7 @@ def execute_EXT_Z_ZI_Con (VL : Nat) (dst : Nat) (esize : Nat) (position__arg : N
     else position
   let position : Int := (Int.shiftl position 3)
   let concat : (BitVec (VL * 2)) := (Sail.BitVec.castWidth (operand2 +++ operand1))
-  ArmFull.assert ((0 ≤b (Sail.Int.toNatChecked (position))) && ((((Sail.Int.toNatChecked (position)) +i VL) -i 1) <b (VL *i 2))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:27905.71-27905.72"
+  ArmFull.assert ((0 ≤b (Sail.Int.toNatChecked (position))) && ((((Sail.Int.toNatChecked (position)) +i VL) -i 1) <b (VL *i 2))) "sail-arm/instrs64_sve.sail:27905.71-27905.72"
   let result : (BitVec VL) :=
     (Sail.BitVec.castWidth (Sail.BitVec.extractLsb concat
       (Sail.Int.toNatChecked ((((Sail.Int.toNatChecked (position)) +i VL) -i 1)))

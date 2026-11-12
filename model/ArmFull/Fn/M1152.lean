@@ -323,11 +323,11 @@ def decode_FADD_Z_P_ZS__ (size : (BitVec 2)) (Pg : (BitVec 3)) (i1 : (BitVec 1))
     if ((i1 == 0#1) : Bool)
     then
       (do
-        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:79.49-79.50"
+        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:79.49-79.50"
         ((Sail.BitVec.castWidth ) <$> (FPPointFive 0#1 (Sail.Int.toNatChecked (esize)))))
     else
       (do
-        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:82.49-82.50"
+        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:82.49-82.50"
         ((Sail.BitVec.castWidth ) <$> (FPOne 0#1 (Sail.Int.toNatChecked (esize))))) ) : SailM
     (BitVec (Sail.Int.toNatChecked (esize : Int))) )
   match VL with
@@ -378,11 +378,11 @@ def decode_FSUB_Z_P_ZS__ (size : (BitVec 2)) (Pg : (BitVec 3)) (i1 : (BitVec 1))
     if ((i1 == 0#1) : Bool)
     then
       (do
-        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:152.49-152.50"
+        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:152.49-152.50"
         ((Sail.BitVec.castWidth ) <$> (FPPointFive 0#1 (Sail.Int.toNatChecked (esize)))))
     else
       (do
-        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:155.49-155.50"
+        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:155.49-155.50"
         ((Sail.BitVec.castWidth ) <$> (FPOne 0#1 (Sail.Int.toNatChecked (esize))))) ) : SailM
     (BitVec (Sail.Int.toNatChecked (esize : Int))) )
   match VL with
@@ -433,11 +433,11 @@ def decode_FMUL_Z_P_ZS__ (size : (BitVec 2)) (Pg : (BitVec 3)) (i1 : (BitVec 1))
     if ((i1 == 0#1) : Bool)
     then
       (do
-        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:225.49-225.50"
+        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:225.49-225.50"
         ((Sail.BitVec.castWidth ) <$> (FPPointFive 0#1 (Sail.Int.toNatChecked (esize)))))
     else
       (do
-        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:228.49-228.50"
+        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:228.49-228.50"
         ((Sail.BitVec.castWidth ) <$> (FPTwo 0#1 (Sail.Int.toNatChecked (esize))))) ) : SailM
     (BitVec (Sail.Int.toNatChecked (esize : Int))) )
   match VL with
@@ -488,11 +488,11 @@ def decode_FSUBR_Z_P_ZS__ (size : (BitVec 2)) (Pg : (BitVec 3)) (i1 : (BitVec 1)
     if ((i1 == 0#1) : Bool)
     then
       (do
-        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:298.49-298.50"
+        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:298.49-298.50"
         ((Sail.BitVec.castWidth ) <$> (FPPointFive 0#1 (Sail.Int.toNatChecked (esize)))))
     else
       (do
-        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:301.49-301.50"
+        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:301.49-301.50"
         ((Sail.BitVec.castWidth ) <$> (FPOne 0#1 (Sail.Int.toNatChecked (esize))))) ) : SailM
     (BitVec (Sail.Int.toNatChecked (esize : Int))) )
   match VL with
@@ -544,7 +544,7 @@ def decode_FMAXNM_Z_P_ZS__ (size : (BitVec 2)) (Pg : (BitVec 3)) (i1 : (BitVec 1
     then (pure ((Sail.BitVec.castWidth (Zeros (n := (Sail.Int.toNatChecked (esize)))))))
     else
       (do
-        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:371.49-371.50"
+        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:371.49-371.50"
         ((Sail.BitVec.castWidth ) <$> (FPOne 0#1 (Sail.Int.toNatChecked (esize))))) ) : SailM
     (BitVec (Sail.Int.toNatChecked (esize : Int))) )
   match VL with
@@ -596,7 +596,7 @@ def decode_FMINNM_Z_P_ZS__ (size : (BitVec 2)) (Pg : (BitVec 3)) (i1 : (BitVec 1
     then (pure ((Sail.BitVec.castWidth (Zeros (n := (Sail.Int.toNatChecked (esize)))))))
     else
       (do
-        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:441.49-441.50"
+        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:441.49-441.50"
         ((Sail.BitVec.castWidth ) <$> (FPOne 0#1 (Sail.Int.toNatChecked (esize))))) ) : SailM
     (BitVec (Sail.Int.toNatChecked (esize : Int))) )
   match VL with
@@ -648,7 +648,7 @@ def decode_FMAX_Z_P_ZS__ (size : (BitVec 2)) (Pg : (BitVec 3)) (i1 : (BitVec 1))
     then (pure ((Sail.BitVec.castWidth (Zeros (n := (Sail.Int.toNatChecked (esize)))))))
     else
       (do
-        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:511.49-511.50"
+        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:511.49-511.50"
         ((Sail.BitVec.castWidth ) <$> (FPOne 0#1 (Sail.Int.toNatChecked (esize))))) ) : SailM
     (BitVec (Sail.Int.toNatChecked (esize : Int))) )
   match VL with
@@ -700,7 +700,7 @@ def decode_FMIN_Z_P_ZS__ (size : (BitVec 2)) (Pg : (BitVec 3)) (i1 : (BitVec 1))
     then (pure ((Sail.BitVec.castWidth (Zeros (n := (Sail.Int.toNatChecked (esize)))))))
     else
       (do
-        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:581.49-581.50"
+        ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:581.49-581.50"
         ((Sail.BitVec.castWidth ) <$> (FPOne 0#1 (Sail.Int.toNatChecked (esize))))) ) : SailM
     (BitVec (Sail.Int.toNatChecked (esize : Int))) )
   match VL with

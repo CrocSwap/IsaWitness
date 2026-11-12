@@ -352,7 +352,7 @@ def AArch32_TakePrefetchAbortException (vaddress : (BitVec 32)) (fault : FaultRe
 
 def AArch64_BreakpointException (fault : FaultRecord) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  ArmFull.assert (w__0.EL != EL3) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:14835.27-14835.28"
+  ArmFull.assert (w__0.EL != EL3) "sail-arm/v8_base.sail:14835.27-14835.28"
   let route_to_el2 ← (( do
     if ((← do
          if ((← do
@@ -501,7 +501,7 @@ def AArch64_InstructionAbort (vaddress : (BitVec 64)) (fault : FaultRecord) : Sa
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (bne fault.statuscode Fault_AsyncExternal) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:15017.54-15017.55")
+      ArmFull.assert (bne fault.statuscode Fault_AsyncExternal) "sail-arm/v8_base.sail:15017.54-15017.55")
   else (pure (()))
   let target_el ← (( do (undefined_bitvector_at (← occLabel 876) 2) ) : SailM (BitVec 2) )
   let w__1 ← (( do (IsExternalAbort__1 fault) ) : SailM Bool )
@@ -585,7 +585,7 @@ def AArch64_InstructionAbort (vaddress : (BitVec 64)) (fault : FaultRecord) : Sa
 
 def AArch64_VectorCatchException (fault : FaultRecord) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  ArmFull.assert (w__0.EL != EL2) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:15048.27-15048.28"
+  ArmFull.assert (w__0.EL != EL2) "sail-arm/v8_base.sail:15048.27-15048.28"
   let w__5 ← (( do
     if ((← do
          (EL2Enabled ())) : Bool)
@@ -600,7 +600,7 @@ def AArch64_VectorCatchException (fault : FaultRecord) : SailM Unit := do
             let w__3 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
             (pure ((((_get_MDCR_EL2_Type_TDE w__3) == 1#1) : Bool)))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__5 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:15049.70-15049.71"
+  ArmFull.assert w__5 "sail-arm/v8_base.sail:15049.70-15049.71"
   let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
   let vect_offset : Int := (BitVec.toNat 0x0#4)
   let vaddress ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
@@ -611,7 +611,7 @@ def AArch64_VectorCatchException (fault : FaultRecord) : SailM Unit := do
 
 def AArch64_WatchpointException (vaddress : (BitVec 64)) (fault : FaultRecord) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  ArmFull.assert (w__0.EL != EL3) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:15060.27-15060.28"
+  ArmFull.assert (w__0.EL != EL3) "sail-arm/v8_base.sail:15060.27-15060.28"
   let route_to_el2 ← (( do
     if ((← do
          if ((← do
@@ -667,15 +667,15 @@ def AArch64_WatchpointException (vaddress : (BitVec 64)) (fault : FaultRecord) :
 
 def TakeGPCException (vaddress : (BitVec 64)) (fault : FaultRecord) : SailM Unit := do
   let w__0 ← (( do (HaveRME ()) ) : SailM Bool )
-  ArmFull.assert w__0 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:15144.20-15144.21"
+  ArmFull.assert w__0 "sail-arm/v8_base.sail:15144.20-15144.21"
   let w__1 ← (( do (HaveAtomicExt ()) ) : SailM Bool )
-  ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:15145.26-15145.27"
+  ArmFull.assert w__1 "sail-arm/v8_base.sail:15145.26-15145.27"
   let w__2 ← (( do (HaveAccessFlagUpdateExt ()) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:15146.36-15146.37"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:15146.36-15146.37"
   let w__3 ← (( do (HaveDirtyBitModifierExt ()) ) : SailM Bool )
-  ArmFull.assert w__3 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:15147.36-15147.37"
+  ArmFull.assert w__3 "sail-arm/v8_base.sail:15147.36-15147.37"
   let w__4 ← (( do (HaveDoubleFaultExt ()) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:15148.31-15148.32"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:15148.31-15148.32"
   let except ← (( do (undefined_ExceptionRecord (← occLabel 881) ()) ) : SailM ExceptionRecord )
   let except : ExceptionRecord := { except with exceptype := Exception_GPC }
   let except : ExceptionRecord := { except with vaddress := (Sail.BitVec.zeroExtend vaddress 64) }

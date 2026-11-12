@@ -417,7 +417,7 @@ def AArch32_EnterHypModeInDebugState (except : ExceptionRecord) : SailM Unit := 
       (do
         (ELUsingAArch32 EL2))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__3 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13905.87-13905.88"
+  ArmFull.assert w__3 "sail-arm/v8_base.sail:13905.87-13905.88"
   (AArch32_ReportHypEntry except)
   (AArch32_WriteMode M32_Hyp)
   let w__4 ← (( do (__UNKNOWN_bits 32) ) : SailM (BitVec 32) )
@@ -741,7 +741,7 @@ def AArch32_CheckTimerConditions (_ : Unit) : SailM Unit := do
   let status ← (( do (undefined_bool_at (.site 1165) ()) ) : SailM Bool )
   let offset : (BitVec 64) := (Zeros (n := 64))
   let w__0 ← (( do (HaveAArch64 ()) ) : SailM Bool )
-  ArmFull.assert (! w__0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:18191.34-18191.35"
+  ArmFull.assert (! w__0) "sail-arm/v8_base.sail:18191.34-18191.35"
   let status ← (( do
     if ((HaveEL EL3) : Bool)
     then

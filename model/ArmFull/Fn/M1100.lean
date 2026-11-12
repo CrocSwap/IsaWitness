@@ -501,7 +501,7 @@ def decode_fcvtas_float_aarch64_instrs_float_convert_int (Rd : (BitVec 5)) (Rn :
         (Sail.Int.toNatChecked (part)) rounding is_unsigned))
   | _ =>
     (do
-      ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:14400.22-14400.23"
+      ArmFull.assert false "sail-arm/instrs64.sail:14400.22-14400.23"
       throw Error.Exit)
 
 
@@ -623,7 +623,7 @@ def decode_fcvtau_float_aarch64_instrs_float_convert_int (Rd : (BitVec 5)) (Rn :
         (Sail.Int.toNatChecked (part)) rounding is_unsigned))
   | _ =>
     (do
-      ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:14510.22-14510.23"
+      ArmFull.assert false "sail-arm/instrs64.sail:14510.22-14510.23"
       throw Error.Exit)
 
 
@@ -745,7 +745,7 @@ def decode_fcvtms_float_aarch64_instrs_float_convert_int (Rd : (BitVec 5)) (Rn :
         (Sail.Int.toNatChecked (part)) rounding is_unsigned))
   | _ =>
     (do
-      ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:14620.22-14620.23"
+      ArmFull.assert false "sail-arm/instrs64.sail:14620.22-14620.23"
       throw Error.Exit)
 
 

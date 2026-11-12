@@ -336,7 +336,7 @@ def decode_aarch32_instrs_ERET_A1enc_A_txt (cond : (BitVec 4)) : SailM Unit := d
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:40855.29-40855.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:40855.29-40855.30"
       (execute_aarch32_instrs_ERET_Op_AS_txt ()))
   else (pure (()))
 

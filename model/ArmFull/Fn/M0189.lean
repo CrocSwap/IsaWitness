@@ -410,7 +410,7 @@ def AArch64_SS2TTWParams (ipaspace : PASpace) (s1aarch64 : Bool) : SailM S2TTWPa
 
 def AArch64_GetS2TLBContext (ss : SecurityState) (ipa : FullAddress) (tg : TGx) : SailM TLBContext := do
   let w__0 ← (( do (EL2Enabled ()) ) : SailM Bool )
-  ArmFull.assert w__0 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26612.23-26612.24"
+  ArmFull.assert w__0 "sail-arm/v8_base.sail:26612.23-26612.24"
   let tlbcontext ← (( do (undefined_TLBContext (← occLabel 1551) ()) ) : SailM TLBContext )
   let tlbcontext : TLBContext := { tlbcontext with ss := ss }
   let tlbcontext : TLBContext := { tlbcontext with regime := Regime_EL10 }
@@ -596,7 +596,7 @@ def AArch64_ClearEventCounters (_ : Unit) : SailM Unit := do
         for idx in [loop_idx_lower:loop_idx_upper:1]i do
           let () := loop_vars
           loop_vars ← do
-            ArmFull.assert ((0 ≤b idx) && (idx <b 32)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34397.64-34397.65"
+            ArmFull.assert ((0 ≤b idx) && (idx <b 32)) "sail-arm/v8_base.sail:34397.64-34397.65"
             let w__0 ← (( do readReg PMEVCNTR_EL0 ) : SailM (Vector (BitVec 64) 32) )
             writeReg PMEVCNTR_EL0 (vectorUpdate w__0 (Sail.Int.toNatChecked (idx)) (Zeros (n := 64)))
         (pure loop_vars)))
@@ -628,7 +628,7 @@ def AArch64_PMUSwIncrement (sw_incr : (BitVec 32)) : SailM Unit := do
             for idx in [loop_idx_lower:loop_idx_upper:1]i do
               let () := loop_vars
               loop_vars ← do
-                ArmFull.assert ((0 ≤b idx) && (idx <b 32)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34413.64-34413.65"
+                ArmFull.assert ((0 ≤b idx) && (idx <b 32)) "sail-arm/v8_base.sail:34413.64-34413.65"
                 if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access sw_incr
                          (Sail.Int.toNatChecked (idx)))])) == 1#1) : Bool)
                 then
@@ -703,8 +703,8 @@ def AArch32_IncrementEventCounter (idx : Nat) (increment_name : Int) : SailM Uni
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (0 ≤b idx) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43482.36-43482.37"
-      ArmFull.assert (idx <b 31) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43483.36-43483.37"
+      ArmFull.assert (0 ≤b idx) "sail-arm/v8_base.sail:43482.36-43482.37"
+      ArmFull.assert (idx <b 31) "sail-arm/v8_base.sail:43483.36-43483.37"
       (AArch64_IncrementEventCounter idx increment_name))
   else
     (do
@@ -764,7 +764,7 @@ def AArch32_PMUSwIncrement (sw_incr : (BitVec 32)) : SailM Unit := do
             for idx in [loop_idx_lower:loop_idx_upper:1]i do
               let () := loop_vars
               loop_vars ← do
-                ArmFull.assert ((0 ≤b idx) && (idx <b 32)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43529.64-43529.65"
+                ArmFull.assert ((0 ≤b idx) && (idx <b 32)) "sail-arm/v8_base.sail:43529.64-43529.65"
                 if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access sw_incr
                          (Sail.Int.toNatChecked (idx)))])) == 1#1) : Bool)
                 then

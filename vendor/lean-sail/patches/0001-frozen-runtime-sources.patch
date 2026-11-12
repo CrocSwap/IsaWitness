@@ -552,9 +552,12 @@ index 9b08ca7..0f5c0a2 100644
 +  default := ⟨default, (fun _ p => trivialChoiceSource.chooseAt p default (), 0), default, default, default,
 +    default, default, #[]⟩
 diff --git a/Sail/Sail.lean b/Sail/Sail.lean
-index e53f6a1..0d51ca5 100644
+index e53f6a1..b4219dd 100644
 --- a/Sail/Sail.lean
 +++ b/Sail/Sail.lean
+@@ -35 +35 @@ namespace Sail.ConcurrencyInterfaceV1
+-open PreSail
++open _root_.Sail.ConcurrencyInterfaceV1.PreSail
 @@ -37 +37 @@ open PreSail
 -variable {Register : Type} {RegisterType : Register → Type} [DecidableEq Register] [Hashable Register]
 +variable {Regs : Type} [Arch]

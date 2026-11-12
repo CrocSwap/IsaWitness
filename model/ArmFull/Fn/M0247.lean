@@ -282,7 +282,7 @@ def CheckExceptionCatch (exception_entry : Bool) : SailM Unit := do
 
 /-- Type quantifiers: N : Nat, List.elem N [32, 64, 128] -/
 def FetchDescriptor (ee : (BitVec 1)) (walkaddress : AddressDescriptor) (walkaccess : AccessDescriptor) (fault_in : FaultRecord) (N : Nat) (translation_info : TranslationInfo) : SailM (FaultRecord × (BitVec N)) := SailME.run do
-  ArmFull.assert (((N == 32) || (N == 64)) || (N == 128)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19932.41-19932.42"
+  ArmFull.assert (((N == 32) || (N == 64)) || (N == 128)) "sail-arm/v8_base.sail:19932.41-19932.42"
   let descriptor ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1244)
       (Sail.Int.toNatChecked (N)))) ) : SailME (FaultRecord × (BitVec N)) (BitVec N) )
@@ -349,13 +349,13 @@ def AArch64_CheckBreakpoint (fault_in : FaultRecord) (vaddress : (BitVec 64)) (a
   let reason ← (( do (undefined_bitvector_at (← occLabel 1394) 6) ) : SailM (BitVec 6) )
   let w__0 ← (( do (S1TranslationRegime__1 ()) ) : SailM (BitVec 2) )
   let w__1 ← (( do (ELUsingAArch32 w__0) ) : SailM Bool )
-  ArmFull.assert (! w__1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23655.61-23655.62"
+  ArmFull.assert (! w__1) "sail-arm/v8_base.sail:23655.61-23655.62"
   let w__4 ← (( do
     (pure ((← do
           (pure ((← do
                 (UsingAArch32 ())) && (((size == 2) || (size == 4)) : Bool)))) || ((size == 4) : Bool)))
     ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23656.63-23656.64"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:23656.63-23656.64"
   let fault : FaultRecord := fault_in
   let val_match : Bool := false
   let mismatch : Bool := true
@@ -369,7 +369,7 @@ def AArch64_CheckBreakpoint (fault_in : FaultRecord) (vaddress : (BitVec 64)) (a
       for i in [loop_i_lower:loop_i_upper:1]i do
         let (is_mismatch_i, match_i, mismatch, mismatch_bp, val_match) := loop_vars
         loop_vars ← do
-          ArmFull.assert ((i <b 64) || (! (((size == 2) || (size == 4)) || (size == 4)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23662.67-23662.68"
+          ArmFull.assert ((i <b 64) || (! (((size == 2) || (size == 4)) || (size == 4)))) "sail-arm/v8_base.sail:23662.67-23662.68"
           let w__6 ← (( do
             (AArch64_BreakpointMatch (Sail.Int.toNatChecked (i)) vaddress accdesc size) ) : SailM
             (Bool × Bool) )
@@ -408,7 +408,7 @@ def AArch64_CheckWatchpoint (fault_in : FaultRecord) (vaddress : (BitVec 64)) (a
     (BitVec 6) )
   let w__0 ← (( do (S1TranslationRegime__1 ()) ) : SailME FaultRecord (BitVec 2) )
   let w__1 ← (( do (ELUsingAArch32 w__0) ) : SailME FaultRecord Bool )
-  ArmFull.assert (! w__1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23817.61-23817.62"
+  ArmFull.assert (! w__1) "sail-arm/v8_base.sail:23817.61-23817.62"
   let fault : FaultRecord := fault_in
   if ((BEq.beq accdesc.acctype AccessType_DC) : Bool)
   then
@@ -434,7 +434,7 @@ def AArch64_CheckWatchpoint (fault_in : FaultRecord) (vaddress : (BitVec 64)) (a
       for i in [loop_i_lower:loop_i_upper:1]i do
         let fault := loop_vars
         loop_vars ← do
-          ArmFull.assert (i <b 64) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23828.39-23828.40"
+          ArmFull.assert (i <b 64) "sail-arm/v8_base.sail:23828.39-23828.40"
           let w__3 ← (( do
             (AArch64_WatchpointMatch (Sail.Int.toNatChecked (i)) vaddress size accdesc) ) : SailME
             FaultRecord Bool )
@@ -635,8 +635,8 @@ def AArch32_CheckBreakpoint (fault_in : FaultRecord) (vaddress : (BitVec 32)) (a
   let reason ← (( do (undefined_bitvector_at (← occLabel 2665) 6) ) : SailM (BitVec 6) )
   let w__0 ← (( do (S1TranslationRegime__1 ()) ) : SailM (BitVec 2) )
   let w__1 ← (( do (ELUsingAArch32 w__0) ) : SailM Bool )
-  ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40488.51-40488.52"
-  ArmFull.assert ((size == 2) || (size == 4)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40489.32-40489.33"
+  ArmFull.assert w__1 "sail-arm/v8_base.sail:40488.51-40488.52"
+  ArmFull.assert ((size == 2) || (size == 4)) "sail-arm/v8_base.sail:40489.32-40489.33"
   let fault : FaultRecord := fault_in
   let val_match : Bool := false
   let mismatch : Bool := false
@@ -649,7 +649,7 @@ def AArch32_CheckBreakpoint (fault_in : FaultRecord) (vaddress : (BitVec 32)) (a
       for i in [loop_i_lower:loop_i_upper:1]i do
         let (match_i, mismatch, mismatch_i, val_match) := loop_vars
         loop_vars ← do
-          ArmFull.assert ((i <b 16) || (! ((size == 2) || (size == 4)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40494.64-40494.65"
+          ArmFull.assert ((i <b 16) || (! ((size == 2) || (size == 4)))) "sail-arm/v8_base.sail:40494.64-40494.65"
           let w__3 ← (( do
             (AArch32_BreakpointMatch (Sail.Int.toNatChecked (i)) vaddress accdesc size) ) : SailM
             (Bool × Bool) )
@@ -688,7 +688,7 @@ def AArch32_CheckWatchpoint (fault_in : FaultRecord) (vaddress : (BitVec 32)) (a
     (BitVec 6) )
   let w__0 ← (( do (S1TranslationRegime__1 ()) ) : SailME FaultRecord (BitVec 2) )
   let w__1 ← (( do (ELUsingAArch32 w__0) ) : SailME FaultRecord Bool )
-  ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40757.51-40757.52"
+  ArmFull.assert w__1 "sail-arm/v8_base.sail:40757.51-40757.52"
   let fault : FaultRecord := fault_in
   if ((BEq.beq accdesc.acctype AccessType_DC) : Bool)
   then
@@ -723,7 +723,7 @@ def AArch32_CheckWatchpoint (fault_in : FaultRecord) (vaddress : (BitVec 32)) (a
       for i in [loop_i_lower:loop_i_upper:1]i do
         let val_match := loop_vars
         loop_vars ← do
-          ArmFull.assert (i <b 16) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40770.39-40770.40"
+          ArmFull.assert (i <b 16) "sail-arm/v8_base.sail:40770.39-40770.40"
           let w__4 ← (( do
             (AArch32_WatchpointMatch (Sail.Int.toNatChecked (i)) vaddress size accdesc) ) : SailME
             FaultRecord Bool )

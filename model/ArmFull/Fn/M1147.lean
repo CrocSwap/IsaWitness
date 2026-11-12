@@ -118,7 +118,7 @@ def decode_aarch32_instrs_VSQRT_A1enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1))
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:36850.29-36850.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:36850.29-36850.30"
       if (((size == 0b00#2) || ((size == 0b01#2) && (! (HaveFP16Ext ())))) : Bool)
       then sailThrow ((Error_Undefined ()))
       else (pure (()))
@@ -276,7 +276,7 @@ def decode_aarch32_instrs_VSUB_f_A2enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1)
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:39545.29-39545.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:39545.29-39545.30"
       let elements ← (( do (undefined_int_at (← occLabel 3756) ()) ) : SailM Int )
       let regs ← (( do (undefined_int_at (← occLabel 3757) ()) ) : SailM Int )
       let w__3 ← (( do
@@ -663,7 +663,7 @@ def decode_aarch32_instrs_VCMLA_A1enc_A_txt (rot : (BitVec 2)) (D : (BitVec 1)) 
     if ((Q == 0#1) : Bool)
     then 1
     else 2
-  ArmFull.assert ((esize == 16) || (esize == 32)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:46581.41-46581.42"
+  ArmFull.assert ((esize == 16) || (esize == 32)) "sail-arm/instrs32.sail:46581.41-46581.42"
   (execute_aarch32_instrs_VCMLA_Op_A_txt (Sail.Int.toNatChecked (d)) elements
     (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))
     (Sail.Int.toNatChecked (regs)) rot)
@@ -694,7 +694,7 @@ def decode_aarch32_instrs_VCMLA_T1enc_A_txt (rot : (BitVec 2)) (D : (BitVec 1)) 
     if ((Q == 0#1) : Bool)
     then 1
     else 2
-  ArmFull.assert ((esize == 16) || (esize == 32)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:46620.41-46620.42"
+  ArmFull.assert ((esize == 16) || (esize == 32)) "sail-arm/instrs32.sail:46620.41-46620.42"
   (execute_aarch32_instrs_VCMLA_Op_A_txt (Sail.Int.toNatChecked (d)) elements
     (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))
     (Sail.Int.toNatChecked (regs)) rot)
@@ -728,7 +728,7 @@ def decode_aarch32_instrs_VCMLA_idx_A1enc_A_txt (S : (BitVec 1)) (D : (BitVec 1)
     if ((S == 1#1) : Bool)
     then 0
     else (BitVec.toNat M)
-  ArmFull.assert ((0 ≤b m) && ((m ≤b 31) && ((esize == 16) || (esize == 32)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:46716.64-46716.65"
+  ArmFull.assert ((0 ≤b m) && ((m ≤b 31) && ((esize == 16) || (esize == 32)))) "sail-arm/instrs32.sail:46716.64-46716.65"
   (execute_aarch32_instrs_VCMLA_idx_Op_A_txt (Sail.Int.toNatChecked (d)) elements
     (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (index)) (Sail.Int.toNatChecked (m))
     (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (regs)) rot)

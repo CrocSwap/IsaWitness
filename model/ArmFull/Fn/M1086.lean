@@ -784,7 +784,7 @@ def Mem_read__2 (address : (BitVec 64)) (size : Nat) (accdesc : AccessDescriptor
             if ((ispair && aligned) : Bool)
             then
               (do
-                ArmFull.assert ((((halfsize == 1) || (halfsize == 2)) || (halfsize == 4)) || (halfsize == 8)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28194.52-28194.53"
+                ArmFull.assert ((((halfsize == 1) || (halfsize == 2)) || (halfsize == 4)) || (halfsize == 8)) "sail-arm/v8_base.sail:28194.52-28194.53"
                 let highhalf ← (( do
                   ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1644)
                     (Sail.Int.toNatChecked ((halfsize *i 8))))) ) : SailM
@@ -838,8 +838,8 @@ def Mem_read__2 (address : (BitVec 64)) (size : Nat) (accdesc : AccessDescriptor
                       aligned ispair)))
                 else
                   (do
-                    ArmFull.assert (size >b 1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28208.23-28208.24"
-                    ArmFull.assert ((((halfsize == 1) || (halfsize == 2)) || (halfsize == 4)) || (halfsize == 8)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28209.52-28209.53"
+                    ArmFull.assert (size >b 1) "sail-arm/v8_base.sail:28208.23-28208.24"
+                    ArmFull.assert ((((halfsize == 1) || (halfsize == 2)) || (halfsize == 4)) || (halfsize == 8)) "sail-arm/v8_base.sail:28209.52-28209.53"
                     let highhalf ← (( do
                       ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1642)
                         (Sail.Int.toNatChecked ((halfsize *i 8))))) ) : SailM
@@ -904,7 +904,7 @@ def Mem_read__2 (address : (BitVec 64)) (size : Nat) (accdesc : AccessDescriptor
                           ((Sail.BitVec.updateSubrange value_name 7 0 w__19) : (BitVec (size * 8)))
                         let c ← (( do (ConstrainUnpredictable Unpredictable_DEVPAGE2) ) : SailM
                           Constraint )
-                        ArmFull.assert ((BEq.beq c Constraint_FAULT) || (BEq.beq c Constraint_NONE)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28223.63-28223.64"
+                        ArmFull.assert ((BEq.beq c Constraint_FAULT) || (BEq.beq c Constraint_NONE)) "sail-arm/v8_base.sail:28223.63-28223.64"
                         let aligned : Bool :=
                           if ((BEq.beq c Constraint_NONE) : Bool)
                           then true

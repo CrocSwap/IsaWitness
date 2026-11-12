@@ -116,7 +116,7 @@ def decode_aarch32_instrs_VMOV_r_A2enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1)
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:28974.29-28974.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:28974.29-28974.30"
       let w__3 ← (( do
         if ((← do
              let w__1 ← (( do (FPSCR_read__1 ()) ) : SailM (BitVec 32) )
@@ -207,7 +207,7 @@ def decode_aarch32_instrs_VMOV_rs_A1enc_A_txt (cond : (BitVec 4)) (opc1 : (BitVe
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:29062.29-29062.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:29062.29-29062.30"
       let advsimd ← (( do (undefined_bool_at (← occLabel 3513) ()) ) : SailM Bool )
       let esize : Int := 8
       let index ← (( do (undefined_int_at (← occLabel 3514) ()) ) : SailM Int )
@@ -266,7 +266,7 @@ def decode_aarch32_instrs_VMOV_rs_A1enc_A_txt (cond : (BitVec 4)) (opc1 : (BitVe
             (Sail.Int.toNatChecked (t))))
       | _ =>
         (do
-          ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:29105.26-29105.27"
+          ArmFull.assert false "sail-arm/instrs32.sail:29105.26-29105.27"
           throw Error.Exit))
   else (pure (()))
 
@@ -334,7 +334,7 @@ def decode_aarch32_instrs_VMOV_rs_T1enc_A_txt (opc1 : (BitVec 2)) (Vd : (BitVec 
             (Sail.Int.toNatChecked (t))))
       | _ =>
         (do
-          ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:29173.26-29173.27"
+          ArmFull.assert false "sail-arm/instrs32.sail:29173.26-29173.27"
           throw Error.Exit))
   else (pure (()))
 
@@ -344,7 +344,7 @@ def decode_aarch32_instrs_VMOV_s_A1enc_A_txt (cond : (BitVec 4)) (op : (BitVec 1
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:29211.29-29211.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:29211.29-29211.30"
       let to_arm_register : Bool := (op == 1#1)
       let t : Int := (BitVec.toNat Rt)
       let n : Int := (BitVec.toNat (Vn +++ N))
@@ -377,7 +377,7 @@ def decode_aarch32_instrs_VMOV_sr_A1enc_A_txt (cond : (BitVec 4)) (U : (BitVec 1
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:29282.29-29282.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:29282.29-29282.30"
       let advsimd ← (( do (undefined_bool_at (← occLabel 3517) ()) ) : SailM Bool )
       let esize : Int := 8
       let index ← (( do (undefined_int_at (← occLabel 3518) ()) ) : SailM Int )
@@ -443,7 +443,7 @@ def decode_aarch32_instrs_VMOV_sr_A1enc_A_txt (cond : (BitVec 4)) (U : (BitVec 1
             (Sail.Int.toNatChecked (t)) is_unsigned))
       | _ =>
         (do
-          ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:29329.26-29329.27"
+          ArmFull.assert false "sail-arm/instrs32.sail:29329.26-29329.27"
           throw Error.Exit))
   else (pure (()))
 
@@ -518,7 +518,7 @@ def decode_aarch32_instrs_VMOV_sr_T1enc_A_txt (U : (BitVec 1)) (opc1 : (BitVec 2
             (Sail.Int.toNatChecked (t)) is_unsigned))
       | _ =>
         (do
-          ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:29402.26-29402.27"
+          ArmFull.assert false "sail-arm/instrs32.sail:29402.26-29402.27"
           throw Error.Exit))
   else (pure (()))
 
@@ -528,7 +528,7 @@ def decode_aarch32_instrs_VMOV_ss_A1enc_A_txt (cond : (BitVec 4)) (op : (BitVec 
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:29443.29-29443.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:29443.29-29443.30"
       let to_arm_registers : Bool := (op == 1#1)
       let t : Int := (BitVec.toNat Rt)
       let t2 : Int := (BitVec.toNat Rt2)

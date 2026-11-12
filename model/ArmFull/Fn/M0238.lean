@@ -438,7 +438,7 @@ def AArch64_ReservedBreakpointType (n : Int) (bt2_in : (BitVec 1)) (bt_in : (Bit
         let c : Constraint := tup__0
         let bt2 : (BitVec 1) := (Sail.BitVec.extractLsb tup__1 4 4)
         let bt : (BitVec 4) := (Sail.BitVec.extractLsb tup__1 3 0)
-        ArmFull.assert ((BEq.beq c Constraint_DISABLED) || (BEq.beq c Constraint_UNKNOWN)) "/home/doug/boss-scratch/armcert-defects/c27b-accepted/armcert_c27b.sail:362.65-362.66"
+        ArmFull.assert ((BEq.beq c Constraint_DISABLED) || (BEq.beq c Constraint_UNKNOWN)) "armcert/armcert_c27b.sail:362.65-362.66"
         if ((BEq.beq c Constraint_DISABLED) : Bool)
         then
           (do
@@ -625,9 +625,9 @@ def ZAslice_read (tile : Int) (esize : Int) (vertical : Bool) (slice_name : Int)
   if (vertical : Bool)
   then
     (do
-      ArmFull.assert (width ≥b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31219.38-31219.39"
-      ArmFull.assert (esize ≥b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31220.38-31220.39"
-      ArmFull.assert (((slice_name *i esize) ≤b (((slice_name *i esize) +i esize) -i 1)) || (! ((slice_name ≥b 0) && (((slice_name +i 1) *i esize) ≤b width)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31221.151-31221.152"
+      ArmFull.assert (width ≥b 0) "sail-arm/v8_base.sail:31219.38-31219.39"
+      ArmFull.assert (esize ≥b 0) "sail-arm/v8_base.sail:31220.38-31220.39"
+      ArmFull.assert (((slice_name *i esize) ≤b (((slice_name *i esize) +i esize) -i 1)) || (! ((slice_name ≥b 0) && (((slice_name +i 1) *i esize) ≤b width)))) "sail-arm/v8_base.sail:31221.151-31221.152"
       ((Sail.BitVec.castWidth ) <$> (ZAvslice_read tile (Sail.Int.toNatChecked (esize)) slice_name
         width)))
   else
@@ -641,8 +641,8 @@ def ZAslice_set (tile : Int) (esize : Int) (vertical : Bool) (slice_name : Int) 
   if (vertical : Bool)
   then
     (do
-      ArmFull.assert (width ≥b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31235.38-31235.39"
-      ArmFull.assert (esize ≥b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31236.38-31236.39"
+      ArmFull.assert (width ≥b 0) "sail-arm/v8_base.sail:31235.38-31235.39"
+      ArmFull.assert (esize ≥b 0) "sail-arm/v8_base.sail:31236.38-31236.39"
       (ZAvslice_set tile (Sail.Int.toNatChecked (esize)) slice_name width
         (Sail.BitVec.castWidth value_name)))
   else
@@ -716,7 +716,7 @@ def SPEBufferFilled (_ : Unit) : SailM Unit := do
 /-- Type quantifiers: total_latency : Int -/
 def SPECollectRecord (events : (BitVec 64)) (total_latency : Int) (optype : OpType) : SailM Bool := do
   let w__0 ← (( do (StatisticalProfilingEnabled ()) ) : SailM Bool )
-  ArmFull.assert w__0 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34983.40-34983.41"
+  ArmFull.assert w__0 "sail-arm/v8_base.sail:34983.40-34983.41"
   let mask : (BitVec 64) := (Sail.BitVec.zeroExtend 0xAA#8 64)
   let m ← (( do (undefined_bitvector_at (.site 2433) 64) ) : SailM (BitVec 64) )
   let w__1 ← (( do (HaveSVE ()) ) : SailM Bool )

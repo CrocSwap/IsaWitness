@@ -461,7 +461,7 @@ def CacheConfigRead (cache_sel : (BitVec 4)) : SailM (BitVec 64) := do
     then true
     else false
   let level : Int := (BitVec.toNat (Sail.BitVec.extractLsb cache_sel 3 1))
-  ArmFull.assert (level <b 7) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:253.20-253.21"
+  ArmFull.assert (level <b 7) "sail-arm/sysregs.sail:253.20-253.21"
   (getCacheID level data_cache)
 
 
@@ -508,7 +508,7 @@ def decode_aarch32_instrs_TSB_A1enc_A_txt (cond : (BitVec 4)) : SailM Unit := do
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:46053.29-46053.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:46053.29-46053.30"
       let w__1 ← (( do (HaveSelfHostedTrace ()) ) : SailM Bool )
       if ((! w__1) : Bool)
       then
@@ -527,7 +527,7 @@ def decode_aarch32_instrs_CLRBHB_A1enc_A_txt (cond : (BitVec 4)) : SailM Unit :=
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:47977.29-47977.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:47977.29-47977.30"
       let w__1 ← (( do (HaveFeatCLRBHB ()) ) : SailM Bool )
       if ((! w__1) : Bool)
       then
@@ -727,7 +727,7 @@ def execute_aarch64_instrs_integer_bitfield (d : Nat) (datasize : Nat) (extend :
     if (extend : Bool)
     then
       (do
-        ArmFull.assert ((0 ≤b s) && (s <b datasize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:2923.53-2923.54"
+        ArmFull.assert ((0 ≤b s) && (s <b datasize)) "sail-arm/instrs64.sail:2923.53-2923.54"
         (pure ((Sail.BitVec.castWidth (BitVec.replicateBits
             (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access src s)])) datasize)))))
     else (pure (dst)) ) : SailM (BitVec datasize) )

@@ -197,7 +197,7 @@ def AArch32_TakeHypTrapException (ec : Int) : SailM Unit := do
 
 
 def AArch32_CallHypervisor (immediate : (BitVec 16)) : SailM Unit := do
-  ArmFull.assert (HaveEL EL2) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42929.22-42929.23"
+  ArmFull.assert (HaveEL EL2) "sail-arm/v8_base.sail:42929.22-42929.23"
   let w__0 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
   if ((! w__0) : Bool)
   then
@@ -445,7 +445,7 @@ def AArch32_TakeVirtualSErrorException (_ : Unit) : SailM Unit := do
       (do
         (EL2Enabled ()))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43224.63-43224.64"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:43224.63-43224.64"
   let w__5 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
   if (w__5 : Bool)
   then
@@ -459,7 +459,7 @@ def AArch32_TakeVirtualSErrorException (_ : Unit) : SailM Unit := do
             let w__7 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
             (pure ((((_get_HCR_Type_AMO w__7) == 1#1) : Bool))))
         else (pure false) ) : SailM Bool )
-      ArmFull.assert w__8 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43226.62-43226.63")
+      ArmFull.assert w__8 "sail-arm/v8_base.sail:43226.62-43226.63")
   else
     (do
       let w__11 ← (( do
@@ -471,7 +471,7 @@ def AArch32_TakeVirtualSErrorException (_ : Unit) : SailM Unit := do
             let w__10 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
             (pure ((((_get_HCR_EL2_Type_AMO w__10) == 1#1) : Bool))))
         else (pure false) ) : SailM Bool )
-      ArmFull.assert w__11 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43228.56-43228.57")
+      ArmFull.assert w__11 "sail-arm/v8_base.sail:43228.56-43228.57")
   let w__14 ← (( do
     if ((← do
          let w__12 ← (( do readReg PSTATE ) : SailM ProcState )
@@ -682,7 +682,7 @@ def AArch32_TakeVirtualIRQException (_ : Unit) : SailM Unit := do
       (do
         (EL2Enabled ()))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43298.63-43298.64"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:43298.63-43298.64"
   let w__5 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
   if (w__5 : Bool)
   then
@@ -696,7 +696,7 @@ def AArch32_TakeVirtualIRQException (_ : Unit) : SailM Unit := do
             let w__7 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
             (pure ((((_get_HCR_Type_IMO w__7) == 1#1) : Bool))))
         else (pure false) ) : SailM Bool )
-      ArmFull.assert w__8 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43300.62-43300.63")
+      ArmFull.assert w__8 "sail-arm/v8_base.sail:43300.62-43300.63")
   else
     (do
       let w__11 ← (( do
@@ -708,7 +708,7 @@ def AArch32_TakeVirtualIRQException (_ : Unit) : SailM Unit := do
             let w__10 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
             (pure ((((_get_HCR_EL2_Type_IMO w__10) == 1#1) : Bool))))
         else (pure false) ) : SailM Bool )
-      ArmFull.assert w__11 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43302.56-43302.57")
+      ArmFull.assert w__11 "sail-arm/v8_base.sail:43302.56-43302.57")
   let w__14 ← (( do
     if ((← do
          let w__12 ← (( do readReg PSTATE ) : SailM ProcState )

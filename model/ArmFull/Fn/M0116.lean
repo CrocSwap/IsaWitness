@@ -652,7 +652,7 @@ def IsASEInstruction (_ : Unit) : SailM Bool := do
 
 /-- Type quantifiers: N : Nat, List.elem N [16, 32, 64] -/
 def FPZero (sign : (BitVec 1)) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:15627.38-15627.39"
+  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-arm/v8_base.sail:15627.38-15627.39"
   let E : Nat :=
     if ((N == 16) : Bool)
     then 5
@@ -693,7 +693,7 @@ def FPDecodeRM (rm : (BitVec 2)) : SailM FPRounding := do
 
 /-- Type quantifiers: N : Nat, List.elem N [16, 32, 64] -/
 def FPTwo (sign : (BitVec 1)) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:17017.38-17017.39"
+  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-arm/v8_base.sail:17017.38-17017.39"
   let E : Nat :=
     if ((N == 16) : Bool)
     then 5
@@ -713,7 +713,7 @@ def FPTwo (sign : (BitVec 1)) (N : Nat) : SailM (BitVec N) := do
 
 /-- Type quantifiers: N : Nat, List.elem N [16, 32, 64] -/
 def FPThree (sign : (BitVec 1)) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:17825.38-17825.39"
+  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-arm/v8_base.sail:17825.38-17825.39"
   let E : Nat :=
     if ((N == 16) : Bool)
     then 5
@@ -733,7 +733,7 @@ def FPThree (sign : (BitVec 1)) (N : Nat) : SailM (BitVec N) := do
 
 /-- Type quantifiers: N : Nat, List.elem N [16, 32, 64] -/
 def VFPExpandImm (imm8 : (BitVec 8)) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:17939.38-17939.39"
+  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-arm/v8_base.sail:17939.38-17939.39"
   let E : Nat :=
     if ((N == 16) : Bool)
     then 5

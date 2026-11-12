@@ -510,11 +510,11 @@ def Extend (x : (BitVec k_M)) (N : Nat) (is_unsigned : Bool) : SailM (BitVec N) 
   if (is_unsigned : Bool)
   then
     (do
-      ArmFull.assert (((Sail.BitVec.length x) ≥b 0) && (N ≥b (Sail.BitVec.length x))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/builtins.sail:121.47-121.48"
+      ArmFull.assert (((Sail.BitVec.length x) ≥b 0) && (N ≥b (Sail.BitVec.length x))) "sail-arm/builtins.sail:121.47-121.48"
       (pure ((Sail.BitVec.castWidth (Sail.BitVec.zeroExtend x N)))))
   else
     (do
-      ArmFull.assert (((Sail.BitVec.length x) >b 0) && (N ≥b (Sail.BitVec.length x))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/builtins.sail:124.46-124.47"
+      ArmFull.assert (((Sail.BitVec.length x) >b 0) && (N ≥b (Sail.BitVec.length x))) "sail-arm/builtins.sail:124.46-124.47"
       (pure ((Sail.BitVec.castWidth (sign_extend x N)))))
 
 

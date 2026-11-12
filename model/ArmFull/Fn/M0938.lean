@@ -171,7 +171,7 @@ def execute_FEXPA_Z_Z__ (VL : Nat) (d : Nat) (esize : Nat) (n : Nat) : SailM Uni
         loop_vars ← do
           let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) : SailM
             (BitVec esize) )
-          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:7557.49-7557.50"
+          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:7557.49-7557.50"
           let w__0 ← (( do (FPExpA element) ) : SailM (BitVec esize) )
           (Elem_set result e esize (Sail.BitVec.castWidth w__0))
       (pure loop_vars)) ) : SailM (BitVec VL) )
@@ -273,7 +273,7 @@ def execute_ADR_Z_AZ_SD_same_scaled (VL : Nat) (d : Nat) (esize : Nat) (m : Nat)
         loop_vars ← do
           let addr ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read base e esize)) ) : SailM
             (BitVec esize) )
-          ArmFull.assert ((osize -i 1) <b esize) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:12914.46-12914.47"
+          ArmFull.assert ((osize -i 1) <b esize) "sail-arm/instrs64_sve.sail:12914.46-12914.47"
           let w__0 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read offs e esize)) ) : SailM
             (BitVec esize) )
           let offset ← (( do

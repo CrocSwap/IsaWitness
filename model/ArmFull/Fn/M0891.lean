@@ -720,7 +720,7 @@ def execute_EXTQ_Z_ZI_Des (VL : Nat) (dn : Nat) (m : Nat) (position : Int) : Sai
           let w__0 ← (( do (Elem_read operand2 s 128) ) : SailM (BitVec 128) )
           let w__1 ← (( do (Elem_read operand1 s 128) ) : SailM (BitVec 128) )
           let concat : (BitVec 256) := (w__0 +++ w__1)
-          ArmFull.assert ((0 ≤b position) && ((position +i 127) <b 256)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:54880.67-54880.68"
+          ArmFull.assert ((0 ≤b position) && ((position +i 127) <b 256)) "sail-arm/instrs64_sve.sail:54880.67-54880.68"
           (Elem_set result s 128
             (Sail.BitVec.castWidth (Sail.BitVec.extractLsb concat
               (Sail.Int.toNatChecked ((position +i 127))) (Sail.Int.toNatChecked (position)))))

@@ -530,7 +530,7 @@ def decode_aarch32_instrs_VMRS_A1enc_AS_txt (cond : (BitVec 4)) (reg : (BitVec 4
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:41998.29-41998.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:41998.29-41998.30"
       let t : Int := (BitVec.toNat Rt)
       if ((let b__0 := reg
          (! (if (((Sail.BitVec.castWidth (m := 3) (Sail.BitVec.extractLsb b__0 3 1)) == (0b000#3 : (BitVec 3))) : Bool)
@@ -587,7 +587,7 @@ def decode_aarch32_instrs_VMSR_A1enc_AS_txt (cond : (BitVec 4)) (reg : (BitVec 4
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:42089.29-42089.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:42089.29-42089.30"
       let t : Int := (BitVec.toNat Rt)
       if (((let b__0 := reg
            (! (if (((Sail.BitVec.castWidth (m := 3) (Sail.BitVec.extractLsb b__0 3 1)) == (0b000#3 : (BitVec 3))) : Bool)
@@ -596,7 +596,7 @@ def decode_aarch32_instrs_VMSR_A1enc_AS_txt (cond : (BitVec 4)) (reg : (BitVec 4
       then
         (do
           let c ← (( do (ConstrainUnpredictable Unpredictable_VMSR) ) : SailM Constraint )
-          ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:42096.62-42096.63"
+          ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-arm/instrs32.sail:42096.62-42096.63"
           match c with
           | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
           | .Constraint_NOP =>
@@ -624,7 +624,7 @@ def decode_aarch32_instrs_VMSR_T1enc_AS_txt (reg : (BitVec 4)) (Rt : (BitVec 4))
       then
         (do
           let c ← (( do (ConstrainUnpredictable Unpredictable_VMSR) ) : SailM Constraint )
-          ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:42137.62-42137.63"
+          ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-arm/instrs32.sail:42137.62-42137.63"
           match c with
           | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
           | .Constraint_NOP =>

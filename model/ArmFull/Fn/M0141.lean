@@ -610,7 +610,7 @@ def ZeroUnsignedSatQ (i : Int) (N : Nat) (M : Nat) : SailM ((BitVec M) × Bool) 
     if ((N >b 0) : Bool)
     then
       (do
-        ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b M)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:57129.54-57129.55"
+        ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b M)) "sail-arm/v8_base.sail:57129.54-57129.55"
         let fullresult : (BitVec M) :=
           (Sail.BitVec.updateSubrange fullresult (Sail.Int.toNatChecked ((N -i 1))) 0
             (Sail.BitVec.castWidth (integer_subrange result (N -i 1) 0)))
@@ -653,7 +653,7 @@ def CPYSizeChoice (toaddress : (BitVec 64)) (fromaddress : (BitVec 64)) (cpysize
     if ((remaining <b N) : Bool)
     then remaining
     else N
-  ArmFull.assert (limit ≥b 1) "/home/doug/boss-scratch/armcert-defects/c27-accepted/armcert_c27.sail:377.21-377.22"
+  ArmFull.assert (limit ≥b 1) "armcert/armcert_c27.sail:377.21-377.22"
   (undefined_range_at (← occLabel 2864) 1 limit)
 
 
@@ -735,9 +735,9 @@ def SETPreSizeChoice (toaddress : (BitVec 64)) (setsize : (BitVec 64)) (IsSETGP 
 
 /-- Type quantifiers: AlignSize : Int, remaining : Int -/
 def SETSizeChoice (toaddress : (BitVec 64)) (setsize : (BitVec 64)) (AlignSize : Int) (remaining : Int) : SailM Int := do
-  ArmFull.assert ((AlignSize == 1) || (AlignSize == 16)) "/home/doug/boss-scratch/armcert-defects/c27-accepted/armcert_c27.sail:386.43-386.44"
+  ArmFull.assert ((AlignSize == 1) || (AlignSize == 16)) "armcert/armcert_c27.sail:386.43-386.44"
   let units : Int := (fdiv_int remaining AlignSize)
-  ArmFull.assert (units ≥b 1) "/home/doug/boss-scratch/armcert-defects/c27-accepted/armcert_c27.sail:388.21-388.22"
+  ArmFull.assert (units ≥b 1) "armcert/armcert_c27.sail:388.21-388.22"
   let selected ← (( do
     ((fun n => Sail.Int.toNatChecked n) <$> ((undefined_range_at (← occLabel 2867) 1 units))) ) :
     SailM Nat )

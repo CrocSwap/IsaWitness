@@ -588,7 +588,7 @@ def execute_aarch64_instrs_vector_shift_right_narrow_nonuniform_sisd (d : Nat) (
   List.elem datasize [4, 8, 16, 32, 64, 128] ∧ 0 ≤ d ∧ d ≤ 31 -/
 def execute_aarch64_instrs_vector_shift_left_sat_sisd (d : Nat) (datasize : Nat) (dst_unsigned : Bool) (elements : Int) (esize : Nat) (n : Nat) (shift : Int) (src_unsigned : Bool) : SailM Unit := do
   (CheckFPAdvSIMDEnabled64 ())
-  ArmFull.assert (((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:48981.56-48981.57"
+  ArmFull.assert (((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) "sail-arm/instrs64.sail:48981.56-48981.57"
   let operand ← (( do ((Sail.BitVec.castWidth ) <$> (V_read n datasize)) ) : SailM
     (BitVec datasize) )
   let result ← (( do

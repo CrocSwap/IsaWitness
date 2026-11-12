@@ -514,7 +514,7 @@ def execute_aarch32_instrs_LDM_e_Op_AS_txt (increment_name : Bool) (n : Nat) (re
                   else (pure (address))
               (pure loop_vars)) ) : SailM (BitVec 32) )
           let new_pc_value ← (( do (MemS_read address 4) ) : SailM (BitVec 32) )
-          ArmFull.assert ((0 ≤b n) && (n <b 15)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:40979.46-40979.47"
+          ArmFull.assert ((0 ≤b n) && (n <b 15)) "sail-arm/instrs32.sail:40979.46-40979.47"
           if ((wback && ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access registers n)])) == 0#1)) : Bool)
           then
             (do

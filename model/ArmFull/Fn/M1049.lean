@@ -190,7 +190,7 @@ def decode_aarch32_instrs_VDUP_r_A1enc_A_txt (cond : (BitVec 4)) (B : (BitVec 1)
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:23626.29-23626.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:23626.29-23626.30"
       if (((Q == 1#1) && ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vd 0)])) == 1#1)) : Bool)
       then sailThrow ((Error_Undefined ()))
       else (pure (()))

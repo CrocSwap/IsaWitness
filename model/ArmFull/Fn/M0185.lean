@@ -197,7 +197,7 @@ def CheckValidStateMatch (ssc_in : (BitVec 2)) (ssce_in : (BitVec 1)) (hmc_in : 
   if ((! w__0) : Bool)
   then
     (do
-      ArmFull.assert (ssce_in == 0#1) "/home/doug/boss-scratch/armcert-defects/c27b-accepted/armcert_c27b.sail:442.29-442.30")
+      ArmFull.assert (ssce_in == 0#1) "armcert/armcert_c27b.sail:442.29-442.30")
   else (pure (()))
   let reserved : Bool := false
   let ssc : (BitVec 2) := ssc_in
@@ -297,7 +297,7 @@ def CheckValidStateMatch (ssc_in : (BitVec 2)) (ssce_in : (BitVec 1)) (hmc_in : 
         let ssc : (BitVec 2) := (Sail.BitVec.extractLsb tup__1 4 3)
         let ssce : (BitVec 1) := (Sail.BitVec.extractLsb tup__1 2 2)
         let pxc : (BitVec 2) := (Sail.BitVec.extractLsb tup__1 1 0)
-        ArmFull.assert ((BEq.beq c Constraint_DISABLED) || (BEq.beq c Constraint_UNKNOWN)) "/home/doug/boss-scratch/armcert-defects/c27b-accepted/armcert_c27b.sail:498.65-498.66"
+        ArmFull.assert ((BEq.beq c Constraint_DISABLED) || (BEq.beq c Constraint_UNKNOWN)) "armcert/armcert_c27b.sail:498.65-498.66"
         if ((BEq.beq c Constraint_DISABLED) : Bool)
         then
           (do
@@ -376,7 +376,7 @@ def AArch64_DecodeDescriptorType (descriptor : (BitVec k_N)) (d128 : (BitVec 1))
       if ((d128 == 1#1) : Bool)
       then
         (do
-          ArmFull.assert (110 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:24904.35-24904.36"
+          ArmFull.assert (110 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:24904.35-24904.36"
           let skl : (BitVec 2) := (Sail.BitVec.extractLsb descriptor 110 109)
           (pure (if ((((BEq.beq tgx TGx_16KB) || (BEq.beq tgx TGx_64KB)) && (((BitVec.toNat skl) == 3) : Bool)) : Bool)
             then DescriptorType_Invalid
@@ -390,7 +390,7 @@ def AArch64_DecodeDescriptorType (descriptor : (BitVec k_N)) (d128 : (BitVec 1))
                 else DescriptorType_Table)))))
       else
         (do
-          ArmFull.assert (1 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:24918.33-24918.34"
+          ArmFull.assert (1 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:24918.33-24918.34"
           if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 1)])) == 1#1) : Bool)
           then
             (pure (if ((level == FINAL_LEVEL) : Bool)
@@ -486,7 +486,7 @@ def AArch64_S1ApplyTablePerms (permissions_in : Permissions) (descriptor : (BitV
         if ((walkparams.d128 == 1#1) : Bool)
         then
           (do
-            ArmFull.assert (126 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25581.39-25581.40"
+            ArmFull.assert (126 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25581.39-25581.40"
             let ap_table : (BitVec 2) :=
               ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 126)])) +++ 0#1)
             let pxn_table : (BitVec 1) :=
@@ -494,7 +494,7 @@ def AArch64_S1ApplyTablePerms (permissions_in : Permissions) (descriptor : (BitV
             (pure ((ap_table, pxn_table))))
         else
           (do
-            ArmFull.assert (62 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25585.38-25585.39"
+            ArmFull.assert (62 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25585.38-25585.39"
             let ap_table : (BitVec 2) :=
               ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 62)])) +++ 0#1)
             let pxn_table : (BitVec 1) :=
@@ -514,7 +514,7 @@ def AArch64_S1ApplyTablePerms (permissions_in : Permissions) (descriptor : (BitV
             if ((walkparams.d128 == 1#1) : Bool)
             then
               (do
-                ArmFull.assert (126 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25593.39-25593.40"
+                ArmFull.assert (126 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25593.39-25593.40"
                 let ap_table : (BitVec 2) := (Sail.BitVec.extractLsb descriptor 126 125)
                 let uxn_table : (BitVec 1) :=
                   (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 124)]))
@@ -523,7 +523,7 @@ def AArch64_S1ApplyTablePerms (permissions_in : Permissions) (descriptor : (BitV
                 (pure ((ap_table, pxn_table, uxn_table))))
             else
               (do
-                ArmFull.assert (62 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25598.38-25598.39"
+                ArmFull.assert (62 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25598.38-25598.39"
                 let ap_table : (BitVec 2) := (Sail.BitVec.extractLsb descriptor 62 61)
                 let uxn_table : (BitVec 1) :=
                   (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 60)]))
@@ -544,7 +544,7 @@ def AArch64_S1ApplyTablePerms (permissions_in : Permissions) (descriptor : (BitV
             if ((walkparams.d128 == 1#1) : Bool)
             then
               (do
-                ArmFull.assert (126 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25608.39-25608.40"
+                ArmFull.assert (126 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25608.39-25608.40"
                 let ap_table : (BitVec 2) :=
                   ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 126)])) +++ 0#1)
                 let xn_table : (BitVec 1) :=
@@ -552,7 +552,7 @@ def AArch64_S1ApplyTablePerms (permissions_in : Permissions) (descriptor : (BitV
                 (pure ((ap_table, xn_table))))
             else
               (do
-                ArmFull.assert (62 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25612.38-25612.39"
+                ArmFull.assert (62 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25612.38-25612.39"
                 let ap_table : (BitVec 2) :=
                   ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 62)])) +++ 0#1)
                 let xn_table : (BitVec 1) :=

@@ -149,12 +149,12 @@ def AArch64_MemZero (regval : (BitVec 64)) (cachetype : CacheType) : SailM Unit 
   let w__0 ← (( do readReg DCZID_EL0 ) : SailM (BitVec 64) )
   let size : Nat :=
     (Sail.Int.toNatChecked ((4 *i (2 ^i (BitVec.toNat (_get_DCZID_EL0_Type_BS w__0))))))
-  ArmFull.assert (size ≤b MAX_ZERO_BLOCK_SIZE) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36724.38-36724.39"
+  ArmFull.assert (size ≤b MAX_ZERO_BLOCK_SIZE) "sail-arm/v8_base.sail:36724.38-36724.39"
   let w__1 ← (( do (HaveMTE2Ext ()) ) : SailM Bool )
   if (w__1 : Bool)
   then
     (do
-      ArmFull.assert (size ≥b TAG_GRANULE) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36726.34-36726.35")
+      ArmFull.assert (size ≥b TAG_GRANULE) "sail-arm/v8_base.sail:36726.34-36726.35")
   else (pure (()))
   let vaddress : (BitVec 64) := (Align_bits regval size)
   let tagaccess : Bool :=
@@ -192,7 +192,7 @@ def FPHalvedSub (op1 : (BitVec k_N)) (op2 : (BitVec k_N)) (fpcr : (BitVec 64)) :
   let zero1 ← (( do (undefined_bool_at (← occLabel 2733) ()) ) : SailM Bool )
   let zero2 ← (( do (undefined_bool_at (← occLabel 2734) ()) ) : SailM Bool )
   ArmFull.assert (((Sail.BitVec.length result) == 16) || (((Sail.BitVec.length result) == 32) || ((Sail.BitVec.length
-          result) == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:41774.41-41774.42"
+          result) == 64))) "sail-arm/v8_base.sail:41774.41-41774.42"
   let rounding ← (( do (FPRoundingMode fpcr) ) : SailM FPRounding )
   let w__0 ← (( do (FPUnpack op1 fpcr) ) : SailM (FPType × (BitVec 1) × real) )
   let (tup__0, tup__1, tup__2) := (w__0 : (FPType × (BitVec 1) × real))
@@ -264,7 +264,7 @@ def FPHalvedSub (op1 : (BitVec k_N)) (op2 : (BitVec k_N)) (fpcr : (BitVec 64)) :
 /-- Type quantifiers: k_ispair : Bool, size : Nat, List.elem size [1, 2, 4, 8, 16] -/
 def Mem_with_type_read__1 (address : (BitVec 32)) (size : Nat) (accdesc : AccessDescriptor) (ispair : Bool) : SailM (BitVec (size * 8)) := do
   let c ← (( do (undefined_Constraint (← occLabel 2763) ()) ) : SailM Constraint )
-  ArmFull.assert ((size == 1) || ((size == 2) || ((size == 4) || ((size == 8) || (size == 16))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:41981.69-41981.70"
+  ArmFull.assert ((size == 1) || ((size == 2) || ((size == 4) || ((size == 8) || (size == 16))))) "sail-arm/v8_base.sail:41981.69-41981.70"
   let halfsize : Nat := (Sail.Int.toNatChecked ((Int.ediv size 2)))
   let value_name ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 2764)
@@ -293,12 +293,12 @@ def Mem_with_type_read__1 (address : (BitVec 32)) (size : Nat) (accdesc : Access
         ((Sail.BitVec.castWidth ) <$> (AArch32_MemSingle_read__1 address size accdesc aligned ispair)))
     else
       (do
-        ArmFull.assert (size >b 1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:41992.23-41992.24"
+        ArmFull.assert (size >b 1) "sail-arm/v8_base.sail:41992.23-41992.24"
         let w__4 ← (( do (AArch32_MemSingle_read address 1 accdesc aligned) ) : SailM
           (BitVec (1 * 8)) )
         let value_name := ((Sail.BitVec.updateSubrange value_name 7 0 w__4) : (BitVec (size * 8)))
         let c ← (( do (ConstrainUnpredictable Unpredictable_DEVPAGE2) ) : SailM Constraint )
-        ArmFull.assert ((BEq.beq c Constraint_FAULT) || (BEq.beq c Constraint_NONE)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:41995.59-41995.60"
+        ArmFull.assert ((BEq.beq c Constraint_FAULT) || (BEq.beq c Constraint_NONE)) "sail-arm/v8_base.sail:41995.59-41995.60"
         let aligned : Bool :=
           if ((BEq.beq c Constraint_NONE) : Bool)
           then true
@@ -353,22 +353,22 @@ def Mem_with_type_set__1 (address : (BitVec 32)) (size : Nat) (accdesc : AccessD
     if (w__3 : Bool)
     then
       (do
-        ArmFull.assert (((size *i 8) == 8) || (((size *i 8) == 16) || (((size *i 8) == 32) || (((size *i 8) == 64) || ((size *i 8) == 128))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42031.116-42031.117"
+        ArmFull.assert (((size *i 8) == 8) || (((size *i 8) == 16) || (((size *i 8) == 32) || (((size *i 8) == 64) || ((size *i 8) == 128))))) "sail-arm/v8_base.sail:42031.116-42031.117"
         let value_name : (BitVec (size * 8)) := (reverse_endianness value_name)
         (pure (value_name)))
     else (pure (value_name)) ) : SailM (BitVec (size * 8)) )
   if (aligned : Bool)
   then
     (do
-      ArmFull.assert (((((size == 1) || (size == 2)) || (size == 4)) || (size == 8)) || (size == 16)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42035.52-42035.53"
+      ArmFull.assert (((((size == 1) || (size == 2)) || (size == 4)) || (size == 8)) || (size == 16)) "sail-arm/v8_base.sail:42035.52-42035.53"
       (AArch32_MemSingle_set__1 address size accdesc aligned ispair
         (Sail.BitVec.castWidth value_name)))
   else
     (do
-      ArmFull.assert (size >b 1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42038.23-42038.24"
+      ArmFull.assert (size >b 1) "sail-arm/v8_base.sail:42038.23-42038.24"
       (AArch32_MemSingle_set address 1 accdesc aligned (Sail.BitVec.extractLsb value_name 7 0))
       let c ← (( do (ConstrainUnpredictable Unpredictable_DEVPAGE2) ) : SailM Constraint )
-      ArmFull.assert ((BEq.beq c Constraint_FAULT) || (BEq.beq c Constraint_NONE)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42041.59-42041.60"
+      ArmFull.assert ((BEq.beq c Constraint_FAULT) || (BEq.beq c Constraint_NONE)) "sail-arm/v8_base.sail:42041.59-42041.60"
       let aligned : Bool :=
         if ((BEq.beq c Constraint_NONE) : Bool)
         then true
@@ -730,7 +730,7 @@ def decode_aarch32_instrs_MRC_A1enc_A_txt (cond : (BitVec 4)) (opc1 : (BitVec 3)
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:7790.29-7790.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:7790.29-7790.30"
       let t : Int := (BitVec.toNat Rt)
       let cp : Int :=
         if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access coproc 0)])) == 0#1) : Bool)

@@ -608,7 +608,7 @@ def execute_aarch64_instrs_memory_atomicops_swp (acquire : Bool) (datasize : Nat
     (BitVec datasize) )
   let data ← (( do (MemAtomic address comparevalue store_value accdesc) ) : SailM
     (BitVec datasize) )
-  ArmFull.assert (regsize ≥b datasize) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:51787.44-51787.45"
+  ArmFull.assert (regsize ≥b datasize) "sail-arm/instrs64.sail:51787.44-51787.45"
   (X_set t regsize (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend data regsize)))
   let w__2 ← (( do readReg SPESampleInFlight ) : SailM Bool )
   if (w__2 : Bool)
@@ -702,37 +702,37 @@ def execute_FCMGE_P_P_Z0__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (n : Nat
                 match op with
                 | .Cmp_EQ =>
                   (do
-                    ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:635.59-635.60"
+                    ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:635.59-635.60"
                     let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
                     (FPCompareEQ element (Sail.BitVec.castWidth (integer_subrange 0 (esize -i 1) 0))
                       w__3))
                 | .Cmp_GE =>
                   (do
-                    ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:639.59-639.60"
+                    ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:639.59-639.60"
                     let w__5 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
                     (FPCompareGE element (Sail.BitVec.castWidth (integer_subrange 0 (esize -i 1) 0))
                       w__5))
                 | .Cmp_GT =>
                   (do
-                    ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:643.59-643.60"
+                    ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:643.59-643.60"
                     let w__7 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
                     (FPCompareGT element (Sail.BitVec.castWidth (integer_subrange 0 (esize -i 1) 0))
                       w__7))
                 | .Cmp_NE =>
                   (do
-                    ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:647.59-647.60"
+                    ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:647.59-647.60"
                     let w__9 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
                     (FPCompareNE element (Sail.BitVec.castWidth (integer_subrange 0 (esize -i 1) 0))
                       w__9))
                 | .Cmp_LT =>
                   (do
-                    ArmFull.assert (((((esize -i 1) -i 0) +i 1) == 16) || (((((esize -i 1) -i 0) +i 1) == 32) || ((((esize -i 1) -i 0) +i 1) == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:651.117-651.118"
+                    ArmFull.assert (((((esize -i 1) -i 0) +i 1) == 16) || (((((esize -i 1) -i 0) +i 1) == 32) || ((((esize -i 1) -i 0) +i 1) == 64))) "sail-arm/instrs64_sve.sail:651.117-651.118"
                     let w__11 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
                     (FPCompareGT (Sail.BitVec.castWidth (integer_subrange 0 (esize -i 1) 0)) element
                       w__11))
                 | .Cmp_LE =>
                   (do
-                    ArmFull.assert (((((esize -i 1) -i 0) +i 1) == 16) || (((((esize -i 1) -i 0) +i 1) == 32) || ((((esize -i 1) -i 0) +i 1) == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:655.117-655.118"
+                    ArmFull.assert (((((esize -i 1) -i 0) +i 1) == 16) || (((((esize -i 1) -i 0) +i 1) == 32) || ((((esize -i 1) -i 0) +i 1) == 64))) "sail-arm/instrs64_sve.sail:655.117-655.118"
                     let w__13 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
                     (FPCompareGE (Sail.BitVec.castWidth (integer_subrange 0 (esize -i 1) 0)) element
                       w__13))

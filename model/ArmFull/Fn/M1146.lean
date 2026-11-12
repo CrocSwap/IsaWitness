@@ -174,7 +174,7 @@ def decode_aarch32_instrs_VMUL_s_T1enc_A_txt (Q : (BitVec 1)) (D : (BitVec 1)) (
       let index : Int := index
       let esize : Int := esize
       let elements : Int := elements
-      ArmFull.assert (((regs == 1) || (regs == 2)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 15) && (((((index == 0) || (index == 1)) || (index == 2)) || (index == 3)) && (((esize == 16) || (esize == 32)) && (((elements == 2) || (elements == 4)) && ((0 ≤b d) && (d ≤b 31)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:30160.175-30160.176"
+      ArmFull.assert (((regs == 1) || (regs == 2)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 15) && (((((index == 0) || (index == 1)) || (index == 2)) || (index == 3)) && (((esize == 16) || (esize == 32)) && (((elements == 2) || (elements == 4)) && ((0 ≤b d) && (d ≤b 31)))))))))) "sail-arm/instrs32.sail:30160.175-30160.176"
       (execute_aarch32_instrs_VMUL_s_Op_A_txt (Sail.Int.toNatChecked (d))
         (Sail.Int.toNatChecked (elements)) (Sail.Int.toNatChecked (esize)) floating_point
         (Sail.Int.toNatChecked (index)) long_destination (Sail.Int.toNatChecked (m))
@@ -226,7 +226,7 @@ def decode_aarch32_instrs_VMUL_s_T2enc_A_txt (U : (BitVec 1)) (D : (BitVec 1)) (
       let index : Int := index
       let esize : Int := esize
       let elements : Int := elements
-      ArmFull.assert (((regs == 1) || (regs == 2)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 15) && (((((index == 0) || (index == 1)) || (index == 2)) || (index == 3)) && (((esize == 16) || (esize == 32)) && (((elements == 2) || (elements == 4)) && ((0 ≤b d) && (d ≤b 31)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:30216.175-30216.176"
+      ArmFull.assert (((regs == 1) || (regs == 2)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 15) && (((((index == 0) || (index == 1)) || (index == 2)) || (index == 3)) && (((esize == 16) || (esize == 32)) && (((elements == 2) || (elements == 4)) && ((0 ≤b d) && (d ≤b 31)))))))))) "sail-arm/instrs32.sail:30216.175-30216.176"
       (execute_aarch32_instrs_VMUL_s_Op_A_txt (Sail.Int.toNatChecked (d))
         (Sail.Int.toNatChecked (elements)) (Sail.Int.toNatChecked (esize)) floating_point
         (Sail.Int.toNatChecked (index)) long_destination (Sail.Int.toNatChecked (m))
@@ -239,7 +239,7 @@ def decode_aarch32_instrs_VNMLA_A1enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1))
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:30788.29-30788.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:30788.29-30788.30"
       let w__3 ← (( do
         if ((← do
              let w__1 ← (( do (FPSCR_read__1 ()) ) : SailM (BitVec 32) )
@@ -308,7 +308,7 @@ def decode_aarch32_instrs_VNMLA_A2enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1))
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:30852.29-30852.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:30852.29-30852.30"
       let w__3 ← (( do
         if ((← do
              let w__1 ← (( do (FPSCR_read__1 ()) ) : SailM (BitVec 32) )

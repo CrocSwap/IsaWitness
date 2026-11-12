@@ -195,7 +195,7 @@ def execute_FSQRT_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (n : Nat)
             (do
               let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
                 SailM (BitVec esize) )
-              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:3310.53-3310.54"
+              ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:3310.53-3310.54"
               let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
               let w__4 ← (( do (FPSqrt element w__3) ) : SailM (BitVec esize) )
               (Elem_set result e esize (Sail.BitVec.castWidth w__4)))

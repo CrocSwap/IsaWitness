@@ -673,7 +673,7 @@ def execute_aarch64_instrs_vector_arithmetic_binary_uniform_add_fp_complex (d : 
             match rot with
             | 0 =>
               (do
-                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:12690.55-12690.56"
+                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:12690.55-12690.56"
                 let w__0 ← (( do
                   ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 ((e *i 2) +i 1) esize)) ) :
                   SailM (BitVec esize) )
@@ -690,14 +690,14 @@ def execute_aarch64_instrs_vector_arithmetic_binary_uniform_add_fp_complex (d : 
                   ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 ((e *i 2) +i 1) esize)) ) :
                   SailM (BitVec esize) )
                 let element1 := (w__3 : (BitVec esize))
-                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:12696.55-12696.56"
+                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:12696.55-12696.56"
                 let w__4 ← (( do
                   ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 (e *i 2) esize)) ) : SailM
                   (BitVec esize) )
                 let w__5 ← (( do (FPNeg w__4) ) : SailM (BitVec esize) )
                 let element3 := (w__5 : (BitVec esize))
                 (pure ((element1, element3)))) ) : SailM ((BitVec esize) × (BitVec esize)) )
-          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:12700.49-12700.50"
+          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:12700.49-12700.50"
           let w__6 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 (e *i 2) esize)) ) :
             SailM (BitVec esize) )
           let w__7 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )

@@ -395,7 +395,7 @@ def GPTLevel0Index (pa : (BitVec 56)) : SailM Int := do
   then (pure (0))
   else
     (do
-      ArmFull.assert ((0 ≤b l0sz) && ((pps -i 1) <b 56)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19758.51-19758.52"
+      ArmFull.assert ((0 ≤b l0sz) && ((pps -i 1) <b 56)) "sail-arm/v8_base.sail:19758.51-19758.52"
       (pure ((BitVec.toNat
           (Sail.BitVec.extractLsb pa (Sail.Int.toNatChecked ((pps -i 1)))
             (Sail.Int.toNatChecked (l0sz)))))))
@@ -408,15 +408,15 @@ def GPTLevel1Index (pa : (BitVec 56)) : SailM Int := do
   match w__1 with
   | .PGS_4KB =>
     (do
-      ArmFull.assert ((16 ≤b (l0sz -i 1)) && ((l0sz -i 1) <b 56)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19768.63-19768.64"
+      ArmFull.assert ((16 ≤b (l0sz -i 1)) && ((l0sz -i 1) <b 56)) "sail-arm/v8_base.sail:19768.63-19768.64"
       (pure ((BitVec.toNat (Sail.BitVec.extractLsb pa (Sail.Int.toNatChecked ((l0sz -i 1))) 16)))))
   | .PGS_16KB =>
     (do
-      ArmFull.assert ((18 ≤b (l0sz -i 1)) && ((l0sz -i 1) <b 56)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19772.63-19772.64"
+      ArmFull.assert ((18 ≤b (l0sz -i 1)) && ((l0sz -i 1) <b 56)) "sail-arm/v8_base.sail:19772.63-19772.64"
       (pure ((BitVec.toNat (Sail.BitVec.extractLsb pa (Sail.Int.toNatChecked ((l0sz -i 1))) 18)))))
   | .PGS_64KB =>
     (do
-      ArmFull.assert ((20 ≤b (l0sz -i 1)) && ((l0sz -i 1) <b 56)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19776.63-19776.64"
+      ArmFull.assert ((20 ≤b (l0sz -i 1)) && ((l0sz -i 1) <b 56)) "sail-arm/v8_base.sail:19776.63-19776.64"
       (pure ((BitVec.toNat (Sail.BitVec.extractLsb pa (Sail.Int.toNatChecked ((l0sz -i 1))) 20)))))
 
 
@@ -444,8 +444,8 @@ def StageOA (ia : (BitVec 64)) (d128 : (BitVec 1)) (tgx : TGx) (walkstate : TTWS
   let csize : Int := csize
   let ia_msb : Int := (tsize +i csize)
   let oa : FullAddress := { oa with paspace := walkstate.baseaddress.paspace }
-  ArmFull.assert ((0 ≤b ia_msb) && (ia_msb ≤b 55)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:20052.53-20052.54"
-  ArmFull.assert (0 ≤b (ia_msb -i 1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:20053.39-20053.40"
+  ArmFull.assert ((0 ≤b ia_msb) && (ia_msb ≤b 55)) "sail-arm/v8_base.sail:20052.53-20052.54"
+  ArmFull.assert (0 ≤b (ia_msb -i 1)) "sail-arm/v8_base.sail:20053.39-20053.40"
   let oa : FullAddress :=
     { oa with address := (Sail.BitVec.castWidth (m := 56) ((Sail.BitVec.extractLsb
           walkstate.baseaddress.address 55 (Sail.Int.toNatChecked (ia_msb))) +++ (Sail.BitVec.extractLsb
@@ -577,8 +577,8 @@ def ComputePACIMPDEF (data : (BitVec 64)) (modifier : (BitVec 64)) (key0 : (BitV
 
 /-- Type quantifiers: n : Int, width : Nat, List.elem width [8, 16, 32, 64] -/
 def X_read (n : Int) (width : Nat) : SailM (BitVec width) := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22319.27-22319.28"
-  ArmFull.assert ((width == 8) || ((width == 16) || ((width == 32) || (width == 64)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22320.63-22320.64"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-arm/v8_base.sail:22319.27-22319.28"
+  ArmFull.assert ((width == 8) || ((width == 16) || ((width == 32) || (width == 64)))) "sail-arm/v8_base.sail:22320.63-22320.64"
   if ((n != 31) : Bool)
   then
     (do
@@ -641,7 +641,7 @@ def AArch64_ResetSpecialRegisters (_ : Unit) : SailM Unit := do
 
 def ELR_read__1 (_ : Unit) : SailM (BitVec 64) := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  ArmFull.assert (w__0.EL != EL0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22444.27-22444.28"
+  ArmFull.assert (w__0.EL != EL0) "sail-arm/v8_base.sail:22444.27-22444.28"
   let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
   (ELR_read w__1.EL)
 

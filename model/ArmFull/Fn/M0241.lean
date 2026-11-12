@@ -142,7 +142,7 @@ def BranchTo (target : (BitVec k_N)) (branch_type : BranchType) (branch_conditio
   then
     (do
       let w__0 ← (( do (UsingAArch32 ()) ) : SailM Bool )
-      ArmFull.assert w__0 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6804.29-6804.30"
+      ArmFull.assert w__0 "sail-arm/v8_base.sail:6804.29-6804.30"
       writeReg _PC (Sail.BitVec.zeroExtend target 64))
   else
     (do
@@ -153,7 +153,7 @@ def BranchTo (target : (BitVec k_N)) (branch_type : BranchType) (branch_conditio
             let w__1 ← (( do (UsingAArch32 ()) ) : SailM Bool )
             (pure (((! w__1) : Bool))))
         else (pure false) ) : SailM Bool )
-      ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6807.50-6807.51"
+      ArmFull.assert w__2 "sail-arm/v8_base.sail:6807.50-6807.51"
       let w__3 ← (( do readReg PSTATE ) : SailM ProcState )
       let target_vaddress ← (( do
         (AArch64_BranchAddr (Sail.BitVec.extractLsb target 63 0) w__3.EL) ) : SailM (BitVec 64) )
@@ -189,7 +189,7 @@ def gic_read_ram (offset : (BitVec 16)) : SailM (BitVec 32) := do
   | .Ok (value, _) => (pure (value))
   | .Err _ =>
     (do
-      ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/devices.sail:134.18-134.19"
+      ArmFull.assert false "sail-arm/devices.sail:134.18-134.19"
       throw Error.Exit)
 
 
@@ -214,8 +214,8 @@ def Strip (A : (BitVec 64)) (data : Bool) : SailM (BitVec 64) := do
       if (tbi : Bool)
       then
         (do
-          ArmFull.assert ((0 ≤b ((56 -i bottom_PAC_bit) -i 1)) && (((56 -i bottom_PAC_bit) -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21567.90-21567.91"
-          ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21568.80-21568.81"
+          ArmFull.assert ((0 ≤b ((56 -i bottom_PAC_bit) -i 1)) && (((56 -i bottom_PAC_bit) -i 1) <b 64)) "sail-arm/v8_base.sail:21567.90-21567.91"
+          ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "sail-arm/v8_base.sail:21568.80-21568.81"
           let original_ptr : (BitVec 64) :=
             (Sail.BitVec.castWidth (((Sail.BitVec.extractLsb A 63 56) +++ (Sail.BitVec.extractLsb
                   extfield (Sail.Int.toNatChecked (((56 -i bottom_PAC_bit) -i 1))) 0)) +++ (Sail.BitVec.extractLsb
@@ -226,8 +226,8 @@ def Strip (A : (BitVec 64)) (data : Bool) : SailM (BitVec 64) := do
           if (mtx : Bool)
           then
             (do
-              ArmFull.assert ((0 ≤b ((56 -i bottom_PAC_bit) -i 1)) && (((56 -i bottom_PAC_bit) -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21571.90-21571.91"
-              ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21572.80-21572.81"
+              ArmFull.assert ((0 ≤b ((56 -i bottom_PAC_bit) -i 1)) && (((56 -i bottom_PAC_bit) -i 1) <b 64)) "sail-arm/v8_base.sail:21571.90-21571.91"
+              ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "sail-arm/v8_base.sail:21572.80-21572.81"
               let original_ptr : (BitVec 64) :=
                 (Sail.BitVec.castWidth ((((Sail.BitVec.extractLsb extfield 63 60) +++ (Sail.BitVec.extractLsb
                         A 59 56)) +++ (Sail.BitVec.extractLsb extfield
@@ -236,8 +236,8 @@ def Strip (A : (BitVec 64)) (data : Bool) : SailM (BitVec 64) := do
               (pure (original_ptr)))
           else
             (do
-              ArmFull.assert ((0 ≤b ((64 -i bottom_PAC_bit) -i 1)) && (((64 -i bottom_PAC_bit) -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21575.90-21575.91"
-              ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21576.80-21576.81"
+              ArmFull.assert ((0 ≤b ((64 -i bottom_PAC_bit) -i 1)) && (((64 -i bottom_PAC_bit) -i 1) <b 64)) "sail-arm/v8_base.sail:21575.90-21575.91"
+              ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "sail-arm/v8_base.sail:21576.80-21576.81"
               let original_ptr : (BitVec 64) :=
                 (Sail.BitVec.castWidth ((Sail.BitVec.extractLsb extfield
                     (Sail.Int.toNatChecked (((64 -i bottom_PAC_bit) -i 1))) 0) +++ (Sail.BitVec.extractLsb
@@ -275,7 +275,7 @@ def AddPAC (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data
             (do
               let w__6 ← (( do (S1TranslationRegime__1 ()) ) : SailM (BitVec 2) )
               (pure (((w__6 == EL2) : Bool)))) ) : SailM Bool )
-        ArmFull.assert w__7 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21714.80-21714.81"
+        ArmFull.assert w__7 "sail-arm/v8_base.sail:21714.80-21714.81"
         let w__8 ← (( do (S1TranslationRegime__1 ()) ) : SailM (BitVec 2) )
         if ((w__8 == EL1) : Bool)
         then
@@ -400,8 +400,8 @@ def AddPAC (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data
         if (tbi : Bool)
         then
           (do
-            ArmFull.assert ((0 ≤b ((56 -i bottom_PAC_bit) -i 1)) && (((56 -i bottom_PAC_bit) -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21757.90-21757.91"
-            ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21758.80-21758.81"
+            ArmFull.assert ((0 ≤b ((56 -i bottom_PAC_bit) -i 1)) && (((56 -i bottom_PAC_bit) -i 1) <b 64)) "sail-arm/v8_base.sail:21757.90-21757.91"
+            ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "sail-arm/v8_base.sail:21758.80-21758.81"
             let ext_ptr : (BitVec 64) :=
               (Sail.BitVec.castWidth (((Sail.BitVec.extractLsb ptr 63 56) +++ (Sail.BitVec.extractLsb
                     extfield (Sail.Int.toNatChecked (((56 -i bottom_PAC_bit) -i 1))) 0)) +++ (Sail.BitVec.extractLsb
@@ -412,8 +412,8 @@ def AddPAC (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data
             if (mtx : Bool)
             then
               (do
-                ArmFull.assert ((0 ≤b ((56 -i bottom_PAC_bit) -i 1)) && (((56 -i bottom_PAC_bit) -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21761.90-21761.91"
-                ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21762.80-21762.81"
+                ArmFull.assert ((0 ≤b ((56 -i bottom_PAC_bit) -i 1)) && (((56 -i bottom_PAC_bit) -i 1) <b 64)) "sail-arm/v8_base.sail:21761.90-21761.91"
+                ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "sail-arm/v8_base.sail:21762.80-21762.81"
                 let ext_ptr : (BitVec 64) :=
                   (Sail.BitVec.castWidth ((((Sail.BitVec.extractLsb extfield 63 60) +++ (Sail.BitVec.extractLsb
                           ptr 59 56)) +++ (Sail.BitVec.extractLsb extfield
@@ -422,8 +422,8 @@ def AddPAC (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data
                 (pure (ext_ptr)))
             else
               (do
-                ArmFull.assert ((0 ≤b ((64 -i bottom_PAC_bit) -i 1)) && (((64 -i bottom_PAC_bit) -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21765.90-21765.91"
-                ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21766.80-21766.81"
+                ArmFull.assert ((0 ≤b ((64 -i bottom_PAC_bit) -i 1)) && (((64 -i bottom_PAC_bit) -i 1) <b 64)) "sail-arm/v8_base.sail:21765.90-21765.91"
+                ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "sail-arm/v8_base.sail:21766.80-21766.81"
                 let ext_ptr : (BitVec 64) :=
                   (Sail.BitVec.castWidth ((Sail.BitVec.extractLsb extfield
                       (Sail.Int.toNatChecked (((64 -i bottom_PAC_bit) -i 1))) 0) +++ (Sail.BitVec.extractLsb
@@ -433,7 +433,7 @@ def AddPAC (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data
         (ComputePAC ext_ptr modifier (Sail.BitVec.extractLsb K 127 64)
           (Sail.BitVec.extractLsb K 63 0) isgeneric) ) : SailM (BitVec 64) )
       let unusedbits_mask : (BitVec 64) := (Zeros (n := 64))
-      ArmFull.assert ((0 ≤b bottom_PAC_bit) && (bottom_PAC_bit ≤b 54)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21771.69-21771.70"
+      ArmFull.assert ((0 ≤b bottom_PAC_bit) && (bottom_PAC_bit ≤b 54)) "sail-arm/v8_base.sail:21771.69-21771.70"
       let unusedbits_mask : (BitVec 64) :=
         (Sail.BitVec.castWidth (Sail.BitVec.updateSubrange unusedbits_mask 54
           (Sail.Int.toNatChecked (bottom_PAC_bit))
@@ -474,7 +474,7 @@ def AddPAC (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data
           if (tbi : Bool)
           then
             (do
-              ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21787.84-21787.85"
+              ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "sail-arm/v8_base.sail:21787.84-21787.85"
               let result : (BitVec 64) :=
                 (Sail.BitVec.castWidth ((((Sail.BitVec.extractLsb ptr 63 56) +++ selbit) +++ (Sail.BitVec.extractLsb
                       PAC 54 (Sail.Int.toNatChecked (bottom_PAC_bit)))) +++ (Sail.BitVec.extractLsb
@@ -482,19 +482,19 @@ def AddPAC (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data
               (pure (result)))
           else
             (do
-              ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21790.84-21790.85"
+              ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "sail-arm/v8_base.sail:21790.84-21790.85"
               let result : (BitVec 64) :=
                 (Sail.BitVec.castWidth ((((Sail.BitVec.extractLsb PAC 63 56) +++ selbit) +++ (Sail.BitVec.extractLsb
                       PAC 54 (Sail.Int.toNatChecked (bottom_PAC_bit)))) +++ (Sail.BitVec.extractLsb
                     ptr (Sail.Int.toNatChecked ((bottom_PAC_bit -i 1))) 0)))
-              ArmFull.assert (! mtx) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21792.32-21792.33"
+              ArmFull.assert (! mtx) "sail-arm/v8_base.sail:21792.32-21792.33"
               (pure (result))))
       else
         (do
           if (tbi : Bool)
           then
             (do
-              ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21796.84-21796.85"
+              ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "sail-arm/v8_base.sail:21796.84-21796.85"
               let result : (BitVec 64) :=
                 (Sail.BitVec.castWidth ((((Sail.BitVec.extractLsb ptr 63 56) +++ selbit) +++ ((Sail.BitVec.castWidth (m := (Sail.Int.toNatChecked (((54 : Int) -i (bottom_PAC_bit : Int)) +i (1 : Int)))) (Sail.BitVec.extractLsb
                         ptr 54 (Sail.Int.toNatChecked (bottom_PAC_bit)))) ^^^ (Sail.BitVec.castWidth (Sail.BitVec.extractLsb
@@ -506,7 +506,7 @@ def AddPAC (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data
               if (mtx : Bool)
               then
                 (do
-                  ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21799.84-21799.85"
+                  ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "sail-arm/v8_base.sail:21799.84-21799.85"
                   let result : (BitVec 64) :=
                     (Sail.BitVec.castWidth ((((((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
                                 ptr 63 60)) ^^^ (Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
@@ -517,7 +517,7 @@ def AddPAC (ptr : (BitVec 64)) (modifier : (BitVec 64)) (K : (BitVec 128)) (data
                   (pure (result)))
               else
                 (do
-                  ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21802.84-21802.85"
+                  ArmFull.assert ((0 ≤b (bottom_PAC_bit -i 1)) && ((bottom_PAC_bit -i 1) <b 64)) "sail-arm/v8_base.sail:21802.84-21802.85"
                   let result : (BitVec 64) :=
                     (Sail.BitVec.castWidth (((((Sail.BitVec.castWidth (m := 8) (Sail.BitVec.extractLsb
                               ptr 63 56)) ^^^ (Sail.BitVec.castWidth (m := 8) (Sail.BitVec.extractLsb
@@ -544,7 +544,7 @@ def AArch64_BreakpointValueMatch (n_in : Int) (vaddress : (BitVec 64)) (linked_t
         let (tup__0, tup__1) := (w__2 : (Constraint × Int))
         let c : Constraint := tup__0
         let n : Int := tup__1
-        ArmFull.assert ((BEq.beq c Constraint_DISABLED) || (BEq.beq c Constraint_UNKNOWN)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23258.65-23258.66"
+        ArmFull.assert ((BEq.beq c Constraint_DISABLED) || (BEq.beq c Constraint_UNKNOWN)) "sail-arm/v8_base.sail:23258.65-23258.66"
         if ((BEq.beq c Constraint_DISABLED) : Bool)
         then
           (do
@@ -553,7 +553,7 @@ def AArch64_BreakpointValueMatch (n_in : Int) (vaddress : (BitVec 64)) (linked_t
         (pure ((c, n))))
     else (pure ((c, n))) ) : SailME (Bool × Bool) (Constraint × Int) )
   let n : Int := n
-  ArmFull.assert ((0 ≤b n) && (n <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23265.42-23265.43"
+  ArmFull.assert ((0 ≤b n) && (n <b 64)) "sail-arm/v8_base.sail:23265.42-23265.43"
   let w__3 ← (( do (IsBreakpointEnabled (Sail.Int.toNatChecked (n))) ) : SailME (Bool × Bool)
     Bool )
   if ((! w__3) : Bool)
@@ -681,7 +681,7 @@ def AArch64_BreakpointValueMatch (n_in : Int) (vaddress : (BitVec 64)) (linked_t
                                   let c : Constraint := tup__0
                                   let mask : Int := tup__1
                                   ArmFull.assert ((BEq.beq c Constraint_DISABLED) || ((BEq.beq c
-                                        Constraint_NONE) || (BEq.beq c Constraint_UNKNOWN))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23327.92-23327.93"
+                                        Constraint_NONE) || (BEq.beq c Constraint_UNKNOWN))) "sail-arm/v8_base.sail:23327.92-23327.93"
                                   match c with
                                   | .Constraint_DISABLED =>
                                     (do
@@ -739,7 +739,7 @@ def AArch64_BreakpointValueMatch (n_in : Int) (vaddress : (BitVec 64)) (linked_t
                               if ((HaveAArch32 ()) : Bool)
                               then
                                 (do
-                                  ArmFull.assert ((byte == 0) || (byte == 2)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23360.40-23360.41"
+                                  ArmFull.assert ((byte == 0) || (byte == 2)) "sail-arm/v8_base.sail:23360.40-23360.41"
                                   let w__18 ← (( do readReg DBGBCR_EL1 ) : SailME (Bool × Bool)
                                     (Vector (BitVec 64) 64) )
                                   let byte_select_match :=
@@ -750,7 +750,7 @@ def AArch64_BreakpointValueMatch (n_in : Int) (vaddress : (BitVec 64)) (linked_t
                                   (pure (byte_select_match)))
                               else
                                 (do
-                                  ArmFull.assert (byte == 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23363.28-23363.29"
+                                  ArmFull.assert (byte == 0) "sail-arm/v8_base.sail:23363.28-23363.29"
                                   (pure (true))) ) : SailME (Bool × Bool) Bool )
                             let top ← (( do (DebugAddrTop ()) ) : SailME (Bool × Bool) Int )
                             let bottom : Nat := 2
@@ -786,7 +786,7 @@ def AArch64_BreakpointValueMatch (n_in : Int) (vaddress : (BitVec 64)) (linked_t
                             if ((mask >b bottom) : Bool)
                             then
                               (do
-                                ArmFull.assert ((0 ≤b mask) && ((mask ≤b top) && (top <b 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23373.71-23373.72"
+                                ArmFull.assert ((0 ≤b mask) && ((mask ≤b top) && (top <b 64))) "sail-arm/v8_base.sail:23373.71-23373.72"
                                 let w__26 ← (( do
                                   (pure ((← do
                                         let w__25 ← (( do readReg DBGBVR_EL1 ) : SailME
@@ -816,7 +816,7 @@ def AArch64_BreakpointValueMatch (n_in : Int) (vaddress : (BitVec 64)) (linked_t
                                 else (pure (bvr_match)))
                             else
                               (do
-                                ArmFull.assert ((0 ≤b bottom) && ((bottom ≤b top) && (top <b 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23380.75-23380.76"
+                                ArmFull.assert ((0 ≤b bottom) && ((bottom ≤b top) && (top <b 64))) "sail-arm/v8_base.sail:23380.75-23380.76"
                                 (pure ((← do
                                       let w__30 ← (( do readReg DBGBVR_EL1 ) : SailME
                                         (Bool × Bool) (Vector (BitVec 64) 64) )

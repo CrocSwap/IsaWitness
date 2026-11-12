@@ -176,7 +176,7 @@ def AArch64_IC__1 (regval : (BitVec 64)) (opscope : CacheOpScope) : SailM Unit :
       (CACHE_OP cache))
   else
     (do
-      ArmFull.assert (BEq.beq opscope CacheOpScope_PoU) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36768.42-36768.43"
+      ArmFull.assert (BEq.beq opscope CacheOpScope_PoU) "sail-arm/v8_base.sail:36768.42-36768.43"
       let w__10 ← (( do
         if ((← do
              (EL2Enabled ())) : Bool)

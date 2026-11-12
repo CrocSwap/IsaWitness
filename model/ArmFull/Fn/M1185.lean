@@ -445,7 +445,7 @@ def execute_aarch64_instrs_memory_pair_simdfp_no_alloc (datasize : Nat) (memop :
   match memop with
   | .MemOp_STORE =>
     (do
-      ArmFull.assert (((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:31021.62-31021.63"
+      ArmFull.assert (((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) "sail-arm/instrs64.sail:31021.62-31021.63"
       let data1 ← (( do ((Sail.BitVec.castWidth ) <$> (V_read t datasize)) ) : SailM
         (BitVec datasize) )
       let data2 ← (( do ((Sail.BitVec.castWidth ) <$> (V_read t2 datasize)) ) : SailM
@@ -474,7 +474,7 @@ def execute_aarch64_instrs_memory_pair_simdfp_no_alloc (datasize : Nat) (memop :
             let data2 := (w__5 : (BitVec datasize))
             (pure ((data1, data2))))
         else (pure ((data1, data2))) ) : SailM ((BitVec datasize) × (BitVec datasize)) )
-      ArmFull.assert (((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:31034.62-31034.63"
+      ArmFull.assert (((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) "sail-arm/instrs64.sail:31034.62-31034.63"
       (V_set t datasize (Sail.BitVec.castWidth data1))
       (V_set t2 datasize (Sail.BitVec.castWidth data2)))
   | _ => (pure (()))
@@ -533,7 +533,7 @@ def execute_aarch64_instrs_memory_pair_simdfp_post_idx (datasize : Nat) (memop :
   match memop with
   | .MemOp_STORE =>
     (do
-      ArmFull.assert (((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:31176.62-31176.63"
+      ArmFull.assert (((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) "sail-arm/instrs64.sail:31176.62-31176.63"
       let data1 ← (( do ((Sail.BitVec.castWidth ) <$> (V_read t datasize)) ) : SailM
         (BitVec datasize) )
       let data2 ← (( do ((Sail.BitVec.castWidth ) <$> (V_read t2 datasize)) ) : SailM
@@ -562,7 +562,7 @@ def execute_aarch64_instrs_memory_pair_simdfp_post_idx (datasize : Nat) (memop :
             let data2 := (w__5 : (BitVec datasize))
             (pure ((data1, data2))))
         else (pure ((data1, data2))) ) : SailM ((BitVec datasize) × (BitVec datasize)) )
-      ArmFull.assert (((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:31189.62-31189.63"
+      ArmFull.assert (((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) "sail-arm/instrs64.sail:31189.62-31189.63"
       (V_set t datasize (Sail.BitVec.castWidth data1))
       (V_set t2 datasize (Sail.BitVec.castWidth data2)))
   | _ => (pure (()))

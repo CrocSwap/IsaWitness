@@ -174,8 +174,8 @@ def FPProcessDenorms (type1 : FPType) (type2 : FPType) (N : Int) (fpcr : (BitVec
 /-- Type quantifiers: k_N : Nat, k_fpexc : Bool, List.elem k_N [16, 32, 64] -/
 def FPProcessNaN__1 (fptype : FPType) (op : (BitVec k_N)) (fpcr : (BitVec 64)) (fpexc : Bool) : SailM (BitVec k_N) := do
   ArmFull.assert (((Sail.BitVec.length op) == 16) || (((Sail.BitVec.length op) == 32) || ((Sail.BitVec.length
-          op) == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:16162.41-16162.42"
-  ArmFull.assert ((BEq.beq fptype FPType_QNaN) || (BEq.beq fptype FPType_SNaN)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:16163.56-16163.57"
+          op) == 64))) "sail-arm/v8_base.sail:16162.41-16162.42"
+  ArmFull.assert ((BEq.beq fptype FPType_QNaN) || (BEq.beq fptype FPType_SNaN)) "sail-arm/v8_base.sail:16163.56-16163.57"
   let topfrac : Int := 9
   let topfrac : Int :=
     match (Sail.BitVec.length op) with
@@ -189,7 +189,7 @@ def FPProcessNaN__1 (fptype : FPType) (op : (BitVec k_N)) (fpcr : (BitVec 64)) (
     if ((BEq.beq fptype FPType_SNaN) : Bool)
     then
       (do
-        ArmFull.assert ((0 ≤b topfrac) && (topfrac <b (Sail.BitVec.length result))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:16180.58-16180.59"
+        ArmFull.assert ((0 ≤b topfrac) && (topfrac <b (Sail.BitVec.length result))) "sail-arm/v8_base.sail:16180.58-16180.59"
         let result : (BitVec k_N) :=
           (BitVec.update result (Sail.Int.toNatChecked (topfrac)) (Bit 1#1))
         if (fpexc : Bool)

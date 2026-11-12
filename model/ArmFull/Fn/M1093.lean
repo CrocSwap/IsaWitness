@@ -298,7 +298,7 @@ def decode_aarch32_instrs_VNEG_A2enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1)) 
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:30572.29-30572.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:30572.29-30572.30"
       let floating_point ← (( do (undefined_bool_at (← occLabel 3549) ()) ) : SailM Bool )
       let elements ← (( do (undefined_int_at (← occLabel 3550) ()) ) : SailM Int )
       let regs ← (( do (undefined_int_at (← occLabel 3551) ()) ) : SailM Int )

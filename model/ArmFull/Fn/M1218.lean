@@ -301,7 +301,7 @@ def execute_LDFF1B_Z_P_AI_D (VL : Nat) (esize : Nat) (g : Nat) (msize : Nat) (n 
         ((Sail.BitVec.castWidth ) <$> (Z_read n VL)))
     else (pure (base)) ) : SailM (BitVec VL) )
   let base := base
-  ArmFull.assert accdesc.first "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:77396.24-77396.25"
+  ArmFull.assert accdesc.first "sail-arm/instrs64_sve.sail:77396.24-77396.25"
   let (accdesc, data, fault, faulted, result, unknown) ← (( do
     let loop_e_lower : Nat := 0
     let loop_e_upper : Int := (elements -i 1)
@@ -439,7 +439,7 @@ def execute_LDFF1SB_Z_P_AI_D (VL : Nat) (esize : Nat) (g : Nat) (msize : Nat) (n
         ((Sail.BitVec.castWidth ) <$> (Z_read n VL)))
     else (pure (base)) ) : SailM (BitVec VL) )
   let base := base
-  ArmFull.assert accdesc.first "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:77500.24-77500.25"
+  ArmFull.assert accdesc.first "sail-arm/instrs64_sve.sail:77500.24-77500.25"
   let (accdesc, data, fault, faulted, result, unknown) ← (( do
     let loop_e_lower : Nat := 0
     let loop_e_upper : Int := (elements -i 1)
@@ -723,7 +723,7 @@ def execute_LDFF1H_Z_P_AI_D (VL : Nat) (esize : Nat) (g : Nat) (msize : Nat) (n 
         ((Sail.BitVec.castWidth ) <$> (Z_read n VL)))
     else (pure (base)) ) : SailM (BitVec VL) )
   let base := base
-  ArmFull.assert accdesc.first "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:77764.24-77764.25"
+  ArmFull.assert accdesc.first "sail-arm/instrs64_sve.sail:77764.24-77764.25"
   let (accdesc, data, fault, faulted, result, unknown) ← (( do
     let loop_e_lower : Nat := 0
     let loop_e_upper : Int := (elements -i 1)

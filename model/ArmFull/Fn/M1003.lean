@@ -135,12 +135,12 @@ def CheckCryptoEnabled32 (_ : Unit) : SailM Unit := do
 
 /-- Type quantifiers: k_aligned : Bool, k_ispair : Bool, size : Nat, List.elem size [1, 2, 4, 8, 16] -/
 def AArch32_MemSingle_read__1 (address : (BitVec 32)) (size : Nat) (accdesc_in : AccessDescriptor) (aligned : Bool) (ispair : Bool) : SailM (BitVec (size * 8)) := do
-  ArmFull.assert ((size == 1) || ((size == 2) || ((size == 4) || ((size == 8) || (size == 16))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:41910.69-41910.70"
+  ArmFull.assert ((size == 1) || ((size == 2) || ((size == 4) || ((size == 8) || (size == 16))))) "sail-arm/v8_base.sail:41910.69-41910.70"
   let value_name ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 2761)
       (Sail.Int.toNatChecked ((size *i 8))))) ) : SailM (BitVec (size * 8)) )
   let accdesc : AccessDescriptor := accdesc_in
-  ArmFull.assert (IsAligned__1 address size) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:41913.38-41913.39"
+  ArmFull.assert (IsAligned__1 address size) "sail-arm/v8_base.sail:41913.38-41913.39"
   let memaddrdesc ← (( do (AArch32_TranslateAddress address accdesc aligned size) ) : SailM
     AddressDescriptor )
   if ((IsFault memaddrdesc) : Bool)
@@ -173,9 +173,9 @@ def AArch32_MemSingle_read__1 (address : (BitVec 32)) (size : Nat) (accdesc_in :
 
 /-- Type quantifiers: k_aligned : Bool, k_ispair : Bool, size : Nat, List.elem size [1, 2, 4, 8, 16] -/
 def AArch32_MemSingle_set__1 (address : (BitVec 32)) (size : Nat) (accdesc_in : AccessDescriptor) (aligned : Bool) (ispair : Bool) (value_name : (BitVec (size * 8))) : SailM Unit := do
-  ArmFull.assert ((size == 1) || ((size == 2) || ((size == 4) || ((size == 8) || (size == 16))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:41945.69-41945.70"
+  ArmFull.assert ((size == 1) || ((size == 2) || ((size == 4) || ((size == 8) || (size == 16))))) "sail-arm/v8_base.sail:41945.69-41945.70"
   let accdesc : AccessDescriptor := accdesc_in
-  ArmFull.assert (IsAligned__1 address size) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:41947.38-41947.39"
+  ArmFull.assert (IsAligned__1 address size) "sail-arm/v8_base.sail:41947.38-41947.39"
   let memaddrdesc ← (( do (AArch32_TranslateAddress address accdesc aligned size) ) : SailM
     AddressDescriptor )
   if ((IsFault memaddrdesc) : Bool)

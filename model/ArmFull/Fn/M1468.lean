@@ -510,7 +510,7 @@ def decode_aarch32_instrs_LDC_i_A1enc_A_txt (cond : (BitVec 4)) (P : (BitVec 1))
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:3431.29-3431.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:3431.29-3431.30"
       if ((Rn == 0b1111#4) : Bool)
       then sailThrow ((Error_See "LDC (literal)"))
       else (pure (()))
@@ -553,7 +553,7 @@ def decode_aarch32_instrs_LDC_l_A1enc_A_txt (cond : (BitVec 4)) (P : (BitVec 1))
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:3507.29-3507.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:3507.29-3507.30"
       if ((((P == 0#1) && (U == 0#1)) && (W == 0#1)) : Bool)
       then sailThrow ((Error_Undefined ()))
       else (pure (()))
@@ -614,7 +614,7 @@ def decode_aarch32_instrs_STC_A1enc_A_txt (cond : (BitVec 4)) (P : (BitVec 1)) (
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:13365.29-13365.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:13365.29-13365.30"
       if ((((P == 0#1) && (U == 0#1)) && (W == 0#1)) : Bool)
       then sailThrow ((Error_Undefined ()))
       else (pure (()))

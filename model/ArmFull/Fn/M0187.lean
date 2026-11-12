@@ -174,7 +174,7 @@ def IllegalExceptionReturn (spsr : (BitVec k_N)) : SailM Bool := SailME.run do
                     let w__3 ← (( do (ELUsingAArch32 EL1) ) : SailME Bool Bool )
                     (pure (((! w__3) : Bool))))
                 else (pure false)) ) : SailME Bool Bool )
-          ArmFull.assert w__5 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8252.64-8252.65"
+          ArmFull.assert w__5 "sail-arm/v8_base.sail:8252.64-8252.65"
           if ((known && (neq_bool spsr_mode_is_aarch32 target_el_is_aarch32)) : Bool)
           then (pure (true))
           else
@@ -543,7 +543,7 @@ def AArch64_PEErrorState (fault : FaultRecord) : SailM ErrorState := SailME.run 
           else (pure (()))))
   else (pure (()))
   let w__5 ← (( do (FaultIsCorrected ()) ) : SailME ErrorState Bool )
-  ArmFull.assert (! w__5) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:14707.39-14707.40"
+  ArmFull.assert (! w__5) "sail-arm/v8_base.sail:14707.39-14707.40"
   let w__12 ← (( do
     if ((← do
          if ((← do

@@ -119,7 +119,7 @@ open ATAccess
 
 def CheckOriginalSVEEnabled (_ : Unit) : SailM Unit := do
   let w__0 ← (( do (HaveSVE ()) ) : SailM Bool )
-  ArmFull.assert w__0 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:29250.20-29250.21"
+  ArmFull.assert w__0 "sail-arm/v8_base.sail:29250.20-29250.21"
   let disabled ← (( do (undefined_bool_at (← occLabel 1710) ()) ) : SailM Bool )
   let w__6 ← (( do
     if ((← do

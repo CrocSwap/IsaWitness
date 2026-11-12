@@ -639,8 +639,8 @@ def PMUCounterMask (_ : Unit) : SailM (BitVec 64) := do
       (do
         (AArch64_GetNumEventCountersAccessible ())) ) : SailM Int )
   let n : Int := n
-  ArmFull.assert (n ≥b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:4047.30-4047.31"
-  ArmFull.assert (64 ≥b n) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:4048.31-4048.32"
+  ArmFull.assert (n ≥b 0) "sail-arm/v8_base.sail:4047.30-4047.31"
+  ArmFull.assert (64 ≥b n) "sail-arm/v8_base.sail:4048.31-4048.32"
   let mask : (BitVec 64) := (Sail.BitVec.zeroExtend (Ones (n := (Sail.Int.toNatChecked (n)))) 64)
   let mask : (BitVec 64) := (BitVec.update mask CYCLE_COUNTER_ID (Bit 1#1))
   let w__5 ← (( do

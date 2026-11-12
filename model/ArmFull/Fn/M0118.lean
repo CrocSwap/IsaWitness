@@ -281,17 +281,17 @@ def TweakCellRot (incell_name : (BitVec 4)) : SailM (BitVec 4) := do
 
 /-- Type quantifiers: n : Int, part : Int, width : Nat, width ≥ 0 -/
 def Vpart_read (n : Int) (part : Int) (width : Nat) : SailM (BitVec width) := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22343.27-22343.28"
-  ArmFull.assert ((part == 0) || (part == 1)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22344.32-22344.33"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-arm/v8_base.sail:22343.27-22343.28"
+  ArmFull.assert ((part == 0) || (part == 1)) "sail-arm/v8_base.sail:22344.32-22344.33"
   if ((part == 0) : Bool)
   then
     (do
-      ArmFull.assert (width <b 128) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22346.26-22346.27"
-      ArmFull.assert (((((width == 8) || (width == 16)) || (width == 32)) || (width == 64)) || (width == 128)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22347.57-22347.58"
+      ArmFull.assert (width <b 128) "sail-arm/v8_base.sail:22346.26-22346.27"
+      ArmFull.assert (((((width == 8) || (width == 16)) || (width == 32)) || (width == 64)) || (width == 128)) "sail-arm/v8_base.sail:22347.57-22347.58"
       ((Sail.BitVec.castWidth ) <$> (V_read n width)))
   else
     (do
-      ArmFull.assert ((width == 32) || (width == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22350.40-22350.41"
+      ArmFull.assert ((width == 32) || (width == 64)) "sail-arm/v8_base.sail:22350.40-22350.41"
       let vreg ← (( do (V_read n 128) ) : SailM (BitVec 128) )
       (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb vreg
           (Sail.Int.toNatChecked (((width *i 2) -i 1))) width)))))
@@ -369,7 +369,7 @@ def _set_RGSR_EL1_Type_TAG (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 4)) 
 
 def AArch64_NextRandomTagBit (_ : Unit) : SailM (BitVec 1) := do
   let w__0 ← (( do readReg GCR_EL1 ) : SailM (BitVec 64) )
-  ArmFull.assert ((_get_GCR_EL1_Type_RRND w__0) == 0#1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22689.31-22689.32"
+  ArmFull.assert ((_get_GCR_EL1_Type_RRND w__0) == 0#1) "sail-arm/v8_base.sail:22689.31-22689.32"
   let w__1 ← (( do readReg RGSR_EL1 ) : SailM (BitVec 64) )
   let lfsr : (BitVec 16) := (Sail.BitVec.extractLsb (_get_RGSR_EL1_Type_SEED w__1) 15 0)
   let top : (BitVec 1) :=
@@ -461,7 +461,7 @@ def AArch64_ReportTagCheckFault (el : (BitVec 2)) (ttbr : (BitVec 1)) : SailM Un
   if ((questionMark == EL3) : Bool)
   then
     (do
-      ArmFull.assert (ttbr == 0#1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22983.28-22983.29"
+      ArmFull.assert (ttbr == 0#1) "sail-arm/v8_base.sail:22983.28-22983.29"
       let w__0 ← (( do readReg TFSR_EL3 ) : SailM (BitVec 64) )
       writeReg TFSR_EL3 (Sail.BitVec.updateSubrange w__0 0 0 1#1))
   else

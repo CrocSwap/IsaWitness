@@ -154,7 +154,7 @@ def AArch32_EnterMonitorMode (preferred_exception_return : (BitVec 32)) (lr_offs
       (do
         (ELUsingAArch32 EL3))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:14133.44-14133.45"
+  ArmFull.assert w__1 "sail-arm/v8_base.sail:14133.44-14133.45"
   let w__2 ← (( do (CurrentSecurityState ()) ) : SailM SecurityState )
   let from_secure : Bool := (BEq.beq w__2 SS_Secure)
   let w__3 ← (( do (Halted ()) ) : SailM Bool )
@@ -483,7 +483,7 @@ def AArch64_S2Walk (fault_in : FaultRecord) (ipa : AddressDescriptor) (walkparam
                                 if ((walkparams.d128 == 1#1) : Bool)
                                 then
                                   (do
-                                    ArmFull.assert (110 <b N) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:27115.49-27115.50"
+                                    ArmFull.assert (110 <b N) "sail-arm/v8_base.sail:27115.49-27115.50"
                                     (pure ((Sail.BitVec.extractLsb descriptor 110 109))))
                                 else (pure (0b00#2)) ) : SailME
                                 (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
@@ -560,7 +560,7 @@ def AArch64_S2Walk (fault_in : FaultRecord) (ipa : AddressDescriptor) (walkparam
                               (pure ((descaddress, fault, new_descriptor, skl, walkstate))))
                           | .DescriptorType_Leaf =>
                             (do
-                              ArmFull.assert (52 <b N) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:27133.44-27133.45"
+                              ArmFull.assert (52 <b N) "sail-arm/v8_base.sail:27133.44-27133.45"
                               let w__34 ← (( do
                                 (AArch64_S2NextWalkStateLeaf walkstate accdesc.ss walkparams ipa
                                   descriptor) ) : SailME
@@ -593,7 +593,7 @@ def AArch64_S2Walk (fault_in : FaultRecord) (ipa : AddressDescriptor) (walkparam
                               let descaccess ← (( do (CreateAccDescTTEUpdate accdesc) ) : SailME
                                 (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
                                 AccessDescriptor )
-                              ArmFull.assert ((N == 64) || (N == 128)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:27146.50-27146.51"
+                              ArmFull.assert ((N == 64) || (N == 128)) "sail-arm/v8_base.sail:27146.50-27146.51"
                               let w__38 ← (( do
                                 (AArch64_MemSwapTableDesc fault descriptor new_descriptor
                                   walkparams.ee descaccess walkaddress translation_info) ) : SailME
@@ -720,13 +720,13 @@ def AArch64_S2Walk (fault_in : FaultRecord) (ipa : AddressDescriptor) (walkparam
             if ((walkparams.d128 == 1#1) : Bool)
             then
               (do
-                ArmFull.assert (127 <b N) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:27174.39-27174.40"
+                ArmFull.assert (127 <b N) "sail-arm/v8_base.sail:27174.39-27174.40"
                 let tlbrecord : TLBRecord :=
                   { tlbrecord with s2descriptor := (Sail.BitVec.extractLsb descriptor 127 0) }
                 (pure (tlbrecord)))
             else
               (do
-                ArmFull.assert (63 <b N) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:27177.38-27177.39"
+                ArmFull.assert (63 <b N) "sail-arm/v8_base.sail:27177.38-27177.39"
                 let tlbrecord : TLBRecord :=
                   { tlbrecord with s2descriptor := (Sail.BitVec.updateSubrange
                       tlbrecord.s2descriptor 63 0 (Sail.BitVec.extractLsb descriptor 63 0)) }

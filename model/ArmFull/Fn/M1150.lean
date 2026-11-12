@@ -414,7 +414,7 @@ def execute_aarch64_instrs_vector_reduce_fp16_maxnm_sisd (d : Nat) (datasize : N
   let operand ← (( do ((Sail.BitVec.castWidth ) <$> (V_read n datasize)) ) : SailM
     (BitVec datasize) )
   let altfp : Bool := false
-  ArmFull.assert (datasize ≥b esize) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:18425.42-18425.43"
+  ArmFull.assert (datasize ≥b esize) "sail-arm/instrs64.sail:18425.42-18425.43"
   let w__0 ← (( do ((Sail.BitVec.castWidth ) <$> (Reduce__1 op operand esize altfp)) ) : SailM
     (BitVec esize) )
   (V_set d esize (Sail.BitVec.castWidth w__0))

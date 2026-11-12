@@ -143,7 +143,7 @@ def AArch64_IMPDEFResets (_ : Unit) : SailM Unit := do
     for i in [loop_i_lower:loop_i_upper:1]i do
       let () := loop_vars
       loop_vars ← do
-        ArmFull.assert ((0 ≤b i) && (i <b 4)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/reset.sail:432.55-432.56"
+        ArmFull.assert ((0 ≤b i) && (i <b 4)) "sail-arm/reset.sail:432.55-432.56"
         let w__5 ← (( do readReg ERRnFR ) : SailM (Vector (BitVec 64) 4) )
         let w__6 ← (( do readReg ERRnFR ) : SailM (Vector (BitVec 64) 4) )
         writeReg ERRnFR (vectorUpdate w__5 (Sail.Int.toNatChecked (i))
@@ -821,7 +821,7 @@ def AArch64_IMPDEFResets (_ : Unit) : SailM Unit := do
                 let w__299 ← (( do readReg ID_AA64PFR1_EL1 ) : SailM (BitVec 64) )
                 (pure ((((_get_ID_AA64PFR1_EL1_Type_MPAM_frac w__299) == 0b0001#4) : Bool))))
             else (pure false)) ) : SailM Bool )
-      ArmFull.assert w__301 "/home/doug/boss-scratch/sail-lean-fork/integ/model/reset.sail:720.56-720.57"
+      ArmFull.assert w__301 "sail-arm/reset.sail:720.56-720.57"
       let w__302 ← (( do readReg __empam_sdeflt_implemented ) : SailM Bool )
       if (w__302 : Bool)
       then

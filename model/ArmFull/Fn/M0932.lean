@@ -529,7 +529,7 @@ def execute_aarch64_instrs_vector_transfer_vector_cpy_dup_sisd (d : Nat) (datasi
         let result := loop_vars
         loop_vars ← do (Elem_set result e esize (Sail.BitVec.castWidth element))
       (pure loop_vars)) ) : SailM (BitVec datasize) )
-  ArmFull.assert (((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:10473.56-10473.57"
+  ArmFull.assert (((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) "sail-arm/instrs64.sail:10473.56-10473.57"
   (V_set d datasize (Sail.BitVec.castWidth result))
 
 
@@ -539,7 +539,7 @@ def execute_aarch64_instrs_vector_transfer_vector_cpy_dup_sisd (d : Nat) (datasi
   List.elem datasize [64, 128] ∧ 0 ≤ d ∧ d ≤ 31 -/
 def execute_aarch64_instrs_vector_transfer_integer_dup (d : Nat) (datasize : Nat) (elements : Int) (esize : Nat) (n : Nat) : SailM Unit := do
   (CheckFPAdvSIMDEnabled64 ())
-  ArmFull.assert ((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:10541.48-10541.49"
+  ArmFull.assert ((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:10541.48-10541.49"
   let element ← (( do ((Sail.BitVec.castWidth ) <$> (X_read n esize)) ) : SailM (BitVec esize) )
   let result ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 4103)
@@ -576,7 +576,7 @@ def execute_aarch64_instrs_vector_transfer_vector_extract (d : Nat) (datasize : 
   let hi ← (( do ((Sail.BitVec.castWidth ) <$> (V_read m datasize)) ) : SailM (BitVec datasize) )
   let lo ← (( do ((Sail.BitVec.castWidth ) <$> (V_read n datasize)) ) : SailM (BitVec datasize) )
   let concat : (BitVec (datasize * 2)) := (Sail.BitVec.castWidth (hi +++ lo))
-  ArmFull.assert ((0 ≤b position) && (((position +i datasize) -i 1) <b (datasize *i 2))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:10696.83-10696.84"
+  ArmFull.assert ((0 ≤b position) && (((position +i datasize) -i 1) <b (datasize *i 2))) "sail-arm/instrs64.sail:10696.83-10696.84"
   (V_set d datasize
     (Sail.BitVec.castWidth (Sail.BitVec.extractLsb concat
       (Sail.Int.toNatChecked (((position +i datasize) -i 1))) (Sail.Int.toNatChecked (position)))))
@@ -654,7 +654,7 @@ def execute_aarch64_instrs_vector_transfer_vector_insert (d : Nat) (dst_index : 
   n ≤ 31 ∧ List.elem esize [8, 16, 32, 64, 128, 256] ∧ datasize = 128 ∧ 0 ≤ d ∧ d ≤ 31 -/
 def execute_aarch64_instrs_vector_transfer_integer_insert (d : Nat) (datasize : Nat) (esize : Nat) (index : Int) (n : Nat) : SailM Unit := do
   (CheckFPAdvSIMDEnabled64 ())
-  ArmFull.assert ((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:22661.48-22661.49"
+  ArmFull.assert ((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:22661.48-22661.49"
   let element ← (( do ((Sail.BitVec.castWidth ) <$> (X_read n esize)) ) : SailM (BitVec esize) )
   let result ← (( do ((Sail.BitVec.castWidth ) <$> (V_read d datasize)) ) : SailM
     (BitVec datasize) )

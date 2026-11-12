@@ -356,7 +356,7 @@ def execute_aarch32_instrs_VMOVL_Op_A_txt (d__arg : Nat) (elements : Int) (esize
       for e in [loop_e_lower:loop_e_upper:1]i do
         let result := loop_vars
         loop_vars ← do
-          ArmFull.assert (((e *i esize) ≤b (((e *i esize) +i esize) -i 1)) || (! ((e ≥b 0) && (((e +i 1) *i esize) ≤b 64)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:28727.131-28727.132"
+          ArmFull.assert (((e *i esize) ≤b (((e *i esize) +i esize) -i 1)) || (! ((e ≥b 0) && (((e +i 1) *i esize) ≤b 64)))) "sail-arm/instrs32.sail:28727.131-28727.132"
           let w__0 ← (( do (Din_read m) ) : SailM (BitVec 64) )
           let w__1 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read w__0 e esize)) ) : SailM
             (BitVec esize) )

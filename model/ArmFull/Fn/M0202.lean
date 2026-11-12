@@ -255,7 +255,7 @@ def IncrementInstructionCounter (increment_name : Int) : SailM Unit := do
 
 /-- Type quantifiers: k_IsInstr : Bool -/
 def AddrTop (address : (BitVec 64)) (IsInstr : Bool) (el : (BitVec 2)) : SailM Int := do
-  ArmFull.assert (HaveEL el) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6128.21-6128.22"
+  ArmFull.assert (HaveEL el) "sail-arm/v8_base.sail:6128.21-6128.22"
   let regime ← (( do (S1TranslationRegime el) ) : SailM (BitVec 2) )
   let w__0 ← (( do (ELUsingAArch32 regime) ) : SailM Bool )
   if (w__0 : Bool)
@@ -337,7 +337,7 @@ def SPEBranch__1 (target : (BitVec k_N)) (branch_type : BranchType) (conditional
           writeReg SPESampleAddressValid (vectorUpdate w__8 SPEAddrPosPrevBranchTarget
             previous_branch_valid))
       else (pure (()))
-      ArmFull.assert (55 <b (Sail.BitVec.length target)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6728.34-6728.35"
+      ArmFull.assert (55 <b (Sail.BitVec.length target)) "sail-arm/v8_base.sail:6728.34-6728.35"
       let w__9 ← (( do readReg SPESamplePreviousBranchAddress ) : SailM (BitVec 64) )
       writeReg SPESamplePreviousBranchAddress (Sail.BitVec.updateSubrange w__9 55 0
         (Sail.BitVec.extractLsb target 55 0))
@@ -405,7 +405,7 @@ def SPEBranch__1 (target : (BitVec k_N)) (branch_type : BranchType) (conditional
           if (taken_flag : Bool)
           then
             (do
-              ArmFull.assert (55 <b (Sail.BitVec.length target)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6767.38-6767.39"
+              ArmFull.assert (55 <b (Sail.BitVec.length target)) "sail-arm/v8_base.sail:6767.38-6767.39"
               let w__19 ← (( do readReg SPESampleAddress ) : SailM (Vector (BitVec 64) 32) )
               let w__20 ← (( do readReg SPESampleAddress ) : SailM (Vector (BitVec 64) 32) )
               writeReg SPESampleAddress (vectorUpdate w__19 SPEAddrPosBranchTarget
@@ -646,7 +646,7 @@ def DebugExceptionReturnSS (spsr : (BitVec k_N)) : SailM (BitVec 1) := do
       (do
         let w__3 ← (( do readReg PSTATE ) : SailM ProcState )
         (pure (((w__3.EL != EL0) : Bool)))) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8493.55-8493.56"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:8493.55-8493.56"
   let enabled_at_source ← (( do (undefined_bool_at (← occLabel 655) ()) ) : SailM Bool )
   let w__5 ← (( do (Restarting ()) ) : SailM Bool )
   let enabled_at_source ← (( do
@@ -678,7 +678,7 @@ def DebugExceptionReturnSS (spsr : (BitVec k_N)) : SailM (BitVec 1) := do
         let (tup__0, tup__1) := (w__11 : (Bool × (BitVec 2)))
         let valid_name : Bool := tup__0
         let dest_el : (BitVec 2) := tup__1
-        ArmFull.assert valid_name "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8508.25-8508.26"
+        ArmFull.assert valid_name "sail-arm/v8_base.sail:8508.25-8508.26"
         (pure (dest_el))) ) : SailM (BitVec 2) )
   let dest_ss ← (( do (SecurityStateAtEL dest_el) ) : SailM SecurityState )
   let mask ← (( do (undefined_bitvector_at (← occLabel 658) 1) ) : SailM (BitVec 1) )
@@ -696,7 +696,7 @@ def DebugExceptionReturnSS (spsr : (BitVec k_N)) : SailM (BitVec 1) := do
         (AArch32_GenerateDebugExceptionsFrom dest_el dest_ss))
     else
       (do
-        ArmFull.assert (9 <b (Sail.BitVec.length spsr)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8518.33-8518.34"
+        ArmFull.assert (9 <b (Sail.BitVec.length spsr)) "sail-arm/v8_base.sail:8518.33-8518.34"
         let mask : (BitVec 1) := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access spsr 9)]))
         (AArch64_GenerateDebugExceptionsFrom dest_el dest_ss mask)) ) : SailM Bool )
   let ELd ← (( do (DebugTargetFrom dest_ss) ) : SailM (BitVec 2) )
@@ -716,7 +716,7 @@ def DebugExceptionReturnSS (spsr : (BitVec k_N)) : SailM (BitVec 1) := do
   if (w__19 : Bool)
   then
     (do
-      ArmFull.assert (21 <b (Sail.BitVec.length spsr)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8525.34-8525.35"
+      ArmFull.assert (21 <b (Sail.BitVec.length spsr)) "sail-arm/v8_base.sail:8525.34-8525.35"
       let SS_bit : (BitVec 1) := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access spsr 21)]))
       (pure (SS_bit)))
   else (pure (0#1))

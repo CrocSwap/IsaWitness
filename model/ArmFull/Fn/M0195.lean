@@ -126,10 +126,10 @@ def S1TranslationRegime__1 (_ : Unit) : SailM (BitVec 2) := do
 def EffectiveTBI (address : (BitVec 64)) (IsInstr : Bool) (el : (BitVec 2)) : SailM (BitVec 1) := do
   let tbi ← (( do (undefined_bitvector_at (← occLabel 567) 1) ) : SailM (BitVec 1) )
   let tbid ← (( do (undefined_bitvector_at (← occLabel 568) 1) ) : SailM (BitVec 1) )
-  ArmFull.assert (HaveEL el) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6080.21-6080.22"
+  ArmFull.assert (HaveEL el) "sail-arm/v8_base.sail:6080.21-6080.22"
   let regime ← (( do (S1TranslationRegime el) ) : SailM (BitVec 2) )
   let w__0 ← (( do (ELUsingAArch32 regime) ) : SailM Bool )
-  ArmFull.assert (! w__0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6082.43-6082.44"
+  ArmFull.assert (! w__0) "sail-arm/v8_base.sail:6082.43-6082.44"
   let questionMark := regime
   let (tbi, tbid) ← (( do
     if ((questionMark == EL1) : Bool)
@@ -254,15 +254,15 @@ def EffectiveTBI (address : (BitVec 64)) (IsInstr : Bool) (el : (BitVec 2)) : Sa
 
 /-- Type quantifiers: n : Int -/
 def Rmode_read (n : Int) (mode : (BitVec 5)) : SailM (BitVec 32) := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 14)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6376.27-6376.28"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 14)) "sail-arm/v8_base.sail:6376.27-6376.28"
   let w__0 ← (( do (CurrentSecurityState ()) ) : SailM SecurityState )
   if ((bne w__0 SS_Secure) : Bool)
   then
     (do
-      ArmFull.assert (mode != M32_Monitor) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6378.34-6378.35")
+      ArmFull.assert (mode != M32_Monitor) "sail-arm/v8_base.sail:6378.34-6378.35")
   else (pure (()))
   let w__1 ← (( do (BadMode mode) ) : SailM Bool )
-  ArmFull.assert (! w__1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6380.34-6380.35"
+  ArmFull.assert (! w__1) "sail-arm/v8_base.sail:6380.34-6380.35"
   if ((mode == M32_Monitor) : Bool)
   then
     (do

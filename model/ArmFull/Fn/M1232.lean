@@ -334,7 +334,7 @@ def execute_ST1H_Z_P_BI__ (VL : Nat) (esize : Nat) (g : Nat) (msize : Nat) (n : 
           (do
             let eoff : Int := ((offset *i elements) +i e)
             let addr : (BitVec 64) := (BitVec.addInt base (eoff *i mbytes))
-            ArmFull.assert ((0 ≤b (msize -i 1)) && ((msize -i 1) <b esize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:86003.70-86003.71"
+            ArmFull.assert ((0 ≤b (msize -i 1)) && ((msize -i 1) <b esize)) "sail-arm/instrs64_sve.sail:86003.70-86003.71"
             let w__8 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read src e esize)) ) : SailM
               (BitVec esize) )
             (Mem_set addr mbytes accdesc

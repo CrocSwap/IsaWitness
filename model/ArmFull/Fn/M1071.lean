@@ -227,7 +227,7 @@ def FPDiv (op1 : (BitVec k_N)) (op2 : (BitVec k_N)) (fpcr : (BitVec 64)) : SailM
   let zero1 ← (( do (undefined_bool_at (← occLabel 983) ()) ) : SailM Bool )
   let zero2 ← (( do (undefined_bool_at (← occLabel 984) ()) ) : SailM Bool )
   ArmFull.assert (((Sail.BitVec.length result) == 16) || (((Sail.BitVec.length result) == 32) || ((Sail.BitVec.length
-          result) == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:16583.41-16583.42"
+          result) == 64))) "sail-arm/v8_base.sail:16583.41-16583.42"
   let w__0 ← (( do (FPUnpack op1 fpcr) ) : SailM (FPType × (BitVec 1) × real) )
   let (tup__0, tup__1, tup__2) := (w__0 : (FPType × (BitVec 1) × real))
   let type1 : FPType := tup__0
@@ -313,7 +313,7 @@ def FPMaxNum (op1_in : (BitVec k_N)) (op2_in : (BitVec k_N)) (fpcr : (BitVec 64)
   let type1 ← (( do (undefined_FPType (← occLabel 997) ()) ) : SailM FPType )
   let type2 ← (( do (undefined_FPType (← occLabel 998) ()) ) : SailM FPType )
   ArmFull.assert (((Sail.BitVec.length op2_in) == 16) || (((Sail.BitVec.length op2_in) == 32) || ((Sail.BitVec.length
-          op2_in) == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:16680.41-16680.42"
+          op2_in) == 64))) "sail-arm/v8_base.sail:16680.41-16680.42"
   let op1 : (BitVec k_N) := op1_in
   let op2 : (BitVec k_N) := op2_in
   let (__tup_0, _, _) ← (( do (FPUnpack op1 fpcr) ) : SailM (FPType × (BitVec 1) × real) )
@@ -376,7 +376,7 @@ def FPMinNum (op1_in : (BitVec k_N)) (op2_in : (BitVec k_N)) (fpcr : (BitVec 64)
   let type1 ← (( do (undefined_FPType (← occLabel 1011) ()) ) : SailM FPType )
   let type2 ← (( do (undefined_FPType (← occLabel 1012) ()) ) : SailM FPType )
   ArmFull.assert (((Sail.BitVec.length op2_in) == 16) || (((Sail.BitVec.length op2_in) == 32) || ((Sail.BitVec.length
-          op2_in) == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:16782.41-16782.42"
+          op2_in) == 64))) "sail-arm/v8_base.sail:16782.41-16782.42"
   let op1 : (BitVec k_N) := op1_in
   let op2 : (BitVec k_N) := op2_in
   let (__tup_0, _, _) ← (( do (FPUnpack op1 fpcr) ) : SailM (FPType × (BitVec 1) × real) )
@@ -437,7 +437,7 @@ def FPMul (op1 : (BitVec k_N)) (op2 : (BitVec k_N)) (fpcr : (BitVec 64)) : SailM
   let zero1 ← (( do (undefined_bool_at (← occLabel 1023) ()) ) : SailM Bool )
   let zero2 ← (( do (undefined_bool_at (← occLabel 1024) ()) ) : SailM Bool )
   ArmFull.assert (((Sail.BitVec.length result) == 16) || (((Sail.BitVec.length result) == 32) || ((Sail.BitVec.length
-          result) == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:16824.41-16824.42"
+          result) == 64))) "sail-arm/v8_base.sail:16824.41-16824.42"
   let w__0 ← (( do (FPUnpack op1 fpcr) ) : SailM (FPType × (BitVec 1) × real) )
   let (tup__0, tup__1, tup__2) := (w__0 : (FPType × (BitVec 1) × real))
   let type1 : FPType := tup__0
@@ -519,7 +519,7 @@ def FPMulX (op1 : (BitVec k_N)) (op2 : (BitVec k_N)) (fpcr : (BitVec 64)) : Sail
   let zero1 ← (( do (undefined_bool_at (← occLabel 1055) ()) ) : SailM Bool )
   let zero2 ← (( do (undefined_bool_at (← occLabel 1056) ()) ) : SailM Bool )
   ArmFull.assert (((Sail.BitVec.length op2) == 16) || (((Sail.BitVec.length op2) == 32) || ((Sail.BitVec.length
-          op2) == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:17040.41-17040.42"
+          op2) == 64))) "sail-arm/v8_base.sail:17040.41-17040.42"
   let result ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1057)
       (Sail.BitVec.length op2))) ) : SailM (BitVec k_N) )
@@ -595,7 +595,7 @@ def FPSqrt (op : (BitVec k_N)) (fpcr : (BitVec 64)) : SailM (BitVec k_N) := do
   let sign ← (( do (undefined_bitvector_at (← occLabel 1125) 1) ) : SailM (BitVec 1) )
   let value_name ← (( do (undefined_real_at (← occLabel 1126) ()) ) : SailM real )
   ArmFull.assert (((Sail.BitVec.length op) == 16) || (((Sail.BitVec.length op) == 32) || ((Sail.BitVec.length
-          op) == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:17724.41-17724.42"
+          op) == 64))) "sail-arm/v8_base.sail:17724.41-17724.42"
   let w__0 ← (( do (FPUnpack op fpcr) ) : SailM (FPType × (BitVec 1) × real) )
   let (tup__0, tup__1, tup__2) := (w__0 : (FPType × (BitVec 1) × real))
   let fptype : FPType := tup__0
@@ -683,7 +683,7 @@ def FPRecipStepFused (op1_in : (BitVec k_N)) (op2 : (BitVec k_N)) : SailM (BitVe
   let zero1 ← (( do (undefined_bool_at (← occLabel 1691) ()) ) : SailM Bool )
   let zero2 ← (( do (undefined_bool_at (← occLabel 1692) ()) ) : SailM Bool )
   ArmFull.assert (((Sail.BitVec.length op2) == 16) || (((Sail.BitVec.length op2) == 32) || ((Sail.BitVec.length
-          op2) == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:29114.41-29114.42"
+          op2) == 64))) "sail-arm/v8_base.sail:29114.41-29114.42"
   let op1 : (BitVec k_N) := op1_in
   let result ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1693)

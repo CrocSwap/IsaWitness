@@ -165,7 +165,7 @@ def SVEAccessTrap (target_el : (BitVec 2)) : SailM Unit := do
                 let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
                 (pure ((((BitVec.toNat target_el) ≥b (BitVec.toNat w__0.EL)) : Bool)))) && ((target_el != EL0) : Bool)))) && ((HaveEL
           target_el) : Bool))) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:29235.86-29235.87"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:29235.86-29235.87"
   let route_to_el2 ← (( do
     if ((← do
          if (((target_el == EL1) : Bool) : Bool)
@@ -193,7 +193,7 @@ def SVEAccessTrap (target_el : (BitVec 2)) : SailM Unit := do
 def SMEAccessTrap (etype : SMEExceptionType) (target_el_in : (BitVec 2)) : SailM Unit := do
   let target_el : (BitVec 2) := target_el_in
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  ArmFull.assert ((BitVec.toNat target_el) ≥b (BitVec.toNat w__0.EL)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:29351.45-29351.46"
+  ArmFull.assert ((BitVec.toNat target_el) ≥b (BitVec.toNat w__0.EL)) "sail-arm/v8_base.sail:29351.45-29351.46"
   let target_el : (BitVec 2) :=
     if ((target_el == EL0) : Bool)
     then EL1
@@ -501,7 +501,7 @@ def AArch64_CallSecureMonitor (immediate : (BitVec 16)) : SailM Unit := do
         let w__0 ← (( do (ELUsingAArch32 EL3) ) : SailM Bool )
         (pure (((! w__0) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:33567.54-33567.55"
+  ArmFull.assert w__1 "sail-arm/v8_base.sail:33567.54-33567.55"
   let w__2 ← (( do (UsingAArch32 ()) ) : SailM Bool )
   if (w__2 : Bool)
   then
@@ -518,7 +518,7 @@ def AArch64_CallSecureMonitor (immediate : (BitVec 16)) : SailM Unit := do
 
 
 def AArch64_CallHypervisor (immediate : (BitVec 16)) : SailM Unit := do
-  ArmFull.assert (HaveEL EL2) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:33582.22-33582.23"
+  ArmFull.assert (HaveEL EL2) "sail-arm/v8_base.sail:33582.22-33582.23"
   let w__0 ← (( do (UsingAArch32 ()) ) : SailM Bool )
   if (w__0 : Bool)
   then

@@ -149,7 +149,7 @@ open ATAccess
 
 /-- Type quantifiers: k_interrupt : Bool, k_retry : Bool -/
 def FailTransaction__1 (cause : TMFailure) (retry : Bool) (interrupt : Bool) (reason : (BitVec 15)) : SailM Unit := do
-  ArmFull.assert ((! retry) || (! interrupt)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7577.48-7577.49"
+  ArmFull.assert ((! retry) || (! interrupt)) "sail-arm/v8_base.sail:7577.48-7577.49"
   let w__3 ← (( do
     if ((← do
          (HaveBRBExt ())) : Bool)
@@ -240,7 +240,7 @@ def AArch64_StateMatch (ssc_in : (BitVec 2)) (ssce_in : (BitVec 1)) (hmc_in : (B
   if ((! w__0) : Bool)
   then
     (do
-      ArmFull.assert (ssce_in == 0#1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23515.29-23515.30")
+      ArmFull.assert (ssce_in == 0#1) "sail-arm/v8_base.sail:23515.29-23515.30")
   else (pure (()))
   let ssc : (BitVec 2) := ssc_in
   let ssce : (BitVec 1) := ssce_in
@@ -317,7 +317,7 @@ def AArch64_StateMatch (ssc_in : (BitVec 2)) (ssce_in : (BitVec 1)) (hmc_in : (B
                 let c : Constraint := tup__0
                 let linked_n : Int := tup__1
                 ArmFull.assert ((BEq.beq c Constraint_DISABLED) || ((BEq.beq c Constraint_NONE) || (BEq.beq
-                      c Constraint_UNKNOWN))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23575.92-23575.93"
+                      c Constraint_UNKNOWN))) "sail-arm/v8_base.sail:23575.92-23575.93"
                 let linked ← (( do
                   match c with
                   | .Constraint_DISABLED =>
@@ -348,7 +348,7 @@ def AArch64_StateMatch (ssc_in : (BitVec 2)) (ssce_in : (BitVec 1)) (hmc_in : (B
 /-- Type quantifiers: k_cold_reset : Bool -/
 def AArch64_TakeReset (cold_reset : Bool) : SailM Unit := do
   let w__0 ← (( do (HaveAArch64 ()) ) : SailM Bool )
-  ArmFull.assert w__0 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:33499.24-33499.25"
+  ArmFull.assert w__0 "sail-arm/v8_base.sail:33499.24-33499.25"
   let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
   writeReg PSTATE { w__1 with nRW := 0#1 }
   if ((HaveEL EL3) : Bool)
@@ -415,7 +415,7 @@ def AArch64_TakeReset (cold_reset : Bool) : SailM Unit := do
           let w__18 ← (( do (AArch64_PAMax ()) ) : SailM Int )
           (pure (((is_zero_subrange rv 63 w__18) : Bool)))) && ((IsZero
           (Sail.BitVec.extractLsb rv 1 0)) : Bool))) ) : SailM Bool )
-  ArmFull.assert w__19 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:33529.73-33529.74"
+  ArmFull.assert w__19 "sail-arm/v8_base.sail:33529.73-33529.74"
   let branch_conditional : Bool := false
   (BranchTo rv BranchType_RESET branch_conditional)
 
@@ -546,7 +546,7 @@ def AArch32_StateMatch (ssc_in : (BitVec 2)) (hmc_in : (BitVec 1)) (pxc_in : (Bi
                   let c : Constraint := tup__0
                   let linked_n : Int := tup__1
                   ArmFull.assert ((BEq.beq c Constraint_DISABLED) || ((BEq.beq c Constraint_NONE) || (BEq.beq
-                        c Constraint_UNKNOWN))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40417.92-40417.93"
+                        c Constraint_UNKNOWN))) "sail-arm/v8_base.sail:40417.92-40417.93"
                   let linked ← (( do
                     match c with
                     | .Constraint_DISABLED =>
@@ -617,7 +617,7 @@ def BranchWritePC (address_in : (BitVec 32)) (branch_type : BranchType) : SailM 
 def CBWritePC (address_in : (BitVec 32)) : SailM Unit := do
   let address : (BitVec 32) := address_in
   let w__0 ← (( do (CurrentInstrSet ()) ) : SailM InstrSet )
-  ArmFull.assert (BEq.beq w__0 InstrSet_T32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42418.44-42418.45"
+  ArmFull.assert (BEq.beq w__0 InstrSet_T32) "sail-arm/v8_base.sail:42418.44-42418.45"
   let address : (BitVec 32) := (BitVec.update address 0 (Bit 0#1))
   let branch_conditional : Bool := true
   (BranchTo address BranchType_DIR branch_conditional)
@@ -626,7 +626,7 @@ def CBWritePC (address_in : (BitVec 32)) : SailM Unit := do
 /-- Type quantifiers: k_cold_reset : Bool -/
 def AArch32_TakeReset (cold_reset : Bool) : SailM Unit := do
   let w__0 ← (( do (HaveAArch64 ()) ) : SailM Bool )
-  ArmFull.assert (! w__0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42835.34-42835.35"
+  ArmFull.assert (! w__0) "sail-arm/v8_base.sail:42835.34-42835.35"
   if ((HaveEL EL3) : Bool)
   then
     (do
@@ -705,7 +705,7 @@ def AArch32_TakeReset (cold_reset : Bool) : SailM Unit := do
               (pure (((w__20.T == 1#1) : Bool)))) || (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                   rv 1)])) == 0#1) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__22 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42870.62-42870.63"
+  ArmFull.assert w__22 "sail-arm/v8_base.sail:42870.62-42870.63"
   let branch_conditional : Bool := false
   (BranchTo rv BranchType_RESET branch_conditional)
 

@@ -674,7 +674,7 @@ def execute_FCLAMP_Z_ZZ__ (VL : Nat) (d : Nat) (esize : Nat) (m : Nat) (n : Nat)
             SailM (BitVec esize) )
           let element3 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand3 e esize)) ) :
             SailM (BitVec esize) )
-          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:11265.49-11265.50"
+          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:11265.49-11265.50"
           let w__0 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
           let w__1 ← (( do (FPMaxNum element1 element3 w__0) ) : SailM (BitVec esize) )
           let w__2 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )

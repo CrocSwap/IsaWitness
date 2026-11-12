@@ -245,7 +245,7 @@ def AArch64_SystemAccessTrap (target_el : (BitVec 2)) (ec : Int) : SailM Unit :=
         let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
         (pure ((((BitVec.toNat target_el) ≥b (BitVec.toNat w__0.EL)) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:33913.86-33913.87"
+  ArmFull.assert w__1 "sail-arm/v8_base.sail:33913.86-33913.87"
   let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
   let vect_offset : Int := (BitVec.toNat 0x0#4)
   let w__2 ← (( do (ThisInstr ()) ) : SailM (BitVec 32) )
@@ -262,7 +262,7 @@ def AArch64_AArch32SystemAccessTrap (target_el : (BitVec 2)) (ec : Int) : SailM 
         let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
         (pure ((((BitVec.toNat target_el) ≥b (BitVec.toNat w__0.EL)) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34008.86-34008.87"
+  ArmFull.assert w__1 "sail-arm/v8_base.sail:34008.86-34008.87"
   let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
   let vect_offset : Int := (BitVec.toNat 0x0#4)
   let w__2 ← (( do (ThisInstr ()) ) : SailM (BitVec 32) )
@@ -359,7 +359,7 @@ def AArch64_TakeVirtualSErrorException (_ : Unit) : SailM Unit := do
       (do
         (EL2Enabled ()))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34186.63-34186.64"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:34186.63-34186.64"
   let w__7 ← (( do
     if ((← do
          let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
@@ -369,7 +369,7 @@ def AArch64_TakeVirtualSErrorException (_ : Unit) : SailM Unit := do
         let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
         (pure ((((_get_HCR_EL2_Type_AMO w__6) == 1#1) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__7 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34187.52-34187.53"
+  ArmFull.assert w__7 "sail-arm/v8_base.sail:34187.52-34187.53"
   let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
   let vect_offset : Int := (BitVec.toNat 0x180#12)
   let except ← (( do (ExceptionSyndrome Exception_SError) ) : SailM ExceptionRecord )
@@ -452,7 +452,7 @@ def AArch64_TakePhysicalIRQException (_ : Unit) : SailM Unit := do
       then
         (do
           let w__11 ← (( do readReg PSTATE ) : SailM ProcState )
-          ArmFull.assert (w__11.EL != EL3) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34217.31-34217.32"
+          ArmFull.assert (w__11.EL != EL3) "sail-arm/v8_base.sail:34217.31-34217.32"
           (AArch64_TakeException EL2 except preferred_exception_return vect_offset))
       else
         (do
@@ -465,7 +465,7 @@ def AArch64_TakePhysicalIRQException (_ : Unit) : SailM Unit := do
               (do
                 let w__13 ← (( do readReg PSTATE ) : SailM ProcState )
                 (pure (((w__13.EL == EL1) : Bool)))) ) : SailM Bool )
-          ArmFull.assert w__14 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34220.50-34220.51"
+          ArmFull.assert w__14 "sail-arm/v8_base.sail:34220.50-34220.51"
           (AArch64_TakeException EL1 except preferred_exception_return vect_offset)))
 
 
@@ -484,7 +484,7 @@ def AArch64_TakeVirtualIRQException (_ : Unit) : SailM Unit := do
       (do
         (EL2Enabled ()))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34228.63-34228.64"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:34228.63-34228.64"
   let w__7 ← (( do
     if ((← do
          let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
@@ -494,7 +494,7 @@ def AArch64_TakeVirtualIRQException (_ : Unit) : SailM Unit := do
         let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
         (pure ((((_get_HCR_EL2_Type_IMO w__6) == 1#1) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__7 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34229.52-34229.53"
+  ArmFull.assert w__7 "sail-arm/v8_base.sail:34229.52-34229.53"
   let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
   let vect_offset : Int := (BitVec.toNat 0x80#8)
   let except ← (( do (ExceptionSyndrome Exception_IRQ) ) : SailM ExceptionRecord )
@@ -552,7 +552,7 @@ def AArch64_TakePhysicalFIQException (_ : Unit) : SailM Unit := do
       then
         (do
           let w__11 ← (( do readReg PSTATE ) : SailM ProcState )
-          ArmFull.assert (w__11.EL != EL3) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34247.31-34247.32"
+          ArmFull.assert (w__11.EL != EL3) "sail-arm/v8_base.sail:34247.31-34247.32"
           (AArch64_TakeException EL2 except preferred_exception_return vect_offset))
       else
         (do
@@ -565,7 +565,7 @@ def AArch64_TakePhysicalFIQException (_ : Unit) : SailM Unit := do
               (do
                 let w__13 ← (( do readReg PSTATE ) : SailM ProcState )
                 (pure (((w__13.EL == EL1) : Bool)))) ) : SailM Bool )
-          ArmFull.assert w__14 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34250.50-34250.51"
+          ArmFull.assert w__14 "sail-arm/v8_base.sail:34250.50-34250.51"
           (AArch64_TakeException EL1 except preferred_exception_return vect_offset)))
 
 
@@ -584,7 +584,7 @@ def AArch64_TakeVirtualFIQException (_ : Unit) : SailM Unit := do
       (do
         (EL2Enabled ()))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34258.63-34258.64"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:34258.63-34258.64"
   let w__7 ← (( do
     if ((← do
          let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
@@ -594,7 +594,7 @@ def AArch64_TakeVirtualFIQException (_ : Unit) : SailM Unit := do
         let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
         (pure ((((_get_HCR_EL2_Type_FMO w__6) == 1#1) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__7 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34259.52-34259.53"
+  ArmFull.assert w__7 "sail-arm/v8_base.sail:34259.52-34259.53"
   let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
   let vect_offset : Int := (BitVec.toNat 0x100#12)
   let except ← (( do (ExceptionSyndrome Exception_FIQ) ) : SailM ExceptionRecord )
@@ -652,7 +652,7 @@ def AArch64_SoftwareBreakpoint (immediate : (BitVec 16)) : SailM Unit := do
 
 def AArch64_SoftwareStepException (_ : Unit) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  ArmFull.assert (w__0.EL != EL3) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:34290.27-34290.28"
+  ArmFull.assert (w__0.EL != EL3) "sail-arm/v8_base.sail:34290.27-34290.28"
   let route_to_el2 ← (( do
     if ((← do
          if ((← do

@@ -644,9 +644,9 @@ def C40InitRawRegression (_ : Unit) : SailM Unit := do
   writeReg __num_ctx_breakpoints (Neg.neg 1)
   (InitFeatureImpl ())
   let w__0 ← (( do readReg NUM_BREAKPOINTS ) : SailM Int )
-  ArmFull.assert (w__0 ≥b 2) "/home/doug/boss-scratch/armcert-defects/c47-accepted/armcert-c47-impdef.sail:799.31-799.32"
+  ArmFull.assert (w__0 ≥b 2) "armcert/armcert-c47-impdef.sail:799.31-799.32"
   let w__1 ← (( do readReg NUM_WATCHPOINTS ) : SailM Int )
-  ArmFull.assert (w__1 ≥b 2) "/home/doug/boss-scratch/armcert-defects/c47-accepted/armcert-c47-impdef.sail:800.31-800.32"
+  ArmFull.assert (w__1 ≥b 2) "armcert/armcert-c47-impdef.sail:800.31-800.32"
   let w__5 ← (( do
     if ((← do
          let w__2 ← (( do readReg __num_ctx_breakpoints ) : SailM Int )
@@ -657,7 +657,7 @@ def C40InitRawRegression (_ : Unit) : SailM Unit := do
         let w__4 ← (( do readReg NUM_BREAKPOINTS ) : SailM Int )
         (pure (((w__3 ≤b w__4) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__5 "/home/doug/boss-scratch/armcert-defects/c47-accepted/armcert-c47-impdef.sail:801.80-801.81"
+  ArmFull.assert w__5 "armcert/armcert-c47-impdef.sail:801.80-801.81"
 
 
 def ELUsingAArch32 (el : (BitVec 2)) : SailM Bool := do

@@ -699,7 +699,7 @@ def decode_SRSRA_Z_ZI__ (tszh : (BitVec 2)) (tszl : (BitVec 2)) (imm3 : (BitVec 
       | _ => (pure (())))
   | _ =>
     (do
-      ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:51742.22-51742.23"
+      ArmFull.assert false "sail-arm/instrs64_sve.sail:51742.22-51742.23"
       throw Error.Exit)
 
 
@@ -821,7 +821,7 @@ def decode_SSRA_Z_ZI__ (tszh : (BitVec 2)) (tszl : (BitVec 2)) (imm3 : (BitVec 3
       | _ => (pure (())))
   | _ =>
     (do
-      ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:51889.22-51889.23"
+      ArmFull.assert false "sail-arm/instrs64_sve.sail:51889.22-51889.23"
       throw Error.Exit)
 
 

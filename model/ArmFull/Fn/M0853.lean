@@ -503,7 +503,7 @@ def decode_aarch32_instrs_WFE_A1enc_A_txt (cond : (BitVec 4)) : SailM Unit := do
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:40507.29-40507.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:40507.29-40507.30"
       (execute_aarch32_instrs_WFE_Op_A_txt ()))
   else (pure (()))
 
@@ -531,7 +531,7 @@ def decode_aarch32_instrs_WFI_A1enc_A_txt (cond : (BitVec 4)) : SailM Unit := do
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:40578.29-40578.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:40578.29-40578.30"
       (execute_aarch32_instrs_WFI_Op_A_txt ()))
   else (pure (()))
 
@@ -733,7 +733,7 @@ def decode_autia_aarch64_instrs_integer_pac_autia_hint (op2 : (BitVec 3)) (CRm :
         (pure ((d, n, source_is_sp)))) ) : SailM (Int × Int × Bool) )
   let n : Int := n
   let d : Int := d
-  ArmFull.assert ((0 ≤b n) && (n ≤b 31)) "/home/doug/boss-scratch/armcert-defects/c27-accepted/armcert_c27.sail:141.43-141.44"
+  ArmFull.assert ((0 ≤b n) && (n ≤b 31)) "armcert/armcert_c27.sail:141.43-141.44"
   (execute_aarch64_instrs_integer_pac_autia_dp_1src (Sail.Int.toNatChecked (d))
     (Sail.Int.toNatChecked (n)) source_is_sp)
 

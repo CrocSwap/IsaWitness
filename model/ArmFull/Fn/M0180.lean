@@ -234,7 +234,7 @@ def GetBRBENumRecords (_ : Unit) : SailM Int := do
                 let w__3 ← (( do readReg BRBIDR0_EL1 ) : SailM (BitVec 64) )
                 (pure ((((BitVec.toNat (_get_BRBIDR0_EL1_Type_NUMREC w__3)) == (BitVec.toNat 0x40#8)) : Bool))))))
     ) : SailM Bool )
-  ArmFull.assert w__6 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6426.176-6426.177"
+  ArmFull.assert w__6 "sail-arm/v8_base.sail:6426.176-6426.177"
   (__IMPDEF_integer "Number of BRB records")
 
 
@@ -383,7 +383,7 @@ def FPDefaultNaN (N : Nat) : SailM (BitVec N) := do
 
 def AArch64_PAMax (_ : Unit) : SailM Int := do
   let pamax ← (( do (__IMPDEF_integer "Maximum Physical Address Size") ) : SailM Int )
-  ArmFull.assert ((pamax == 32) || ((pamax == 36) || ((pamax == 40) || ((pamax == 42) || ((pamax == 44) || ((pamax == 48) || ((pamax == 52) || (pamax == 56)))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19468.120-19468.121"
+  ArmFull.assert ((pamax == 32) || ((pamax == 36) || ((pamax == 40) || ((pamax == 42) || ((pamax == 44) || ((pamax == 48) || ((pamax == 52) || (pamax == 56)))))))) "sail-arm/v8_base.sail:19468.120-19468.121"
   (pure (pamax))
 
 

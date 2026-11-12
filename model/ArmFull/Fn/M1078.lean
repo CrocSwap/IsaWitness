@@ -158,7 +158,7 @@ def execute_aarch64_instrs_float_convert_int (d : Nat) (fltsize : Nat) (intsize 
     (do
       let fltval ← (( do ((Sail.BitVec.castWidth ) <$> (V_read n (Sail.Int.toNatChecked (fsize))))
         ) : SailM (BitVec (Sail.Int.toNatChecked (fsize : Int))) )
-      ArmFull.assert ((((fsize == 16) || (fsize == 32)) || (fsize == 64)) && (((intsize == 16) || (intsize == 32)) || (intsize == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:14270.80-14270.81"
+      ArmFull.assert ((((fsize == 16) || (fsize == 32)) || (fsize == 64)) && (((intsize == 16) || (intsize == 32)) || (intsize == 64))) "sail-arm/instrs64.sail:14270.80-14270.81"
       let intval ← (( do
         ((Sail.BitVec.castWidth ) <$> (FPToFixed fltval 0 is_unsigned fpcr rounding intsize)) ) :
         SailM (BitVec intsize) )
@@ -176,7 +176,7 @@ def execute_aarch64_instrs_float_convert_int (d : Nat) (fltsize : Nat) (intsize 
         SailM (BitVec (Sail.Int.toNatChecked (fsize : Int))) )
       let fltval : (BitVec (Sail.Int.toNatChecked (fsize : Int))) :=
         (w__1 : (BitVec (Sail.Int.toNatChecked (fsize : Int))))
-      ArmFull.assert ((((fltsize == 16) || (fltsize == 32)) || (fltsize == 64)) && (((intsize == 16) || (intsize == 32)) || (intsize == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:14278.82-14278.83"
+      ArmFull.assert ((((fltsize == 16) || (fltsize == 32)) || (fltsize == 64)) && (((intsize == 16) || (intsize == 32)) || (intsize == 64))) "sail-arm/instrs64.sail:14278.82-14278.83"
       let w__2 ← (( do
         ((Sail.BitVec.castWidth ) <$> (FixedToFP intval 0 is_unsigned fpcr rounding fltsize)) ) :
         SailM (BitVec fltsize) )
@@ -189,7 +189,7 @@ def execute_aarch64_instrs_float_convert_int (d : Nat) (fltsize : Nat) (intsize 
       let fltval ← (( do
         ((Sail.BitVec.castWidth ) <$> (Vpart_read n part (Sail.Int.toNatChecked (fsize)))) ) : SailM
         (BitVec (Sail.Int.toNatChecked (fsize : Int))) )
-      ArmFull.assert ((fsize ≥b 0) && (intsize ≥b fsize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:14284.63-14284.64"
+      ArmFull.assert ((fsize ≥b 0) && (intsize ≥b fsize)) "sail-arm/instrs64.sail:14284.63-14284.64"
       let intval : (BitVec intsize) :=
         (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend fltval intsize))
       (X_set d intsize (Sail.BitVec.castWidth intval)))
@@ -197,7 +197,7 @@ def execute_aarch64_instrs_float_convert_int (d : Nat) (fltsize : Nat) (intsize 
     (do
       let intval ← (( do ((Sail.BitVec.castWidth ) <$> (X_read n intsize)) ) : SailM
         (BitVec intsize) )
-      ArmFull.assert ((0 ≤b (fsize -i 1)) && ((fsize -i 1) <b intsize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:14290.70-14290.71"
+      ArmFull.assert ((0 ≤b (fsize -i 1)) && ((fsize -i 1) <b intsize)) "sail-arm/instrs64.sail:14290.70-14290.71"
       let fltval : (BitVec (Sail.Int.toNatChecked (fsize : Int))) :=
         (Sail.BitVec.castWidth (Sail.BitVec.extractLsb intval (Sail.Int.toNatChecked ((fsize -i 1)))
           0))
@@ -207,8 +207,8 @@ def execute_aarch64_instrs_float_convert_int (d : Nat) (fltsize : Nat) (intsize 
       let z ← (( do (undefined_bitvector_at (← occLabel 4198) 1) ) : SailM (BitVec 1) )
       let fltval ← (( do ((Sail.BitVec.castWidth ) <$> (V_read n (Sail.Int.toNatChecked (fsize))))
         ) : SailM (BitVec (Sail.Int.toNatChecked (fsize : Int))) )
-      ArmFull.assert (fsize == 64) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:14297.41-14297.42"
-      ArmFull.assert (intsize == 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:14298.43-14298.44"
+      ArmFull.assert (fsize == 64) "sail-arm/instrs64.sail:14297.41-14297.42"
+      ArmFull.assert (intsize == 32) "sail-arm/instrs64.sail:14298.43-14298.44"
       let w__4 ← (( do
         ((fun (x0, x1) => ((Sail.BitVec.castWidth x0), x1)) <$> (FPToFixedJS (k_M := 64)
           (Sail.BitVec.castWidth fltval) fpcr true intsize)) ) : SailM ((BitVec 32) × (BitVec 1)) )
@@ -348,7 +348,7 @@ def execute_aarch64_instrs_float_convert_fix (d : Nat) (fltsize : Nat) (fracbits
     (do
       let fltval ← (( do ((Sail.BitVec.castWidth ) <$> (V_read n (Sail.Int.toNatChecked (fsize))))
         ) : SailM (BitVec (Sail.Int.toNatChecked (fsize : Int))) )
-      ArmFull.assert ((((fsize == 16) || (fsize == 32)) || (fsize == 64)) && (((intsize == 16) || (intsize == 32)) || (intsize == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:16857.80-16857.81"
+      ArmFull.assert ((((fsize == 16) || (fsize == 32)) || (fsize == 64)) && (((intsize == 16) || (intsize == 32)) || (intsize == 64))) "sail-arm/instrs64.sail:16857.80-16857.81"
       let intval ← (( do
         ((Sail.BitVec.castWidth ) <$> (FPToFixed fltval fracbits is_unsigned fpcr rounding intsize))
         ) : SailM (BitVec intsize) )
@@ -732,7 +732,7 @@ def execute_aarch64_instrs_memory_atomicops_ld (acquire : Bool) (datasize : Nat)
   if ((t != 31) : Bool)
   then
     (do
-      ArmFull.assert ((datasize ≥b 0) && (regsize ≥b datasize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:25715.67-25715.68"
+      ArmFull.assert ((datasize ≥b 0) && (regsize ≥b datasize)) "sail-arm/instrs64.sail:25715.67-25715.68"
       (X_set t regsize (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend data regsize))))
   else (pure (()))
   let w__2 ← (( do readReg SPESampleInFlight ) : SailM Bool )

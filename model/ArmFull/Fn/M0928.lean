@@ -373,7 +373,7 @@ def ATS1HW_SysRegWrite32_6bb51bbf34dda57b (el : (BitVec 2)) (coproc : (BitVec 4)
 
 
 def decode_aarch32_instrs_BKPT_A1enc_A_txt (cond : (BitVec 4)) (imm12 : (BitVec 12)) (imm4 : (BitVec 4)) : SailM Unit := do
-  ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:1917.25-1917.26"
+  ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:1917.25-1917.26"
   let imm16 : (BitVec 16) := (imm12 +++ imm4)
   if ((cond != 0b1110#4) : Bool)
   then sailThrow ((Error_Unpredictable ()))
@@ -405,7 +405,7 @@ def decode_aarch32_instrs_ESB_A1enc_A_txt (cond : (BitVec 4)) : SailM Unit := do
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:45997.29-45997.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:45997.29-45997.30"
       let w__1 ← (( do (HaveRASExt ()) ) : SailM Bool )
       if ((! w__1) : Bool)
       then

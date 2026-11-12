@@ -633,7 +633,7 @@ def Mk_TTBR1_EL2_Type (v : (BitVec 128)) : (BitVec 128) :=
 
 
 def IsExternalSyncAbort (statuscode : Fault) : SailM Bool := do
-  ArmFull.assert (bne statuscode Fault_None) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13362.35-13362.36"
+  ArmFull.assert (bne statuscode Fault_None) "sail-arm/v8_base.sail:13362.35-13362.36"
   (pure (((BEq.beq statuscode Fault_SyncExternal) || ((BEq.beq statuscode Fault_SyncParity) || ((BEq.beq
             statuscode Fault_SyncExternalOnWalk) || (BEq.beq statuscode Fault_SyncParityOnWalk))))))
 
@@ -643,24 +643,24 @@ def PendSErrorInterrupt (fault : FaultRecord) : Unit :=
 
 
 def IsAsyncAbort (statuscode : Fault) : SailM Bool := do
-  ArmFull.assert (bne statuscode Fault_None) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13606.35-13606.36"
+  ArmFull.assert (bne statuscode Fault_None) "sail-arm/v8_base.sail:13606.35-13606.36"
   (pure (((BEq.beq statuscode Fault_AsyncExternal) || (BEq.beq statuscode Fault_AsyncParity))))
 
 
 def IsExternalAbort (statuscode : Fault) : SailM Bool := do
-  ArmFull.assert (bne statuscode Fault_None) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13619.35-13619.36"
+  ArmFull.assert (bne statuscode Fault_None) "sail-arm/v8_base.sail:13619.35-13619.36"
   (pure (((BEq.beq statuscode Fault_SyncExternal) || ((BEq.beq statuscode Fault_SyncParity) || ((BEq.beq
             statuscode Fault_SyncExternalOnWalk) || ((BEq.beq statuscode Fault_SyncParityOnWalk) || ((BEq.beq
                 statuscode Fault_AsyncExternal) || (BEq.beq statuscode Fault_AsyncParity))))))))
 
 
 def IsSecondStage (fault : FaultRecord) : SailM Bool := do
-  ArmFull.assert (bne fault.statuscode Fault_None) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13630.41-13630.42"
+  ArmFull.assert (bne fault.statuscode Fault_None) "sail-arm/v8_base.sail:13630.41-13630.42"
   (pure (fault.secondstage))
 
 
 def IPAValid (fault : FaultRecord) : SailM Bool := do
-  ArmFull.assert (bne fault.statuscode Fault_None) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13675.41-13675.42"
+  ArmFull.assert (bne fault.statuscode Fault_None) "sail-arm/v8_base.sail:13675.41-13675.42"
   (pure (if ((bne fault.gpcf.gpf GPCF_None) : Bool)
     then fault.secondstage
     else

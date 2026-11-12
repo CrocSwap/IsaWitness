@@ -117,8 +117,8 @@ open ATAccess
 
 /-- Type quantifiers: N : Nat, N = 32 -/
 def BFRound (op : real) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert (N == 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:32006.18-32006.19"
-  ArmFull.assert (bne op (0)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:32007.20-32007.21"
+  ArmFull.assert (N == 32) "sail-arm/v8_base.sail:32006.18-32006.19"
+  ArmFull.assert (bne op (0)) "sail-arm/v8_base.sail:32007.20-32007.21"
   let result ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1764)
       (Sail.Int.toNatChecked (N)))) ) : SailM (BitVec N) )

@@ -147,7 +147,7 @@ def SPESampleAddOpOther (conditional : Bool) (taken : Bool) : SailM Unit := do
 
 /-- Type quantifiers: k_N : Nat, List.elem k_N [8, 16, 32, 64] -/
 def SPEAddPacketToRecord (header_hi : (BitVec 2)) (header_lo : (BitVec 4)) (payload : (BitVec k_N)) : SailM Unit := do
-  ArmFull.assert ((Nat.mod (Sail.BitVec.length payload) 8) == 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:35115.26-35115.27"
+  ArmFull.assert ((Nat.mod (Sail.BitVec.length payload) 8) == 0) "sail-arm/v8_base.sail:35115.26-35115.27"
   let sz ← (( do (undefined_bitvector_at (← occLabel 2436) 2) ) : SailM (BitVec 2) )
   let sz ← (( do
     match (Sail.BitVec.length payload) with
@@ -185,7 +185,7 @@ def AArch64_TLBI_ALL (security : SecurityState) (regime : Regime) (shareability 
       (do
         let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
         (pure (((w__1.EL == EL2) : Bool)))) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:35915.46-35915.47"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:35915.46-35915.47"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2461) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_ALL }
   let r : TLBIRecord := { r with from_aarch64 := true }
@@ -217,7 +217,7 @@ def AArch64_TLBI_VMALL (security : SecurityState) (regime : Regime) (vmid : (Bit
           (do
             let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
             (pure (((w__2.EL == EL1) : Bool))))) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:35933.65-35933.66"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:35933.65-35933.66"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2462) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_VMALL }
   let r : TLBIRecord := { r with from_aarch64 := true }
@@ -244,7 +244,7 @@ def AArch64_TLBI_VMALLS12 (security : SecurityState) (regime : Regime) (vmid : (
       (do
         let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
         (pure (((w__1.EL == EL2) : Bool)))) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:35952.46-35952.47"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:35952.46-35952.47"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2463) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_VMALLS12 }
   let r : TLBIRecord := { r with from_aarch64 := true }
@@ -277,7 +277,7 @@ def AArch64_TLBI_ASID (security : SecurityState) (regime : Regime) (vmid : (BitV
           (do
             let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
             (pure (((w__2.EL == EL1) : Bool))))) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:35971.65-35971.66"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:35971.65-35971.66"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2464) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_ASID }
   let r : TLBIRecord := { r with from_aarch64 := true }
@@ -311,7 +311,7 @@ def AArch64_TLBI_VA (security : SecurityState) (regime : Regime) (vmid : (BitVec
           (do
             let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
             (pure (((w__2.EL == EL1) : Bool))))) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:35991.65-35991.66"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:35991.65-35991.66"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2465) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_VA }
   let r : TLBIRecord := { r with from_aarch64 := true }
@@ -355,7 +355,7 @@ def AArch64_TLBIP_VA (security : SecurityState) (regime : Regime) (vmid : (BitVe
           (do
             let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
             (pure (((w__2.EL == EL1) : Bool))))) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36018.65-36018.66"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:36018.65-36018.66"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2466) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_VA }
   let r : TLBIRecord := { r with from_aarch64 := true }
@@ -399,7 +399,7 @@ def AArch64_TLBI_VAA (security : SecurityState) (regime : Regime) (vmid : (BitVe
           (do
             let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
             (pure (((w__2.EL == EL1) : Bool))))) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36045.65-36045.66"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:36045.65-36045.66"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2467) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_VAA }
   let r : TLBIRecord := { r with from_aarch64 := true }
@@ -442,7 +442,7 @@ def AArch64_TLBIP_VAA (security : SecurityState) (regime : Regime) (vmid : (BitV
           (do
             let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
             (pure (((w__2.EL == EL1) : Bool))))) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36071.65-36071.66"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:36071.65-36071.66"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2468) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_VAA }
   let r : TLBIRecord := { r with from_aarch64 := true }
@@ -479,7 +479,7 @@ def AArch64_TLBI_IPAS2 (security : SecurityState) (regime : Regime) (vmid : (Bit
       (do
         let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
         (pure (((w__1.EL == EL2) : Bool)))) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36097.46-36097.47"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:36097.46-36097.47"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2469) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_IPAS2 }
   let r : TLBIRecord := { r with from_aarch64 := true }
@@ -534,7 +534,7 @@ def AArch64_TLBIP_IPAS2 (security : SecurityState) (regime : Regime) (vmid : (Bi
       (do
         let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
         (pure (((w__1.EL == EL2) : Bool)))) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36137.46-36137.47"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:36137.46-36137.47"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2470) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_IPAS2 }
   let r : TLBIRecord := { r with from_aarch64 := true }

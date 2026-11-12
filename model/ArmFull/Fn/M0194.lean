@@ -140,7 +140,7 @@ def CountPMUEvents (idx : Nat) : SailM Bool := do
           (do
             (HavePMUv3ICNTR ()))
         else (pure false)) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:4945.108-4945.109"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:4945.108-4945.109"
   let enabled ← (( do (undefined_bool_at (← occLabel 534) ()) ) : SailM Bool )
   let filtered ← (( do (undefined_bool_at (← occLabel 535) ()) ) : SailM Bool )
   let E ← (( do (undefined_bitvector_at (← occLabel 536) 1) ) : SailM (BitVec 1) )
@@ -153,7 +153,7 @@ def CountPMUEvents (idx : Nat) : SailM Bool := do
     then
       (do
         let w__3 ← (( do (HaveAArch64 ()) ) : SailM Bool )
-        ArmFull.assert w__3 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:4954.30-4954.31"
+        ArmFull.assert w__3 "sail-arm/v8_base.sail:4954.30-4954.31"
         if ((← do
              let w__4 ← (( do readReg PMCR_EL0 ) : SailM (BitVec 64) )
              (pure ((((_get_PMCR_EL0_Type_E w__4) == 1#1) : Bool)))) : Bool)
@@ -229,7 +229,7 @@ def CountPMUEvents (idx : Nat) : SailM Bool := do
                 else (pure false))
             else
               (do
-                ArmFull.assert ((0 ≤b idx) && (idx <b 32)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:4973.56-4973.57"
+                ArmFull.assert ((0 ≤b idx) && (idx <b 32)) "sail-arm/v8_base.sail:4973.56-4973.57"
                 if (((E == 1#1) : Bool) : Bool)
                 then
                   (do
@@ -534,12 +534,12 @@ def CountPMUEvents (idx : Nat) : SailM Bool := do
             if (w__96 : Bool)
             then
               (do
-                ArmFull.assert ((0 ≤b idx) && (idx <b 32)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:5058.56-5058.57"
+                ArmFull.assert ((0 ≤b idx) && (idx <b 32)) "sail-arm/v8_base.sail:5058.56-5058.57"
                 let w__97 ← (( do readReg PMEVTYPER_EL0 ) : SailM (Vector (BitVec 64) 32) )
                 (pure ((Sail.BitVec.extractLsb (GetElem?.getElem! w__97 idx) 31 0))))
             else
               (do
-                ArmFull.assert ((0 ≤b idx) && (idx <b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:5061.56-5061.57"
+                ArmFull.assert ((0 ≤b idx) && (idx <b 31)) "sail-arm/v8_base.sail:5061.56-5061.57"
                 (PMEVTYPER_read idx)))) ) : SailM (BitVec 32) )
   let filter := filter
   let P : (BitVec 1) := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access filter 31)]))

@@ -143,7 +143,7 @@ open AccessType
 open ATAccess
 
 def decode_aarch32_instrs_HLT_A1enc_A_txt (cond : (BitVec 4)) (imm12 : (BitVec 12)) (imm4 : (BitVec 4)) : SailM Unit := do
-  ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:42755.25-42755.26"
+  ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:42755.25-42755.26"
   let w__2 ← (( do
     if ((← do
          let w__0 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
@@ -215,7 +215,7 @@ def AArch64_TakeException (target_el : (BitVec 2)) (exception_in : ExceptionReco
         let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
         (pure ((((BitVec.toNat target_el) ≥b (BitVec.toNat w__2.EL)) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__3 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:10356.105-10356.106"
+  ArmFull.assert w__3 "sail-arm/v8_base.sail:10356.105-10356.106"
   let w__4 ← (( do (Halted ()) ) : SailM Bool )
   if (w__4 : Bool)
   then
@@ -632,7 +632,7 @@ def AArch32_EnterHypMode (except : ExceptionRecord) (preferred_exception_return 
       (do
         (ELUsingAArch32 EL2))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__3 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13942.87-13942.88"
+  ArmFull.assert w__3 "sail-arm/v8_base.sail:13942.87-13942.88"
   let w__4 ← (( do (Halted ()) ) : SailM Bool )
   if (w__4 : Bool)
   then
@@ -727,7 +727,7 @@ def AArch32_EnterMode (target_mode : (BitVec 5)) (preferred_exception_return : (
         let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
         (pure (((w__1.EL != EL2) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:14054.49-14054.50"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:14054.49-14054.50"
   let w__3 ← (( do (Halted ()) ) : SailM Bool )
   if (w__3 : Bool)
   then

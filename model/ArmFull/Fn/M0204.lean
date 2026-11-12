@@ -363,12 +363,12 @@ def AArch64_S1ApplyOutputPerms (permissions_in : Permissions) (descriptor : (Bit
           if ((walkparams.d128 == 1#1) : Bool)
           then
             (do
-              ArmFull.assert (118 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25368.39-25368.40"
+              ArmFull.assert (118 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25368.39-25368.40"
               let pi_index : (BitVec 4) := (Sail.BitVec.extractLsb descriptor 118 115)
               (pure (pi_index)))
           else
             (do
-              ArmFull.assert (54 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25371.38-25371.39"
+              ArmFull.assert (54 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25371.38-25371.39"
               let pi_index : (BitVec 4) :=
                 (((Sail.BitVec.extractLsb descriptor 54 53) +++ (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                         descriptor 51)]))) +++ (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
@@ -383,7 +383,7 @@ def AArch64_S1ApplyOutputPerms (permissions_in : Permissions) (descriptor : (Bit
           { permissions with upi := (Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
               walkparams.pire0 (Sail.Int.toNatChecked ((bit_index +i 3)))
               (Sail.Int.toNatChecked (bit_index)))) }
-        ArmFull.assert (7 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25377.33-25377.34"
+        ArmFull.assert (7 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25377.33-25377.34"
         let permissions : Permissions :=
           { permissions with ndirty := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 7)])) }
         (pure (permissions)))
@@ -400,11 +400,11 @@ def AArch64_S1ApplyOutputPerms (permissions_in : Permissions) (descriptor : (Bit
           if (w__2 : Bool)
           then
             (do
-              ArmFull.assert (7 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25381.37-25381.38"
+              ArmFull.assert (7 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25381.37-25381.38"
               let permissions : Permissions :=
                 { permissions with ap := (Sail.BitVec.updateSubrange permissions.ap 2 1
                     ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 7)])) +++ 0#1)) }
-              ArmFull.assert (54 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25383.38-25383.39"
+              ArmFull.assert (54 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25383.38-25383.39"
               let permissions : Permissions :=
                 { permissions with pxn := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                       descriptor 54)])) }
@@ -414,11 +414,11 @@ def AArch64_S1ApplyOutputPerms (permissions_in : Permissions) (descriptor : (Bit
               if ((HasUnprivileged regime) : Bool)
               then
                 (do
-                  ArmFull.assert (7 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25386.37-25386.38"
+                  ArmFull.assert (7 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25386.37-25386.38"
                   let permissions : Permissions :=
                     { permissions with ap := (Sail.BitVec.updateSubrange permissions.ap 2 1
                         (Sail.BitVec.extractLsb descriptor 7 6)) }
-                  ArmFull.assert (54 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25388.38-25388.39"
+                  ArmFull.assert (54 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25388.38-25388.39"
                   let permissions : Permissions :=
                     { permissions with uxn := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                           descriptor 54)])) }
@@ -428,16 +428,16 @@ def AArch64_S1ApplyOutputPerms (permissions_in : Permissions) (descriptor : (Bit
                   (pure (permissions)))
               else
                 (do
-                  ArmFull.assert (7 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25392.37-25392.38"
+                  ArmFull.assert (7 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25392.37-25392.38"
                   let permissions : Permissions :=
                     { permissions with ap := (Sail.BitVec.updateSubrange permissions.ap 2 1
                         ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 7)])) +++ 1#1)) }
-                  ArmFull.assert (54 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25394.38-25394.39"
+                  ArmFull.assert (54 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25394.38-25394.39"
                   let permissions : Permissions :=
                     { permissions with xn := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                           descriptor 54)])) }
                   (pure (permissions)))) ) : SailM Permissions )
-        ArmFull.assert (51 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25397.34-25397.35"
+        ArmFull.assert (51 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25397.34-25397.35"
         let permissions : Permissions :=
           if ((((walkparams.ha == 1#1) && (walkparams.hd == 1#1)) && ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                      descriptor 51)])) == 1#1)) : Bool)
@@ -457,13 +457,13 @@ def AArch64_S1ApplyOutputPerms (permissions_in : Permissions) (descriptor : (Bit
       if ((walkparams.d128 == 1#1) : Bool)
       then
         (do
-          ArmFull.assert (124 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25407.39-25407.40"
+          ArmFull.assert (124 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25407.39-25407.40"
           let permissions : Permissions :=
             { permissions with po_index := (Sail.BitVec.extractLsb descriptor 124 121) }
           (pure (permissions)))
       else
         (do
-          ArmFull.assert (62 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25410.38-25410.39"
+          ArmFull.assert (62 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25410.38-25410.39"
           let permissions : Permissions :=
             { permissions with po_index := (0#1 +++ (Sail.BitVec.extractLsb descriptor 62 60)) }
           (pure (permissions))))
@@ -570,10 +570,10 @@ def SPESetDataVirtualAddress (vaddress : (BitVec 64)) : SailM Unit := do
 
 
 def ProtectionEnabled (el : (BitVec 2)) : SailM Bool := SailME.run do
-  ArmFull.assert (HaveEL el) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28475.21-28475.22"
+  ArmFull.assert (HaveEL el) "sail-arm/v8_base.sail:28475.21-28475.22"
   let regime ← (( do (S1TranslationRegime el) ) : SailME Bool (BitVec 2) )
   let w__0 ← (( do (ELUsingAArch32 regime) ) : SailME Bool Bool )
-  ArmFull.assert (! w__0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28477.43-28477.44"
+  ArmFull.assert (! w__0) "sail-arm/v8_base.sail:28477.43-28477.44"
   let w__1 ← (( do (IsD128Enabled el) ) : SailME Bool Bool )
   if ((! w__1) : Bool)
   then
@@ -620,8 +620,8 @@ def ProtectionEnabled (el : (BitVec 2)) : SailM Bool := SailME.run do
 /-- Type quantifiers: index : Int, width : Nat, width ≥ 0 -/
 def ZAvector_read (index : Int) (width : Nat) : SailM (BitVec width) := do
   let SVL ← (( do (CurrentSVL_read ()) ) : SailM Int )
-  ArmFull.assert (width == SVL) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31134.23-31134.24"
-  ArmFull.assert ((index ≥b 0) && (index <b (Int.ediv width 8))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31135.45-31135.46"
+  ArmFull.assert (width == SVL) "sail-arm/v8_base.sail:31134.23-31134.24"
+  ArmFull.assert ((index ≥b 0) && (index <b (Int.ediv width 8))) "sail-arm/v8_base.sail:31135.45-31135.46"
   let w__0 ← (( do readReg _ZA ) : SailM (Vector (BitVec 2048) 256) )
   (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb
       (GetElem?.getElem! w__0 (Sail.Int.toNatChecked (index)))
@@ -631,8 +631,8 @@ def ZAvector_read (index : Int) (width : Nat) : SailM (BitVec width) := do
 /-- Type quantifiers: index : Int, width : Nat, width ≥ 0 -/
 def ZAvector_set (index : Int) (width : Nat) (value_name : (BitVec width)) : SailM Unit := do
   let SVL ← (( do (CurrentSVL_read ()) ) : SailM Int )
-  ArmFull.assert (width == SVL) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31144.23-31144.24"
-  ArmFull.assert ((index ≥b 0) && (index <b (Int.ediv width 8))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31145.45-31145.46"
+  ArmFull.assert (width == SVL) "sail-arm/v8_base.sail:31144.23-31144.24"
+  ArmFull.assert ((index ≥b 0) && (index <b (Int.ediv width 8))) "sail-arm/v8_base.sail:31145.45-31145.46"
   let w__0 ← (( do (ConstrainUnpredictableBool Unpredictable_SMEZEROUPPER) ) : SailM Bool )
   if (w__0 : Bool)
   then
@@ -687,7 +687,7 @@ def AArch64_vESBOperation (_ : Unit) : SailM Unit := do
       (do
         (EL2Enabled ()))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:33362.63-33362.64"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:33362.63-33362.64"
   let vSEI_enabled ← (( do
     if ((← do
          let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )

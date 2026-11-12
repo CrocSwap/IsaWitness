@@ -454,7 +454,7 @@ def AArch64_TakeExceptionInDebugState (target_el : (BitVec 2)) (exception_in : E
         let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
         (pure ((((BitVec.toNat target_el) ≥b (BitVec.toNat w__2.EL)) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__3 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9865.105-9865.106"
+  ArmFull.assert w__3 "sail-arm/v8_base.sail:9865.105-9865.106"
   let w__5 ← (( do
     if (((target_el != EL3) : Bool) : Bool)
     then (pure true)
@@ -462,7 +462,7 @@ def AArch64_TakeExceptionInDebugState (target_el : (BitVec 2)) (exception_in : E
       (do
         let w__4 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
         (pure ((((_get_EDSCR_Type_SDD w__4) == 0#1) : Bool)))) ) : SailM Bool )
-  ArmFull.assert w__5 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9866.54-9866.55"
+  ArmFull.assert w__5 "sail-arm/v8_base.sail:9866.54-9866.55"
   let except : ExceptionRecord := exception_in
   let sync_errors ← (( do (undefined_bool_at (← occLabel 693) ()) ) : SailM Bool )
   let w__6 ← (( do (HaveIESB ()) ) : SailM Bool )
@@ -680,7 +680,7 @@ def GPTWalk (pa : (BitVec 56)) (accdesc : AccessDescriptor) : SailM (GPCFRecord 
   let pps ← (( do (DecodePPS ()) ) : SailME (GPCFRecord × GPTEntry) Int )
   let l0sz ← (( do (GPTL0Size ()) ) : SailME (GPCFRecord × GPTEntry) Int )
   let alignment : Int := (Max.max ((pps -i l0sz) +i 3) 12)
-  ArmFull.assert (56 ≥b alignment) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19809.39-19809.40"
+  ArmFull.assert (56 ≥b alignment) "sail-arm/v8_base.sail:19809.39-19809.40"
   let base : (BitVec 56) :=
     (base &&& (Sail.BitVec.castWidth (m := 56) (Complement.complement
         (Sail.BitVec.zeroExtend (Ones (n := (Sail.Int.toNatChecked (alignment)))) 56))))
@@ -779,7 +779,7 @@ def GPTWalk (pa : (BitVec 56)) (accdesc : AccessDescriptor) : SailM (GPCFRecord 
                   (pure ((gpf, table)))) ) : SailME (GPCFRecord × GPTEntry) (GPCF × GPTTable) )
             (pure ((gpf, result, table)))) ) : SailME (GPCFRecord × GPTEntry)
         (GPCF × GPTEntry × GPTTable) )
-      ArmFull.assert ((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb level_0_entry 3 0)) == GPT_Table) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19846.45-19846.46"
+      ArmFull.assert ((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb level_0_entry 3 0)) == GPT_Table) "sail-arm/v8_base.sail:19846.45-19846.46"
       let w__22 ← (( do (GPTLevel1Index pa) ) : SailME (GPCFRecord × GPTEntry) Int )
       let offset : Int := (w__22 *i 8)
       let gptaddrdesc : AddressDescriptor :=

@@ -697,7 +697,7 @@ def execute_aarch32_instrs_DSB_Op_A_txt (option_name : (BitVec 4)) : SailM Unit 
         ArmFull.assert (! (if ((((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__0 3 3)) == (0#1 : (BitVec 1))) && ((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
                    b__0 1 0)) == (0b00#2 : (BitVec 2)))) : Bool)
           then true
-          else false : Bool)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:3029.20-3029.21"
+          else false : Bool)) "sail-arm/instrs32.sail:3029.20-3029.21"
         let domain : MBReqDomain := MBReqDomain_FullSystem
         let types : MBReqTypes := MBReqTypes_All
         (pure ((domain, types)))) ) : SailM (MBReqDomain × MBReqTypes) )

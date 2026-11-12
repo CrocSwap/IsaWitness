@@ -770,7 +770,7 @@ def GetNreg (_ : Unit) : SailM Int := do
             then (pure (0))
             else
               (do
-                ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:1400.20-1400.21"
+                ArmFull.assert false "sail-arm/sysregs.sail:1400.20-1400.21"
                 throw Error.Exit))) ) : SailM Int )
   let nreg : Int := nreg
   (pure (nreg))

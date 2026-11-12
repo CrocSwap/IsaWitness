@@ -229,7 +229,7 @@ def SecurityStateAtEL (EL : (BitVec 2)) : SailM SecurityState := SailME.run do
             else
               (do
                 (EL2Enabled ())) ) : SailME SecurityState Bool )
-          ArmFull.assert w__7 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:4136.39-4136.40"
+          ArmFull.assert w__7 "sail-arm/v8_base.sail:4136.39-4136.40"
           let w__8 ← (( do (ELUsingAArch32 EL3) ) : SailME SecurityState Bool )
           if ((! w__8) : Bool)
           then
@@ -278,7 +278,7 @@ def PMUOverflowCondition (check_e : Bool) (check_cnten : Bool) (check_inten : Bo
     if ((counters <b 31) : Bool)
     then
       (do
-        ArmFull.assert ((0 ≤b counters) && (counters ≤b 30)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:4603.61-4603.62"
+        ArmFull.assert ((0 ≤b counters) && (counters ≤b 30)) "sail-arm/v8_base.sail:4603.61-4603.62"
         let ovsf : (BitVec 64) :=
           (Sail.BitVec.castWidth (Sail.BitVec.updateSubrange ovsf 30
             (Sail.Int.toNatChecked (counters))
@@ -324,7 +324,7 @@ def PMUOverflowCondition (check_e : Bool) (check_cnten : Bool) (check_inten : Bo
             if (check_e : Bool)
             then
               (do
-                ArmFull.assert ((0 ≤b idx) && (idx <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:4615.64-4615.65"
+                ArmFull.assert ((0 ≤b idx) && (idx <b 64)) "sail-arm/v8_base.sail:4615.64-4615.65"
                 let ovsf : (BitVec 64) :=
                   (BitVec.update ovsf (Sail.Int.toNatChecked (idx))
                     (Bit
@@ -335,7 +335,7 @@ def PMUOverflowCondition (check_e : Bool) (check_cnten : Bool) (check_inten : Bo
           if ((((! is_hyp) && (! include_lo_name)) || (is_hyp && (! include_hi_name))) : Bool)
           then
             (do
-              ArmFull.assert ((0 ≤b idx) && (idx <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:4619.64-4619.65"
+              ArmFull.assert ((0 ≤b idx) && (idx <b 64)) "sail-arm/v8_base.sail:4619.64-4619.65"
               let ovsf : (BitVec 64) := (BitVec.update ovsf (Sail.Int.toNatChecked (idx)) (Bit 0#1))
               (pure (ovsf)))
           else (pure (ovsf))
@@ -613,7 +613,7 @@ def AArch32_WriteMode (mode : (BitVec 5)) : SailM Unit := do
   let (tup__0, tup__1) := (w__0 : (Bool × (BitVec 2)))
   let valid_name : Bool := tup__0
   let el : (BitVec 2) := tup__1
-  ArmFull.assert valid_name "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8277.21-8277.22"
+  ArmFull.assert valid_name "sail-arm/v8_base.sail:8277.21-8277.22"
   let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
   writeReg PSTATE { w__1 with M := mode }
   let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
@@ -659,7 +659,7 @@ def AArch32_GenerateDebugExceptionsFrom (from_el : (BitVec 2)) (from_state : Sec
           if (((HaveEL EL3) && (BEq.beq from_state SS_Secure)) : Bool)
           then
             (do
-              ArmFull.assert (from_el != EL2) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8448.29-8448.30"
+              ArmFull.assert (from_el != EL2) "sail-arm/v8_base.sail:8448.29-8448.30"
               let w__8 ← (( do (IsSecureEL2Enabled ()) ) : SailM Bool )
               let enabled ← (( do
                 if (w__8 : Bool)
@@ -707,7 +707,7 @@ def AArch32_GenerateDebugExceptionsFrom (from_el : (BitVec 2)) (from_state : Sec
 
 def AArch64_MaybeZeroRegisterUppers (_ : Unit) : SailM Unit := do
   let w__0 ← (( do (UsingAArch32 ()) ) : SailM Bool )
-  ArmFull.assert w__0 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8991.25-8991.26"
+  ArmFull.assert w__0 "sail-arm/v8_base.sail:8991.25-8991.26"
   let first : Int := 0
   let last : Int := 14
   let include_R15_name ← (( do (undefined_bool_at (← occLabel 670) ()) ) : SailM Bool )

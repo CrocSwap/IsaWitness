@@ -135,17 +135,17 @@ open ATAccess
 
 /-- Type quantifiers: k_aligned : Bool, k_ispair : Bool, size : Nat, List.elem size [1, 2, 4, 8, 16] -/
 def AArch64_MemSingle_set__1 (address : (BitVec 64)) (size : Nat) (accdesc_in : AccessDescriptor) (aligned : Bool) (ispair : Bool) (value_name : (BitVec (size * 8))) : SailM Unit := do
-  ArmFull.assert ((size == 1) || ((size == 2) || ((size == 4) || ((size == 8) || (size == 16))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28072.69-28072.70"
+  ArmFull.assert ((size == 1) || ((size == 2) || ((size == 4) || ((size == 8) || (size == 16))))) "sail-arm/v8_base.sail:28072.69-28072.70"
   let accdesc : AccessDescriptor := accdesc_in
   let w__0 ← (( do (HaveLSE2Ext ()) ) : SailM Bool )
   if (w__0 : Bool)
   then
     (do
       let w__1 ← (( do (AllInAlignedQuantity address size 16) ) : SailM Bool )
-      ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28075.54-28075.55")
+      ArmFull.assert w__1 "sail-arm/v8_base.sail:28075.54-28075.55")
   else
     (do
-      ArmFull.assert (IsAligned__1 address size) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28077.42-28077.43")
+      ArmFull.assert (IsAligned__1 address size) "sail-arm/v8_base.sail:28077.42-28077.43")
   let w__3 ← (( do
     (pure ((← do
           (HaveMTE2Ext ())) && (accdesc.tagchecked : Bool))) ) : SailM Bool )
@@ -257,7 +257,7 @@ def AArch64_MemSingle_set__1 (address : (BitVec 64)) (size : Nat) (accdesc_in : 
       if ((aligned && ispair) : Bool)
       then
         (do
-          ArmFull.assert ((size == 8) || (size == 16)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28128.37-28128.38"
+          ArmFull.assert ((size == 8) || (size == 16)) "sail-arm/v8_base.sail:28128.37-28128.38"
           let halfsize : Nat := (Sail.Int.toNatChecked ((Int.ediv size 2)))
           let highhalf ← (( do
             ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1638)
@@ -326,9 +326,9 @@ def AArch64_MemSingle_set__1 (address : (BitVec 64)) (size : Nat) (accdesc_in : 
 
 /-- Type quantifiers: k_size : Nat, k_size ≥ 0 -/
 def MemAtomic (address : (BitVec 64)) (cmpoperand : (BitVec k_size)) (operand : (BitVec k_size)) (accdesc_in : AccessDescriptor) : SailM (BitVec k_size) := do
-  ArmFull.assert accdesc_in.atomicop "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28335.30-28335.31"
+  ArmFull.assert accdesc_in.atomicop "sail-arm/v8_base.sail:28335.30-28335.31"
   let bytes : Nat := (Sail.Int.toNatChecked ((Int.ediv (Sail.BitVec.length operand) 8)))
-  ArmFull.assert ((bytes == 1) || ((bytes == 2) || ((bytes == 4) || ((bytes == 8) || (bytes == 16))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28337.74-28337.75"
+  ArmFull.assert ((bytes == 1) || ((bytes == 2) || ((bytes == 4) || ((bytes == 8) || (bytes == 16))))) "sail-arm/v8_base.sail:28337.74-28337.75"
   let newvalue ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1654)
       (Sail.BitVec.length operand))) ) : SailM (BitVec k_size) )
@@ -401,7 +401,7 @@ def MemAtomic (address : (BitVec 64)) (cmpoperand : (BitVec k_size)) (operand : 
   else (pure (()))
   let memstatus ← (( do (undefined_PhysMemRetStatus (← occLabel 1656) ()) ) : SailM
     PhysMemRetStatus )
-  ArmFull.assert ((8 *i bytes) == (Sail.BitVec.length operand)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28363.42-28363.43"
+  ArmFull.assert ((8 *i bytes) == (Sail.BitVec.length operand)) "sail-arm/v8_base.sail:28363.42-28363.43"
   let w__13 ← (( do
     ((fun (x0, x1) => (x0, (Sail.BitVec.castWidth x1))) <$> (PhysMemRead memaddrdesc bytes accdesc
       none)) ) : SailM (PhysMemRetStatus × (BitVec (8 * (Sail.Int.toNatChecked bytes)))) )
@@ -536,10 +536,10 @@ def MemAtomic (address : (BitVec 64)) (cmpoperand : (BitVec k_size)) (operand : 
 
 /-- Type quantifiers: k_size : Nat, k_size ≥ 0 -/
 def MemAtomicRCW (address : (BitVec 64)) (cmpoperand : (BitVec k_size)) (operand : (BitVec k_size)) (accdesc_in : AccessDescriptor) : SailM ((BitVec 4) × (BitVec k_size)) := do
-  ArmFull.assert accdesc_in.atomicop "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28582.30-28582.31"
-  ArmFull.assert accdesc_in.rcw "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28583.25-28583.26"
+  ArmFull.assert accdesc_in.atomicop "sail-arm/v8_base.sail:28582.30-28582.31"
+  ArmFull.assert accdesc_in.rcw "sail-arm/v8_base.sail:28583.25-28583.26"
   let bytes : Nat := (Sail.Int.toNatChecked ((Int.ediv (Sail.BitVec.length operand) 8)))
-  ArmFull.assert ((bytes == 8) || (bytes == 16)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28585.35-28585.36"
+  ArmFull.assert ((bytes == 8) || (bytes == 16)) "sail-arm/v8_base.sail:28585.35-28585.36"
   let nzcv ← (( do (undefined_bitvector_at (← occLabel 1660) 4) ) : SailM (BitVec 4) )
   let oldvalue ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1661)
@@ -613,7 +613,7 @@ def MemAtomicRCW (address : (BitVec 64)) (cmpoperand : (BitVec k_size)) (operand
   else (pure (()))
   let memstatus ← (( do (undefined_PhysMemRetStatus (← occLabel 1663) ()) ) : SailM
     PhysMemRetStatus )
-  ArmFull.assert ((8 *i bytes) == (Sail.BitVec.length operand)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28612.42-28612.43"
+  ArmFull.assert ((8 *i bytes) == (Sail.BitVec.length operand)) "sail-arm/v8_base.sail:28612.42-28612.43"
   let w__13 ← (( do
     ((fun (x0, x1) => (x0, (Sail.BitVec.castWidth x1))) <$> (PhysMemRead memaddrdesc bytes accdesc
       none)) ) : SailM (PhysMemRetStatus × (BitVec (8 * (Sail.Int.toNatChecked bytes)))) )
@@ -772,7 +772,7 @@ def MemStore64B (address : (BitVec 64)) (value_name : (BitVec 512)) (accdesc_in 
   then
     (do
       let c ← (( do (ConstrainUnpredictable Unpredictable_LS64UNSUPPORTED) ) : SailM Constraint )
-      ArmFull.assert ((BEq.beq c Constraint_LIMITED_ATOMICITY) || (BEq.beq c Constraint_FAULT)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28823.72-28823.73"
+      ArmFull.assert ((BEq.beq c Constraint_LIMITED_ATOMICITY) || (BEq.beq c Constraint_FAULT)) "sail-arm/v8_base.sail:28823.72-28823.73"
       if ((BEq.beq c Constraint_FAULT) : Bool)
       then
         (do

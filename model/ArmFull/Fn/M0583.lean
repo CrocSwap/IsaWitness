@@ -161,7 +161,7 @@ def AArch32_SystemAccessTrap (mode : (BitVec 5)) (ec : Int) : SailM Unit := do
         let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
         (pure ((((BitVec.toNat target_el) ≥b (BitVec.toNat w__1.EL)) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:41526.101-41526.102"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:41526.101-41526.102"
   if ((target_el == EL2) : Bool)
   then
     (do
@@ -362,7 +362,7 @@ def AArch32_CheckIllegalState (_ : Unit) : SailM Unit := do
 def AArch32_CheckForWFxTrap (target_el : (BitVec 2)) (wfxtype : WFxType) : SailM Unit := do
   let except ← (( do (undefined_ExceptionRecord (← occLabel 2785) ()) ) : SailM ExceptionRecord
     )
-  ArmFull.assert (HaveEL target_el) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43067.28-43067.29"
+  ArmFull.assert (HaveEL target_el) "sail-arm/v8_base.sail:43067.28-43067.29"
   let w__0 ← (( do (ELUsingAArch32 target_el) ) : SailM Bool )
   if ((! w__0) : Bool)
   then

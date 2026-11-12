@@ -185,7 +185,7 @@ def execute_LDFF1B_Z_P_BR_U16 (VL : Nat) (esize : Nat) (g : Nat) (m : Nat) (msiz
         let w__6 ← (( do (X_read m 64) ) : SailM (BitVec 64) )
         let offset := (w__6 : (BitVec 64))
         (pure ((base, offset)))) ) : SailM ((BitVec 64) × (BitVec 64)) )
-  ArmFull.assert accdesc.first "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:64481.24-64481.25"
+  ArmFull.assert accdesc.first "sail-arm/instrs64_sve.sail:64481.24-64481.25"
   let (accdesc, data, fault, faulted, result, unknown) ← (( do
     let loop_e_lower : Nat := 0
     let loop_e_upper : Int := (elements -i 1)
@@ -348,7 +348,7 @@ def execute_LDFF1B_Z_P_BR_U32 (VL : Nat) (esize : Nat) (g : Nat) (m : Nat) (msiz
         let w__6 ← (( do (X_read m 64) ) : SailM (BitVec 64) )
         let offset := (w__6 : (BitVec 64))
         (pure ((base, offset)))) ) : SailM ((BitVec 64) × (BitVec 64)) )
-  ArmFull.assert accdesc.first "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:64592.24-64592.25"
+  ArmFull.assert accdesc.first "sail-arm/instrs64_sve.sail:64592.24-64592.25"
   let (accdesc, data, fault, faulted, result, unknown) ← (( do
     let loop_e_lower : Nat := 0
     let loop_e_upper : Int := (elements -i 1)
@@ -511,7 +511,7 @@ def execute_LDFF1B_Z_P_BR_U64 (VL : Nat) (esize : Nat) (g : Nat) (m : Nat) (msiz
         let w__6 ← (( do (X_read m 64) ) : SailM (BitVec 64) )
         let offset := (w__6 : (BitVec 64))
         (pure ((base, offset)))) ) : SailM ((BitVec 64) × (BitVec 64)) )
-  ArmFull.assert accdesc.first "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:64703.24-64703.25"
+  ArmFull.assert accdesc.first "sail-arm/instrs64_sve.sail:64703.24-64703.25"
   let (accdesc, data, fault, faulted, result, unknown) ← (( do
     let loop_e_lower : Nat := 0
     let loop_e_upper : Int := (elements -i 1)
@@ -674,7 +674,7 @@ def execute_LDFF1SW_Z_P_BR_S64 (VL : Nat) (esize : Nat) (g : Nat) (m : Nat) (msi
         let w__6 ← (( do (X_read m 64) ) : SailM (BitVec 64) )
         let offset := (w__6 : (BitVec 64))
         (pure ((base, offset)))) ) : SailM ((BitVec 64) × (BitVec 64)) )
-  ArmFull.assert accdesc.first "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:64814.24-64814.25"
+  ArmFull.assert accdesc.first "sail-arm/instrs64_sve.sail:64814.24-64814.25"
   let (accdesc, data, fault, faulted, result, unknown) ← (( do
     let loop_e_lower : Nat := 0
     let loop_e_upper : Int := (elements -i 1)

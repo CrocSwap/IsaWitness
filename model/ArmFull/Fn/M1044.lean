@@ -266,7 +266,7 @@ def MemLoad64B (address : (BitVec 64)) (accdesc_in : AccessDescriptor) : SailM (
   then
     (do
       let c ← (( do (ConstrainUnpredictable Unpredictable_LS64UNSUPPORTED) ) : SailM Constraint )
-      ArmFull.assert ((BEq.beq c Constraint_LIMITED_ATOMICITY) || (BEq.beq c Constraint_FAULT)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28910.72-28910.73"
+      ArmFull.assert ((BEq.beq c Constraint_LIMITED_ATOMICITY) || (BEq.beq c Constraint_FAULT)) "sail-arm/v8_base.sail:28910.72-28910.73"
       if ((BEq.beq c Constraint_FAULT) : Bool)
       then
         (do
@@ -431,8 +431,8 @@ def AArch64_DataMemZero (regval : (BitVec 64)) (vaddress : (BitVec 64)) (accdesc
 
 /-- Type quantifiers: k_aligned : Bool, size : Nat, size > 0 -/
 def MemSingleNF_read (address : (BitVec 64)) (size : Nat) (accdesc_in : AccessDescriptor) (aligned : Bool) : SailM ((BitVec (8 * size)) × Bool) := SailME.run do
-  ArmFull.assert (BEq.beq accdesc_in.acctype AccessType_SVE) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:29674.47-29674.48"
-  ArmFull.assert (accdesc_in.nonfault || (accdesc_in.firstfault && (! accdesc_in.first))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:29675.83-29675.84"
+  ArmFull.assert (BEq.beq accdesc_in.acctype AccessType_SVE) "sail-arm/v8_base.sail:29674.47-29674.48"
+  ArmFull.assert (accdesc_in.nonfault || (accdesc_in.firstfault && (! accdesc_in.first))) "sail-arm/v8_base.sail:29675.83-29675.84"
   let value_name ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1713)
       (Sail.Int.toNatChecked ((8 *i size))))) ) : SailME ((BitVec (8 * size)) × Bool)
@@ -545,7 +545,7 @@ def FPCompareUN (op1 : (BitVec k_N)) (op2 : (BitVec k_N)) (fpcr : (BitVec 64)) :
   let value1_name ← (( do (undefined_real_at (← occLabel 1722) ()) ) : SailM real )
   let value2_name ← (( do (undefined_real_at (← occLabel 1723) ()) ) : SailM real )
   ArmFull.assert (((Sail.BitVec.length op2) == 16) || (((Sail.BitVec.length op2) == 32) || ((Sail.BitVec.length
-          op2) == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:29873.41-29873.42"
+          op2) == 64))) "sail-arm/v8_base.sail:29873.41-29873.42"
   let w__0 ← (( do (FPUnpack op1 fpcr) ) : SailM (FPType × (BitVec 1) × real) )
   let (tup__0, tup__1, tup__2) := (w__0 : (FPType × (BitVec 1) × real))
   let type1 : FPType := tup__0
@@ -581,7 +581,7 @@ def FPCompareNE (op1 : (BitVec k_N)) (op2 : (BitVec k_N)) (fpcr : (BitVec 64)) :
   let value1_name ← (( do (undefined_real_at (← occLabel 1728) ()) ) : SailM real )
   let value2_name ← (( do (undefined_real_at (← occLabel 1729) ()) ) : SailM real )
   ArmFull.assert (((Sail.BitVec.length op2) == 16) || (((Sail.BitVec.length op2) == 32) || ((Sail.BitVec.length
-          op2) == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:29896.41-29896.42"
+          op2) == 64))) "sail-arm/v8_base.sail:29896.41-29896.42"
   let result ← (( do (undefined_bool_at (← occLabel 1730) ()) ) : SailM Bool )
   let w__0 ← (( do (FPUnpack op1 fpcr) ) : SailM (FPType × (BitVec 1) × real) )
   let (tup__0, tup__1, tup__2) := (w__0 : (FPType × (BitVec 1) × real))
@@ -618,7 +618,7 @@ def FPLogB (op : (BitVec k_N)) (fpcr : (BitVec 64)) : SailM (BitVec k_N) := do
   let sign ← (( do (undefined_bitvector_at (← occLabel 1748) 1) ) : SailM (BitVec 1) )
   let value_name ← (( do (undefined_real_at (← occLabel 1749) ()) ) : SailM real )
   ArmFull.assert (((Sail.BitVec.length op) == 16) || (((Sail.BitVec.length op) == 32) || ((Sail.BitVec.length
-          op) == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:31092.41-31092.42"
+          op) == 64))) "sail-arm/v8_base.sail:31092.41-31092.42"
   let result ← (( do (undefined_int_at (← occLabel 1750) ()) ) : SailM Int )
   let w__0 ← (( do (FPUnpack op fpcr) ) : SailM (FPType × (BitVec 1) × real) )
   let (tup__0, tup__1, tup__2) := (w__0 : (FPType × (BitVec 1) × real))
@@ -670,7 +670,7 @@ def FPConvertBF (op : (BitVec k_N)) (fpcr_in : (BitVec 64)) (rounding_in : FPRou
   let fptype ← (( do (undefined_FPType (← occLabel 1795) ()) ) : SailM FPType )
   let sign ← (( do (undefined_bitvector_at (← occLabel 1796) 1) ) : SailM (BitVec 1) )
   let value_name ← (( do (undefined_real_at (← occLabel 1797) ()) ) : SailM real )
-  ArmFull.assert ((Sail.BitVec.length op) == 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:32225.19-32225.20"
+  ArmFull.assert ((Sail.BitVec.length op) == 32) "sail-arm/v8_base.sail:32225.19-32225.20"
   let halfsize : Nat := (Sail.Int.toNatChecked ((Int.ediv (Sail.BitVec.length op) 2)))
   let fpcr : FPCRType := fpcr_in
   let rounding : FPRounding := rounding_in
@@ -760,7 +760,7 @@ def BFAdd__1 (op1 : (BitVec k_N)) (op2 : (BitVec k_N)) (fpcr : (BitVec 64)) (fpe
   let value2_name ← (( do (undefined_real_at (← occLabel 1838) ()) ) : SailM real )
   let zero1 ← (( do (undefined_bool_at (← occLabel 1839) ()) ) : SailM Bool )
   let zero2 ← (( do (undefined_bool_at (← occLabel 1840) ()) ) : SailM Bool )
-  ArmFull.assert ((Sail.BitVec.length op2) == 16) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:32512.19-32512.20"
+  ArmFull.assert ((Sail.BitVec.length op2) == 16) "sail-arm/v8_base.sail:32512.19-32512.20"
   let rounding ← (( do (FPRoundingMode fpcr) ) : SailM FPRounding )
   let done ← (( do (undefined_bool_at (← occLabel 1841) ()) ) : SailM Bool )
   let result ← (( do

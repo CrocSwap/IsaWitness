@@ -146,7 +146,7 @@ def Hint_Branch (hint : BranchType) : SailM Unit := do
 
 /-- Type quantifiers: x : Int -/
 def FloorPow2 (x : Int) : SailM Nat := do
-  ArmFull.assert (x ≥b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6832.17-6832.18"
+  ArmFull.assert (x ≥b 0) "sail-arm/v8_base.sail:6832.17-6832.18"
   let n : Int := 1
   if ((x == 0) : Bool)
   then (pure (0))
@@ -158,7 +158,7 @@ def FloorPow2 (x : Int) : SailM Nat := do
         (pure loop_vars) ) : SailM Int )
       let n : Int := n
       let r : Nat := (Sail.Int.toNatChecked ((2 ^i (n -i 1))))
-      ArmFull.assert (r ≥b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6842.17-6842.18"
+      ArmFull.assert (r ≥b 0) "sail-arm/v8_base.sail:6842.17-6842.18"
       (pure (r)))
 
 
@@ -881,7 +881,7 @@ def SetInterruptRequestLevel (intid : InterruptID) (level : Signal) : SailM Unit
 
 /-- Type quantifiers: k_M : Nat, N : Nat, k_M > N ∧ k_M ≥ 0 ∧ 0 ≤ (N - 1) -/
 def Split (value_name : (BitVec k_M)) (N : Nat) : SailM ((BitVec (k_M - N)) × (BitVec N)) := do
-  ArmFull.assert ((Sail.BitVec.length value_name) >b N) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8058.17-8058.18"
+  ArmFull.assert ((Sail.BitVec.length value_name) >b N) "sail-arm/v8_base.sail:8058.17-8058.18"
   (pure (((Sail.BitVec.castWidth (Sail.BitVec.extractLsb value_name
       (Sail.Int.toNatChecked (((Sail.BitVec.length value_name) -i 1))) N)), (Sail.BitVec.castWidth (Sail.BitVec.extractLsb
       value_name (Sail.Int.toNatChecked ((N -i 1))) 0)))))
@@ -889,7 +889,7 @@ def Split (value_name : (BitVec k_M)) (N : Nat) : SailM ((BitVec (k_M - N)) × (
 
 /-- Type quantifiers: k_round : Bool, shift : Int, value_name : Int -/
 def RShr (value_name : Int) (shift : Int) (round : Bool) : SailM Int := do
-  ArmFull.assert (shift >b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:8066.20-8066.21"
+  ArmFull.assert (shift >b 0) "sail-arm/v8_base.sail:8066.20-8066.21"
   (pure (if (round : Bool)
     then
       (Int.shiftr (value_name +i (Int.shiftl 1 (Sail.Int.toNatChecked ((shift -i 1)))))

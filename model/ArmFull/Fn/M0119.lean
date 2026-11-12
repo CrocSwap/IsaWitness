@@ -255,7 +255,7 @@ def AArch64_S1ICacheEnabled (regime : Regime) : SailM Bool := do
 
 
 def AArch64_S1EPD (regime : Regime) (va : (BitVec 64)) : SailM (BitVec 1) := do
-  ArmFull.assert (HasUnprivileged regime) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25151.34-25151.35"
+  ArmFull.assert (HasUnprivileged regime) "sail-arm/v8_base.sail:25151.34-25151.35"
   let varange : VARange := (AArch64_GetVARange va)
   match regime with
   | .Regime_EL20 =>

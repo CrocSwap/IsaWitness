@@ -157,7 +157,7 @@ def AArch32_vESBOperation (_ : Unit) : SailM Unit := do
       (do
         (EL2Enabled ()))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42806.63-42806.64"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:42806.63-42806.64"
   let w__5 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
   if ((! w__5) : Bool)
   then

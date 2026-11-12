@@ -137,7 +137,7 @@ def GPICheck (paspace : PASpace) (gpi : (BitVec 4)) : SailM Bool := do
       then
         (do
           let w__0 ← (( do (HaveSecureEL2Ext ()) ) : SailM Bool )
-          ArmFull.assert w__0 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19498.35-19498.36"
+          ArmFull.assert w__0 "sail-arm/v8_base.sail:19498.35-19498.36"
           (pure ((BEq.beq paspace PAS_Secure))))
       else
         (do
@@ -395,7 +395,7 @@ def AArch64_ResetGeneralRegisters (_ : Unit) : SailM Unit := do
 
 /-- Type quantifiers: alignment : Int, size : Int -/
 def AllInAlignedQuantity (address : (BitVec 64)) (size : Int) (alignment : Int) : SailM Bool := do
-  ArmFull.assert (size ≤b alignment) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:22735.28-22735.29"
+  ArmFull.assert (size ≤b alignment) "sail-arm/v8_base.sail:22735.28-22735.29"
   (pure (((Align_bits (BitVec.subInt (BitVec.addInt address size) 1) alignment) == (Align_bits
         address alignment))))
 

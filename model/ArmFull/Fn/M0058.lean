@@ -784,14 +784,14 @@ def undefined_ID_AA64PFR0_EL1_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVe
 
 /-- Type quantifiers: i : Int -/
 def IsG1ActivityMonitorImplemented (i : Int) : SailM Bool := do
-  ArmFull.assert ((0 ≤b i) && (i <b 16)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:870.26-870.27"
+  ArmFull.assert ((0 ≤b i) && (i <b 16)) "sail-arm/impdefs.sail:870.26-870.27"
   let w__0 ← (( do readReg __g1_activity_monitor_implemented ) : SailM (BitVec 16) )
   (pure (((BitVec.access w__0 (Sail.Int.toNatChecked (i))) == 1#1)))
 
 
 /-- Type quantifiers: i : Int -/
 def IsG1ActivityMonitorOffsetImplemented (i : Int) : SailM Bool := do
-  ArmFull.assert ((0 ≤b i) && (i <b 16)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:877.26-877.27"
+  ArmFull.assert ((0 ≤b i) && (i <b 16)) "sail-arm/impdefs.sail:877.26-877.27"
   let w__0 ← (( do readReg __g1_activity_monitor_offset_implemented ) : SailM (BitVec 16) )
   (pure (((BitVec.access w__0 (Sail.Int.toNatChecked (i))) == 1#1)))
 

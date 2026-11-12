@@ -124,7 +124,7 @@ def decode_sqshrn_advsimd_aarch64_instrs_vector_shift_right_narrow_uniform_sisd 
   let shift : Int := ((2 *i esize) -i (BitVec.toNat (immh +++ immb)))
   let round : Bool := (op == 1#1)
   let is_unsigned : Bool := (U == 1#1)
-  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && (((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:48639.87-48639.88"
+  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && (((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64))) "sail-arm/instrs64.sail:48639.87-48639.88"
   (execute_aarch64_instrs_vector_shift_right_narrow_uniform_sisd (Sail.Int.toNatChecked (d))
     (Sail.Int.toNatChecked (datasize)) elements (Sail.Int.toNatChecked (esize))
     (Sail.Int.toNatChecked (n)) part round shift is_unsigned)
@@ -146,7 +146,7 @@ def decode_sqshrn_advsimd_aarch64_instrs_vector_shift_right_narrow_uniform_simd 
   let shift : Int := ((2 *i esize) -i (BitVec.toNat (immh +++ immb)))
   let round : Bool := (op == 1#1)
   let is_unsigned : Bool := (U == 1#1)
-  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:48672.51-48672.52"
+  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:48672.51-48672.52"
   (execute_aarch64_instrs_vector_shift_right_narrow_uniform_sisd (Sail.Int.toNatChecked (d))
     datasize elements (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (n))
     (Sail.Int.toNatChecked (part)) round shift is_unsigned)
@@ -168,7 +168,7 @@ def decode_uqrshrn_advsimd_aarch64_instrs_vector_shift_right_narrow_uniform_sisd
   let shift : Int := ((2 *i esize) -i (BitVec.toNat (immh +++ immb)))
   let round : Bool := (op == 1#1)
   let is_unsigned : Bool := (U == 1#1)
-  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && (((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:48706.87-48706.88"
+  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && (((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64))) "sail-arm/instrs64.sail:48706.87-48706.88"
   (execute_aarch64_instrs_vector_shift_right_narrow_uniform_sisd (Sail.Int.toNatChecked (d))
     (Sail.Int.toNatChecked (datasize)) elements (Sail.Int.toNatChecked (esize))
     (Sail.Int.toNatChecked (n)) part round shift is_unsigned)
@@ -190,7 +190,7 @@ def decode_uqrshrn_advsimd_aarch64_instrs_vector_shift_right_narrow_uniform_simd
   let shift : Int := ((2 *i esize) -i (BitVec.toNat (immh +++ immb)))
   let round : Bool := (op == 1#1)
   let is_unsigned : Bool := (U == 1#1)
-  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:48739.51-48739.52"
+  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:48739.51-48739.52"
   (execute_aarch64_instrs_vector_shift_right_narrow_uniform_sisd (Sail.Int.toNatChecked (d))
     datasize elements (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (n))
     (Sail.Int.toNatChecked (part)) round shift is_unsigned)
@@ -212,7 +212,7 @@ def decode_uqshrn_advsimd_aarch64_instrs_vector_shift_right_narrow_uniform_sisd 
   let shift : Int := ((2 *i esize) -i (BitVec.toNat (immh +++ immb)))
   let round : Bool := (op == 1#1)
   let is_unsigned : Bool := (U == 1#1)
-  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && (((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:48773.87-48773.88"
+  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && (((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64))) "sail-arm/instrs64.sail:48773.87-48773.88"
   (execute_aarch64_instrs_vector_shift_right_narrow_uniform_sisd (Sail.Int.toNatChecked (d))
     (Sail.Int.toNatChecked (datasize)) elements (Sail.Int.toNatChecked (esize))
     (Sail.Int.toNatChecked (n)) part round shift is_unsigned)
@@ -234,7 +234,7 @@ def decode_uqshrn_advsimd_aarch64_instrs_vector_shift_right_narrow_uniform_simd 
   let shift : Int := ((2 *i esize) -i (BitVec.toNat (immh +++ immb)))
   let round : Bool := (op == 1#1)
   let is_unsigned : Bool := (U == 1#1)
-  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:48806.51-48806.52"
+  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:48806.51-48806.52"
   (execute_aarch64_instrs_vector_shift_right_narrow_uniform_sisd (Sail.Int.toNatChecked (d))
     datasize elements (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (n))
     (Sail.Int.toNatChecked (part)) round shift is_unsigned)
@@ -255,7 +255,7 @@ def decode_sqrshrun_advsimd_aarch64_instrs_vector_shift_right_narrow_nonuniform_
   let part : Nat := 0
   let shift : Int := ((2 *i esize) -i (BitVec.toNat (immh +++ immb)))
   let round : Bool := (op == 1#1)
-  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && (((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:48866.87-48866.88"
+  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && (((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64))) "sail-arm/instrs64.sail:48866.87-48866.88"
   (execute_aarch64_instrs_vector_shift_right_narrow_nonuniform_sisd (Sail.Int.toNatChecked (d))
     (Sail.Int.toNatChecked (datasize)) elements (Sail.Int.toNatChecked (esize))
     (Sail.Int.toNatChecked (n)) part round shift)
@@ -276,7 +276,7 @@ def decode_sqrshrun_advsimd_aarch64_instrs_vector_shift_right_narrow_nonuniform_
   let elements : Int := (fdiv_int datasize esize)
   let shift : Int := ((2 *i esize) -i (BitVec.toNat (immh +++ immb)))
   let round : Bool := (op == 1#1)
-  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:48897.51-48897.52"
+  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:48897.51-48897.52"
   (execute_aarch64_instrs_vector_shift_right_narrow_nonuniform_sisd (Sail.Int.toNatChecked (d))
     datasize elements (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (n))
     (Sail.Int.toNatChecked (part)) round shift)
@@ -297,7 +297,7 @@ def decode_sqshrun_advsimd_aarch64_instrs_vector_shift_right_narrow_nonuniform_s
   let part : Nat := 0
   let shift : Int := ((2 *i esize) -i (BitVec.toNat (immh +++ immb)))
   let round : Bool := (op == 1#1)
-  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && (((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:48929.87-48929.88"
+  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && (((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64))) "sail-arm/instrs64.sail:48929.87-48929.88"
   (execute_aarch64_instrs_vector_shift_right_narrow_nonuniform_sisd (Sail.Int.toNatChecked (d))
     (Sail.Int.toNatChecked (datasize)) elements (Sail.Int.toNatChecked (esize))
     (Sail.Int.toNatChecked (n)) part round shift)
@@ -318,7 +318,7 @@ def decode_sqshrun_advsimd_aarch64_instrs_vector_shift_right_narrow_nonuniform_s
   let elements : Int := (fdiv_int datasize esize)
   let shift : Int := ((2 *i esize) -i (BitVec.toNat (immh +++ immb)))
   let round : Bool := (op == 1#1)
-  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:48960.51-48960.52"
+  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:48960.51-48960.52"
   (execute_aarch64_instrs_vector_shift_right_narrow_nonuniform_sisd (Sail.Int.toNatChecked (d))
     datasize elements (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (n))
     (Sail.Int.toNatChecked (part)) round shift)
@@ -353,7 +353,7 @@ def decode_sqshl_advsimd_imm_aarch64_instrs_vector_shift_left_sat_sisd (Rd : (Bi
       (pure ((dst_unsigned, src_unsigned)))) ) : SailM (Bool × Bool) )
   let dst_unsigned := dst_unsigned
   let src_unsigned := src_unsigned
-  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:49036.92-49036.93"
+  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128))) "sail-arm/instrs64.sail:49036.92-49036.93"
   (execute_aarch64_instrs_vector_shift_left_sat_sisd (Sail.Int.toNatChecked (d))
     (Sail.Int.toNatChecked (datasize)) dst_unsigned elements (Sail.Int.toNatChecked (esize))
     (Sail.Int.toNatChecked (n)) shift src_unsigned)
@@ -394,7 +394,7 @@ def decode_sqshl_advsimd_imm_aarch64_instrs_vector_shift_left_sat_simd (Rd : (Bi
       (pure ((dst_unsigned, src_unsigned)))) ) : SailM (Bool × Bool) )
   let dst_unsigned := dst_unsigned
   let src_unsigned := src_unsigned
-  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:49087.51-49087.52"
+  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:49087.51-49087.52"
   (execute_aarch64_instrs_vector_shift_left_sat_sisd (Sail.Int.toNatChecked (d))
     (Sail.Int.toNatChecked (datasize)) dst_unsigned elements (Sail.Int.toNatChecked (esize))
     (Sail.Int.toNatChecked (n)) shift src_unsigned)
@@ -429,7 +429,7 @@ def decode_sqshlu_advsimd_aarch64_instrs_vector_shift_left_sat_sisd (Rd : (BitVe
       (pure ((dst_unsigned, src_unsigned)))) ) : SailM (Bool × Bool) )
   let dst_unsigned := dst_unsigned
   let src_unsigned := src_unsigned
-  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:49136.92-49136.93"
+  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128))) "sail-arm/instrs64.sail:49136.92-49136.93"
   (execute_aarch64_instrs_vector_shift_left_sat_sisd (Sail.Int.toNatChecked (d))
     (Sail.Int.toNatChecked (datasize)) dst_unsigned elements (Sail.Int.toNatChecked (esize))
     (Sail.Int.toNatChecked (n)) shift src_unsigned)
@@ -470,7 +470,7 @@ def decode_sqshlu_advsimd_aarch64_instrs_vector_shift_left_sat_simd (Rd : (BitVe
       (pure ((dst_unsigned, src_unsigned)))) ) : SailM (Bool × Bool) )
   let dst_unsigned := dst_unsigned
   let src_unsigned := src_unsigned
-  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:49187.51-49187.52"
+  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:49187.51-49187.52"
   (execute_aarch64_instrs_vector_shift_left_sat_sisd (Sail.Int.toNatChecked (d))
     (Sail.Int.toNatChecked (datasize)) dst_unsigned elements (Sail.Int.toNatChecked (esize))
     (Sail.Int.toNatChecked (n)) shift src_unsigned)
@@ -505,7 +505,7 @@ def decode_uqshl_advsimd_imm_aarch64_instrs_vector_shift_left_sat_sisd (Rd : (Bi
       (pure ((dst_unsigned, src_unsigned)))) ) : SailM (Bool × Bool) )
   let dst_unsigned := dst_unsigned
   let src_unsigned := src_unsigned
-  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:49236.92-49236.93"
+  ArmFull.assert ((((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((((((datasize == 4) || (datasize == 8)) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128))) "sail-arm/instrs64.sail:49236.92-49236.93"
   (execute_aarch64_instrs_vector_shift_left_sat_sisd (Sail.Int.toNatChecked (d))
     (Sail.Int.toNatChecked (datasize)) dst_unsigned elements (Sail.Int.toNatChecked (esize))
     (Sail.Int.toNatChecked (n)) shift src_unsigned)
@@ -546,7 +546,7 @@ def decode_uqshl_advsimd_imm_aarch64_instrs_vector_shift_left_sat_simd (Rd : (Bi
       (pure ((dst_unsigned, src_unsigned)))) ) : SailM (Bool × Bool) )
   let dst_unsigned := dst_unsigned
   let src_unsigned := src_unsigned
-  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:49287.51-49287.52"
+  ArmFull.assert (((((esize == 4) || (esize == 8)) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:49287.51-49287.52"
   (execute_aarch64_instrs_vector_shift_left_sat_sisd (Sail.Int.toNatChecked (d))
     (Sail.Int.toNatChecked (datasize)) dst_unsigned elements (Sail.Int.toNatChecked (esize))
     (Sail.Int.toNatChecked (n)) shift src_unsigned)

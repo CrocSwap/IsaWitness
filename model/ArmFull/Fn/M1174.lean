@@ -132,8 +132,8 @@ open ATAccess
 
 /-- Type quantifiers: N : Nat, offset : Int, List.elem N [64, 128] -/
 def NVMem_read__1 (offset : Int) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert (offset >b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28763.21-28763.22"
-  ArmFull.assert ((N == 64) || (N == 128)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28764.29-28764.30"
+  ArmFull.assert (offset >b 0) "sail-arm/v8_base.sail:28763.21-28763.22"
+  ArmFull.assert ((N == 64) || (N == 128)) "sail-arm/v8_base.sail:28764.29-28764.30"
   let w__0 ← (( do readReg VNCR_EL2 ) : SailM (BitVec 64) )
   let address : (BitVec 64) :=
     (sign_extend ((_get_VNCR_EL2_Type_BADDR w__0) +++ (integer_subrange offset 11 0)) 64)
@@ -143,8 +143,8 @@ def NVMem_read__1 (offset : Int) (N : Nat) : SailM (BitVec N) := do
 
 /-- Type quantifiers: N : Nat, offset : Int, List.elem N [64, 128] -/
 def NVMem_set__1 (offset : Int) (N : Nat) (value_name : (BitVec N)) : SailM Unit := do
-  ArmFull.assert (offset >b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28783.21-28783.22"
-  ArmFull.assert ((N == 64) || (N == 128)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28784.29-28784.30"
+  ArmFull.assert (offset >b 0) "sail-arm/v8_base.sail:28783.21-28783.22"
+  ArmFull.assert ((N == 64) || (N == 128)) "sail-arm/v8_base.sail:28784.29-28784.30"
   let w__0 ← (( do readReg VNCR_EL2 ) : SailM (BitVec 64) )
   let address : (BitVec 64) :=
     (sign_extend ((_get_VNCR_EL2_Type_BADDR w__0) +++ (integer_subrange offset 11 0)) 64)
@@ -155,7 +155,7 @@ def NVMem_set__1 (offset : Int) (N : Nat) (value_name : (BitVec N)) : SailM Unit
 
 /-- Type quantifiers: k_M : Nat, k_N : Nat, k_esize : Nat, k_N ≥ 0 ∧ k_M ≥ 0 ∧ k_esize ≥ 0 -/
 def ReducePredicated (op : ReduceOp) (input : (BitVec k_N)) (mask : (BitVec k_M)) (identity : (BitVec k_esize)) : SailM (BitVec k_esize) := do
-  ArmFull.assert ((Sail.BitVec.length input) == ((Sail.BitVec.length mask) *i 8)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:30871.23-30871.24"
+  ArmFull.assert ((Sail.BitVec.length input) == ((Sail.BitVec.length mask) *i 8)) "sail-arm/v8_base.sail:30871.23-30871.24"
   let p2bits ← (( do (CeilPow2 (Sail.BitVec.length input)) ) : SailM Nat )
   let operand ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1745)
@@ -178,28 +178,28 @@ def ReducePredicated (op : ReduceOp) (input : (BitVec k_N)) (mask : (BitVec k_M)
           if (w__1 : Bool)
           then
             (do
-              ArmFull.assert ((Sail.BitVec.length input) ≥b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:30877.38-30877.39"
-              ArmFull.assert ((Sail.BitVec.length identity) ≥b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:30878.42-30878.43"
+              ArmFull.assert ((Sail.BitVec.length input) ≥b 0) "sail-arm/v8_base.sail:30877.38-30877.39"
+              ArmFull.assert ((Sail.BitVec.length identity) ≥b 0) "sail-arm/v8_base.sail:30878.42-30878.43"
               ArmFull.assert (((e *i (Sail.BitVec.length identity)) ≤b (((e *i (Sail.BitVec.length
                           identity)) +i (Sail.BitVec.length identity)) -i 1)) || (! ((e ≥b 0) && (((e +i 1) *i (Sail.BitVec.length
-                          identity)) ≤b (Sail.BitVec.length input))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:30879.135-30879.136"
+                          identity)) ≤b (Sail.BitVec.length input))))) "sail-arm/v8_base.sail:30879.135-30879.136"
               let w__2 ← (( do
                 ((Sail.BitVec.castWidth ) <$> (Elem_read input e (Sail.BitVec.length identity))) ) :
                 SailM (BitVec k_esize) )
               (Elem_set operand e (Sail.BitVec.length identity) (Sail.BitVec.castWidth w__2)))
           else
             (do
-              ArmFull.assert (p2bits ≥b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:30882.43-30882.44"
-              ArmFull.assert ((Sail.BitVec.length identity) ≥b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:30883.42-30883.43"
+              ArmFull.assert (p2bits ≥b 0) "sail-arm/v8_base.sail:30882.43-30882.44"
+              ArmFull.assert ((Sail.BitVec.length identity) ≥b 0) "sail-arm/v8_base.sail:30883.42-30883.43"
               ArmFull.assert (((e *i (Sail.BitVec.length identity)) ≤b (((e +i 1) *i (Sail.BitVec.length
                         identity)) -i 1)) || (! ((e ≥b 0) && (((e +i 1) *i (Sail.BitVec.length
-                          identity)) ≤b p2bits)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:30884.137-30884.138"
+                          identity)) ≤b p2bits)))) "sail-arm/v8_base.sail:30884.137-30884.138"
               (Elem_set operand e (Sail.BitVec.length identity) (Sail.BitVec.castWidth identity)))
       (pure loop_vars)) ) : SailM (BitVec (Sail.Int.toNatChecked p2bits)) )
   ArmFull.assert ((((((((((p2bits == 16) || (p2bits == 32)) || (p2bits == 64)) || (p2bits == 128)) || (p2bits == 256)) || (p2bits == 512)) || (p2bits == 1024)) || (p2bits == 2048)) && ((((((Sail.BitVec.length
                   identity) == 8) || ((Sail.BitVec.length identity) == 16)) || ((Sail.BitVec.length
                 identity) == 32)) || ((Sail.BitVec.length identity) == 64)) && (p2bits ≥b (Sail.BitVec.length
-            identity)))) || (! ((Sail.BitVec.length input) == ((Sail.BitVec.length mask) *i 8)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:30888.143-30888.144"
+            identity)))) || (! ((Sail.BitVec.length input) == ((Sail.BitVec.length mask) *i 8)))) "sail-arm/v8_base.sail:30888.143-30888.144"
   ((Sail.BitVec.castWidth ) <$> (Reduce op operand (Sail.BitVec.length identity)))
 
 

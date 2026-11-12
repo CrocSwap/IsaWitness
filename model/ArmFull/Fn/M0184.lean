@@ -626,7 +626,7 @@ def TestEventCNTP (prev_physical_count : (BitVec 64)) (current_physical_count : 
                   readReg CNTPOFF_EL2)
               else (pure ((Zeros (n := 64)))))
           else (pure (offset)) ) : SailM (BitVec 64) )
-        ArmFull.assert ((0 ≤b n) && (n <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:18360.46-18360.47"
+        ArmFull.assert ((0 ≤b n) && (n <b 64)) "sail-arm/v8_base.sail:18360.46-18360.47"
         let samplebit : (BitVec 1) :=
           (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access (current_physical_count - offset)
               (Sail.Int.toNatChecked (n)))]))
@@ -718,7 +718,7 @@ def TestEventCNTV (prev_physical_count : (BitVec 64)) (current_physical_count : 
           else
             (let offset : (BitVec 64) := (Zeros (n := 64))
             (pure (offset))) ) : SailM (BitVec 64) )
-        ArmFull.assert ((0 ≤b n) && (n <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:18411.46-18411.47"
+        ArmFull.assert ((0 ≤b n) && (n <b 64)) "sail-arm/v8_base.sail:18411.46-18411.47"
         let samplebit : (BitVec 1) :=
           (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access (current_physical_count - offset)
               (Sail.Int.toNatChecked (n)))]))

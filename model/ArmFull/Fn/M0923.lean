@@ -487,7 +487,7 @@ def FPProcessNaN (fptype : FPType) (op : (BitVec k_N)) (fpcr : (BitVec 64)) : Sa
 /-- Type quantifiers: k_N : Nat, k_fpexc : Bool, List.elem k_N [16, 32, 64] -/
 def FPProcessNaNs__1 (type1 : FPType) (type2 : FPType) (op1 : (BitVec k_N)) (op2 : (BitVec k_N)) (fpcr : (BitVec 64)) (fpexc : Bool) : SailM (Bool × (BitVec k_N)) := do
   ArmFull.assert (((Sail.BitVec.length op2) == 16) || (((Sail.BitVec.length op2) == 32) || ((Sail.BitVec.length
-          op2) == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:16206.41-16206.42"
+          op2) == 64))) "sail-arm/v8_base.sail:16206.41-16206.42"
   let done ← (( do (undefined_bool_at (← occLabel 919) ()) ) : SailM Bool )
   let result ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 920)
@@ -571,7 +571,7 @@ def FPRoundCV (op : real) (fpcr_in : (BitVec 64)) (rounding : FPRounding) (N : N
 /-- Type quantifiers: k_N : Nat, k_fpexc : Bool, List.elem k_N [16, 32, 64] -/
 def FPProcessNaNs3__1 (type1 : FPType) (type2 : FPType) (type3 : FPType) (op1 : (BitVec k_N)) (op2 : (BitVec k_N)) (op3 : (BitVec k_N)) (fpcr : (BitVec 64)) (fpexc : Bool) : SailM (Bool × (BitVec k_N)) := do
   ArmFull.assert (((Sail.BitVec.length op3) == 16) || (((Sail.BitVec.length op3) == 32) || ((Sail.BitVec.length
-          op3) == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:16864.41-16864.42"
+          op3) == 64))) "sail-arm/v8_base.sail:16864.41-16864.42"
   let result ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1025)
       (Sail.BitVec.length op3))) ) : SailM (BitVec k_N) )
@@ -691,7 +691,7 @@ def FPProcessNaNs3__1 (type1 : FPType) (type2 : FPType) (type3 : FPType) (op1 : 
 
 /-- Type quantifiers: k_N : Nat, k_fpexc : Bool, List.elem k_N [32, 64] -/
 def FPProcessNaNs3H (type1 : FPType) (type2 : FPType) (type3 : FPType) (op1 : (BitVec k_N)) (op2 : (BitVec (k_N / 2))) (op3 : (BitVec (k_N / 2))) (fpcr : (BitVec 64)) (fpexc : Bool) : SailM (Bool × (BitVec k_N)) := do
-  ArmFull.assert (((Sail.BitVec.length op1) == 32) || ((Sail.BitVec.length op1) == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:17069.30-17069.31"
+  ArmFull.assert (((Sail.BitVec.length op1) == 32) || ((Sail.BitVec.length op1) == 64)) "sail-arm/v8_base.sail:17069.30-17069.31"
   let result ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1059)
       (Sail.BitVec.length op1))) ) : SailM (BitVec k_N) )

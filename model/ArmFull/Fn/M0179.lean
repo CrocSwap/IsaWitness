@@ -250,7 +250,7 @@ def AArch64_S1DecodeTG1 (tg1_in : (BitVec 2)) : SailM TGx := do
 
 
 def AArch64_HaveS2TG (tgx : TGx) : SailM Bool := do
-  ArmFull.assert (HaveEL EL2) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:25703.22-25703.23"
+  ArmFull.assert (HaveEL EL2) "sail-arm/v8_base.sail:25703.22-25703.23"
   let w__0 ← (( do (HaveGTGExt ()) ) : SailM Bool )
   if (w__0 : Bool)
   then

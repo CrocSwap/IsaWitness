@@ -456,7 +456,7 @@ def HaveAArch32 (_ : Unit) : Bool :=
 
 
 def Unreachable (_ : Unit) : SailM Unit := do
-  ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:4096.16-4096.17"
+  ArmFull.assert false "sail-arm/v8_base.sail:4096.16-4096.17"
   throw Error.Exit
 
 

@@ -131,7 +131,7 @@ def C27bDebugCount (extended : Bool) : SailM Int := do
 
 /-- Type quantifiers: b : Int -/
 def C27bContextCount (b : Int) : SailM Int := do
-  ArmFull.assert (b ≥b 1) "/home/doug/boss-scratch/armcert-defects/c27b-accepted/armcert_c27b.sail:59.17-59.18"
+  ArmFull.assert (b ≥b 1) "armcert/armcert_c27b.sail:59.17-59.18"
   (undefined_range_at (.site 8673) 1 b)
 
 
@@ -650,7 +650,7 @@ def BadMode (mode : (BitVec 5)) : SailM Bool := do
 
 /-- Type quantifiers: n : Nat, n ≥ 0 ∧ n ≤ 15 -/
 def LookUpRIndex (n : Nat) (mode : (BitVec 5)) : SailM Int := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 14)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6344.27-6344.28"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 14)) "sail-arm/v8_base.sail:6344.27-6344.28"
   match n with
   | 8 =>
     (do
@@ -709,8 +709,8 @@ def HaveSVE (_ : Unit) : SailM Bool := do
 
 /-- Type quantifiers: n : Int, width : Nat, List.elem width [32, 64] -/
 def X_set (n : Int) (width : Nat) (value_name : (BitVec width)) : SailM Unit := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7435.27-7435.28"
-  ArmFull.assert ((width == 32) || (width == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7436.36-7436.37"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-arm/v8_base.sail:7435.27-7435.28"
+  ArmFull.assert ((width == 32) || (width == 64)) "sail-arm/v8_base.sail:7436.36-7436.37"
   if ((n != 31) : Bool)
   then
     (do
@@ -764,7 +764,7 @@ def HavePFAR (_ : Unit) : SailM Bool := do
 
 def ELR_set__1 (value_name : (BitVec 64)) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  ArmFull.assert (w__0.EL != EL0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:9418.27-9418.28"
+  ArmFull.assert (w__0.EL != EL0) "sail-arm/v8_base.sail:9418.27-9418.28"
   let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
   (ELR_set w__1.EL value_name)
 

@@ -480,7 +480,7 @@ def decode_aarch32_instrs_SVC_A1enc_A_txt (cond : (BitVec 4)) (imm24 : (BitVec 2
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:16058.29-16058.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:16058.29-16058.30"
       let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend imm24 32)
       (execute_aarch32_instrs_SVC_Op_A_txt imm32))
   else (pure (()))
@@ -605,7 +605,7 @@ def execute_aarch32_instrs_WFI_Op_A_txt (_ : Unit) : SailM Unit := do
 
 
 def decode_aarch32_instrs_HVC_A1enc_A_txt (cond : (BitVec 4)) (imm12 : (BitVec 12)) (imm4 : (BitVec 4)) : SailM Unit := do
-  ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:40919.25-40919.26"
+  ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:40919.25-40919.26"
   if ((cond != 0b1110#4) : Bool)
   then sailThrow ((Error_Unpredictable ()))
   else (pure (()))
@@ -627,7 +627,7 @@ def decode_aarch32_instrs_SMC_A1enc_AS_txt (cond : (BitVec 4)) (imm4 : (BitVec 4
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:41716.29-41716.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:41716.29-41716.30"
       (execute_aarch32_instrs_SMC_Op_AS_txt ()))
   else (pure (()))
 

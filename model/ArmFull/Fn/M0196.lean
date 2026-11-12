@@ -553,7 +553,7 @@ def WFETrapDelay (target_el : (BitVec 2)) : SailM (Bool × Int) := do
         then
           (do
             let w__5 ← (( do (EL2Enabled ()) ) : SailM Bool )
-            ArmFull.assert w__5 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:10740.29-10740.30"
+            ArmFull.assert w__5 "sail-arm/v8_base.sail:10740.29-10740.30"
             let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
             let delay_enabled := (((_get_HCR_EL2_Type_TWEDEn w__6) == 1#1) : Bool)
             let w__7 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
@@ -598,10 +598,10 @@ def AArch64_ChkFeat (feat_select : (BitVec 64)) : SailM (BitVec 64) := do
 
 def EffectiveTCMA (address : (BitVec 64)) (el : (BitVec 2)) : SailM (BitVec 1) := do
   let tcma ← (( do (undefined_bitvector_at (← occLabel 740) 1) ) : SailM (BitVec 1) )
-  ArmFull.assert (HaveEL el) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:11075.21-11075.22"
+  ArmFull.assert (HaveEL el) "sail-arm/v8_base.sail:11075.21-11075.22"
   let regime ← (( do (S1TranslationRegime el) ) : SailM (BitVec 2) )
   let w__0 ← (( do (ELUsingAArch32 regime) ) : SailM Bool )
-  ArmFull.assert (! w__0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:11077.43-11077.44"
+  ArmFull.assert (! w__0) "sail-arm/v8_base.sail:11077.43-11077.44"
   let questionMark := regime
   if ((questionMark == EL1) : Bool)
   then
@@ -658,10 +658,10 @@ def EffectiveTCMA (address : (BitVec 64)) (el : (BitVec 2)) : SailM (BitVec 1) :
 /-- Type quantifiers: k_is_instr : Bool -/
 def EffectiveMTX (address : (BitVec 64)) (is_instr : Bool) (el : (BitVec 2)) : SailM (BitVec 1) := do
   let mtx ← (( do (undefined_bitvector_at (← occLabel 741) 1) ) : SailM (BitVec 1) )
-  ArmFull.assert (HaveEL el) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:11109.21-11109.22"
+  ArmFull.assert (HaveEL el) "sail-arm/v8_base.sail:11109.21-11109.22"
   let regime ← (( do (S1TranslationRegime el) ) : SailM (BitVec 2) )
   let w__0 ← (( do (ELUsingAArch32 regime) ) : SailM Bool )
-  ArmFull.assert (! w__0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:11111.43-11111.44"
+  ArmFull.assert (! w__0) "sail-arm/v8_base.sail:11111.43-11111.44"
   let w__2 ← (( do
     (pure ((← do
           let w__1 ← (( do (HaveMTE4Ext ()) ) : SailM Bool )
@@ -727,11 +727,11 @@ def AltPARTIDspace (el : (BitVec 2)) (security : SecurityState) (primaryPIdSpace
   match security with
   | .SS_NonSecure =>
     (do
-      ArmFull.assert (el != EL3) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:11334.26-11334.27"
+      ArmFull.assert (el != EL3) "sail-arm/v8_base.sail:11334.26-11334.27"
       (pure (primaryPIdSpace)))
   | .SS_Secure =>
     (do
-      ArmFull.assert (el != EL3) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:11338.26-11338.27"
+      ArmFull.assert (el != EL3) "sail-arm/v8_base.sail:11338.26-11338.27"
       if ((BEq.beq primaryPIdSpace PIdSpace_NonSecure) : Bool)
       then (pure (primaryPIdSpace))
       else
@@ -739,7 +739,7 @@ def AltPARTIDspace (el : (BitVec 2)) (security : SecurityState) (primaryPIdSpace
           (AltPIdSecure el primaryPIdSpace)))
   | .SS_Root =>
     (do
-      ArmFull.assert (el == EL3) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:11345.26-11345.27"
+      ArmFull.assert (el == EL3) "sail-arm/v8_base.sail:11345.26-11345.27"
       let w__2 ← (( do (MPAM3_EL3_read ()) ) : SailM (BitVec 64) )
       if (((_get_MPAM3_EL3_Type_ALTSP_EL3 w__2) == 1#1) : Bool)
       then
@@ -753,7 +753,7 @@ def AltPARTIDspace (el : (BitVec 2)) (security : SecurityState) (primaryPIdSpace
       else (pure (primaryPIdSpace)))
   | .SS_Realm =>
     (do
-      ArmFull.assert (el != EL3) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:11357.26-11357.27"
+      ArmFull.assert (el != EL3) "sail-arm/v8_base.sail:11357.26-11357.27"
       (AltPIdRealm el primaryPIdSpace))
 
 

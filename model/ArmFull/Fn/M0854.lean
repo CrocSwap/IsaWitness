@@ -170,7 +170,7 @@ def decode_autib_aarch64_instrs_integer_pac_autib_hint (op2 : (BitVec 3)) (CRm :
         (pure ((d, n, source_is_sp)))) ) : SailM (Int × Int × Bool) )
   let n : Int := n
   let d : Int := d
-  ArmFull.assert ((0 ≤b n) && (n ≤b 31)) "/home/doug/boss-scratch/armcert-defects/c27-accepted/armcert_c27.sail:192.43-192.44"
+  ArmFull.assert ((0 ≤b n) && (n ≤b 31)) "armcert/armcert_c27.sail:192.43-192.44"
   (execute_aarch64_instrs_integer_pac_autib_dp_1src (Sail.Int.toNatChecked (d))
     (Sail.Int.toNatChecked (n)) source_is_sp)
 

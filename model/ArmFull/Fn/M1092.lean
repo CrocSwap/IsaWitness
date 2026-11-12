@@ -121,7 +121,7 @@ def decode_aarch32_instrs_VCVT_xv_A1enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:23359.29-23359.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:23359.29-23359.30"
       if (((sf == 0b00#2) || ((sf == 0b01#2) && (! (HaveFP16Ext ())))) : Bool)
       then sailThrow ((Error_Undefined ()))
       else (pure (()))

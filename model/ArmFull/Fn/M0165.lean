@@ -261,7 +261,7 @@ def execute_aarch64_instrs_integer_ins_ext_extract_immediate (d : Nat) (datasize
   let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read m datasize)) ) : SailM
     (BitVec datasize) )
   let concat : (BitVec (2 * datasize)) := (Sail.BitVec.castWidth (operand1 +++ operand2))
-  ArmFull.assert (((lsb +i datasize) -i 1) <b (2 *i datasize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:10732.59-10732.60"
+  ArmFull.assert (((lsb +i datasize) -i 1) <b (2 *i datasize)) "sail-arm/instrs64.sail:10732.59-10732.60"
   let result : (BitVec datasize) :=
     (Sail.BitVec.castWidth (Sail.BitVec.extractLsb concat
       (Sail.Int.toNatChecked (((lsb +i datasize) -i 1))) lsb))
@@ -322,7 +322,7 @@ def execute_aarch64_instrs_integer_ins_ext_insert_movewide (d : Nat) (datasize :
     else
       (let result : (BitVec datasize) := (Sail.BitVec.castWidth (Zeros (n := datasize)))
       (pure (result))) ) : SailM (BitVec datasize) )
-  ArmFull.assert ((pos +i 15) <b datasize) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:38730.44-38730.45"
+  ArmFull.assert ((pos +i 15) <b datasize) "sail-arm/instrs64.sail:38730.44-38730.45"
   let result : (BitVec datasize) :=
     (Sail.BitVec.updateSubrange result (Sail.Int.toNatChecked ((pos +i 15))) pos
       (Sail.BitVec.castWidth imm))
@@ -388,8 +388,8 @@ def execute_aarch64_instrs_integer_arithmetic_rev (container_size : Nat) (d : Na
               loop_vars_1 ← do
                 let rev_index : Int := rev_index
                 let index : Int := index
-                ArmFull.assert ((0 ≤b rev_index) && ((rev_index +i 7) <b datasize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:41065.83-41065.84"
-                ArmFull.assert ((0 ≤b index) && ((index +i 7) <b datasize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:41066.75-41066.76"
+                ArmFull.assert ((0 ≤b rev_index) && ((rev_index +i 7) <b datasize)) "sail-arm/instrs64.sail:41065.83-41065.84"
+                ArmFull.assert ((0 ≤b index) && ((index +i 7) <b datasize)) "sail-arm/instrs64.sail:41066.75-41066.76"
                 let result : (BitVec datasize) :=
                   (Sail.BitVec.updateSubrange result (Sail.Int.toNatChecked ((rev_index +i 7)))
                     (Sail.Int.toNatChecked (rev_index))

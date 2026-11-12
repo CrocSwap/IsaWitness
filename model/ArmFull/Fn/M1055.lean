@@ -367,7 +367,7 @@ def decode_aarch32_instrs_VQSHL_i_A1enc_A_txt (U : (BitVec 1)) (D : (BitVec 1)) 
             (Sail.Int.toNatChecked (regs)) shift_amount src_unsigned))
       | _ =>
         (do
-          ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:34086.26-34086.27"
+          ArmFull.assert false "sail-arm/instrs32.sail:34086.26-34086.27"
           throw Error.Exit))
   else (pure (()))
 
@@ -463,7 +463,7 @@ def decode_aarch32_instrs_VQSHL_i_T1enc_A_txt (U : (BitVec 1)) (D : (BitVec 1)) 
             (Sail.Int.toNatChecked (regs)) shift_amount src_unsigned))
       | _ =>
         (do
-          ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:34171.26-34171.27"
+          ArmFull.assert false "sail-arm/instrs32.sail:34171.26-34171.27"
           throw Error.Exit))
   else (pure (()))
 

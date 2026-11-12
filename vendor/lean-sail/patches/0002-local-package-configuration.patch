@@ -49,7 +49,7 @@ index 9565ae9..9c2e310 100644
 + "fixedToolchain": false}
 diff --git a/lakefile.lean b/lakefile.lean
 new file mode 100644
-index 0000000..23927d6
+index 0000000..0c949e7
 --- /dev/null
 +++ b/lakefile.lean
 @@ -0,0 +1,24 @@
@@ -57,7 +57,7 @@ index 0000000..23927d6
 +open Lake DSL
 +
 +package «lean-sail» where
-+  moreLeanArgs := #["-M12288"]
++  moreLeanArgs := #["-j1", "-M12288", "-DElab.async=false"]
 +
 +require «lean-buildtools» from "../lean-buildtools"
 +

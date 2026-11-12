@@ -136,7 +136,7 @@ def decode_ldpsw_aarch64_instrs_memory_pair_general_pre_idx (Rt : (BitVec 5)) (R
       (do
         let c ← (( do (ConstrainUnpredictable Unpredictable_WBOVERLAPLD) ) : SailM Constraint )
         ArmFull.assert ((BEq.beq c Constraint_WBSUPPRESS) || ((BEq.beq c Constraint_UNKNOWN) || ((BEq.beq
-                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:31976.113-31976.114"
+                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "sail-arm/instrs64.sail:31976.113-31976.114"
         match c with
         | .Constraint_WBSUPPRESS =>
           (let wback : Bool := false
@@ -157,7 +157,7 @@ def decode_ldpsw_aarch64_instrs_memory_pair_general_pre_idx (Rt : (BitVec 5)) (R
       (do
         let c ← (( do (ConstrainUnpredictable Unpredictable_WBOVERLAPST) ) : SailM Constraint )
         ArmFull.assert ((BEq.beq c Constraint_NONE) || ((BEq.beq c Constraint_UNKNOWN) || ((BEq.beq
-                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:31995.107-31995.108"
+                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "sail-arm/instrs64.sail:31995.107-31995.108"
         match c with
         | .Constraint_NONE => (pure (false))
         | .Constraint_UNKNOWN => (pure (true))
@@ -174,7 +174,7 @@ def decode_ldpsw_aarch64_instrs_memory_pair_general_pre_idx (Rt : (BitVec 5)) (R
       (do
         let c ← (( do (ConstrainUnpredictable Unpredictable_LDPOVERLAP) ) : SailM Constraint )
         ArmFull.assert ((BEq.beq c Constraint_UNKNOWN) || ((BEq.beq c Constraint_UNDEF) || (BEq.beq
-              c Constraint_NOP))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32014.84-32014.85"
+              c Constraint_NOP))) "sail-arm/instrs64.sail:32014.84-32014.85"
         match c with
         | .Constraint_UNKNOWN => (pure (true))
         | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
@@ -184,7 +184,7 @@ def decode_ldpsw_aarch64_instrs_memory_pair_general_pre_idx (Rt : (BitVec 5)) (R
             (pure (rt_unknown)))
         | _ => (pure (rt_unknown)))
     else (pure (rt_unknown)) ) : SailM Bool )
-  ArmFull.assert ((datasize == 32) || (datasize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32028.44-32028.45"
+  ArmFull.assert ((datasize == 32) || (datasize == 64)) "sail-arm/instrs64.sail:32028.44-32028.45"
   (execute_aarch64_instrs_memory_pair_general_post_idx (Sail.Int.toNatChecked (datasize)) memop
     (Sail.Int.toNatChecked (n)) nontemporal offset postindex rt_unknown is_signed
     (Sail.Int.toNatChecked (t)) (Sail.Int.toNatChecked (t2)) tagchecked wb_unknown wback)
@@ -218,7 +218,7 @@ def decode_ldpsw_aarch64_instrs_memory_pair_general_offset (Rt : (BitVec 5)) (Rn
       (do
         let c ← (( do (ConstrainUnpredictable Unpredictable_WBOVERLAPLD) ) : SailM Constraint )
         ArmFull.assert ((BEq.beq c Constraint_WBSUPPRESS) || ((BEq.beq c Constraint_UNKNOWN) || ((BEq.beq
-                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32065.113-32065.114"
+                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "sail-arm/instrs64.sail:32065.113-32065.114"
         match c with
         | .Constraint_WBSUPPRESS =>
           (let wback : Bool := false
@@ -239,7 +239,7 @@ def decode_ldpsw_aarch64_instrs_memory_pair_general_offset (Rt : (BitVec 5)) (Rn
       (do
         let c ← (( do (ConstrainUnpredictable Unpredictable_WBOVERLAPST) ) : SailM Constraint )
         ArmFull.assert ((BEq.beq c Constraint_NONE) || ((BEq.beq c Constraint_UNKNOWN) || ((BEq.beq
-                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32084.107-32084.108"
+                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "sail-arm/instrs64.sail:32084.107-32084.108"
         match c with
         | .Constraint_NONE => (pure (false))
         | .Constraint_UNKNOWN => (pure (true))
@@ -256,7 +256,7 @@ def decode_ldpsw_aarch64_instrs_memory_pair_general_offset (Rt : (BitVec 5)) (Rn
       (do
         let c ← (( do (ConstrainUnpredictable Unpredictable_LDPOVERLAP) ) : SailM Constraint )
         ArmFull.assert ((BEq.beq c Constraint_UNKNOWN) || ((BEq.beq c Constraint_UNDEF) || (BEq.beq
-              c Constraint_NOP))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32103.84-32103.85"
+              c Constraint_NOP))) "sail-arm/instrs64.sail:32103.84-32103.85"
         match c with
         | .Constraint_UNKNOWN => (pure (true))
         | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
@@ -266,7 +266,7 @@ def decode_ldpsw_aarch64_instrs_memory_pair_general_offset (Rt : (BitVec 5)) (Rn
             (pure (rt_unknown)))
         | _ => (pure (rt_unknown)))
     else (pure (rt_unknown)) ) : SailM Bool )
-  ArmFull.assert ((datasize == 32) || (datasize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32117.44-32117.45"
+  ArmFull.assert ((datasize == 32) || (datasize == 64)) "sail-arm/instrs64.sail:32117.44-32117.45"
   (execute_aarch64_instrs_memory_pair_general_post_idx (Sail.Int.toNatChecked (datasize)) memop
     (Sail.Int.toNatChecked (n)) nontemporal offset postindex rt_unknown is_signed
     (Sail.Int.toNatChecked (t)) (Sail.Int.toNatChecked (t2)) tagchecked wb_unknown wback)
@@ -300,7 +300,7 @@ def decode_stp_gen_aarch64_instrs_memory_pair_general_post_idx (Rt : (BitVec 5))
       (do
         let c ← (( do (ConstrainUnpredictable Unpredictable_WBOVERLAPLD) ) : SailM Constraint )
         ArmFull.assert ((BEq.beq c Constraint_WBSUPPRESS) || ((BEq.beq c Constraint_UNKNOWN) || ((BEq.beq
-                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32154.113-32154.114"
+                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "sail-arm/instrs64.sail:32154.113-32154.114"
         match c with
         | .Constraint_WBSUPPRESS =>
           (let wback : Bool := false
@@ -321,7 +321,7 @@ def decode_stp_gen_aarch64_instrs_memory_pair_general_post_idx (Rt : (BitVec 5))
       (do
         let c ← (( do (ConstrainUnpredictable Unpredictable_WBOVERLAPST) ) : SailM Constraint )
         ArmFull.assert ((BEq.beq c Constraint_NONE) || ((BEq.beq c Constraint_UNKNOWN) || ((BEq.beq
-                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32173.107-32173.108"
+                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "sail-arm/instrs64.sail:32173.107-32173.108"
         match c with
         | .Constraint_NONE => (pure (false))
         | .Constraint_UNKNOWN => (pure (true))
@@ -338,7 +338,7 @@ def decode_stp_gen_aarch64_instrs_memory_pair_general_post_idx (Rt : (BitVec 5))
       (do
         let c ← (( do (ConstrainUnpredictable Unpredictable_LDPOVERLAP) ) : SailM Constraint )
         ArmFull.assert ((BEq.beq c Constraint_UNKNOWN) || ((BEq.beq c Constraint_UNDEF) || (BEq.beq
-              c Constraint_NOP))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32192.84-32192.85"
+              c Constraint_NOP))) "sail-arm/instrs64.sail:32192.84-32192.85"
         match c with
         | .Constraint_UNKNOWN => (pure (true))
         | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
@@ -348,7 +348,7 @@ def decode_stp_gen_aarch64_instrs_memory_pair_general_post_idx (Rt : (BitVec 5))
             (pure (rt_unknown)))
         | _ => (pure (rt_unknown)))
     else (pure (rt_unknown)) ) : SailM Bool )
-  ArmFull.assert ((datasize == 32) || (datasize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32206.44-32206.45"
+  ArmFull.assert ((datasize == 32) || (datasize == 64)) "sail-arm/instrs64.sail:32206.44-32206.45"
   (execute_aarch64_instrs_memory_pair_general_post_idx (Sail.Int.toNatChecked (datasize)) memop
     (Sail.Int.toNatChecked (n)) nontemporal offset postindex rt_unknown is_signed
     (Sail.Int.toNatChecked (t)) (Sail.Int.toNatChecked (t2)) tagchecked wb_unknown wback)
@@ -382,7 +382,7 @@ def decode_stp_gen_aarch64_instrs_memory_pair_general_pre_idx (Rt : (BitVec 5)) 
       (do
         let c ← (( do (ConstrainUnpredictable Unpredictable_WBOVERLAPLD) ) : SailM Constraint )
         ArmFull.assert ((BEq.beq c Constraint_WBSUPPRESS) || ((BEq.beq c Constraint_UNKNOWN) || ((BEq.beq
-                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32243.113-32243.114"
+                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "sail-arm/instrs64.sail:32243.113-32243.114"
         match c with
         | .Constraint_WBSUPPRESS =>
           (let wback : Bool := false
@@ -403,7 +403,7 @@ def decode_stp_gen_aarch64_instrs_memory_pair_general_pre_idx (Rt : (BitVec 5)) 
       (do
         let c ← (( do (ConstrainUnpredictable Unpredictable_WBOVERLAPST) ) : SailM Constraint )
         ArmFull.assert ((BEq.beq c Constraint_NONE) || ((BEq.beq c Constraint_UNKNOWN) || ((BEq.beq
-                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32262.107-32262.108"
+                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "sail-arm/instrs64.sail:32262.107-32262.108"
         match c with
         | .Constraint_NONE => (pure (false))
         | .Constraint_UNKNOWN => (pure (true))
@@ -420,7 +420,7 @@ def decode_stp_gen_aarch64_instrs_memory_pair_general_pre_idx (Rt : (BitVec 5)) 
       (do
         let c ← (( do (ConstrainUnpredictable Unpredictable_LDPOVERLAP) ) : SailM Constraint )
         ArmFull.assert ((BEq.beq c Constraint_UNKNOWN) || ((BEq.beq c Constraint_UNDEF) || (BEq.beq
-              c Constraint_NOP))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32281.84-32281.85"
+              c Constraint_NOP))) "sail-arm/instrs64.sail:32281.84-32281.85"
         match c with
         | .Constraint_UNKNOWN => (pure (true))
         | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
@@ -430,7 +430,7 @@ def decode_stp_gen_aarch64_instrs_memory_pair_general_pre_idx (Rt : (BitVec 5)) 
             (pure (rt_unknown)))
         | _ => (pure (rt_unknown)))
     else (pure (rt_unknown)) ) : SailM Bool )
-  ArmFull.assert ((datasize == 32) || (datasize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32295.44-32295.45"
+  ArmFull.assert ((datasize == 32) || (datasize == 64)) "sail-arm/instrs64.sail:32295.44-32295.45"
   (execute_aarch64_instrs_memory_pair_general_post_idx (Sail.Int.toNatChecked (datasize)) memop
     (Sail.Int.toNatChecked (n)) nontemporal offset postindex rt_unknown is_signed
     (Sail.Int.toNatChecked (t)) (Sail.Int.toNatChecked (t2)) tagchecked wb_unknown wback)
@@ -464,7 +464,7 @@ def decode_stp_gen_aarch64_instrs_memory_pair_general_offset (Rt : (BitVec 5)) (
       (do
         let c ← (( do (ConstrainUnpredictable Unpredictable_WBOVERLAPLD) ) : SailM Constraint )
         ArmFull.assert ((BEq.beq c Constraint_WBSUPPRESS) || ((BEq.beq c Constraint_UNKNOWN) || ((BEq.beq
-                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32332.113-32332.114"
+                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "sail-arm/instrs64.sail:32332.113-32332.114"
         match c with
         | .Constraint_WBSUPPRESS =>
           (let wback : Bool := false
@@ -485,7 +485,7 @@ def decode_stp_gen_aarch64_instrs_memory_pair_general_offset (Rt : (BitVec 5)) (
       (do
         let c ← (( do (ConstrainUnpredictable Unpredictable_WBOVERLAPST) ) : SailM Constraint )
         ArmFull.assert ((BEq.beq c Constraint_NONE) || ((BEq.beq c Constraint_UNKNOWN) || ((BEq.beq
-                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32351.107-32351.108"
+                c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)))) "sail-arm/instrs64.sail:32351.107-32351.108"
         match c with
         | .Constraint_NONE => (pure (false))
         | .Constraint_UNKNOWN => (pure (true))
@@ -502,7 +502,7 @@ def decode_stp_gen_aarch64_instrs_memory_pair_general_offset (Rt : (BitVec 5)) (
       (do
         let c ← (( do (ConstrainUnpredictable Unpredictable_LDPOVERLAP) ) : SailM Constraint )
         ArmFull.assert ((BEq.beq c Constraint_UNKNOWN) || ((BEq.beq c Constraint_UNDEF) || (BEq.beq
-              c Constraint_NOP))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32370.84-32370.85"
+              c Constraint_NOP))) "sail-arm/instrs64.sail:32370.84-32370.85"
         match c with
         | .Constraint_UNKNOWN => (pure (true))
         | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
@@ -512,7 +512,7 @@ def decode_stp_gen_aarch64_instrs_memory_pair_general_offset (Rt : (BitVec 5)) (
             (pure (rt_unknown)))
         | _ => (pure (rt_unknown)))
     else (pure (rt_unknown)) ) : SailM Bool )
-  ArmFull.assert ((datasize == 32) || (datasize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32384.44-32384.45"
+  ArmFull.assert ((datasize == 32) || (datasize == 64)) "sail-arm/instrs64.sail:32384.44-32384.45"
   (execute_aarch64_instrs_memory_pair_general_post_idx (Sail.Int.toNatChecked (datasize)) memop
     (Sail.Int.toNatChecked (n)) nontemporal offset postindex rt_unknown is_signed
     (Sail.Int.toNatChecked (t)) (Sail.Int.toNatChecked (t2)) tagchecked wb_unknown wback)
@@ -536,7 +536,7 @@ def decode_ldr_imm_fpsimd_aarch64_instrs_memory_single_simdfp_immediate_signed_p
     else MemOp_STORE
   let datasize : Int := (Int.shiftl 8 (Sail.Int.toNatChecked (scale)))
   let tagchecked : Bool := ((bne memop MemOp_PREFETCH) && (wback || (n != 31)))
-  ArmFull.assert ((((((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) || (datasize == 256)) || (datasize == 512)) || (datasize == 1024)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32462.72-32462.73"
+  ArmFull.assert ((((((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) || (datasize == 256)) || (datasize == 512)) || (datasize == 1024)) "sail-arm/instrs64.sail:32462.72-32462.73"
   (execute_aarch64_instrs_memory_single_simdfp_immediate_signed_post_idx
     (Sail.Int.toNatChecked (datasize)) memop (Sail.Int.toNatChecked (n)) nontemporal offset
     postindex (Sail.Int.toNatChecked (t)) tagchecked wback)
@@ -560,7 +560,7 @@ def decode_ldr_imm_fpsimd_aarch64_instrs_memory_single_simdfp_immediate_signed_p
     else MemOp_STORE
   let datasize : Int := (Int.shiftl 8 (Sail.Int.toNatChecked (scale)))
   let tagchecked : Bool := ((bne memop MemOp_PREFETCH) && (wback || (n != 31)))
-  ArmFull.assert ((((((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) || (datasize == 256)) || (datasize == 512)) || (datasize == 1024)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32492.72-32492.73"
+  ArmFull.assert ((((((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) || (datasize == 256)) || (datasize == 512)) || (datasize == 1024)) "sail-arm/instrs64.sail:32492.72-32492.73"
   (execute_aarch64_instrs_memory_single_simdfp_immediate_signed_post_idx
     (Sail.Int.toNatChecked (datasize)) memop (Sail.Int.toNatChecked (n)) nontemporal offset
     postindex (Sail.Int.toNatChecked (t)) tagchecked wback)
@@ -584,7 +584,7 @@ def decode_ldr_imm_fpsimd_aarch64_instrs_memory_single_simdfp_immediate_unsigned
     else MemOp_STORE
   let datasize : Int := (Int.shiftl 8 (Sail.Int.toNatChecked (scale)))
   let tagchecked : Bool := ((bne memop MemOp_PREFETCH) && (wback || (n != 31)))
-  ArmFull.assert ((((((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) || (datasize == 256)) || (datasize == 512)) || (datasize == 1024)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32522.72-32522.73"
+  ArmFull.assert ((((((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) || (datasize == 256)) || (datasize == 512)) || (datasize == 1024)) "sail-arm/instrs64.sail:32522.72-32522.73"
   (execute_aarch64_instrs_memory_single_simdfp_immediate_signed_post_idx
     (Sail.Int.toNatChecked (datasize)) memop (Sail.Int.toNatChecked (n)) nontemporal offset
     postindex (Sail.Int.toNatChecked (t)) tagchecked wback)
@@ -608,7 +608,7 @@ def decode_str_imm_fpsimd_aarch64_instrs_memory_single_simdfp_immediate_signed_p
     else MemOp_STORE
   let datasize : Int := (Int.shiftl 8 (Sail.Int.toNatChecked (scale)))
   let tagchecked : Bool := ((bne memop MemOp_PREFETCH) && (wback || (n != 31)))
-  ArmFull.assert ((((((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) || (datasize == 256)) || (datasize == 512)) || (datasize == 1024)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32552.72-32552.73"
+  ArmFull.assert ((((((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) || (datasize == 256)) || (datasize == 512)) || (datasize == 1024)) "sail-arm/instrs64.sail:32552.72-32552.73"
   (execute_aarch64_instrs_memory_single_simdfp_immediate_signed_post_idx
     (Sail.Int.toNatChecked (datasize)) memop (Sail.Int.toNatChecked (n)) nontemporal offset
     postindex (Sail.Int.toNatChecked (t)) tagchecked wback)
@@ -632,7 +632,7 @@ def decode_str_imm_fpsimd_aarch64_instrs_memory_single_simdfp_immediate_signed_p
     else MemOp_STORE
   let datasize : Int := (Int.shiftl 8 (Sail.Int.toNatChecked (scale)))
   let tagchecked : Bool := ((bne memop MemOp_PREFETCH) && (wback || (n != 31)))
-  ArmFull.assert ((((((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) || (datasize == 256)) || (datasize == 512)) || (datasize == 1024)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32582.72-32582.73"
+  ArmFull.assert ((((((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) || (datasize == 256)) || (datasize == 512)) || (datasize == 1024)) "sail-arm/instrs64.sail:32582.72-32582.73"
   (execute_aarch64_instrs_memory_single_simdfp_immediate_signed_post_idx
     (Sail.Int.toNatChecked (datasize)) memop (Sail.Int.toNatChecked (n)) nontemporal offset
     postindex (Sail.Int.toNatChecked (t)) tagchecked wback)
@@ -656,7 +656,7 @@ def decode_str_imm_fpsimd_aarch64_instrs_memory_single_simdfp_immediate_unsigned
     else MemOp_STORE
   let datasize : Int := (Int.shiftl 8 (Sail.Int.toNatChecked (scale)))
   let tagchecked : Bool := ((bne memop MemOp_PREFETCH) && (wback || (n != 31)))
-  ArmFull.assert ((((((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) || (datasize == 256)) || (datasize == 512)) || (datasize == 1024)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:32612.72-32612.73"
+  ArmFull.assert ((((((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) || (datasize == 256)) || (datasize == 512)) || (datasize == 1024)) "sail-arm/instrs64.sail:32612.72-32612.73"
   (execute_aarch64_instrs_memory_single_simdfp_immediate_signed_post_idx
     (Sail.Int.toNatChecked (datasize)) memop (Sail.Int.toNatChecked (n)) nontemporal offset
     postindex (Sail.Int.toNatChecked (t)) tagchecked wback)

@@ -255,7 +255,7 @@ def execute_aarch64_instrs_memory_ordered_rcpc (datasize : Nat) (n : Nat) (offse
         (X_read n 64)) ) : SailM (BitVec 64) )
   let data ← (( do ((Sail.BitVec.castWidth ) <$> ((Mem_read address dbytes accdesc))) ) : SailM
     (BitVec datasize) )
-  ArmFull.assert (regsize ≥b datasize) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:27327.44-27327.45"
+  ArmFull.assert (regsize ≥b datasize) "sail-arm/instrs64.sail:27327.44-27327.45"
   (X_set t regsize (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend data regsize)))
   if (wback : Bool)
   then
@@ -358,11 +358,11 @@ def execute_aarch64_instrs_memory_single_general_immediate_signed_offset_lda_stl
       if (is_signed : Bool)
       then
         (do
-          ArmFull.assert ((datasize >b 0) && (regsize ≥b datasize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:27521.72-27521.73"
+          ArmFull.assert ((datasize >b 0) && (regsize ≥b datasize)) "sail-arm/instrs64.sail:27521.72-27521.73"
           (X_set t regsize (Sail.BitVec.castWidth (sign_extend data regsize))))
       else
         (do
-          ArmFull.assert ((datasize ≥b 0) && (regsize ≥b datasize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:27524.73-27524.74"
+          ArmFull.assert ((datasize ≥b 0) && (regsize ≥b datasize)) "sail-arm/instrs64.sail:27524.73-27524.74"
           (X_set t regsize (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend data regsize)))))
   | .MemOp_PREFETCH =>
     (do
@@ -423,7 +423,7 @@ def execute_aarch64_instrs_memory_single_simdfp_immediate_signed_offset_ordered 
   match memop with
   | .MemOp_STORE =>
     (do
-      ArmFull.assert (((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:28335.62-28335.63"
+      ArmFull.assert (((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) "sail-arm/instrs64.sail:28335.62-28335.63"
       let data ← (( do ((Sail.BitVec.castWidth ) <$> (V_read t datasize)) ) : SailM
         (BitVec datasize) )
       (Mem_set address (Sail.Int.toNatChecked ((Int.ediv datasize 8))) accdesc
@@ -433,7 +433,7 @@ def execute_aarch64_instrs_memory_single_simdfp_immediate_signed_offset_ordered 
       let data ← (( do
         ((Sail.BitVec.castWidth ) <$> ((Mem_read address
           (Sail.Int.toNatChecked ((Int.ediv datasize 8))) accdesc))) ) : SailM (BitVec datasize) )
-      ArmFull.assert (((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:28341.62-28341.63"
+      ArmFull.assert (((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) || (datasize == 128)) "sail-arm/instrs64.sail:28341.62-28341.63"
       (V_set t datasize (Sail.BitVec.castWidth data)))
   | _ => (pure (()))
   if (wback : Bool)
@@ -518,7 +518,7 @@ def execute_aarch64_instrs_memory_ordered (datasize : Nat) (limitedordered : Boo
       let _ : Unit := (AArch64_SetLSInstructionSyndrome dbytes false t (regsize == 64) true)
       let data ← (( do ((Sail.BitVec.castWidth ) <$> ((Mem_read address dbytes accdesc))) ) :
         SailM (BitVec datasize) )
-      ArmFull.assert ((datasize ≥b 0) && (regsize ≥b datasize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:28464.69-28464.70"
+      ArmFull.assert ((datasize ≥b 0) && (regsize ≥b datasize)) "sail-arm/instrs64.sail:28464.69-28464.70"
       (X_set t regsize (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend data regsize))))
   | _ => (pure (()))
   let w__6 ← (( do readReg SPESampleInFlight ) : SailM Bool )
@@ -594,7 +594,7 @@ def execute_aarch64_instrs_memory_exclusive_pair (acqrel : Bool) (datasize : Nat
                 (pure ((w__5 : (BitVec datasize)))))
             else
               (do
-                ArmFull.assert ((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:28968.61-28968.62"
+                ArmFull.assert ((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) "sail-arm/instrs64.sail:28968.61-28968.62"
                 ((Sail.BitVec.castWidth ) <$> (X_read t datasize)))) ) : SailM (BitVec datasize) )
       let status : (BitVec 1) := 1#1
       let w__7 ← (( do (AArch64_ExclusiveMonitorsPass address dbytes) ) : SailM Bool )
@@ -623,7 +623,7 @@ def execute_aarch64_instrs_memory_exclusive_pair (acqrel : Bool) (datasize : Nat
           if (rt_unknown : Bool)
           then
             (do
-              ArmFull.assert ((datasize == 32) || (datasize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:28984.58-28984.59"
+              ArmFull.assert ((datasize == 32) || (datasize == 64)) "sail-arm/instrs64.sail:28984.58-28984.59"
               let w__10 ← (( do ((Sail.BitVec.castWidth ) <$> (__UNKNOWN_bits datasize)) ) : SailM
                 (BitVec datasize) )
               (X_set t datasize (Sail.BitVec.castWidth w__10)))
@@ -639,8 +639,8 @@ def execute_aarch64_instrs_memory_exclusive_pair (acqrel : Bool) (datasize : Nat
                   if (w__11 : Bool)
                   then
                     (do
-                      ArmFull.assert ((0 ≤b elsize) && ((elsize ≤b (datasize -i 1)) && ((datasize -i 1) <b datasize))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:28989.110-28989.111"
-                      ArmFull.assert (((datasize -i elsize) == 32) || ((datasize -i elsize) == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:28990.96-28990.97"
+                      ArmFull.assert ((0 ≤b elsize) && ((elsize ≤b (datasize -i 1)) && ((datasize -i 1) <b datasize))) "sail-arm/instrs64.sail:28989.110-28989.111"
+                      ArmFull.assert (((datasize -i elsize) == 32) || ((datasize -i elsize) == 64)) "sail-arm/instrs64.sail:28990.96-28990.97"
                       (X_set t (Sail.Int.toNatChecked ((datasize -i elsize)))
                         (Sail.BitVec.castWidth (Sail.BitVec.extractLsb data
                           (Sail.Int.toNatChecked ((datasize -i 1))) elsize)))
@@ -652,8 +652,8 @@ def execute_aarch64_instrs_memory_exclusive_pair (acqrel : Bool) (datasize : Nat
                       (X_set t elsize
                         (Sail.BitVec.castWidth (Sail.BitVec.extractLsb data
                           (Sail.Int.toNatChecked ((elsize -i 1))) 0)))
-                      ArmFull.assert ((0 ≤b elsize) && ((elsize ≤b (datasize -i 1)) && ((datasize -i 1) <b datasize))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:28995.110-28995.111"
-                      ArmFull.assert (((datasize -i elsize) == 32) || ((datasize -i elsize) == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:28996.96-28996.97"
+                      ArmFull.assert ((0 ≤b elsize) && ((elsize ≤b (datasize -i 1)) && ((datasize -i 1) <b datasize))) "sail-arm/instrs64.sail:28995.110-28995.111"
+                      ArmFull.assert (((datasize -i elsize) == 32) || ((datasize -i elsize) == 64)) "sail-arm/instrs64.sail:28996.96-28996.97"
                       (X_set t2 (Sail.Int.toNatChecked ((datasize -i elsize)))
                         (Sail.BitVec.castWidth (Sail.BitVec.extractLsb data
                           (Sail.Int.toNatChecked ((datasize -i 1))) elsize)))))
@@ -675,7 +675,7 @@ def execute_aarch64_instrs_memory_exclusive_pair (acqrel : Bool) (datasize : Nat
         (do
           let data ← (( do ((Sail.BitVec.castWidth ) <$> ((Mem_read address dbytes accdesc))) ) :
             SailM (BitVec datasize) )
-          ArmFull.assert ((datasize ≥b 0) && (regsize ≥b datasize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:29008.73-29008.74"
+          ArmFull.assert ((datasize ≥b 0) && (regsize ≥b datasize)) "sail-arm/instrs64.sail:29008.73-29008.74"
           (X_set t regsize (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend data regsize)))))
   | _ => (pure (()))
   let w__15 ← (( do readReg SPESampleInFlight ) : SailM Bool )
@@ -740,7 +740,7 @@ def execute_aarch64_instrs_memory_exclusive_single (acqrel : Bool) (datasize : N
             then
               (do
                 ArmFull.assert (((Int.ediv datasize 2) == 8) || (((Int.ediv datasize 2) == 16) || (((Int.ediv
-                          datasize 2) == 32) || ((Int.ediv datasize 2) == 64)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:29382.135-29382.136"
+                          datasize 2) == 32) || ((Int.ediv datasize 2) == 64)))) "sail-arm/instrs64.sail:29382.135-29382.136"
                 let el1 ← (( do
                   ((Sail.BitVec.castWidth ) <$> (X_read t
                     (Sail.Int.toNatChecked ((Int.ediv datasize 2))))) ) : SailM
@@ -757,7 +757,7 @@ def execute_aarch64_instrs_memory_exclusive_single (acqrel : Bool) (datasize : N
                 (pure ((w__5 : (BitVec datasize)))))
             else
               (do
-                ArmFull.assert ((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:29387.61-29387.62"
+                ArmFull.assert ((((datasize == 8) || (datasize == 16)) || (datasize == 32)) || (datasize == 64)) "sail-arm/instrs64.sail:29387.61-29387.62"
                 ((Sail.BitVec.castWidth ) <$> (X_read t datasize)))) ) : SailM (BitVec datasize) )
       let status : (BitVec 1) := 1#1
       let w__7 ← (( do (AArch64_ExclusiveMonitorsPass address dbytes) ) : SailM Bool )
@@ -786,7 +786,7 @@ def execute_aarch64_instrs_memory_exclusive_single (acqrel : Bool) (datasize : N
           if (rt_unknown : Bool)
           then
             (do
-              ArmFull.assert ((datasize == 32) || (datasize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:29403.58-29403.59"
+              ArmFull.assert ((datasize == 32) || (datasize == 64)) "sail-arm/instrs64.sail:29403.58-29403.59"
               let w__10 ← (( do ((Sail.BitVec.castWidth ) <$> (__UNKNOWN_bits datasize)) ) : SailM
                 (BitVec datasize) )
               (X_set t datasize (Sail.BitVec.castWidth w__10)))
@@ -802,8 +802,8 @@ def execute_aarch64_instrs_memory_exclusive_single (acqrel : Bool) (datasize : N
                   if (w__11 : Bool)
                   then
                     (do
-                      ArmFull.assert ((0 ≤b elsize) && ((elsize ≤b (datasize -i 1)) && ((datasize -i 1) <b datasize))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:29408.110-29408.111"
-                      ArmFull.assert (((datasize -i elsize) == 32) || ((datasize -i elsize) == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:29409.96-29409.97"
+                      ArmFull.assert ((0 ≤b elsize) && ((elsize ≤b (datasize -i 1)) && ((datasize -i 1) <b datasize))) "sail-arm/instrs64.sail:29408.110-29408.111"
+                      ArmFull.assert (((datasize -i elsize) == 32) || ((datasize -i elsize) == 64)) "sail-arm/instrs64.sail:29409.96-29409.97"
                       (X_set t (Sail.Int.toNatChecked ((datasize -i elsize)))
                         (Sail.BitVec.castWidth (Sail.BitVec.extractLsb data
                           (Sail.Int.toNatChecked ((datasize -i 1))) elsize)))
@@ -812,12 +812,12 @@ def execute_aarch64_instrs_memory_exclusive_single (acqrel : Bool) (datasize : N
                           (Sail.Int.toNatChecked ((elsize -i 1))) 0))))
                   else
                     (do
-                      ArmFull.assert ((0 ≤b (elsize -i 1)) && ((elsize -i 1) <b datasize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:29413.85-29413.86"
+                      ArmFull.assert ((0 ≤b (elsize -i 1)) && ((elsize -i 1) <b datasize)) "sail-arm/instrs64.sail:29413.85-29413.86"
                       (X_set t elsize
                         (Sail.BitVec.castWidth (Sail.BitVec.extractLsb data
                           (Sail.Int.toNatChecked ((elsize -i 1))) 0)))
-                      ArmFull.assert ((0 ≤b elsize) && ((elsize ≤b (datasize -i 1)) && ((datasize -i 1) <b datasize))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:29415.110-29415.111"
-                      ArmFull.assert (((datasize -i elsize) == 32) || ((datasize -i elsize) == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:29416.96-29416.97"
+                      ArmFull.assert ((0 ≤b elsize) && ((elsize ≤b (datasize -i 1)) && ((datasize -i 1) <b datasize))) "sail-arm/instrs64.sail:29415.110-29415.111"
+                      ArmFull.assert (((datasize -i elsize) == 32) || ((datasize -i elsize) == 64)) "sail-arm/instrs64.sail:29416.96-29416.97"
                       (X_set t2 (Sail.Int.toNatChecked ((datasize -i elsize)))
                         (Sail.BitVec.castWidth (Sail.BitVec.extractLsb data
                           (Sail.Int.toNatChecked ((datasize -i 1))) elsize)))))
@@ -839,7 +839,7 @@ def execute_aarch64_instrs_memory_exclusive_single (acqrel : Bool) (datasize : N
         (do
           let data ← (( do ((Sail.BitVec.castWidth ) <$> ((Mem_read address dbytes accdesc))) ) :
             SailM (BitVec datasize) )
-          ArmFull.assert ((datasize ≥b 0) && (regsize ≥b datasize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:29428.73-29428.74"
+          ArmFull.assert ((datasize ≥b 0) && (regsize ≥b datasize)) "sail-arm/instrs64.sail:29428.73-29428.74"
           (X_set t regsize (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend data regsize)))))
   | _ => (pure (()))
   let w__15 ← (( do readReg SPESampleInFlight ) : SailM Bool )

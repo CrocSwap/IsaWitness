@@ -459,7 +459,7 @@ def _set_HFGITR_EL2_Type_nGCSSTR_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (B
 
 /-- Type quantifiers: N : Nat, N = 16 -/
 def BFZero (sign : (BitVec 1)) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert (N == 16) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:32483.18-32483.19"
+  ArmFull.assert (N == 16) "sail-arm/v8_base.sail:32483.18-32483.19"
   let E : Nat := 8
   let F : Int := (N -i (E +i 1))
   (pure ((Sail.BitVec.castWidth ((sign +++ (Zeros (n := E))) +++ (Zeros
@@ -598,7 +598,7 @@ def ResetExternalDebugRegisters (cold_reset : Bool) : SailM Unit := do
 
 /-- Type quantifiers: N : Nat, N ≥ 0 -/
 def NextInstrAddr (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/fetch.sail:190.50-190.51"
+  ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b 64)) "sail-arm/fetch.sail:190.50-190.51"
   let w__0 ← (( do readReg _PC ) : SailM (BitVec 64) )
   let w__1 ← (( do (ThisInstrLength ()) ) : SailM Int )
   (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb (BitVec.addInt w__0 (fdiv_int w__1 8))

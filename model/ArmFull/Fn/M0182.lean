@@ -520,11 +520,11 @@ def AArch64_BlocknTFaults (d128 : (BitVec 1)) (descriptor : (BitVec k_N)) : Sail
         if ((d128 == 1#1) : Bool)
         then
           (do
-            ArmFull.assert (6 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:24853.33-24853.34"
+            ArmFull.assert (6 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:24853.33-24853.34"
             (pure ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 6)])))))
         else
           (do
-            ArmFull.assert (16 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:24856.34-24856.35"
+            ArmFull.assert (16 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:24856.34-24856.35"
             (pure ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 16)]))))) ) : SailM
         (BitVec 1) )
       let bbm_level ← (( do (AArch64_BlockBBMSupportLevel ()) ) : SailM Int )
@@ -701,7 +701,7 @@ def BRB_IALL (_ : Unit) : SailM Unit := do
     for i in [loop_i_lower:loop_i_upper:1]i do
       let () := loop_vars
       loop_vars ← do
-        ArmFull.assert (i <b 64) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:35655.39-35655.40"
+        ArmFull.assert (i <b 64) "sail-arm/v8_base.sail:35655.39-35655.40"
         let w__1 ← (( do readReg Records_SRC ) : SailM (Vector (BitVec 64) 64) )
         writeReg Records_SRC (vectorUpdate w__1 (Sail.Int.toNatChecked (i))
           (Mk_BRBSRCType (Zeros (n := 64))))

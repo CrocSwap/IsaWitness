@@ -299,15 +299,15 @@ def TTBR1_read (_ : Unit) : SailM (BitVec 64) := do
 
 /-- Type quantifiers: n : Int -/
 def Rmode_set (n : Int) (mode : (BitVec 5)) (value_name : (BitVec 32)) : SailM Unit := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 14)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13980.27-13980.28"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 14)) "sail-arm/v8_base.sail:13980.27-13980.28"
   let w__0 ← (( do (CurrentSecurityState ()) ) : SailM SecurityState )
   if ((bne w__0 SS_Secure) : Bool)
   then
     (do
-      ArmFull.assert (mode != M32_Monitor) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13982.34-13982.35")
+      ArmFull.assert (mode != M32_Monitor) "sail-arm/v8_base.sail:13982.34-13982.35")
   else (pure (()))
   let w__1 ← (( do (BadMode mode) ) : SailM Bool )
-  ArmFull.assert (! w__1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13984.34-13984.35"
+  ArmFull.assert (! w__1) "sail-arm/v8_base.sail:13984.34-13984.35"
   if ((mode == M32_Monitor) : Bool)
   then
     (do
@@ -422,7 +422,7 @@ def IFAR_write (value_name : (BitVec 32)) : SailM Unit := do
 
 /-- Type quantifiers: k_d_side : Bool, k_pavalid : Bool -/
 def AArch64_FaultSyndrome (d_side : Bool) (fault : FaultRecord) (pavalid : Bool) : SailM ((BitVec 25) × (BitVec 24)) := do
-  ArmFull.assert (bne fault.statuscode Fault_None) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:14736.41-14736.42"
+  ArmFull.assert (bne fault.statuscode Fault_None) "sail-arm/v8_base.sail:14736.41-14736.42"
   let iss : (BitVec 25) := (Zeros (n := 25))
   let iss2 : (BitVec 24) := (Zeros (n := 24))
   let w__1 ← (( do
@@ -890,7 +890,7 @@ def AArch64_SyncExternalAbortTarget (fault : FaultRecord) : SailM (BitVec 2) := 
           then (pure (EL1))
           else
             (do
-              ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:14970.20-14970.21"
+              ArmFull.assert false "sail-arm/v8_base.sail:14970.20-14970.21"
               throw Error.Exit)))
 
 

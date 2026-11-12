@@ -241,7 +241,7 @@ def decode_SQSHLU_Z_P_ZI__ (tszh : (BitVec 2)) (L : (BitVec 1)) (U : (BitVec 1))
       | _ => (pure (())))
   | _ =>
     (do
-      ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:38214.22-38214.23"
+      ArmFull.assert false "sail-arm/instrs64_sve.sail:38214.22-38214.23"
       throw Error.Exit)
 
 

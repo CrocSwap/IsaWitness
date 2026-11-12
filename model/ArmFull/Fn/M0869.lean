@@ -203,7 +203,7 @@ def execute_LASTA_R_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (isBefore
       then 0
       else last)
   let last : Int := last
-  ArmFull.assert (rsize ≥b esize) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:28256.39-28256.40"
+  ArmFull.assert (rsize ≥b esize) "sail-arm/instrs64_sve.sail:28256.39-28256.40"
   let w__0 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand last esize)) ) : SailM
     (BitVec esize) )
   let result : (BitVec rsize) := (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend w__0 rsize))
@@ -237,7 +237,7 @@ def execute_LASTB_R_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (isBefore
       then 0
       else last)
   let last : Int := last
-  ArmFull.assert (rsize ≥b esize) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:28329.39-28329.40"
+  ArmFull.assert (rsize ≥b esize) "sail-arm/instrs64_sve.sail:28329.39-28329.40"
   let w__0 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand last esize)) ) : SailM
     (BitVec esize) )
   let result : (BitVec rsize) := (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend w__0 rsize))

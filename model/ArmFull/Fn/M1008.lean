@@ -119,7 +119,7 @@ def decode_aarch32_instrs_MCRR_A1enc_A_txt (cond : (BitVec 4)) (Rt2 : (BitVec 4)
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:7125.29-7125.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:7125.29-7125.30"
       let t : Int := (BitVec.toNat Rt)
       let t2 : Int := (BitVec.toNat Rt2)
       let cp : Int :=
@@ -158,7 +158,7 @@ def decode_aarch32_instrs_MRRC_A1enc_A_txt (cond : (BitVec 4)) (Rt2 : (BitVec 4)
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:7844.29-7844.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:7844.29-7844.30"
       let t : Int := (BitVec.toNat Rt)
       let t2 : Int := (BitVec.toNat Rt2)
       let cp : Int :=
@@ -735,7 +735,7 @@ def execute_aarch32_instrs_VEXT_Op_A_txt (d : Nat) (m : Nat) (n : Nat) (position
           (Sail.Int.toNatChecked ((position +i 127))) position))))
   else
     (do
-      ArmFull.assert ((0 ≤b position) && ((position ≤b (position +i 63)) && ((position +i 63) <b 128))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:23935.96-23935.97"
+      ArmFull.assert ((0 ≤b position) && ((position ≤b (position +i 63)) && ((position +i 63) <b 128))) "sail-arm/instrs32.sail:23935.96-23935.97"
       let w__2 ← (( do (D_read m) ) : SailM (BitVec 64) )
       let w__3 ← (( do (D_read n) ) : SailM (BitVec 64) )
       (D_set d

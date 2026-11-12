@@ -294,7 +294,7 @@ def TrapPACUse (target_el : (BitVec 2)) : SailM Unit := do
         let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
         (pure ((((BitVec.toNat target_el) ≥b (BitVec.toNat w__0.EL)) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:21695.86-21695.87"
+  ArmFull.assert w__1 "sail-arm/v8_base.sail:21695.86-21695.87"
   let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
   let vect_offset : Nat := 0
   let except ← (( do (ExceptionSyndrome Exception_PACTrap) ) : SailM ExceptionRecord )
@@ -622,7 +622,7 @@ def AArch64_S2Translate (fault_in : FaultRecord) (ipa : AddressDescriptor) (s1aa
                           (do
                             let tlbentry ← (( do (S2TLBLookup descpaddr.tlbcontext) ) : SailME
                               (FaultRecord × AddressDescriptor) TLBLine )
-                            ArmFull.assert tlbentry.valid_name "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:27304.38-27304.39"
+                            ArmFull.assert tlbentry.valid_name "sail-arm/v8_base.sail:27304.38-27304.39"
                             let tlbrecord : TLBRecord := tlbentry.tlbrecord
                             (pure (tlbrecord)))
                         else

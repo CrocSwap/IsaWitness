@@ -116,7 +116,7 @@ def decode_aarch32_instrs_STRT_A1enc_A_txt (cond : (BitVec 4)) (U : (BitVec 1)) 
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:15375.29-15375.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:15375.29-15375.30"
       let m ← (( do (undefined_int_at (← occLabel 3267) ()) ) : SailM Int )
       let shift_n ← (( do (undefined_int_at (← occLabel 3268) ()) ) : SailM Int )
       let shift_t ← (( do (undefined_SRType (← occLabel 3269) ()) ) : SailM SRType )
@@ -142,7 +142,7 @@ def decode_aarch32_instrs_STRT_A2enc_A_txt (cond : (BitVec 4)) (U : (BitVec 1)) 
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:15410.29-15410.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:15410.29-15410.30"
       let shift_n ← (( do (undefined_int_at (← occLabel 3270) ()) ) : SailM Int )
       let shift_t ← (( do (undefined_SRType (← occLabel 3271) ()) ) : SailM SRType )
       let imm32 ← (( do (undefined_bitvector_at (← occLabel 3272) 32) ) : SailM (BitVec 32) )
@@ -498,7 +498,7 @@ def decode_aarch32_instrs_VLD1_m_A1enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) 
       if ((n == 15) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:24951.173-24951.174"
+      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "sail-arm/instrs32.sail:24951.173-24951.174"
       (execute_aarch32_instrs_VLD1_m_Op_A_txt (Sail.Int.toNatChecked (alignment))
         (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (ebytes)) elements
         (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) register_index regs wback))
@@ -528,7 +528,7 @@ def decode_aarch32_instrs_VLD1_m_A2enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) 
       if (((n == 15) || ((d +i regs) >b 32)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:24988.173-24988.174"
+      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "sail-arm/instrs32.sail:24988.173-24988.174"
       (execute_aarch32_instrs_VLD1_m_Op_A_txt (Sail.Int.toNatChecked (alignment))
         (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (ebytes)) elements
         (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) register_index regs wback))
@@ -558,7 +558,7 @@ def decode_aarch32_instrs_VLD1_m_A3enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) 
       if (((n == 15) || ((d +i regs) >b 32)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:25025.173-25025.174"
+      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "sail-arm/instrs32.sail:25025.173-25025.174"
       (execute_aarch32_instrs_VLD1_m_Op_A_txt (Sail.Int.toNatChecked (alignment))
         (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (ebytes)) elements
         (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) register_index regs wback))
@@ -585,7 +585,7 @@ def decode_aarch32_instrs_VLD1_m_A4enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) 
       if (((n == 15) || ((d +i regs) >b 32)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:25059.173-25059.174"
+      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "sail-arm/instrs32.sail:25059.173-25059.174"
       (execute_aarch32_instrs_VLD1_m_Op_A_txt (Sail.Int.toNatChecked (alignment))
         (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (ebytes)) elements
         (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) register_index regs wback))
@@ -615,7 +615,7 @@ def decode_aarch32_instrs_VLD1_m_T1enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) 
       if ((n == 15) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:25096.173-25096.174"
+      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "sail-arm/instrs32.sail:25096.173-25096.174"
       (execute_aarch32_instrs_VLD1_m_Op_A_txt (Sail.Int.toNatChecked (alignment))
         (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (ebytes)) elements
         (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) register_index regs wback))
@@ -645,7 +645,7 @@ def decode_aarch32_instrs_VLD1_m_T2enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) 
       if (((n == 15) || ((d +i regs) >b 32)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:25133.173-25133.174"
+      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "sail-arm/instrs32.sail:25133.173-25133.174"
       (execute_aarch32_instrs_VLD1_m_Op_A_txt (Sail.Int.toNatChecked (alignment))
         (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (ebytes)) elements
         (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) register_index regs wback))
@@ -675,7 +675,7 @@ def decode_aarch32_instrs_VLD1_m_T3enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) 
       if (((n == 15) || ((d +i regs) >b 32)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:25170.173-25170.174"
+      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "sail-arm/instrs32.sail:25170.173-25170.174"
       (execute_aarch32_instrs_VLD1_m_Op_A_txt (Sail.Int.toNatChecked (alignment))
         (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (ebytes)) elements
         (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) register_index regs wback))
@@ -702,7 +702,7 @@ def decode_aarch32_instrs_VLD1_m_T4enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) 
       if (((n == 15) || ((d +i regs) >b 32)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:25204.173-25204.174"
+      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "sail-arm/instrs32.sail:25204.173-25204.174"
       (execute_aarch32_instrs_VLD1_m_Op_A_txt (Sail.Int.toNatChecked (alignment))
         (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (ebytes)) elements
         (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) register_index regs wback))

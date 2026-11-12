@@ -261,7 +261,7 @@ def AArch32_EnterModeInDebugState (target_mode : (BitVec 5)) : SailM Unit := do
         let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
         (pure (((w__1.EL != EL2) : Bool))))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:14014.49-14014.50"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:14014.49-14014.50"
   let w__3 ← (( do readReg PSTATE ) : SailM ProcState )
   if ((w__3.M == M32_Monitor) : Bool)
   then
@@ -332,7 +332,7 @@ def AArch32_EnterMonitorModeInDebugState (_ : Unit) : SailM Unit := do
       (do
         (ELUsingAArch32 EL3))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:14094.44-14094.45"
+  ArmFull.assert w__1 "sail-arm/v8_base.sail:14094.44-14094.45"
   let w__2 ← (( do (CurrentSecurityState ()) ) : SailM SecurityState )
   let from_secure : Bool := (BEq.beq w__2 SS_Secure)
   let w__3 ← (( do readReg PSTATE ) : SailM ProcState )

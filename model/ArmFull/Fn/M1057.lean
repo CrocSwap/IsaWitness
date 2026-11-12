@@ -236,7 +236,7 @@ def decode_aarch32_instrs_VSHL_i_A1enc_A_txt (D : (BitVec 1)) (imm6 : (BitVec 6)
             (Sail.Int.toNatChecked (regs)) shift_amount))
       | _ =>
         (do
-          ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:35979.26-35979.27"
+          ArmFull.assert false "sail-arm/instrs32.sail:35979.26-35979.27"
           throw Error.Exit))
   else (pure (()))
 
@@ -327,7 +327,7 @@ def decode_aarch32_instrs_VSHL_i_T1enc_A_txt (D : (BitVec 1)) (imm6 : (BitVec 6)
             (Sail.Int.toNatChecked (regs)) shift_amount))
       | _ =>
         (do
-          ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:36057.26-36057.27"
+          ArmFull.assert false "sail-arm/instrs32.sail:36057.26-36057.27"
           throw Error.Exit))
   else (pure (()))
 
@@ -625,7 +625,7 @@ def decode_aarch32_instrs_VSHR_A1enc_A_txt (U : (BitVec 1)) (D : (BitVec 1)) (im
             (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
       | _ =>
         (do
-          ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:36431.26-36431.27"
+          ArmFull.assert false "sail-arm/instrs32.sail:36431.26-36431.27"
           throw Error.Exit))
   else (pure (()))
 
@@ -717,7 +717,7 @@ def decode_aarch32_instrs_VSHR_T1enc_A_txt (U : (BitVec 1)) (D : (BitVec 1)) (im
             (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
       | _ =>
         (do
-          ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:36511.26-36511.27"
+          ArmFull.assert false "sail-arm/instrs32.sail:36511.26-36511.27"
           throw Error.Exit))
   else (pure (()))
 

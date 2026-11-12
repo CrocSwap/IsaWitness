@@ -140,7 +140,7 @@ def AArch32_TakeVirtualFIQException (_ : Unit) : SailM Unit := do
       (do
         (EL2Enabled ()))
     else (pure false) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43345.63-43345.64"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:43345.63-43345.64"
   let w__5 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
   if (w__5 : Bool)
   then
@@ -154,7 +154,7 @@ def AArch32_TakeVirtualFIQException (_ : Unit) : SailM Unit := do
             let w__7 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
             (pure ((((_get_HCR_Type_FMO w__7) == 1#1) : Bool))))
         else (pure false) ) : SailM Bool )
-      ArmFull.assert w__8 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43347.62-43347.63")
+      ArmFull.assert w__8 "sail-arm/v8_base.sail:43347.62-43347.63")
   else
     (do
       let w__11 ← (( do
@@ -166,7 +166,7 @@ def AArch32_TakeVirtualFIQException (_ : Unit) : SailM Unit := do
             let w__10 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
             (pure ((((_get_HCR_EL2_Type_FMO w__10) == 1#1) : Bool))))
         else (pure false) ) : SailM Bool )
-      ArmFull.assert w__11 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:43349.56-43349.57")
+      ArmFull.assert w__11 "sail-arm/v8_base.sail:43349.56-43349.57")
   let w__14 ← (( do
     if ((← do
          let w__12 ← (( do readReg PSTATE ) : SailM ProcState )

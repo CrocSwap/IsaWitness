@@ -131,14 +131,14 @@ open ATAccess
 
 /-- Type quantifiers: offset : Int -/
 def NVMem_read (offset : Int) : SailM (BitVec 64) := do
-  ArmFull.assert (offset >b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28757.21-28757.22"
+  ArmFull.assert (offset >b 0) "sail-arm/v8_base.sail:28757.21-28757.22"
   let size : Nat := 64
   ((Sail.BitVec.castWidth ) <$> (NVMem_read__1 offset size))
 
 
 /-- Type quantifiers: offset : Int -/
 def NVMem_set (offset : Int) (value_name : (BitVec 64)) : SailM Unit := do
-  ArmFull.assert (offset >b 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:28776.21-28776.22"
+  ArmFull.assert (offset >b 0) "sail-arm/v8_base.sail:28776.21-28776.22"
   let size : Nat := 64
   (NVMem_set__1 offset size (Sail.BitVec.castWidth value_name))
 

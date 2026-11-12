@@ -687,7 +687,7 @@ def decode_FDUP_Z_I__ (size : (BitVec 2)) (imm8 : (BitVec 8)) (Zd : (BitVec 5)) 
   else (pure (()))
   let esize : Int := (Int.shiftl 8 (BitVec.toNat size))
   let d : Int := (BitVec.toNat Zd)
-  ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:23403.45-23403.46"
+  ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:23403.45-23403.46"
   let imm ← (( do
     ((Sail.BitVec.castWidth ) <$> (VFPExpandImm imm8 (Sail.Int.toNatChecked (esize)))) ) : SailM
     (BitVec (Sail.Int.toNatChecked (esize : Int))) )
@@ -735,7 +735,7 @@ def decode_FCPY_Z_P_I__ (size : (BitVec 2)) (Pg : (BitVec 4)) (imm8 : (BitVec 8)
   let esize : Int := (Int.shiftl 8 (BitVec.toNat size))
   let g : Int := (BitVec.toNat Pg)
   let d : Int := (BitVec.toNat Zd)
-  ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:23466.45-23466.46"
+  ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sve.sail:23466.45-23466.46"
   let imm ← (( do
     ((Sail.BitVec.castWidth ) <$> (VFPExpandImm imm8 (Sail.Int.toNatChecked (esize)))) ) : SailM
     (BitVec (Sail.Int.toNatChecked (esize : Int))) )

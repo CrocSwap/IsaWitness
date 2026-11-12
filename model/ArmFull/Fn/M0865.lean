@@ -405,7 +405,7 @@ def execute_UXTH_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (n : Nat) 
             (do
               let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
                 SailM (BitVec esize) )
-              ArmFull.assert ((0 ≤b (s_esize -i 1)) && ((s_esize -i 1) <b esize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:23846.74-23846.75"
+              ArmFull.assert ((0 ≤b (s_esize -i 1)) && ((s_esize -i 1) <b esize)) "sail-arm/instrs64_sve.sail:23846.74-23846.75"
               let w__3 ← (( do
                 ((Sail.BitVec.castWidth ) <$> (Extend
                   (Sail.BitVec.extractLsb element (Sail.Int.toNatChecked ((s_esize -i 1))) 0) esize
@@ -451,7 +451,7 @@ def execute_UXTW_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (n : Nat) 
             (do
               let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
                 SailM (BitVec esize) )
-              ArmFull.assert ((0 ≤b (s_esize -i 1)) && ((s_esize -i 1) <b esize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:23921.74-23921.75"
+              ArmFull.assert ((0 ≤b (s_esize -i 1)) && ((s_esize -i 1) <b esize)) "sail-arm/instrs64_sve.sail:23921.74-23921.75"
               let w__3 ← (( do
                 ((Sail.BitVec.castWidth ) <$> (Extend
                   (Sail.BitVec.extractLsb element (Sail.Int.toNatChecked ((s_esize -i 1))) 0) esize
@@ -542,7 +542,7 @@ def execute_SXTH_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (n : Nat) 
             (do
               let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
                 SailM (BitVec esize) )
-              ArmFull.assert ((0 ≤b (s_esize -i 1)) && ((s_esize -i 1) <b esize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:24064.74-24064.75"
+              ArmFull.assert ((0 ≤b (s_esize -i 1)) && ((s_esize -i 1) <b esize)) "sail-arm/instrs64_sve.sail:24064.74-24064.75"
               let w__3 ← (( do
                 ((Sail.BitVec.castWidth ) <$> (Extend
                   (Sail.BitVec.extractLsb element (Sail.Int.toNatChecked ((s_esize -i 1))) 0) esize
@@ -588,7 +588,7 @@ def execute_SXTW_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (n : Nat) 
             (do
               let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
                 SailM (BitVec esize) )
-              ArmFull.assert ((0 ≤b (s_esize -i 1)) && ((s_esize -i 1) <b esize)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:24139.74-24139.75"
+              ArmFull.assert ((0 ≤b (s_esize -i 1)) && ((s_esize -i 1) <b esize)) "sail-arm/instrs64_sve.sail:24139.74-24139.75"
               let w__3 ← (( do
                 ((Sail.BitVec.castWidth ) <$> (Extend
                   (Sail.BitVec.extractLsb element (Sail.Int.toNatChecked ((s_esize -i 1))) 0) esize

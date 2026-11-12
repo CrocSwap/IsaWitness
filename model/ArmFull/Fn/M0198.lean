@@ -502,7 +502,7 @@ def AArch64_CheckTimerConditions (_ : Unit) : SailM Unit := do
 
 
 def AArch64_S1E0POEnabled (regime : Regime) (nv1 : (BitVec 1)) : SailM Bool := do
-  ArmFull.assert (HasUnprivileged regime) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:24025.34-24025.35"
+  ArmFull.assert (HasUnprivileged regime) "sail-arm/v8_base.sail:24025.34-24025.35"
   let w__0 ← (( do (HaveS1POExt ()) ) : SailM Bool )
   if ((! w__0) : Bool)
   then (pure (false))

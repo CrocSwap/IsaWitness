@@ -609,7 +609,7 @@ def decode_smov_advsimd_aarch64_instrs_vector_transfer_integer_move_signed (Rd :
     if ((Q == 1#1) : Bool)
     then 64
     else 32
-  ArmFull.assert (((esize == 8) || (esize == 16)) || (esize == 32)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:46177.44-46177.45"
+  ArmFull.assert (((esize == 8) || (esize == 16)) || (esize == 32)) "sail-arm/instrs64.sail:46177.44-46177.45"
   (execute_aarch64_instrs_vector_transfer_integer_move_signed (Sail.Int.toNatChecked (d))
     (Sail.Int.toNatChecked (datasize)) (Sail.Int.toNatChecked (esize))
     (Sail.Int.toNatChecked (idxdsize)) index (Sail.Int.toNatChecked (n)))

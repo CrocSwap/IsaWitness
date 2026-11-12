@@ -166,7 +166,7 @@ def execute_LUTI4_MZ4_ZTZ_1 (VL : Nat) (d__arg : Nat) (dstride : Nat) (esize : N
                     ((Sail.BitVec.castWidth ) <$> (Elem_read indexes (base +i e) isize)) ) : SailM
                     (BitVec isize) )
                   let index : Int := (BitVec.toNat w__0)
-                  ArmFull.assert ((esize -i 1) <b 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:36318.46-36318.47"
+                  ArmFull.assert ((esize -i 1) <b 32) "sail-arm/instrs64_sme.sail:36318.46-36318.47"
                   let w__1 ← (( do (Elem_read table index 32) ) : SailM (BitVec 32) )
                   (Elem_set result e esize
                     (Sail.BitVec.castWidth (Sail.BitVec.extractLsb w__1
@@ -348,7 +348,7 @@ def execute_LUTI2_MZ2_ZTZ_8 (VL : Nat) (d__arg : Nat) (dstride : Nat) (esize : N
                     ((Sail.BitVec.castWidth ) <$> (Elem_read indexes (base +i e) isize)) ) : SailM
                     (BitVec isize) )
                   let index : Int := (BitVec.toNat w__0)
-                  ArmFull.assert ((esize -i 1) <b 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:37205.46-37205.47"
+                  ArmFull.assert ((esize -i 1) <b 32) "sail-arm/instrs64_sme.sail:37205.46-37205.47"
                   let w__1 ← (( do (Elem_read table index 32) ) : SailM (BitVec 32) )
                   (Elem_set result e esize
                     (Sail.BitVec.castWidth (Sail.BitVec.extractLsb w__1
@@ -403,7 +403,7 @@ def execute_LUTI4_MZ2_ZTZ_8 (VL : Nat) (d__arg : Nat) (dstride : Nat) (esize : N
                     ((Sail.BitVec.castWidth ) <$> (Elem_read indexes (base +i e) isize)) ) : SailM
                     (BitVec isize) )
                   let index : Int := (BitVec.toNat w__0)
-                  ArmFull.assert ((esize -i 1) <b 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:37279.46-37279.47"
+                  ArmFull.assert ((esize -i 1) <b 32) "sail-arm/instrs64_sme.sail:37279.46-37279.47"
                   let w__1 ← (( do (Elem_read table index 32) ) : SailM (BitVec 32) )
                   (Elem_set result e esize
                     (Sail.BitVec.castWidth (Sail.BitVec.extractLsb w__1
@@ -458,7 +458,7 @@ def execute_LUTI2_MZ4_ZTZ_4 (VL : Nat) (d__arg : Nat) (dstride : Nat) (esize : N
                     ((Sail.BitVec.castWidth ) <$> (Elem_read indexes (base +i e) isize)) ) : SailM
                     (BitVec isize) )
                   let index : Int := (BitVec.toNat w__0)
-                  ArmFull.assert ((esize -i 1) <b 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:37353.46-37353.47"
+                  ArmFull.assert ((esize -i 1) <b 32) "sail-arm/instrs64_sme.sail:37353.46-37353.47"
                   let w__1 ← (( do (Elem_read table index 32) ) : SailM (BitVec 32) )
                   (Elem_set result e esize
                     (Sail.BitVec.castWidth (Sail.BitVec.extractLsb w__1
@@ -513,7 +513,7 @@ def execute_LUTI4_MZ4_ZTZ_4 (VL : Nat) (d__arg : Nat) (dstride : Nat) (esize : N
                     ((Sail.BitVec.castWidth ) <$> (Elem_read indexes (base +i e) isize)) ) : SailM
                     (BitVec isize) )
                   let index : Int := (BitVec.toNat w__0)
-                  ArmFull.assert ((esize -i 1) <b 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:37427.46-37427.47"
+                  ArmFull.assert ((esize -i 1) <b 32) "sail-arm/instrs64_sme.sail:37427.46-37427.47"
                   let w__1 ← (( do (Elem_read table index 32) ) : SailM (BitVec 32) )
                   (Elem_set result e esize
                     (Sail.BitVec.castWidth (Sail.BitVec.extractLsb w__1

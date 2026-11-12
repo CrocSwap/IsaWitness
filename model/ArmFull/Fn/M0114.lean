@@ -669,7 +669,7 @@ def BitReverse (data : (BitVec k_N)) : SailM (BitVec k_N) := do
 
 /-- Type quantifiers: k_N : Nat, k_N > 32 -/
 def Poly32Mod2 (data_in : (BitVec k_N)) (poly : (BitVec 32)) : SailM (BitVec 32) := do
-  ArmFull.assert ((Sail.BitVec.length data_in) >b 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:12544.18-12544.19"
+  ArmFull.assert ((Sail.BitVec.length data_in) >b 32) "sail-arm/v8_base.sail:12544.18-12544.19"
   let data : (BitVec k_N) := data_in
   let data ← (( do
     let loop_i_lower : Nat := 32
@@ -693,7 +693,7 @@ def Poly32Mod2 (data_in : (BitVec k_N)) (poly : (BitVec 32)) : SailM (BitVec 32)
 
 /-- Type quantifiers: k_N : Nat, shift : Int, k_N ≥ 0 -/
 def ROL (x : (BitVec k_N)) (shift : Int) : SailM (BitVec k_N) := do
-  ArmFull.assert ((shift ≥b 0) && (shift ≤b (Sail.BitVec.length x))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:12606.35-12606.36"
+  ArmFull.assert ((shift ≥b 0) && (shift ≤b (Sail.BitVec.length x))) "sail-arm/v8_base.sail:12606.35-12606.36"
   (pure (if ((shift == 0) : Bool)
     then (Sail.BitVec.castWidth x)
     else (Sail.BitVec.castWidth (ROR x (Sail.Int.toNatChecked (((Sail.BitVec.length x) -i shift)))))))

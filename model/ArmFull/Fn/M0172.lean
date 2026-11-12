@@ -191,7 +191,7 @@ def PMUCountValue (n : Nat) (Vb : Int) : SailM Int := do
         if (w__8 : Bool)
         then
           (do
-            ArmFull.assert ((0 ≤b n) && (n <b 31)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:5457.46-5457.47"
+            ArmFull.assert ((0 ≤b n) && (n <b 31)) "sail-arm/v8_base.sail:5457.46-5457.47"
             let w__9 ← (( do readReg PMULastThresholdValue ) : SailM (Vector Bool 31) )
             let Vp : Bool := (GetElem?.getElem! w__9 n)
             let w__10 ← (( do readReg PMEVTYPER_EL0 ) : SailM (Vector (BitVec 64) 32) )
@@ -262,7 +262,7 @@ def BRBETimeStamp (_ : Unit) : SailM TimeStamp := SailME.run do
         | 0b10 =>
           (do
             let w__3 ← (( do (HaveECVExt ()) ) : SailME TimeStamp Bool )
-            ArmFull.assert w__3 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:5539.33-5539.34"
+            ArmFull.assert w__3 "sail-arm/v8_base.sail:5539.33-5539.34"
             SailME.throw (TimeStamp_OffsetPhysical : TimeStamp))
         | _ =>
           (do
@@ -441,7 +441,7 @@ def DCInstNeedsTranslation (opscope : CacheOpScope) : SailM Bool := do
 
 /-- Type quantifiers: k_d_side : Bool -/
 def AArch32_FaultSyndrome (d_side : Bool) (fault : FaultRecord) : SailM (BitVec 25) := do
-  ArmFull.assert (bne fault.statuscode Fault_None) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13640.41-13640.42"
+  ArmFull.assert (bne fault.statuscode Fault_None) "sail-arm/v8_base.sail:13640.41-13640.42"
   let iss : (BitVec 25) := (Zeros (n := 25))
   let iss2 : (BitVec 24) := (Zeros (n := 24))
   let w__2 ← (( do
@@ -639,7 +639,7 @@ def S1DecodeMemAttrs (attr_in : (BitVec 8)) (sh : (BitVec 2)) (s1aarch64 : Bool)
                 (do
                   (HaveFeatXS ()))
               else (pure false) ) : SailM Bool )
-            ArmFull.assert w__3 "/home/doug/boss-scratch/armcert-defects/c27b-accepted/armcert_c27b.sail:525.41-525.42"
+            ArmFull.assert w__3 "armcert/armcert_c27b.sail:525.41-525.42"
             let memattrs : MemoryAttributes := { memattrs with memtype := MemType_Normal }
             let memattrs : MemoryAttributes :=
               { memattrs with outer := { memattrs.outer with attrs := MemAttr_NC } }
@@ -655,7 +655,7 @@ def S1DecodeMemAttrs (attr_in : (BitVec 8)) (sh : (BitVec 2)) (s1aarch64 : Bool)
                 (do
                   (HaveFeatXS ()))
               else (pure false) ) : SailM Bool )
-            ArmFull.assert w__5 "/home/doug/boss-scratch/armcert-defects/c27b-accepted/armcert_c27b.sail:532.41-532.42"
+            ArmFull.assert w__5 "armcert/armcert_c27b.sail:532.41-532.42"
             let memattrs : MemoryAttributes := { memattrs with memtype := MemType_Normal }
             let memattrs : MemoryAttributes :=
               { memattrs with outer := { memattrs.outer with attrs := MemAttr_WT } }
@@ -679,7 +679,7 @@ def S1DecodeMemAttrs (attr_in : (BitVec 8)) (sh : (BitVec 2)) (s1aarch64 : Bool)
                 (do
                   (HaveMTE2Ext ()))
               else (pure false) ) : SailM Bool )
-            ArmFull.assert w__7 "/home/doug/boss-scratch/armcert-defects/c27b-accepted/armcert_c27b.sail:543.42-543.43"
+            ArmFull.assert w__7 "armcert/armcert_c27b.sail:543.42-543.43"
             let memattrs : MemoryAttributes := { memattrs with memtype := MemType_Normal }
             let memattrs : MemoryAttributes :=
               { memattrs with outer := { memattrs.outer with attrs := MemAttr_WB } }

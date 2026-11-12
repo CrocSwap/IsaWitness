@@ -156,7 +156,7 @@ def decode_aarch32_instrs_VFMA_A2enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1)) 
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:24102.29-24102.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:24102.29-24102.30"
       let floating_point ← (( do (undefined_bool_at (← occLabel 3423) ()) ) : SailM Bool )
       let elements ← (( do (undefined_int_at (← occLabel 3424) ()) ) : SailM Int )
       let regs ← (( do (undefined_int_at (← occLabel 3425) ()) ) : SailM Int )
@@ -357,7 +357,7 @@ def decode_aarch32_instrs_VFNMA_A1enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1))
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:24319.29-24319.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:24319.29-24319.30"
       let w__3 ← (( do
         if ((← do
              let w__1 ← (( do (FPSCR_read__1 ()) ) : SailM (BitVec 32) )
@@ -625,7 +625,7 @@ def decode_aarch32_instrs_VMLA_f_A2enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1)
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:27444.29-27444.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:27444.29-27444.30"
       let floating_point ← (( do (undefined_bool_at (← occLabel 3466) ()) ) : SailM Bool )
       let elements ← (( do (undefined_int_at (← occLabel 3467) ()) ) : SailM Int )
       let regs ← (( do (undefined_int_at (← occLabel 3468) ()) ) : SailM Int )

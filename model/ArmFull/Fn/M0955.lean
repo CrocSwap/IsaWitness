@@ -638,7 +638,7 @@ def decode_LSL_Z_ZI__ (tszh : (BitVec 2)) (tszl : (BitVec 2)) (imm3 : (BitVec 3)
       | _ => (pure (())))
   | _ =>
     (do
-      ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:31348.22-31348.23"
+      ArmFull.assert false "sail-arm/instrs64_sve.sail:31348.22-31348.23"
       throw Error.Exit)
 
 
@@ -754,7 +754,7 @@ def decode_LSR_Z_ZI__ (tszh : (BitVec 2)) (tszl : (BitVec 2)) (imm3 : (BitVec 3)
       | _ => (pure (())))
   | _ =>
     (do
-      ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:31492.22-31492.23"
+      ArmFull.assert false "sail-arm/instrs64_sve.sail:31492.22-31492.23"
       throw Error.Exit)
 
 

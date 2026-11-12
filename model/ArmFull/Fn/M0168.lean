@@ -139,7 +139,7 @@ open AccessType
 open ATAccess
 
 def DecodeGPTTable (pgs : PGSe) (entry : (BitVec 64)) : SailM (GPCF × GPTTable) := do
-  ArmFull.assert ((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb entry 3 0)) == GPT_Table) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19665.37-19665.38"
+  ArmFull.assert ((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb entry 3 0)) == GPT_Table) "sail-arm/v8_base.sail:19665.37-19665.38"
   let result ← (( do (undefined_GPTTable (← occLabel 1230) ()) ) : SailM GPTTable )
   if ((! (IsZero ((Sail.BitVec.extractLsb entry 63 52) +++ (Sail.BitVec.extractLsb entry 11 4)))) : Bool)
   then
@@ -239,7 +239,7 @@ def ComputePAC (data : (BitVec 64)) (modifier : (BitVec 64)) (key0 : (BitVec 64)
 def NumContextAwareBreakpointsImplemented (b : Int) : SailM Int := do
   (C27cEnsureDebugConfig ())
   let w__0 ← (( do readReg NUM_BREAKPOINTS ) : SailM Int )
-  ArmFull.assert (b == w__0) "/home/doug/boss-scratch/armcert-defects/c40-candidate/armcert-c27c.sail:103.31-103.32"
+  ArmFull.assert (b == w__0) "armcert/armcert-c27c.sail:103.31-103.32"
   readReg __num_ctx_breakpoints
 
 
@@ -307,7 +307,7 @@ def AArch64_WatchpointByteMatch (n : Nat) (vaddress : (BitVec 64)) : SailM Bool 
         let c : Constraint := tup__0
         let mask : Int := tup__1
         ArmFull.assert ((BEq.beq c Constraint_DISABLED) || ((BEq.beq c Constraint_NONE) || (BEq.beq
-              c Constraint_UNKNOWN))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23732.88-23732.89"
+              c Constraint_UNKNOWN))) "sail-arm/v8_base.sail:23732.88-23732.89"
         match c with
         | .Constraint_DISABLED =>
           (do
@@ -345,7 +345,7 @@ def AArch64_WatchpointByteMatch (n : Nat) (vaddress : (BitVec 64)) : SailM Bool 
     if ((mask >b bottom) : Bool)
     then
       (do
-        ArmFull.assert ((0 ≤b mask) && ((mask ≤b top) && (top <b 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23750.67-23750.68"
+        ArmFull.assert ((0 ≤b mask) && ((mask ≤b top) && (top <b 64))) "sail-arm/v8_base.sail:23750.67-23750.68"
         let w__17 ← (( do readReg DBGWVR_EL1 ) : SailME Bool (Vector (BitVec 64) 64) )
         let WVR_match :=
           (((Sail.BitVec.castWidth (m := (Sail.Int.toNatChecked (((top : Int) -i (mask : Int)) +i (1 : Int)))) (Sail.BitVec.extractLsb
@@ -366,7 +366,7 @@ def AArch64_WatchpointByteMatch (n : Nat) (vaddress : (BitVec 64)) : SailM Bool 
         else (pure (WVR_match)))
     else
       (do
-        ArmFull.assert ((0 ≤b bottom) && ((bottom ≤b top) && (top <b 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:23757.71-23757.72"
+        ArmFull.assert ((0 ≤b bottom) && ((bottom ≤b top) && (top <b 64))) "sail-arm/v8_base.sail:23757.71-23757.72"
         let w__21 ← (( do readReg DBGWVR_EL1 ) : SailME Bool (Vector (BitVec 64) 64) )
         let WVR_match :=
           (((Sail.BitVec.castWidth (m := (Sail.Int.toNatChecked (((top : Int) -i (bottom : Int)) +i (1 : Int)))) (Sail.BitVec.extractLsb
@@ -420,7 +420,7 @@ def AArch64_S2ApplyFWBMemAttrs (s1_memattrs : MemoryAttributes) (walkparams : S2
     then (pure (walkparams.sh))
     else
       (do
-        ArmFull.assert (9 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26640.33-26640.34"
+        ArmFull.assert (9 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26640.33-26640.34"
         (pure ((Sail.BitVec.extractLsb descriptor 9 8)))) ) : SailM (BitVec 2) )
   let s2_fnxs : (BitVec 1) := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 11)]))
   let memattrs ← (( do
@@ -541,7 +541,7 @@ def AArch64_S2NextWalkStateTable (currentstate : TTWState) (walkparams : S2TTWPa
     if ((walkparams.d128 == 1#1) : Bool)
     then
       (do
-        ArmFull.assert (110 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26911.35-26911.36"
+        ArmFull.assert (110 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26911.35-26911.36"
         let skl : (BitVec 2) := (Sail.BitVec.extractLsb descriptor 110 109)
         let nextstate : TTWState :=
           { nextstate with level := ((currentstate.level +i (BitVec.toNat skl)) +i 1) }
@@ -713,7 +713,7 @@ def TLBIRange (regime : Regime) (Xt : (BitVec 64)) : SailM (Bool × (BitVec 2) �
 
 def AArch32_S1TTWParamsEL30 (va : (BitVec 32)) : SailM S1TTWParams := do
   let w__0 ← (( do readReg TTBCR_S ) : SailM (BitVec 32) )
-  ArmFull.assert ((_get_TTBCR_Type_EAE w__0) == 1#1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:37244.30-37244.31"
+  ArmFull.assert ((_get_TTBCR_Type_EAE w__0) == 1#1) "sail-arm/v8_base.sail:37244.30-37244.31"
   let walkparams ← (( do (undefined_S1TTWParams (← occLabel 2506) ()) ) : SailM S1TTWParams )
   let w__1 ← (( do readReg TTBCR_S ) : SailM (BitVec 32) )
   let walkparams := ({ walkparams with t0sz := (_get_TTBCR_Type_T0SZ w__1) } : S1TTWParams)

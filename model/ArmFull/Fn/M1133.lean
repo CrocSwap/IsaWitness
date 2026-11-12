@@ -628,7 +628,7 @@ def execute_FMAX_MZ_ZZW_2x2 (VL : Nat) (dn : Nat) (esize : Nat) (m : Nat) (nreg 
                   : SailM (BitVec esize) )
                 let element2 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 e esize)) )
                   : SailM (BitVec esize) )
-                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:16715.53-16715.54"
+                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sme.sail:16715.53-16715.54"
                 let w__1 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
                 let w__2 ← (( do (FPMax element1 element2 w__1) ) : SailM (BitVec esize) )
                 let w__3 ← (( do
@@ -684,7 +684,7 @@ def execute_FMAX_MZ_ZZV_2x1 (VL : Nat) (dn : Nat) (esize : Nat) (m : Nat) (nreg 
                   : SailM (BitVec esize) )
                 let element2 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 e esize)) )
                   : SailM (BitVec esize) )
-                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:16778.53-16778.54"
+                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sme.sail:16778.53-16778.54"
                 let w__1 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
                 let w__2 ← (( do (FPMax element1 element2 w__1) ) : SailM (BitVec esize) )
                 let w__3 ← (( do
@@ -740,7 +740,7 @@ def execute_FMIN_MZ_ZZW_2x2 (VL : Nat) (dn : Nat) (esize : Nat) (m : Nat) (nreg 
                   : SailM (BitVec esize) )
                 let element2 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 e esize)) )
                   : SailM (BitVec esize) )
-                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sme.sail:16841.53-16841.54"
+                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64_sme.sail:16841.53-16841.54"
                 let w__1 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
                 let w__2 ← (( do (FPMin element1 element2 w__1) ) : SailM (BitVec esize) )
                 let w__3 ← (( do

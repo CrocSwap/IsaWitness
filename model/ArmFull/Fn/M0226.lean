@@ -565,7 +565,7 @@ def decode_aarch32_instrs_MSR_i_A1enc_AS_txt (cond : (BitVec 4)) (R : (BitVec 1)
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:41463.29-41463.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:41463.29-41463.30"
       if (((mask == 0b0000#4) && (R == 0#1)) : Bool)
       then sailThrow ((Error_See "Related encodings"))
       else (pure (()))
@@ -608,7 +608,7 @@ def execute_aarch32_instrs_MSR_r_Op_AS_txt (mask : (BitVec 4)) (n : Nat) (write_
   [8, 16, 32, 64] ∧ 0 ≤ n ∧ n ≤ 15 ∧ 0 ≤ m ∧ m ≤ 15 ∧ 0 ≤ d ∧ d ≤ 15 -/
 def execute_aarch32_instrs_CRC32_Op_A_txt (crc32c : Bool) (d : Nat) (m : Nat) (n : Nat) (size : Nat) : SailM Unit := do
   let acc ← (( do (R_read n) ) : SailM (BitVec 32) )
-  ArmFull.assert ((size -i 1) <b 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:42465.37-42465.38"
+  ArmFull.assert ((size -i 1) <b 32) "sail-arm/instrs32.sail:42465.37-42465.38"
   let w__0 ← (( do (R_read m) ) : SailM (BitVec 32) )
   let val_name : (BitVec (0 + (size - 1 - 0 + 1))) :=
     (Sail.BitVec.castWidth (Sail.BitVec.extractLsb w__0 (Sail.Int.toNatChecked ((size -i 1))) 0))
@@ -634,7 +634,7 @@ def PMUEvent (pmuevent : (BitVec 16)) : SailM Unit := do
 
 /-- Type quantifiers: pl : Nat, vl : Nat, (is_VL vl) ∧ (is_PL pl) -/
 def RestoreTransactionCheckpointParameterised (vl : Nat) (pl : Nat) : SailM Unit := do
-  ArmFull.assert ((((((((((((((((vl == 128) || (vl == 256)) || (vl == 384)) || (vl == 512)) || (vl == 640)) || (vl == 768)) || (vl == 896)) || (vl == 1024)) || (vl == 1152)) || (vl == 1280)) || (vl == 1408)) || (vl == 1536)) || (vl == 1664)) || (vl == 1792)) || (vl == 1920)) || (vl == 2048)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:7461.237-7461.238"
+  ArmFull.assert ((((((((((((((((vl == 128) || (vl == 256)) || (vl == 384)) || (vl == 512)) || (vl == 640)) || (vl == 768)) || (vl == 896)) || (vl == 1024)) || (vl == 1152)) || (vl == 1280)) || (vl == 1408)) || (vl == 1536)) || (vl == 1664)) || (vl == 1792)) || (vl == 1920)) || (vl == 2048)) "sail-arm/v8_base.sail:7461.237-7461.238"
   let w__0 ← (( do readReg TSTATE ) : SailM TMState )
   (SP_set w__0.SP)
   let w__1 ← (( do readReg TSTATE ) : SailM TMState )

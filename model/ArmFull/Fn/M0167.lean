@@ -246,7 +246,7 @@ def EncodeLDFSC (statuscode : Fault) (level : Int) : SailM (BitVec 6) := do
   then
     (do
       let w__0 ← (( do (Have56BitPAExt ()) ) : SailM Bool )
-      ArmFull.assert w__0 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13478.31-13478.32"
+      ArmFull.assert w__0 "sail-arm/v8_base.sail:13478.31-13478.32"
       match statuscode with
       | .Fault_AddressSize => (pure (0b101100#6))
       | .Fault_Translation => (pure (0b101010#6))
@@ -255,7 +255,7 @@ def EncodeLDFSC (statuscode : Fault) (level : Int) : SailM (BitVec 6) := do
         (do
           let result : (BitVec 6) := 0b011010#6
           let w__1 ← (( do (HaveRASExt ()) ) : SailM Bool )
-          ArmFull.assert (! w__1) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13491.43-13491.44"
+          ArmFull.assert (! w__1) "sail-arm/v8_base.sail:13491.43-13491.44"
           (pure (result)))
       | .Fault_GPCFOnWalk => (pure (0b100010#6))
       | _ =>
@@ -268,7 +268,7 @@ def EncodeLDFSC (statuscode : Fault) (level : Int) : SailM (BitVec 6) := do
       then
         (do
           let w__2 ← (( do (Have52BitIPAAndPASpaceExt ()) ) : SailM Bool )
-          ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13503.42-13503.43"
+          ArmFull.assert w__2 "sail-arm/v8_base.sail:13503.42-13503.43"
           match statuscode with
           | .Fault_AddressSize => (pure (0b101001#6))
           | .Fault_Translation => (pure (0b101011#6))
@@ -277,7 +277,7 @@ def EncodeLDFSC (statuscode : Fault) (level : Int) : SailM (BitVec 6) := do
             (do
               let result : (BitVec 6) := 0b011011#6
               let w__3 ← (( do (HaveRASExt ()) ) : SailM Bool )
-              ArmFull.assert (! w__3) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13516.43-13516.44"
+              ArmFull.assert (! w__3) "sail-arm/v8_base.sail:13516.43-13516.44"
               (pure (result)))
           | .Fault_GPCFOnWalk => (pure (0b100011#6))
           | _ =>
@@ -290,54 +290,54 @@ def EncodeLDFSC (statuscode : Fault) (level : Int) : SailM (BitVec 6) := do
           | .Fault_AddressSize =>
             (do
               let result : (BitVec 6) := (0b0000#4 +++ (integer_subrange level 1 0))
-              ArmFull.assert ((level == 0) || ((level == 1) || ((level == 2) || (level == 3)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13530.66-13530.67"
+              ArmFull.assert ((level == 0) || ((level == 1) || ((level == 2) || (level == 3)))) "sail-arm/v8_base.sail:13530.66-13530.67"
               (pure (result)))
           | .Fault_AccessFlag =>
             (do
               let result : (BitVec 6) := (0b0010#4 +++ (integer_subrange level 1 0))
-              ArmFull.assert ((level == 0) || ((level == 1) || ((level == 2) || (level == 3)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13534.66-13534.67"
+              ArmFull.assert ((level == 0) || ((level == 1) || ((level == 2) || (level == 3)))) "sail-arm/v8_base.sail:13534.66-13534.67"
               (pure (result)))
           | .Fault_Permission =>
             (do
               let result : (BitVec 6) := (0b0011#4 +++ (integer_subrange level 1 0))
-              ArmFull.assert ((level == 0) || ((level == 1) || ((level == 2) || (level == 3)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13538.66-13538.67"
+              ArmFull.assert ((level == 0) || ((level == 1) || ((level == 2) || (level == 3)))) "sail-arm/v8_base.sail:13538.66-13538.67"
               (pure (result)))
           | .Fault_Translation =>
             (do
               let result : (BitVec 6) := (0b0001#4 +++ (integer_subrange level 1 0))
-              ArmFull.assert ((level == 0) || ((level == 1) || ((level == 2) || (level == 3)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13542.66-13542.67"
+              ArmFull.assert ((level == 0) || ((level == 1) || ((level == 2) || (level == 3)))) "sail-arm/v8_base.sail:13542.66-13542.67"
               (pure (result)))
           | .Fault_SyncExternal => (pure (0b010000#6))
           | .Fault_SyncExternalOnWalk =>
             (do
               let result : (BitVec 6) := (0b0101#4 +++ (integer_subrange level 1 0))
-              ArmFull.assert ((level == 0) || ((level == 1) || ((level == 2) || (level == 3)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13549.66-13549.67"
+              ArmFull.assert ((level == 0) || ((level == 1) || ((level == 2) || (level == 3)))) "sail-arm/v8_base.sail:13549.66-13549.67"
               (pure (result)))
           | .Fault_SyncParity => (pure (0b011000#6))
           | .Fault_SyncParityOnWalk =>
             (do
               let result : (BitVec 6) := (0b0111#4 +++ (integer_subrange level 1 0))
-              ArmFull.assert ((level == 0) || ((level == 1) || ((level == 2) || (level == 3)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13556.66-13556.67"
+              ArmFull.assert ((level == 0) || ((level == 1) || ((level == 2) || (level == 3)))) "sail-arm/v8_base.sail:13556.66-13556.67"
               (pure (result)))
           | .Fault_AsyncParity => (pure (0b011001#6))
           | .Fault_AsyncExternal =>
             (do
               let result : (BitVec 6) := 0b010001#6
               let w__4 ← (( do (UsingAArch32 ()) ) : SailM Bool )
-              ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13563.31-13563.32"
+              ArmFull.assert w__4 "sail-arm/v8_base.sail:13563.31-13563.32"
               (pure (result)))
           | .Fault_TagCheck =>
             (do
               let result : (BitVec 6) := 0b010001#6
               let w__5 ← (( do (HaveMTE2Ext ()) ) : SailM Bool )
-              ArmFull.assert w__5 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13567.30-13567.31"
+              ArmFull.assert w__5 "sail-arm/v8_base.sail:13567.30-13567.31"
               (pure (result)))
           | .Fault_Alignment => (pure (0b100001#6))
           | .Fault_Debug => (pure (0b100010#6))
           | .Fault_GPCFOnWalk =>
             (do
               let result : (BitVec 6) := (0b1001#4 +++ (integer_subrange level 1 0))
-              ArmFull.assert ((level == 0) || ((level == 1) || ((level == 2) || (level == 3)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:13577.66-13577.67"
+              ArmFull.assert ((level == 0) || ((level == 1) || ((level == 2) || (level == 3)))) "sail-arm/v8_base.sail:13577.66-13577.67"
               (pure (result)))
           | .Fault_GPCFOnOutput => (pure (0b101000#6))
           | .Fault_TLBConflict => (pure (0b110000#6))
@@ -390,7 +390,7 @@ def NoFault__1 (accdesc : AccessDescriptor) : SailM FaultRecord := do
 
 /-- Type quantifiers: N : Nat, List.elem N [16, 32, 64] -/
 def FPDefaultNaN__1 (fpcr : (BitVec 64)) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:16128.38-16128.39"
+  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-arm/v8_base.sail:16128.38-16128.39"
   let E : Nat :=
     if ((N == 16) : Bool)
     then 5
@@ -426,7 +426,7 @@ def SPSR_read {N : _} : SailM (BitVec N) := do
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (N == 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:17954.22-17954.23"
+      ArmFull.assert (N == 32) "sail-arm/v8_base.sail:17954.22-17954.23"
       let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
       let questionMark := w__1.M
       if ((questionMark == M32_FIQ) : Bool)
@@ -503,7 +503,7 @@ def SPSR_read {N : _} : SailM (BitVec N) := do
                                   (pure (result))))))))))
   else
     (do
-      ArmFull.assert (N == 64) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:17982.22-17982.23"
+      ArmFull.assert (N == 64) "sail-arm/v8_base.sail:17982.22-17982.23"
       let w__9 ← (( do readReg PSTATE ) : SailM ProcState )
       let questionMark := w__9.EL
       if ((questionMark == EL1) : Bool)
@@ -547,7 +547,7 @@ def BranchToAddr (target : (BitVec k_N)) (branch_type : BranchType) : SailM Unit
   then
     (do
       let w__0 ← (( do (UsingAArch32 ()) ) : SailM Bool )
-      ArmFull.assert w__0 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:18006.29-18006.30"
+      ArmFull.assert w__0 "sail-arm/v8_base.sail:18006.29-18006.30"
       let _ : Unit := (sail_branch_announce 64 (ZeroExtend1 (m := 64) target))
       writeReg _PC (Sail.BitVec.zeroExtend target 64))
   else
@@ -559,7 +559,7 @@ def BranchToAddr (target : (BitVec k_N)) (branch_type : BranchType) : SailM Unit
             let w__1 ← (( do (UsingAArch32 ()) ) : SailM Bool )
             (pure (((! w__1) : Bool))))
         else (pure false) ) : SailM Bool )
-      ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:18010.50-18010.51"
+      ArmFull.assert w__2 "sail-arm/v8_base.sail:18010.50-18010.51"
       let _ : Unit := (sail_branch_announce 64 (Sail.BitVec.extractLsb target 63 0))
       writeReg _PC (Sail.BitVec.extractLsb target 63 0))
   writeReg __BranchTaken true
@@ -642,7 +642,7 @@ def S2CombineS1MemAttrs (s1_memattrs : MemoryAttributes) (s2_memattrs : MemoryAt
 
 
 def DecodeGPTBlock (pgs : PGSe) (entry : (BitVec 64)) : SailM (GPCF × GPTEntry) := do
-  ArmFull.assert ((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb entry 3 0)) == GPT_Block) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19559.37-19559.38"
+  ArmFull.assert ((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb entry 3 0)) == GPT_Block) "sail-arm/v8_base.sail:19559.37-19559.38"
   let result ← (( do (undefined_GPTEntry (← occLabel 1227) ()) ) : SailM GPTEntry )
   if ((! (IsZero (Sail.BitVec.extractLsb entry 63 8))) : Bool)
   then
@@ -672,7 +672,7 @@ def DecodeGPTBlock (pgs : PGSe) (entry : (BitVec 64)) : SailM (GPCF × GPTEntry)
 
 
 def DecodeGPTContiguous (pgs : PGSe) (entry : (BitVec 64)) : SailM (GPCF × GPTEntry) := SailME.run do
-  ArmFull.assert ((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb entry 3 0)) == GPT_Contig) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:19590.38-19590.39"
+  ArmFull.assert ((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb entry 3 0)) == GPT_Contig) "sail-arm/v8_base.sail:19590.38-19590.39"
   let result ← (( do (undefined_GPTEntry (← occLabel 1228) ()) ) : SailME (GPCF × GPTEntry)
     GPTEntry )
   if ((! (IsZero (Sail.BitVec.extractLsb entry 63 10))) : Bool)

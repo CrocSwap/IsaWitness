@@ -433,7 +433,7 @@ def AArch64_SysRegRead (op0 : Int) (op1 : Int) (crn : Int) (crm : Int) (op2 : In
                 (do
                   let w__71 ← (( do readReg PMSELR_EL0 ) : SailME Unit (BitVec 64) )
                   let pmselr_el0 : Int := (BitVec.toNat (_get_PMSELR_EL0_Type_SEL w__71))
-                  ArmFull.assert (pmselr_el0 <b 31) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:335.38-335.39"
+                  ArmFull.assert (pmselr_el0 <b 31) "sail-arm/sysregs.sail:335.38-335.39"
                   let w__72 ← (( do readReg PMEVTYPER_EL0 ) : SailME Unit (Vector (BitVec 64) 32)
                     )
                   (X_set t 64 (GetElem?.getElem! w__72 (Sail.Int.toNatChecked (pmselr_el0)))))))
@@ -494,7 +494,7 @@ def AArch64_SysRegRead (op0 : Int) (op1 : Int) (crn : Int) (crm : Int) (op2 : In
             (do
               let w__88 ← (( do readReg PMSELR_EL0 ) : SailME Unit (BitVec 64) )
               let pmselr_el0 : Int := (BitVec.toNat (_get_PMSELR_EL0_Type_SEL w__88))
-              ArmFull.assert (pmselr_el0 <b 31) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:350.38-350.39"
+              ArmFull.assert (pmselr_el0 <b 31) "sail-arm/sysregs.sail:350.38-350.39"
               let w__89 ← (( do readReg PMEVCNTR_EL0 ) : SailME Unit (Vector (BitVec 64) 32) )
               (X_set t 64 (GetElem?.getElem! w__89 (Sail.Int.toNatChecked (pmselr_el0))))))
       else (pure (())))
@@ -734,7 +734,7 @@ def AArch64_SysRegRead (op0 : Int) (op1 : Int) (crn : Int) (crm : Int) (op2 : In
                           if (((op2 == 0) || (op2 == 4)) : Bool)
                           then
                             (do
-                              ArmFull.assert ((0 ≤b recordIdx) && (recordIdx <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:443.70-443.71"
+                              ArmFull.assert ((0 ≤b recordIdx) && (recordIdx <b 64)) "sail-arm/sysregs.sail:443.70-443.71"
                               let w__143 ← (( do readReg Records_INF ) : SailME Unit
                                 (Vector (BitVec 64) 64) )
                               (X_set t 64
@@ -743,7 +743,7 @@ def AArch64_SysRegRead (op0 : Int) (op1 : Int) (crn : Int) (crm : Int) (op2 : In
                           if (((op2 == 1) || (op2 == 5)) : Bool)
                           then
                             (do
-                              ArmFull.assert ((0 ≤b recordIdx) && (recordIdx <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:447.70-447.71"
+                              ArmFull.assert ((0 ≤b recordIdx) && (recordIdx <b 64)) "sail-arm/sysregs.sail:447.70-447.71"
                               let w__144 ← (( do readReg Records_SRC ) : SailME Unit
                                 (Vector (BitVec 64) 64) )
                               (X_set t 64
@@ -752,7 +752,7 @@ def AArch64_SysRegRead (op0 : Int) (op1 : Int) (crn : Int) (crm : Int) (op2 : In
                           if (((op2 == 2) || (op2 == 6)) : Bool)
                           then
                             (do
-                              ArmFull.assert ((0 ≤b recordIdx) && (recordIdx <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:451.70-451.71"
+                              ArmFull.assert ((0 ≤b recordIdx) && (recordIdx <b 64)) "sail-arm/sysregs.sail:451.70-451.71"
                               let w__145 ← (( do readReg Records_TGT ) : SailME Unit
                                 (Vector (BitVec 64) 64) )
                               (X_set t 64
@@ -786,7 +786,7 @@ def AArch64_SysRegRead (op0 : Int) (op1 : Int) (crn : Int) (crm : Int) (op2 : In
                         (do
                           let w__150 ← (( do readReg ERRSELR_EL1 ) : SailME Unit (BitVec 64) )
                           let index : Int := (BitVec.toNat (_get_ERRSELR_EL1_Type_SEL w__150))
-                          ArmFull.assert ((0 ≤b index) && (index <b 4)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:464.57-464.58"
+                          ArmFull.assert ((0 ≤b index) && (index <b 4)) "sail-arm/sysregs.sail:464.57-464.58"
                           let w__151 ← (( do readReg ERRnFR ) : SailME Unit (Vector (BitVec 64) 4)
                             )
                           (X_set t 64 (GetElem?.getElem! w__151 (Sail.Int.toNatChecked (index))))))

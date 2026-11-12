@@ -237,7 +237,7 @@ def FPDot__1 (op1_a : (BitVec (k_N / 2))) (op1_b : (BitVec (k_N / 2))) (op2_a : 
   let zeroPa ← (( do (undefined_bool_at (← occLabel 1820) ()) ) : SailM Bool )
   let zeroPb ← (( do (undefined_bool_at (← occLabel 1821) ()) ) : SailM Bool )
   let fpcr : FPCRType := fpcr_in
-  ArmFull.assert (SPEMaxCounters == 32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:32331.19-32331.20"
+  ArmFull.assert (SPEMaxCounters == 32) "sail-arm/v8_base.sail:32331.19-32331.20"
   let result ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1822)
       (Sail.Int.toNatChecked (SPEMaxCounters)))) ) : SailM (BitVec k_N) )
@@ -363,14 +363,14 @@ def FPDot__1 (op1_a : (BitVec (k_N / 2))) (op1_b : (BitVec (k_N / 2))) (op2_a : 
 
 /-- Type quantifiers: k_N : Nat, k_N = 16 -/
 def BFNeg (op : (BitVec k_N)) : SailM (BitVec k_N) := do
-  ArmFull.assert ((Sail.BitVec.length op) == 16) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:32442.19-32442.20"
+  ArmFull.assert ((Sail.BitVec.length op) == 16) "sail-arm/v8_base.sail:32442.19-32442.20"
   let honor_altfp : Bool := true
   ((Sail.BitVec.castWidth ) <$> (BFNeg__1 (k_N := 16) (Sail.BitVec.castWidth op) honor_altfp))
 
 
 def SPEWriteToBuffer (_ : Unit) : SailM Unit := do
   let w__0 ← (( do (ProfilingBufferEnabled ()) ) : SailM Bool )
-  ArmFull.assert w__0 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:35284.35-35284.36"
+  ArmFull.assert w__0 "sail-arm/v8_base.sail:35284.35-35284.36"
   let w__1 ← (( do readReg PMBPTR_EL1 ) : SailM (BitVec 64) )
   let w__2 ← (( do readReg PMBIDR_EL1 ) : SailM (BitVec 64) )
   let aligned : Bool :=
@@ -403,7 +403,7 @@ def SPEWriteToBuffer (_ : Unit) : SailM Unit := do
           if (((_get_PMBSR_EL1_Type_S w__6) == 0#1) : Bool)
           then
             (do
-              ArmFull.assert ((0 ≤b i) && (i <b 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:35297.60-35297.61"
+              ArmFull.assert ((0 ≤b i) && (i <b 64)) "sail-arm/v8_base.sail:35297.60-35297.61"
               let w__7 ← (( do readReg PMBPTR_EL1 ) : SailM (BitVec 64) )
               let w__8 ← (( do readReg SPERecordData ) : SailM (Vector (BitVec 8) 64) )
               let w__9 ← (( do
@@ -576,10 +576,10 @@ def AArch32_DC (regval : (BitVec 32)) (cacheop : CacheOp) (opscope : CacheOpScop
                     let w__29 ← (( do readReg CTR_EL0 ) : SailM (BitVec 64) )
                     (pure (((size ≥b (4 *i (2 ^i (BitVec.toNat (_get_CTR_EL0_Type_DminLine w__29))))) : Bool)))) && ((size ≤b 2048) : Bool)))
               ) : SailM Bool )
-            ArmFull.assert w__30 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40907.71-40907.72"
+            ArmFull.assert w__30 "sail-arm/v8_base.sail:40907.71-40907.72"
             ArmFull.assert ((BitVec.toNat
                 ((Sail.BitVec.castWidth (m := 33) (integer_subrange size 32 0)) &&& (Sail.BitVec.castWidth (m := 33) (integer_subrange
-                    (size -i 1) 32 0)))) == 0) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40908.61-40908.62"
+                    (size -i 1) 32 0)))) == 0) "sail-arm/v8_base.sail:40908.61-40908.62"
             let vaddress : (BitVec 32) := (Align_bits regval size)
             (pure ((size, vaddress))))
         else (pure ((size, vaddress))) ) : SailM (Int × (BitVec 32)) )
@@ -699,7 +699,7 @@ def AArch32_IC__1 (regval : (BitVec 32)) (opscope : CacheOpScope) : SailM Unit :
       (CACHE_OP cache))
   else
     (do
-      ArmFull.assert (BEq.beq opscope CacheOpScope_PoU) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40964.42-40964.43"
+      ArmFull.assert (BEq.beq opscope CacheOpScope_PoU) "sail-arm/v8_base.sail:40964.42-40964.43"
       let w__9 ← (( do (EL2Enabled ()) ) : SailME Unit Bool )
       let cache ← (( do
         if (w__9 : Bool)

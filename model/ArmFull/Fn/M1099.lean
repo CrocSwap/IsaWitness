@@ -565,7 +565,7 @@ def execute_aarch64_instrs_vector_arithmetic_binary_uniform_mul_fp_complex (d : 
                 (pure ((element1, element2, element3, element4))))
             | 0b01 =>
               (do
-                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:13536.55-13536.56"
+                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:13536.55-13536.56"
                 let w__4 ← (( do
                   ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 ((e *i 2) +i 1) esize)) ) :
                   SailM (BitVec esize) )
@@ -586,7 +586,7 @@ def execute_aarch64_instrs_vector_arithmetic_binary_uniform_mul_fp_complex (d : 
                 (pure ((element1, element2, element3, element4))))
             | 0b10 =>
               (do
-                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:13543.55-13543.56"
+                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:13543.55-13543.56"
                 let w__9 ← (( do
                   ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 (e *i 2) esize)) ) : SailM
                   (BitVec esize) )
@@ -616,7 +616,7 @@ def execute_aarch64_instrs_vector_arithmetic_binary_uniform_mul_fp_complex (d : 
                   ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 ((e *i 2) +i 1) esize)) ) :
                   SailM (BitVec esize) )
                 let element2 := (w__16 : (BitVec esize))
-                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:13552.55-13552.56"
+                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:13552.55-13552.56"
                 let w__17 ← (( do
                   ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 (e *i 2) esize)) ) : SailM
                   (BitVec esize) )
@@ -628,7 +628,7 @@ def execute_aarch64_instrs_vector_arithmetic_binary_uniform_mul_fp_complex (d : 
                 let element4 := (w__19 : (BitVec esize))
                 (pure ((element1, element2, element3, element4)))) ) : SailM
             ((BitVec esize) × (BitVec esize) × (BitVec esize) × (BitVec esize)) )
-          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:13557.49-13557.50"
+          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:13557.49-13557.50"
           let w__20 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand3 (e *i 2) esize)) ) :
             SailM (BitVec esize) )
           let w__21 ← (( do (FPMulAdd w__20 element2 element1 fpcr) ) : SailM (BitVec esize) )
@@ -710,7 +710,7 @@ def execute_aarch64_instrs_vector_arithmetic_binary_element_mul_acc_complex (d :
                 (pure ((element1, element2, element3, element4))))
             | 0b01 =>
               (do
-                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:13623.55-13623.56"
+                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:13623.55-13623.56"
                 let w__4 ← (( do
                   ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 ((index *i 2) +i 1) esize)) ) :
                   SailM (BitVec esize) )
@@ -731,7 +731,7 @@ def execute_aarch64_instrs_vector_arithmetic_binary_element_mul_acc_complex (d :
                 (pure ((element1, element2, element3, element4))))
             | 0b10 =>
               (do
-                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:13630.55-13630.56"
+                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:13630.55-13630.56"
                 let w__9 ← (( do
                   ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 (index *i 2) esize)) ) : SailM
                   (BitVec esize) )
@@ -761,7 +761,7 @@ def execute_aarch64_instrs_vector_arithmetic_binary_element_mul_acc_complex (d :
                   ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 ((e *i 2) +i 1) esize)) ) :
                   SailM (BitVec esize) )
                 let element2 := (w__16 : (BitVec esize))
-                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:13639.55-13639.56"
+                ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:13639.55-13639.56"
                 let w__17 ← (( do
                   ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 (index *i 2) esize)) ) : SailM
                   (BitVec esize) )
@@ -777,7 +777,7 @@ def execute_aarch64_instrs_vector_arithmetic_binary_element_mul_acc_complex (d :
           let element3 := element3
           let element2 := element2
           let element1 := element1
-          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:13648.49-13648.50"
+          ArmFull.assert (((esize == 16) || (esize == 32)) || (esize == 64)) "sail-arm/instrs64.sail:13648.49-13648.50"
           let w__20 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand3 (e *i 2) esize)) ) :
             SailM (BitVec esize) )
           let w__21 ← (( do (FPMulAdd w__20 element2 element1 fpcr) ) : SailM (BitVec esize) )

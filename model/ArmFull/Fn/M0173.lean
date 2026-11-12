@@ -481,11 +481,11 @@ def AArch64_S2NextWalkStateLeaf (currentstate : TTWState) (ss : SecurityState) (
               if ((walkparams.d128 == 1#1) : Bool)
               then
                 (do
-                  ArmFull.assert (127 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26849.39-26849.40"
+                  ArmFull.assert (127 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26849.39-26849.40"
                   (pure ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 127)])))))
               else
                 (do
-                  ArmFull.assert (55 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26852.38-26852.39"
+                  ArmFull.assert (55 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26852.38-26852.39"
                   (pure ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 55)]))))) ) :
               SailM (BitVec 1) )
             let baseaddress : FullAddress :=
@@ -511,7 +511,7 @@ def AArch64_S2NextWalkStateLeaf (currentstate : TTWState) (ss : SecurityState) (
     then (pure (walkparams.sh))
     else
       (do
-        ArmFull.assert (9 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26866.33-26866.34"
+        ArmFull.assert (9 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26866.33-26866.34"
         (pure ((Sail.BitVec.extractLsb descriptor 9 8)))) ) : SailM (BitVec 2) )
   let s2_fnxs : (BitVec 1) := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 11)]))
   let nextstate ← (( do
@@ -546,7 +546,7 @@ def AArch64_S2NextWalkStateLeaf (currentstate : TTWState) (ss : SecurityState) (
   if ((walkparams.d128 == 1#1) : Bool)
   then
     (do
-      ArmFull.assert (114 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26889.35-26889.36"
+      ArmFull.assert (114 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26889.35-26889.36"
       let nextstate : TTWState :=
         { nextstate with s2assuredonly := (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
               descriptor 114)])) }
@@ -557,7 +557,7 @@ def AArch64_S2NextWalkStateLeaf (currentstate : TTWState) (ss : SecurityState) (
         if ((walkparams.assuredonly == 1#1) : Bool)
         then
           (do
-            ArmFull.assert (58 <b (Sail.BitVec.length descriptor)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:26893.38-26893.39"
+            ArmFull.assert (58 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:26893.38-26893.39"
             (pure ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 58)])))))
         else (pure (0#1)) ) : SailM (BitVec 1) )
       let nextstate := ({ nextstate with s2assuredonly := w__5 } : TTWState)

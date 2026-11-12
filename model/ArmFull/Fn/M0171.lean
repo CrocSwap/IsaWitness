@@ -754,7 +754,7 @@ def ImpDefInt (x : String) : SailM Int := do
                                                                                 (print_endline
                                                                                   (String.append x
                                                                                     " is an unrecognized Implementation defined bit."))
-                                                                              ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/impdefs.sail:746.20-746.21"
+                                                                              ArmFull.assert false "sail-arm/impdefs.sail:746.20-746.21"
                                                                               throw Error.Exit)))))))))))))))))))
 
 

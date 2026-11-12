@@ -732,7 +732,7 @@ def AArch64_SysRegWrite (op0 : Int) (op1 : Int) (crn : Int) (crm : Int) (op2 : I
             (do
               let w__93 ← (( do readReg PMSELR_EL0 ) : SailME Unit (BitVec 64) )
               let pmselr_el0 : Int := (BitVec.toNat (_get_PMSELR_EL0_Type_SEL w__93))
-              ArmFull.assert (pmselr_el0 <b 31) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:748.38-748.39"
+              ArmFull.assert (pmselr_el0 <b 31) "sail-arm/sysregs.sail:748.38-748.39"
               let w__94 ← (( do readReg PMEVTYPER_EL0 ) : SailME Unit (Vector (BitVec 64) 32) )
               writeReg PMEVTYPER_EL0 (vectorUpdate w__94 (Sail.Int.toNatChecked (pmselr_el0))
                 (__get_PMEVTYPER_EL0 (Mk_PMEVTYPER_EL0_Type tempxt)))))
@@ -742,7 +742,7 @@ def AArch64_SysRegWrite (op0 : Int) (op1 : Int) (crn : Int) (crm : Int) (op2 : I
         (do
           let w__95 ← (( do readReg PMSELR_EL0 ) : SailME Unit (BitVec 64) )
           let pmselr_el0 : Int := (BitVec.toNat (_get_PMSELR_EL0_Type_SEL w__95))
-          ArmFull.assert (pmselr_el0 <b 31) "/home/doug/boss-scratch/sail-lean-fork/integ/model/sysregs.sail:754.34-754.35"
+          ArmFull.assert (pmselr_el0 <b 31) "sail-arm/sysregs.sail:754.34-754.35"
           let w__96 ← (( do readReg PMEVCNTR_EL0 ) : SailME Unit (Vector (BitVec 64) 32) )
           writeReg PMEVCNTR_EL0 (vectorUpdate w__96 (Sail.Int.toNatChecked (pmselr_el0)) tempxt))
       else (pure (())))

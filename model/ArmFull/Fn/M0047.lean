@@ -481,7 +481,7 @@ def HCR2_read (_ : Unit) : SailM (BitVec 32) := do
 
 
 def IsDebugException (fault : FaultRecord) : SailM Bool := do
-  ArmFull.assert (bne fault.statuscode Fault_None) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:14522.41-14522.42"
+  ArmFull.assert (bne fault.statuscode Fault_None) "sail-arm/v8_base.sail:14522.41-14522.42"
   (pure ((BEq.beq fault.statuscode Fault_Debug)))
 
 

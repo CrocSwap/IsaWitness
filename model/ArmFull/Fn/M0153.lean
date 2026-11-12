@@ -121,13 +121,13 @@ def UsingAArch32 (_ : Unit) : SailM Bool := do
   if ((! (HaveAArch32 ())) : Bool)
   then
     (do
-      ArmFull.assert (! aarch32) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:4029.32-4029.33")
+      ArmFull.assert (! aarch32) "sail-arm/v8_base.sail:4029.32-4029.33")
   else (pure (()))
   let w__1 ← (( do (HaveAArch64 ()) ) : SailM Bool )
   if ((! w__1) : Bool)
   then
     (do
-      ArmFull.assert aarch32 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:4032.22-4032.23")
+      ArmFull.assert aarch32 "sail-arm/v8_base.sail:4032.22-4032.23")
   else (pure (()))
   (pure (aarch32))
 
@@ -680,9 +680,9 @@ def ImplementedSVEVectorLength (nbits_in : Int) : SailM Int := SailME.run do
       (do
         (IsPow2 maxbits))
     else (pure false) ) : SailME Int Bool )
-  ArmFull.assert w__1 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6873.63-6873.64"
+  ArmFull.assert w__1 "sail-arm/v8_base.sail:6873.63-6873.64"
   let nbits : Int := (Min.min nbits_in maxbits)
-  ArmFull.assert (((128 ≤b nbits) && (nbits ≤b 2048)) && ((Align_int nbits 128) == nbits)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6875.70-6875.71"
+  ArmFull.assert (((128 ≤b nbits) && (nbits ≤b 2048)) && ((Align_int nbits 128) == nbits)) "sail-arm/v8_base.sail:6875.70-6875.71"
   let nbits ← (( do
     let loop_vars ← sailWhileFuelM (α := Int) (fuel := 1048576) (fun nbits => (pure (nbits >b 128))) nbits
       fun nbits => do
@@ -691,7 +691,7 @@ def ImplementedSVEVectorLength (nbits_in : Int) : SailM Int := SailME.run do
         then
           (do
             let nbits : Int := nbits
-            ArmFull.assert (((((nbits == 128) || (nbits == 256)) || (nbits == 512)) || (nbits == 1024)) || (nbits == 2048)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6879.44-6879.45"
+            ArmFull.assert (((((nbits == 128) || (nbits == 256)) || (nbits == 512)) || (nbits == 1024)) || (nbits == 2048)) "sail-arm/v8_base.sail:6879.44-6879.45"
             SailME.throw (nbits : Int)
             (pure (nbits)))
         else
@@ -699,16 +699,16 @@ def ImplementedSVEVectorLength (nbits_in : Int) : SailM Int := SailME.run do
           (pure (nbits)))
     (pure loop_vars) ) : SailME Int Int )
   let nbits : Int := nbits
-  ArmFull.assert (((((nbits == 128) || (nbits == 256)) || (nbits == 512)) || (nbits == 1024)) || (nbits == 2048)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6885.36-6885.37"
+  ArmFull.assert (((((nbits == 128) || (nbits == 256)) || (nbits == 512)) || (nbits == 1024)) || (nbits == 2048)) "sail-arm/v8_base.sail:6885.36-6885.37"
   (pure (nbits))
 
 
 /-- Type quantifiers: nbits_in : Int -/
 def ImplementedSMEVectorLength (nbits_in : Int) : SailM Int := SailME.run do
   let maxbits ← (( do (MaxImplementedSVL ()) ) : SailME Int Int )
-  ArmFull.assert (((((maxbits == 128) || (maxbits == 256)) || (maxbits == 512)) || (maxbits == 1024)) || (maxbits == 2048)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6932.38-6932.39"
+  ArmFull.assert (((((maxbits == 128) || (maxbits == 256)) || (maxbits == 512)) || (maxbits == 1024)) || (maxbits == 2048)) "sail-arm/v8_base.sail:6932.38-6932.39"
   let nbits : Int := (Min.min nbits_in maxbits)
-  ArmFull.assert (((128 ≤b nbits) && (nbits ≤b 2048)) && ((Align_int nbits 128) == nbits)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6934.70-6934.71"
+  ArmFull.assert (((128 ≤b nbits) && (nbits ≤b 2048)) && ((Align_int nbits 128) == nbits)) "sail-arm/v8_base.sail:6934.70-6934.71"
   let nbits ← (( do
     let loop_vars ← sailWhileFuelM (α := Int) (fuel := 1048576) (fun nbits => (pure (nbits >b 128))) nbits
       fun nbits => do
@@ -719,7 +719,7 @@ def ImplementedSMEVectorLength (nbits_in : Int) : SailM Int := SailME.run do
         then
           (do
             let nbits : Int := nbits
-            ArmFull.assert (((((nbits == 128) || (nbits == 256)) || (nbits == 512)) || (nbits == 1024)) || (nbits == 2048)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6938.44-6938.45"
+            ArmFull.assert (((((nbits == 128) || (nbits == 256)) || (nbits == 512)) || (nbits == 1024)) || (nbits == 2048)) "sail-arm/v8_base.sail:6938.44-6938.45"
             SailME.throw (nbits : Int)
             (pure (nbits)))
         else
@@ -734,7 +734,7 @@ def ImplementedSMEVectorLength (nbits_in : Int) : SailM Int := SailME.run do
         then
           (do
             let nbits : Int := nbits
-            ArmFull.assert (((((nbits == 128) || (nbits == 256)) || (nbits == 512)) || (nbits == 1024)) || (nbits == 2048)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:6947.44-6947.45"
+            ArmFull.assert (((((nbits == 128) || (nbits == 256)) || (nbits == 512)) || (nbits == 1024)) || (nbits == 2048)) "sail-arm/v8_base.sail:6947.44-6947.45"
             SailME.throw (nbits : Int)
             (pure (nbits)))
         else

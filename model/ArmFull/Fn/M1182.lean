@@ -414,7 +414,7 @@ def execute_aarch64_instrs_vector_reduce_add_sisd (d : Nat) (datasize : Nat) (es
   (CheckFPAdvSIMDEnabled64 ())
   let operand ← (( do ((Sail.BitVec.castWidth ) <$> (V_read n datasize)) ) : SailM
     (BitVec datasize) )
-  ArmFull.assert (datasize ≥b esize) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64.sail:1153.42-1153.43"
+  ArmFull.assert (datasize ≥b esize) "sail-arm/instrs64.sail:1153.42-1153.43"
   let w__0 ← (( do ((Sail.BitVec.castWidth ) <$> (Reduce op operand esize)) ) : SailM
     (BitVec esize) )
   (V_set d esize (Sail.BitVec.castWidth w__0))
@@ -544,14 +544,14 @@ def execute_aarch64_instrs_memory_mcpymset_cpy (d : Nat) (n : Nat) (options_name
         let stagecpysize := (w__9 : (BitVec 64))
         ArmFull.assert (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access stagecpysize 63)])) == (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
                 cpysize 63)]))) || (stagecpysize == (Sail.BitVec.castWidth (m := 64) (Zeros
-              (n := 64))))) "/home/doug/boss-scratch/armcert-defects/c27-accepted/armcert_c27.sail:450.78-450.79"
+              (n := 64))))) "armcert/armcert_c27.sail:450.78-450.79"
         if (((BitVec.toInt cpysize) >b 0) : Bool)
         then
           (do
-            ArmFull.assert ((BitVec.toInt stagecpysize) ≤b (BitVec.toInt cpysize)) "/home/doug/boss-scratch/armcert-defects/c27-accepted/armcert_c27.sail:452.54-452.55")
+            ArmFull.assert ((BitVec.toInt stagecpysize) ≤b (BitVec.toInt cpysize)) "armcert/armcert_c27.sail:452.54-452.55")
         else
           (do
-            ArmFull.assert ((BitVec.toInt stagecpysize) ≥b (BitVec.toInt cpysize)) "/home/doug/boss-scratch/armcert-defects/c27-accepted/armcert_c27.sail:454.54-454.55")
+            ArmFull.assert ((BitVec.toInt stagecpysize) ≥b (BitVec.toInt cpysize)) "armcert/armcert_c27.sail:454.54-454.55")
         (pure ((cpysize, fromaddress, nzcv, stagecpysize, toaddress))))
     else
       (do
@@ -584,7 +584,7 @@ def execute_aarch64_instrs_memory_mcpymset_cpy (d : Nat) (n : Nat) (options_name
         let postsize ← (( do (CPYPostSizeChoice toaddress fromaddress cpysize) ) : SailM
           (BitVec 64) )
         ArmFull.assert (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access postsize 63)])) == (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                cpysize 63)]))) || (((BitVec.toInt postsize) == 0) : Bool)) "/home/doug/boss-scratch/armcert-defects/c27-accepted/armcert_c27.sail:476.68-476.69"
+                cpysize 63)]))) || (((BitVec.toInt postsize) == 0) : Bool)) "armcert/armcert_c27.sail:476.68-476.69"
         let stagecpysize ← (( do
           if ((BEq.beq stage MOPSStage_Main) : Bool)
           then
@@ -646,8 +646,8 @@ def execute_aarch64_instrs_memory_mcpymset_cpy (d : Nat) (n : Nat) (options_name
                 if (((BitVec.toInt cpysize) <b 0) : Bool)
                 then
                   (do
-                    ArmFull.assert (B ≤b ((Neg.neg 1) *i (BitVec.toInt stagecpysize))) "/home/doug/boss-scratch/armcert-defects/c27-accepted/armcert_c27.sail:504.64-504.65"
-                    ArmFull.assert ((0 ≤b ((B *i 8) -i 1)) && (((B *i 8) -i 1) <b (8 *i N))) "/home/doug/boss-scratch/armcert-defects/c27-accepted/armcert_c27.sail:505.80-505.81"
+                    ArmFull.assert (B ≤b ((Neg.neg 1) *i (BitVec.toInt stagecpysize))) "armcert/armcert_c27.sail:504.64-504.65"
+                    ArmFull.assert ((0 ≤b ((B *i 8) -i 1)) && (((B *i 8) -i 1) <b (8 *i N))) "armcert/armcert_c27.sail:505.80-505.81"
                     let w__15 ← (( do
                       ((Sail.BitVec.castWidth ) <$> (Mem_read (fromaddress + cpysize)
                         (Sail.Int.toNatChecked (B)) raccdesc)) ) : SailM
@@ -663,10 +663,10 @@ def execute_aarch64_instrs_memory_mcpymset_cpy (d : Nat) (n : Nat) (options_name
                     (pure ((cpysize, readdata, stagecpysize))))
                 else
                   (do
-                    ArmFull.assert (B ≤b (BitVec.toInt stagecpysize)) "/home/doug/boss-scratch/armcert-defects/c27-accepted/armcert_c27.sail:511.52-511.53"
+                    ArmFull.assert (B ≤b (BitVec.toInt stagecpysize)) "armcert/armcert_c27.sail:511.52-511.53"
                     let cpysize : (BitVec 64) := (BitVec.subInt cpysize B)
                     let stagecpysize : (BitVec 64) := (BitVec.subInt stagecpysize B)
-                    ArmFull.assert ((0 ≤b ((B *i 8) -i 1)) && (((B *i 8) -i 1) <b (8 *i N))) "/home/doug/boss-scratch/armcert-defects/c27-accepted/armcert_c27.sail:514.80-514.81"
+                    ArmFull.assert ((0 ≤b ((B *i 8) -i 1)) && (((B *i 8) -i 1) <b (8 *i N))) "armcert/armcert_c27.sail:514.80-514.81"
                     let w__16 ← (( do
                       ((Sail.BitVec.castWidth ) <$> (Mem_read (fromaddress + cpysize)
                         (Sail.Int.toNatChecked (B)) raccdesc)) ) : SailM
@@ -698,13 +698,13 @@ def execute_aarch64_instrs_memory_mcpymset_cpy (d : Nat) (n : Nat) (options_name
                 (CPYSizeChoice toaddress fromaddress cpysize (BitVec.toNat stagecpysize) N) ) :
                 SailM Int )
               let B : Int := (w__17 : Int)
-              ArmFull.assert (B ≤b (BitVec.toNat stagecpysize)) "/home/doug/boss-scratch/armcert-defects/c27-accepted/armcert_c27.sail:527.42-527.43"
+              ArmFull.assert (B ≤b (BitVec.toNat stagecpysize)) "armcert/armcert_c27.sail:527.42-527.43"
               let B : Int := B
               let (fromaddress, readdata, toaddress) ← (( do
                 if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access nzcv 3)])) == 0#1) : Bool)
                 then
                   (do
-                    ArmFull.assert ((0 ≤b ((B *i 8) -i 1)) && (((B *i 8) -i 1) <b (8 *i N))) "/home/doug/boss-scratch/armcert-defects/c27-accepted/armcert_c27.sail:531.80-531.81"
+                    ArmFull.assert ((0 ≤b ((B *i 8) -i 1)) && (((B *i 8) -i 1) <b (8 *i N))) "armcert/armcert_c27.sail:531.80-531.81"
                     let w__18 ← (( do
                       ((Sail.BitVec.castWidth ) <$> (Mem_read fromaddress
                         (Sail.Int.toNatChecked (B)) raccdesc)) ) : SailM
@@ -720,7 +720,7 @@ def execute_aarch64_instrs_memory_mcpymset_cpy (d : Nat) (n : Nat) (options_name
                     (pure ((fromaddress, readdata, toaddress))))
                 else
                   (do
-                    ArmFull.assert ((0 ≤b ((B *i 8) -i 1)) && (((B *i 8) -i 1) <b (8 *i N))) "/home/doug/boss-scratch/armcert-defects/c27-accepted/armcert_c27.sail:537.80-537.81"
+                    ArmFull.assert ((0 ≤b ((B *i 8) -i 1)) && (((B *i 8) -i 1) <b (8 *i N))) "armcert/armcert_c27.sail:537.80-537.81"
                     let w__19 ← (( do
                       ((Sail.BitVec.castWidth ) <$> (Mem_read (BitVec.subInt fromaddress B)
                         (Sail.Int.toNatChecked (B)) raccdesc)) ) : SailM

@@ -325,7 +325,7 @@ def AArch32_BreakpointValueMatch (n_in : Int) (vaddress : (BitVec 32)) (linked_t
         let (tup__0, tup__1) := (w__2 : (Constraint × Int))
         let c : Constraint := tup__0
         let n : Int := tup__1
-        ArmFull.assert ((BEq.beq c Constraint_DISABLED) || (BEq.beq c Constraint_UNKNOWN)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40261.65-40261.66"
+        ArmFull.assert ((BEq.beq c Constraint_DISABLED) || (BEq.beq c Constraint_UNKNOWN)) "sail-arm/v8_base.sail:40261.65-40261.66"
         if ((BEq.beq c Constraint_DISABLED) : Bool)
         then
           (do
@@ -334,7 +334,7 @@ def AArch32_BreakpointValueMatch (n_in : Int) (vaddress : (BitVec 32)) (linked_t
         (pure ((c, n))))
     else (pure ((c, n))) ) : SailME (Bool × Bool) (Constraint × Int) )
   let n : Int := n
-  ArmFull.assert ((0 ≤b n) && (n <b 16)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40268.42-40268.43"
+  ArmFull.assert ((0 ≤b n) && (n <b 16)) "sail-arm/v8_base.sail:40268.42-40268.43"
   let w__3 ← (( do (DBGBCR_read (Sail.Int.toNatChecked (n))) ) : SailME (Bool × Bool) (BitVec 32)
     )
   if (((_get_DBGBCR_Type_E w__3) == 0#1) : Bool)
@@ -406,7 +406,7 @@ def AArch32_BreakpointValueMatch (n_in : Int) (vaddress : (BitVec 32)) (linked_t
                 then
                   (do
                     let byte : Int := (BitVec.toNat (Sail.BitVec.extractLsb vaddress 1 0))
-                    ArmFull.assert ((byte == 0) || (byte == 2)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:40314.36-40314.37"
+                    ArmFull.assert ((byte == 0) || (byte == 2)) "sail-arm/v8_base.sail:40314.36-40314.37"
                     let w__7 ← (( do (DBGBCR_read (Sail.Int.toNatChecked (n))) ) : SailME
                       (Bool × Bool) (BitVec 32) )
                     let byte_select_match : Bool :=
@@ -569,7 +569,7 @@ def gic_write_ram (offset : (BitVec 16)) (data : (BitVec 32)) : SailM Unit := do
   | .Ok _ => (pure (()))
   | .Err _ =>
     (do
-      ArmFull.assert false "/home/doug/boss-scratch/sail-lean-fork/integ/model/devices.sail:145.26-145.27"
+      ArmFull.assert false "sail-arm/devices.sail:145.26-145.27"
       throw Error.Exit)
 
 

@@ -308,7 +308,7 @@ def AArch64_TLBI_RVA (security : SecurityState) (regime : Regime) (vmid : (BitVe
           (do
             let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
             (pure (((w__2.EL == EL1) : Bool))))) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36297.65-36297.66"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:36297.65-36297.66"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2472) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_RVA }
   let r : TLBIRecord := { r with from_aarch64 := true }
@@ -360,7 +360,7 @@ def AArch64_TLBI_RVAA (security : SecurityState) (regime : Regime) (vmid : (BitV
           (do
             let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
             (pure (((w__2.EL == EL1) : Bool))))) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36353.65-36353.66"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:36353.65-36353.66"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2476) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_RVAA }
   let r : TLBIRecord := { r with from_aarch64 := true }
@@ -415,7 +415,7 @@ def AArch64_TLBI_RIPAS2 (security : SecurityState) (regime : Regime) (vmid : (Bi
           (do
             let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
             (pure (((w__2.EL == EL1) : Bool))))) ) : SailM Bool )
-  ArmFull.assert w__4 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:36415.65-36415.66"
+  ArmFull.assert w__4 "sail-arm/v8_base.sail:36415.65-36415.66"
   let r ← (( do (undefined_TLBIRecord (← occLabel 2480) ()) ) : SailM TLBIRecord )
   let r : TLBIRecord := { r with op := TLBIOp_RIPAS2 }
   let r : TLBIRecord := { r with from_aarch64 := true }
@@ -629,7 +629,7 @@ def AArch64_PARFaultStatus (fault : FaultRecord) : SailM (BitVec 6) := do
   if ((BEq.beq fault.statuscode Fault_Domain) : Bool)
   then
     (do
-      ArmFull.assert ((fault.level == 1) || (fault.level == 2)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:39066.50-39066.51"
+      ArmFull.assert ((fault.level == 1) || (fault.level == 2)) "sail-arm/v8_base.sail:39066.50-39066.51"
       let fst : (BitVec 6) :=
         (Sail.BitVec.updateSubrange fst 1 0
           (if ((fault.level == 1) : Bool)
@@ -714,7 +714,7 @@ def AArch32_PARFaultStatusLD (fault : FaultRecord) : SailM (BitVec 6) := do
   if ((BEq.beq fault.statuscode Fault_Domain) : Bool)
   then
     (do
-      ArmFull.assert ((fault.level == 1) || (fault.level == 2)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:41008.50-41008.51"
+      ArmFull.assert ((fault.level == 1) || (fault.level == 2)) "sail-arm/v8_base.sail:41008.50-41008.51"
       let syndrome : (BitVec 6) :=
         (Sail.BitVec.updateSubrange syndrome 1 0
           (if ((fault.level == 1) : Bool)
@@ -737,8 +737,8 @@ def SelectInstrSet (iset : InstrSet) : SailM Unit := do
       (do
         let w__1 ← (( do (CurrentInstrSet ()) ) : SailM InstrSet )
         (pure (((BEq.beq w__1 InstrSet_T32) : Bool)))) ) : SailM Bool )
-  ArmFull.assert w__2 "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42361.80-42361.81"
-  ArmFull.assert ((BEq.beq iset InstrSet_A32) || (BEq.beq iset InstrSet_T32)) "/home/doug/boss-scratch/sail-lean-fork/integ/model/v8_base.sail:42362.54-42362.55"
+  ArmFull.assert w__2 "sail-arm/v8_base.sail:42361.80-42361.81"
+  ArmFull.assert ((BEq.beq iset InstrSet_A32) || (BEq.beq iset InstrSet_T32)) "sail-arm/v8_base.sail:42362.54-42362.55"
   let w__3 ← (( do readReg PSTATE ) : SailM ProcState )
   writeReg PSTATE { w__3 with T := if ((BEq.beq iset InstrSet_A32) : Bool)
     then 0#1

@@ -259,7 +259,7 @@ def decode_aarch32_instrs_VADD_f_A2enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1)
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:20225.29-20225.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:20225.29-20225.30"
       let elements ← (( do (undefined_int_at (← occLabel 3356) ()) ) : SailM Int )
       let regs ← (( do (undefined_int_at (← occLabel 3357) ()) ) : SailM Int )
       let w__3 ← (( do
@@ -450,7 +450,7 @@ def decode_aarch32_instrs_VCVTB_A1enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1))
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:22617.29-22617.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:22617.29-22617.30"
       let uses_double : Bool := (sz == 1#1)
       let convert_from_half : Bool := (op == 0#1)
       let lowbit : Int :=
@@ -535,7 +535,7 @@ def decode_aarch32_instrs_VCVT_ds_A1enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:22712.29-22712.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:22712.29-22712.30"
       let double_to_single : Bool := (size == 0b11#2)
       let d : Int :=
         if (double_to_single : Bool)
@@ -545,7 +545,7 @@ def decode_aarch32_instrs_VCVT_ds_A1enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1
         if (double_to_single : Bool)
         then (BitVec.toNat (M +++ Vm))
         else (BitVec.toNat (Vm +++ M))
-      ArmFull.assert ((0 ≤b m) && ((m ≤b 31) && ((0 ≤b d) && (d ≤b 31)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:22716.68-22716.69"
+      ArmFull.assert ((0 ≤b m) && ((m ≤b 31) && ((0 ≤b d) && (d ≤b 31)))) "sail-arm/instrs32.sail:22716.68-22716.69"
       (execute_aarch32_instrs_VCVT_ds_Op_A_txt (Sail.Int.toNatChecked (d)) double_to_single
         (Sail.Int.toNatChecked (m))))
   else (pure (()))
@@ -565,7 +565,7 @@ def decode_aarch32_instrs_VCVT_ds_T1enc_A_txt (D : (BitVec 1)) (Vd : (BitVec 4))
         if (double_to_single : Bool)
         then (BitVec.toNat (M +++ Vm))
         else (BitVec.toNat (Vm +++ M))
-      ArmFull.assert ((0 ≤b m) && ((m ≤b 31) && ((0 ≤b d) && (d ≤b 31)))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:22740.68-22740.69"
+      ArmFull.assert ((0 ≤b m) && ((m ≤b 31) && ((0 ≤b d) && (d ≤b 31)))) "sail-arm/instrs32.sail:22740.68-22740.69"
       (execute_aarch32_instrs_VCVT_ds_Op_A_txt (Sail.Int.toNatChecked (d)) double_to_single
         (Sail.Int.toNatChecked (m))))
   else (pure (()))
@@ -624,7 +624,7 @@ def decode_aarch32_instrs_VDIV_A1enc_A_txt (cond : (BitVec 4)) (D : (BitVec 1)) 
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs32.sail:23491.29-23491.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:23491.29-23491.30"
       let w__3 ← (( do
         if ((← do
              let w__1 ← (( do (FPSCR_read__1 ()) ) : SailM (BitVec 32) )

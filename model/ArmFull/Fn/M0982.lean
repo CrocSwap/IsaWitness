@@ -136,27 +136,27 @@ def decode_CNTP_R_PN__ (size : (BitVec 2)) (vl : (BitVec 1)) (PNn : (BitVec 4)) 
   match VL with
   | 128 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 15) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 31) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56606.130-56606.131"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 15) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 31) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))) "sail-arm/instrs64_sve.sail:56606.130-56606.131"
       (execute_CNTP_R_PN__ 128 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (width))))
   | 256 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 15) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 31) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56610.130-56610.131"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 15) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 31) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))) "sail-arm/instrs64_sve.sail:56610.130-56610.131"
       (execute_CNTP_R_PN__ 256 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (width))))
   | 512 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 15) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 31) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56614.130-56614.131"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 15) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 31) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))) "sail-arm/instrs64_sve.sail:56614.130-56614.131"
       (execute_CNTP_R_PN__ 512 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (width))))
   | 1024 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 15) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 31) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56618.131-56618.132"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 15) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 31) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))) "sail-arm/instrs64_sve.sail:56618.131-56618.132"
       (execute_CNTP_R_PN__ 1024 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (width))))
   | 2048 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 15) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 31) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56622.131-56622.132"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 15) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 31) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))) "sail-arm/instrs64_sve.sail:56622.131-56622.132"
       (execute_CNTP_R_PN__ 2048 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (width))))
   | _ => (pure (()))
@@ -188,31 +188,31 @@ def decode_WHILELO_PN_RR__ (size : (BitVec 2)) (Rm : (BitVec 5)) (vl : (BitVec 1
   match VL with
   | 128 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56696.151-56696.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56696.151-56696.152"
       (execute_WHILELO_PN_RR__ 128 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 256 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56700.151-56700.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56700.151-56700.152"
       (execute_WHILELO_PN_RR__ 256 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 512 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56704.151-56704.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56704.151-56704.152"
       (execute_WHILELO_PN_RR__ 512 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 1024 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56708.152-56708.153"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56708.152-56708.153"
       (execute_WHILELO_PN_RR__ 1024 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 2048 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56712.152-56712.153"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56712.152-56712.153"
       (execute_WHILELO_PN_RR__ 2048 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
@@ -245,31 +245,31 @@ def decode_WHILELS_PN_RR__ (size : (BitVec 2)) (Rm : (BitVec 5)) (vl : (BitVec 1
   match VL with
   | 128 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56790.151-56790.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56790.151-56790.152"
       (execute_WHILELS_PN_RR__ 128 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 256 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56794.151-56794.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56794.151-56794.152"
       (execute_WHILELS_PN_RR__ 256 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 512 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56798.151-56798.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56798.151-56798.152"
       (execute_WHILELS_PN_RR__ 512 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 1024 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56802.152-56802.153"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56802.152-56802.153"
       (execute_WHILELS_PN_RR__ 1024 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 2048 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56806.152-56806.153"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56806.152-56806.153"
       (execute_WHILELS_PN_RR__ 2048 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
@@ -302,31 +302,31 @@ def decode_WHILELT_PN_RR__ (size : (BitVec 2)) (Rm : (BitVec 5)) (vl : (BitVec 1
   match VL with
   | 128 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56884.151-56884.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56884.151-56884.152"
       (execute_WHILELT_PN_RR__ 128 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 256 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56888.151-56888.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56888.151-56888.152"
       (execute_WHILELT_PN_RR__ 256 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 512 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56892.151-56892.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56892.151-56892.152"
       (execute_WHILELT_PN_RR__ 512 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 1024 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56896.152-56896.153"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56896.152-56896.153"
       (execute_WHILELT_PN_RR__ 1024 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 2048 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56900.152-56900.153"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56900.152-56900.153"
       (execute_WHILELT_PN_RR__ 2048 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
@@ -359,31 +359,31 @@ def decode_WHILELE_PN_RR__ (size : (BitVec 2)) (Rm : (BitVec 5)) (vl : (BitVec 1
   match VL with
   | 128 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56978.151-56978.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56978.151-56978.152"
       (execute_WHILELE_PN_RR__ 128 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 256 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56982.151-56982.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56982.151-56982.152"
       (execute_WHILELE_PN_RR__ 256 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 512 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56986.151-56986.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56986.151-56986.152"
       (execute_WHILELE_PN_RR__ 512 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 1024 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56990.152-56990.153"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56990.152-56990.153"
       (execute_WHILELE_PN_RR__ 1024 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 2048 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:56994.152-56994.153"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))))) "sail-arm/instrs64_sve.sail:56994.152-56994.153"
       (execute_WHILELE_PN_RR__ 2048 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
@@ -416,31 +416,31 @@ def decode_WHILEHI_PN_RR__ (size : (BitVec 2)) (Rm : (BitVec 5)) (vl : (BitVec 1
   match VL with
   | 128 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57072.151-57072.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57072.151-57072.152"
       (execute_WHILEHI_PN_RR__ 128 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 256 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57076.151-57076.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57076.151-57076.152"
       (execute_WHILEHI_PN_RR__ 256 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 512 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57080.151-57080.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57080.151-57080.152"
       (execute_WHILEHI_PN_RR__ 512 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 1024 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57084.152-57084.153"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57084.152-57084.153"
       (execute_WHILEHI_PN_RR__ 1024 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 2048 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57088.152-57088.153"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57088.152-57088.153"
       (execute_WHILEHI_PN_RR__ 2048 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
@@ -473,31 +473,31 @@ def decode_WHILEHS_PN_RR__ (size : (BitVec 2)) (Rm : (BitVec 5)) (vl : (BitVec 1
   match VL with
   | 128 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57166.151-57166.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57166.151-57166.152"
       (execute_WHILEHS_PN_RR__ 128 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 256 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57170.151-57170.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57170.151-57170.152"
       (execute_WHILEHS_PN_RR__ 256 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 512 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57174.151-57174.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57174.151-57174.152"
       (execute_WHILEHS_PN_RR__ 512 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 1024 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57178.152-57178.153"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57178.152-57178.153"
       (execute_WHILEHS_PN_RR__ 1024 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 2048 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57182.152-57182.153"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57182.152-57182.153"
       (execute_WHILEHS_PN_RR__ 2048 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
@@ -530,31 +530,31 @@ def decode_WHILEGT_PN_RR__ (size : (BitVec 2)) (Rm : (BitVec 5)) (vl : (BitVec 1
   match VL with
   | 128 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57260.151-57260.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57260.151-57260.152"
       (execute_WHILEGT_PN_RR__ 128 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 256 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57264.151-57264.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57264.151-57264.152"
       (execute_WHILEGT_PN_RR__ 256 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 512 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57268.151-57268.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57268.151-57268.152"
       (execute_WHILEGT_PN_RR__ 512 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 1024 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57272.152-57272.153"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57272.152-57272.153"
       (execute_WHILEGT_PN_RR__ 1024 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 2048 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57276.152-57276.153"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57276.152-57276.153"
       (execute_WHILEGT_PN_RR__ 2048 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
@@ -587,31 +587,31 @@ def decode_WHILEGE_PN_RR__ (size : (BitVec 2)) (Rm : (BitVec 5)) (vl : (BitVec 1
   match VL with
   | 128 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57354.151-57354.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((128 == 128) || (128 == 256)) || (128 == 512)) || (128 == 1024)) || (128 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57354.151-57354.152"
       (execute_WHILEGE_PN_RR__ 128 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 256 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57358.151-57358.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((256 == 128) || (256 == 256)) || (256 == 512)) || (256 == 1024)) || (256 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57358.151-57358.152"
       (execute_WHILEGE_PN_RR__ 256 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 512 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57362.151-57362.152"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((512 == 128) || (512 == 256)) || (512 == 512)) || (512 == 1024)) || (512 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57362.151-57362.152"
       (execute_WHILEGE_PN_RR__ 512 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 1024 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57366.152-57366.153"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((1024 == 128) || (1024 == 256)) || (1024 == 512)) || (1024 == 1024)) || (1024 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57366.152-57366.153"
       (execute_WHILEGE_PN_RR__ 1024 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
   | 2048 =>
     (do
-      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))))) "/home/doug/boss-scratch/sail-lean-fork/integ/model/instrs64_sve.sail:57370.152-57370.153"
+      ArmFull.assert (((width == 2) || (width == 4)) && ((0 ≤b n) && ((n ≤b 31) && ((0 ≤b m) && ((m ≤b 31) && (((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) && ((0 ≤b d) && ((d ≤b 15) && (((((2048 == 128) || (2048 == 256)) || (2048 == 512)) || (2048 == 1024)) || (2048 == 2048)))))))))) "sail-arm/instrs64_sve.sail:57370.152-57370.153"
       (execute_WHILEGE_PN_RR__ 2048 (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (esize))
         invert (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) op rsize is_unsigned
         (Sail.Int.toNatChecked (width))))
