@@ -36,6 +36,8 @@ Generated assertion diagnostics name their source locations by stable relative p
 
 This release provides the model semantics and observation equations. Program proofs over those semantics are outside this release. The per-instruction step layer, instruction-class library and generator, value layer, and memory proof layers are under development privately. We plan to release them later with a worked example that goes from machine code to an end-to-end proof. [Current claims](docs/CLAIMS.md) · [Next model revision](NEXT-REVISION.md)
 
+Signed program claims built on this model are published separately, with the security grades each one holds (CT0 model-trace constant time, CT1 data-independent timing under Arm's DIT contract, CT2 return residue), each as held, FAIL with findings, or not attempted: [signed releases and grades](TODO-CERTIFFI-RELEASES-URL/releases/GRADES.md). IsaWitness itself is the model; it carries no grade.
+
 ## Related work
 
 - **Islaris** (PLDI 2022) verifies concrete Armv8-A and RISC-V machine code using Isla to generate instruction traces from Sail and an Iris program logic in Coq to reason about them. Its published Arm examples use configurations with address translation turned off, although the underlying ISA model includes translation-table walks. Isla and the SMT solver are in the trusted chain for the basic approach. The paper demonstrates optional validation of traces against Sail-generated Coq semantics for RISC-V. IsaWitness makes the Sail-derived model available directly in Lean and records finite Isla comparisons as validation evidence. [Islaris paper, §§1–2 and 5](https://www.cl.cam.ac.uk/~jp622/islaris.pdf)
