@@ -13,6 +13,7 @@ __pycache__/
 /vendor/lean-sail/*
 !/vendor/lean-sail/UPSTREAM.json
 !/vendor/lean-sail/patches/
+!/vendor/lean-sail/lakefile.lean
 !/vendor/lean-sail/Sail/
 /vendor/lean-sail/Sail/*
 !/vendor/lean-sail/Sail/AbstractReal.lean

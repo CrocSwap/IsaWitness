@@ -7,6 +7,23 @@ package ArmFull where
 require «lean-buildtools» from "../vendor/lean-buildtools"
 require «lean-sail» from "../vendor/lean-sail"
 
+/-- Materialize the pinned, patched lean-sail runtime after `lake update`, so Git
+consumers need no manual bootstrap. IsaWitness distributes only the first-party
+package configuration, patches and AbstractReal files; the upstream sources are
+fetched from the pinned commit and every file is SHA256-checked against
+vendor/lean-sail/UPSTREAM.json. Idempotent: a complete, verified payload is left
+untouched. Set ISAWITNESS_LEAN_SAIL_SOURCE to use a local mirror. -/
+post_update pkg do
+  let fetcher := pkg.dir / ".." / "scripts" / "fetch-lean-sail"
+  let src? ← IO.getEnv "ISAWITNESS_LEAN_SAIL_SOURCE"
+  let args := match src? with
+    | some s => #[fetcher.toString, "--source", s]
+    | none => #[fetcher.toString]
+  let out ← IO.Process.output { cmd := "sh", args }
+  unless out.stdout.isEmpty do logInfo out.stdout.trimAsciiEnd.toString
+  if out.exitCode != 0 then
+    error s!"fetch-lean-sail failed ({out.exitCode}): {out.stderr.trimAsciiEnd.toString}"
+
 @[default_target]
 lean_lib ArmSpec01 where
   srcDir := "."

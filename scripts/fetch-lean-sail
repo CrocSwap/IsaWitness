@@ -72,13 +72,13 @@ EOF
                         case "$allowed" in *"|$path|"*) fail "duplicate manifest path $path" ;; esac
                         allowed=$allowed$path'|'
                         case "$path" in
-                            patches/*|Sail/AbstractReal.lean|Sail/AbstractRealRat.lean) ;;
+                            patches/*|lakefile.lean|Sail/AbstractReal.lean|Sail/AbstractRealRat.lean) ;;
                             *) if [ -f "$VENDOR/$path" ]; then fetched_present=1; fi ;;
                         esac
                         ;;
                     bootstrap)
                         case "$path" in
-                            patches/*|Sail/AbstractReal.lean|Sail/AbstractRealRat.lean)
+                            patches/*|lakefile.lean|Sail/AbstractReal.lean|Sail/AbstractRealRat.lean)
                                 [ -f "$VENDOR/$path" ] && [ ! -L "$VENDOR/$path" ] || fail "missing bootstrap file $path"
                                 actual=$(hash_file "$VENDOR/$path")
                                 [ "$actual" = "$expected" ] || fail "bootstrap SHA256 mismatch: $path"
@@ -153,8 +153,11 @@ while IFS= read -r patch || [ -n "$patch" ]; do
     patches=$((patches + 1))
 done < "$VENDOR/patches/series"
 [ "$patches" -eq 2 ] || fail 'incomplete patch series'
+# lakefile.lean is first-party and already in the distributed tree (bootstrap
+# verified its pin); keep it and materialize only the fetched files.
+git -C "$STAGE" rm -q --cached -- lakefile.lean || fail 'patched lakefile missing from stage'
 git --git-dir="$STAGE/.git" --work-tree="$VENDOR" -c core.hooksPath=/dev/null -c core.autocrlf=false -c core.attributesFile=/dev/null checkout-index --all
 manifest_records verify
 walk_payload "$VENDOR"
 printf '%s\n' "lean-sail: pinned commit $REV / tree $TREE, patches and all 23 raw-file SHA256 pins verified"
-printf '%s\n' 'Only metadata, patches and AbstractReal/AbstractRealRat belong in the distributed Git tree.'
+printf '%s\n' 'Only metadata, patches, the first-party lakefile.lean and AbstractReal/AbstractRealRat belong in the distributed Git tree.'
