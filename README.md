@@ -6,11 +6,15 @@ A machine-code proof depends on the behavior assigned to each instruction. IsaWi
 
 - Look up any of the 771 instruction forms in the selected inventory. [Instruction inventory](evidence/instruction-inventory.json)
 - See where selected observations agree with Isla and where comparisons found differences or left gaps. [Cross-validation evidence](evidence/README.md)
-- Rebuild the model from pinned sources and check the canonical hashes of all 1,481 model artifacts. [Build and validation guide](docs/BUILD.md)
+- Rebuild the model from pinned sources and check all 1,571 canonical model and runtime source hashes. [Build and validation guide](docs/BUILD.md)
 
 The model, observation equations and finite comparisons have distinct scopes. Those boundaries matter for claims about instruction equivalence, constant-time behavior, hardware certification and consumer correctness. [Claims](docs/CLAIMS.md) · [Limitations](docs/LIMITATIONS.md)
 
-A clean source-only fetch and build on GB10 passed all four owned-package axiom gates in about 465 seconds. The final fetch wiring was tested separately against identical Lean source and package configuration. [Source-only measurement](evidence/source-fetch-cold.json) · [Provider status](docs/PROVIDER-STATUS.md)
+## Model revision and evidence
+
+IsaWitness pins model revision **v9** at proof commit `83c8f981a6f3c6186784275044845c1ed643cbc1`. The canonical source manifest covers 1,560 `ArmFull` and 11 `Sail` modules. ObsGen provides 771 observation equations in 22 modules. [Model revision](model/REVISION.json) · [Source manifest](model/CANONICAL-SOURCES.sha256)
+
+Isla ran on earlier frozen inputs. The equivalence report and its 12 certified residuals support transfer across the v9 header transition when a fixture is bound to the compared model and retains its original premises and observation. Historical fixture counts keep their original model context. [Equivalence report](evidence/model-equivalence/README.md) · [Cross-validation summary](evidence/cross-validation-summary.json)
 
 ## Getting started
 
@@ -22,21 +26,17 @@ lake update
 lake build
 ```
 
-For full fresh validation, follow [the build instructions](docs/BUILD.md), which gate each owned package and check every model artifact hash. The exact recipe for reproducing the model bit for bit is in [REPRODUCIBILITY](docs/REPRODUCIBILITY.md).
+For full validation, build and gate all four packages. The validation checks canonical source hashes and requires a complete model and runtime module inventory. [Build and validation guide](docs/BUILD.md) · [Reproduction recipe](docs/REPRODUCIBILITY.md)
 
-The fetch step needs POSIX `sh`, Git, and one of `sha256sum`, `shasum -a 256`, or `openssl dgst -sha256`. It verifies the exact upstream commit and tree, the ordered patch series, every resulting source/configuration SHA256 and the complete file set. Only `UPSTREAM.json`, patches and the first-party `AbstractReal`/`AbstractRealRat` files are distributed in the runtime directory. Lake still sees the local package ID `lean-sail`. The cold-build entrypoint performs this verified fetch before any Lake update and includes fetch time in the measurement. Package-owned .lake build metadata is outside the source inventory; all extra source/payload files, partial fetches and local edits are refused rather than overwritten.
+The fetch step uses POSIX `sh`, Git and Python 3.11 or later. It verifies the pinned upstream commit and tree, the input files, each edit's source range, and the complete resulting payload. The runtime directory ships the edit recipe, pins, local package configuration and the first-party `AbstractReal` and `AbstractRealRat` sources. A complete existing payload is rechecked on subsequent runs. Partial fetches and local changes cause verification to fail.
 
-For a previously obtained Git mirror, use `./scripts/fetch-lean-sail --source /path/to/mirror`; the same commit/tree/file pins remain mandatory. Software Heritage provenance is `swh:1:rev:c816ea7ad03cce98d51acee252540fd4215fede8`, but its read-only revision lookup returned 404 and archive availability is **unconfirmed**. No working archived download or public availability is promised. This fallback is source-only: no prebuilt runtime, model or native cache is redistributed while upstream runtime permissions remain unresolved. Fetch and build locally from source. The clean GB10 measurement took about 465 seconds including fetch (roughly 7.8 minutes); other machines and loads can differ. Cache tooling and candidate archives remain private for later permission review. Run the artifact-reading gate only on your own fresh build outputs, never downloaded or untrusted oleans.
-
-The standard Lake packages under `model/`, `vendor/lean-sail/` and `observers/` use relative dependencies within the materialized checkout. The enclosing Git revision pins the first-party files and overlay metadata; the fetched runtime is pinned by its upstream commit/tree and verified resulting file hashes. The source-only gate implementation is vendored separately from proof modules. Model declarations retain their frozen bytes. The runtime and observer public copies normalize internal labels in comments, with original and public source hashes retained in provenance; their declarations are unchanged.
-
-Generated assertion diagnostics name their source locations by stable relative paths (for example `sail-arm/v8_base.sail:L.C-L.C`). This revision regenerated the 306 affected model modules from the same frozen generator and inputs. Only those 2,244 string literals changed. Every other declaration is kernel-identical to the previous revision.
+Use `./scripts/fetch-lean-sail --source /path/to/mirror` to use a local Git mirror. The same identity checks apply. The upstream Software Heritage ID is `swh:1:rev:c816ea7ad03cce98d51acee252540fd4215fede8`, with archive availability unconfirmed. Compiled runtime, model and native caches stay private pending upstream runtime permission.
 
 ## Scope and roadmap
 
 This release provides the model semantics and observation equations. Program proofs over those semantics are outside this release. The per-instruction step layer, instruction-class library and generator, value layer, and memory proof layers are under development privately. We plan to release them later with a worked example that goes from machine code to an end-to-end proof. [Current claims](docs/CLAIMS.md) · [Next model revision](NEXT-REVISION.md)
 
-Signed program claims built on this model are published separately, with the security grades each one holds (CT0 model-trace constant time, CT1 data-independent timing under Arm's DIT contract, CT2 return residue), each as held, FAIL with findings, or not attempted: [signed releases and grades](https://github.com/CrocSwap/CertiFFI/blob/main/releases/GRADES.md). IsaWitness itself is the model; it carries no grade.
+Signed program claims built on this model are published separately, with the security grades each one holds (CT0 model-trace constant time, CT1 data-independent timing under Arm's DIT contract, CT2 return residue), each as held, FAIL with findings, or not attempted. IsaWitness supplies the model. [Signed releases and grades](https://github.com/CrocSwap/CertiFFI/blob/main/releases/GRADES.md) · [Retired releases](https://github.com/CrocSwap/CertiFFI/blob/main/releases/CHANGELOG.md#superseded)
 
 ## Related work
 
@@ -45,8 +45,8 @@ Signed program claims built on this model are published separately, with the sec
 - **LNSym** provides a Lean symbolic simulator for Armv8 machine code, with its own Arm model, program specifications, proofs, and conformance tests. IsaWitness focuses on making a frozen Sail-derived model and its observation evidence available in Lean. [LNSym repository](https://github.com/leanprover/LNSym#readme)
 - **s2n-bignum** verifies concrete arithmetic routines in HOL Light against formal AArch64 and x86-64 machine models. Its documented model scope is sequential, single-core user-mode execution with a flat address space. IsaWitness supplies a Sail-derived model with system-level architectural semantics as a basis for later verification work in Lean. [s2n-bignum repository](https://github.com/awslabs/s2n-bignum#readme) · [Model assumptions](https://github.com/awslabs/s2n-bignum/blob/main/SOUNDNESS.md#b3-what-the-model-omits)
 
-Arm is a registered trademark of Arm Limited (or its subsidiaries or affiliates) in the US and/or elsewhere. This independent project is not sponsored, endorsed or certified by Arm. The public project name is IsaWitness. Canonical Lean package/module identifiers such as `ArmCert` and `ArmFull` remain unchanged for reproducibility.
+Arm is a registered trademark of Arm Limited (or its subsidiaries or affiliates) in the US and/or elsewhere. IsaWitness is an independent project. `ArmCert` and `ArmFull` are technical identifiers in the Lean source. Neither identifier denotes Arm sponsorship, endorsement or certification.
 
-Apache-2.0 covers first-party material, with copyright held by Crocodile Labs Inc. Third-party terms apply separately. Upstream runtime permissions and patch-distribution rights remain open, and the source preview uses local builds while those questions are unresolved. [License](LICENSE) · [Notice](NOTICE) · [Upstream licensing inquiry](https://github.com/rems-project/lean-sail/issues/24)
+Apache-2.0 covers first-party material, with copyright held by Crocodile Labs Inc. Third-party terms apply separately. Upstream runtime permissions remain open. The source preview fetches upstream material and builds it locally. [License](LICENSE) · [Notice](NOTICE) · [Upstream licensing inquiry](https://github.com/rems-project/lean-sail/issues/24)
 
 The artifact reader is tool-only and outside every proof closure, enforced by the gate. Run the gate on your own fresh builds, not as an auditor of downloaded or untrusted `.olean` files; the reader memory-maps artifact regions using unsafe reads.

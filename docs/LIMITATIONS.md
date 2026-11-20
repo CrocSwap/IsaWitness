@@ -1,4 +1,4 @@
-# IsaWitness v1: limitations
+# IsaWitness v9 limitations
 
 ## Scope
 - The 771-form inventory and the observation equations do not certify any instruction end to end.
@@ -19,11 +19,11 @@
 - The ledger keeps 441 partial forms.
 - Selected ordered traces keep 2 mismatches, both ordinary CSDB/SSBB trace differences, and 32 partials.
 - Architectural comparisons keep 65 partials.
-- These are historical, finite report projections. They are not all-input or all-oracle-choice equivalence.
+- The finite report projections retain their historical inputs and model contexts. [v9 transfer scope](../evidence/model-equivalence/README.md)
 
 ## Diagnostic strings
 Generated assertion messages carry source locations as stable relative paths (`sail-arm/…`, `armcert/…`).
-- This revision regenerated 306 model modules from the same frozen generator and inputs, changing only those 2,244 literals.
+- The preceding public model normalized 2,244 diagnostic literals across 306 modules. The v9 manifest pins the current canonical source bytes.
 - The messages are inert data: no file read, include or evaluation hook uses them.
 
 ## Distribution

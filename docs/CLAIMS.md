@@ -1,4 +1,4 @@
-# IsaWitness v1: what is claimed
+# IsaWitness v9 claims
 
 IsaWitness is a frozen, Sail-derived Arm® model in Lean, built for downstream machine-code verification. The release covers four things:
 - reproducible builds;
@@ -12,19 +12,19 @@ It makes no claim to be the first or the only faithful Arm model. It contains no
 
 | Component | Contents |
 |---|---|
-| `ArmFull` model | 1,481 generated Lean modules, translated by Sail from the March 2023 Arm A-profile architecture sources. The source bytes are frozen. |
-| `lean-sail` runtime | Pinned upstream runtime sources, fetched and checked against hashes (see [BUILD](BUILD.md)). Includes two first-party files: `AbstractReal` and `AbstractRealRat`. |
-| `ArmCertObservers` | Six modules of ObsGen observation equations, which project model executions onto architectural state and the event log. |
-| Evidence | A 771-form instruction inventory, finite cross-validation against Isla, build receipts and gate receipts. |
+| `ArmFull` model | 1,560 generated Lean modules, translated by Sail from the March 2023 Arm A-profile architecture sources. Source bytes match the canonical v9 proof pin. |
+| `lean-sail` runtime | 11 canonical runtime modules, materialized from pinned sources and first-party additions (see [BUILD](BUILD.md)). Includes the first-party files `AbstractReal` and `AbstractRealRat`. |
+| `ArmCertObservers` | 22 modules with 771 ObsGen observation equations, which project model executions onto architectural state and the event log. |
+| Evidence | A 771-form instruction inventory, historical finite cross-validation against Isla, the v9 model equivalence report and build receipts. |
 
-`ArmCert`, `ArmFull` and `ArmCertObservers` are the canonical Lean package and module identifiers. They stay unchanged so builds remain byte-reproducible.
+`ArmCert`, `ArmFull` and `ArmCertObservers` are the canonical Lean package and module identifiers. The v9 source manifest pins the corresponding model module inventory.
 
 ## Claims
 
-1. **Reproducible model.** A fresh build from the pinned sources reproduces the canonical SHA256 of every one of the 1,481 model artifacts. The recipe is in [REPRODUCIBILITY](REPRODUCIBILITY.md); the receipts are under [evidence](../evidence/README.md).
-2. **Axiom hygiene.** For every owned declaration in the runtime, model, observer and root packages, the fresh gates report zero source errors and zero axiom errors. The only axioms permitted are `propext`, `Classical.choice` and `Quot.sound`. The audit covers 1,394 runtime declarations, 46,177 model declarations and 4,158 observer declarations.
+1. **Reproducible model.** The 1,571 model and runtime source files match the canonical v9 SHA256 manifest. A fresh build produces a Lean artifact for each canonical module. [Recipe](REPRODUCIBILITY.md) · [Evidence](../evidence/README.md)
+2. **Axiom hygiene.** For every owned declaration in the runtime, model, observer and root packages, the fresh gates report zero source errors and zero axiom errors. The only axioms permitted are `propext`, `Classical.choice` and `Quot.sound`. Each package gate checks its full owned declaration set.
 3. **Observation equations.** The ObsGen equations state exactly which architectural and event-log projections they expose, and nothing more.
-4. **Evidence accounting.**
+4. **Historical evidence accounting.** The counts retain the earlier Isla model context. The reviewed transfer boundary covers the v9 header transition. [Equivalence report](../evidence/model-equivalence/README.md)
    - The 771-form ledger records 300 forms with one category of evidence, 30 with both categories, and 441 partial forms (each with a reason).
    - Selected-case ordered traces: 737 matches, 2 mismatches, 32 partials.
    - Architectural comparisons: 706 matches, 65 partials.
@@ -43,4 +43,4 @@ A theorem proved over IsaWitness establishes its stated conclusion, under its ex
 
 ## Scope and roadmap
 
-Later releases will add the per-instruction step layer, the instruction-class library and generator, the value layer and the memory proof layers. They will come with a worked end-to-end example that goes from machine code to proof. Those layers are being developed separately and are not part of v1. Model corrections queued for regeneration are listed in [NEXT-REVISION](../NEXT-REVISION.md).
+Later releases will add the per-instruction step layer, the instruction-class library and generator, the value layer and the memory proof layers. They will come with a worked end-to-end example that goes from machine code to proof. Those layers are being developed separately and are outside the v9 source release. Model corrections queued for regeneration are listed in [NEXT-REVISION](../NEXT-REVISION.md).

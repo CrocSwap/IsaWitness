@@ -11,20 +11,19 @@ Third-party components and source provenance:
 
 * model/: generated Arm architecture model material and associated source
   retain the exact BSD 3-Clause Clear notice in model/LICENSE, including
-  the named Arm and other copyright holders. The source and target artifact
-  identities are in model/SOURCES.json. The Clear license does not grant
+  the named Arm and other copyright holders. The v9 source identities
+  are in model/CANONICAL-SOURCES.sha256. The Clear license does not grant
   patent rights.
-* vendor/lean-sail/: tracked bootstrap metadata, overlay payloads and the
+* vendor/lean-sail/: tracked bootstrap metadata, source-coordinate edits and the
   first-party AbstractReal/AbstractRealRat sources. Setup obtains upstream
   c816ea7ad03cce98d51acee252540fd4215fede8 locally and verifies the resulting
   source/configuration hashes in UPSTREAM.json. Full upstream runtime files
   are omitted from the distributed Git tree; fetched headers remain intact.
   Sail/BitVec.lean identifies Apache-2.0 and copyright
   Amazon.com, Inc. or its affiliates, with its named authors. Other
-  upstream runtime-file license provenance remains under review; no blanket
-  license is asserted for that unresolved material. Patch-distribution and
-  source-export review remain required. First-party additions do not override
-  upstream rights. Model/runtime/native caches remain private pending permission.
+  upstream runtime-file license provenance remains under review. Source-export
+  review remains required. Model, runtime and native caches remain private
+  pending permission.
 * vendor/lean-buildtools/: first-party gate source at the commit recorded
   in UPSTREAM.json, with its Apache-2.0 LICENSE retained. Its unsafe artifact
   reader is metadata tooling outside every proof closure, not a proof axiom.
@@ -37,10 +36,10 @@ Third-party components and source provenance:
 
 Arm is a registered trademark of Arm Limited (or its subsidiaries or
 affiliates) in the US and/or elsewhere. IsaWitness is independent and is
-not sponsored, endorsed or certified by Arm. Canonical Lean package/module
-names are retained as technical identifiers for reproducibility.
+not sponsored, endorsed or certified by Arm. ArmCert and ArmFull are
+technical identifiers in Lean.
 
 This preparation checkpoint is not approved for public distribution.
-Source-only export/patch review, final source-hygiene admission and explicit
+Source-only export review, final source-hygiene admission and explicit
 owner approval remain open. No runtime, model or native cache redistribution
 is authorized while upstream runtime permissions remain unresolved.

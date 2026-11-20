@@ -1,0 +1,65 @@
+{
+  "verdict": "PASS",
+  "positive_splitters": 2,
+  "negative_controls": [
+    {
+      "splitter": "_private.Sail.ArchSem.0.Sail.ArchSem.PreSail.sailTryCatch.match_1.splitter",
+      "mutation": "helper_body",
+      "rejected_by": [
+        "helper_0_values_binder_rename_equal"
+      ]
+    },
+    {
+      "splitter": "_private.Sail.ArchSem.0.Sail.ArchSem.PreSail.sailTryCatch.match_1.splitter",
+      "mutation": "helper_type",
+      "rejected_by": [
+        "helper_0_types_binder_rename_equal"
+      ]
+    },
+    {
+      "splitter": "_private.Sail.ArchSem.0.Sail.ArchSem.PreSail.sailTryCatch.match_1.splitter",
+      "mutation": "omitted_pair",
+      "rejected_by": [
+        "every_new_private_splitter_helper_covered",
+        "whole_splitter_value_equal_after_certified_substitution"
+      ]
+    },
+    {
+      "splitter": "_private.Sail.ArchSem.0.Sail.ArchSem.PreSail.sailTryCatch.match_1.splitter",
+      "mutation": "parent_body",
+      "rejected_by": [
+        "whole_splitter_value_equal_after_certified_substitution"
+      ]
+    },
+    {
+      "splitter": "_private.Sail.ConcurrencyInterfaceV1.0.Sail.ConcurrencyInterfaceV1.PreSail.readByte.match_1.splitter",
+      "mutation": "helper_body",
+      "rejected_by": [
+        "helper_0_values_binder_rename_equal"
+      ]
+    },
+    {
+      "splitter": "_private.Sail.ConcurrencyInterfaceV1.0.Sail.ConcurrencyInterfaceV1.PreSail.readByte.match_1.splitter",
+      "mutation": "helper_type",
+      "rejected_by": [
+        "helper_0_types_binder_rename_equal"
+      ]
+    },
+    {
+      "splitter": "_private.Sail.ConcurrencyInterfaceV1.0.Sail.ConcurrencyInterfaceV1.PreSail.readByte.match_1.splitter",
+      "mutation": "omitted_pair",
+      "rejected_by": [
+        "at_least_one_actual_helper_pair",
+        "every_new_private_splitter_helper_covered",
+        "whole_splitter_value_equal_after_certified_substitution"
+      ]
+    },
+    {
+      "splitter": "_private.Sail.ConcurrencyInterfaceV1.0.Sail.ConcurrencyInterfaceV1.PreSail.readByte.match_1.splitter",
+      "mutation": "parent_body",
+      "rejected_by": [
+        "whole_splitter_value_equal_after_certified_substitution"
+      ]
+    }
+  ]
+}

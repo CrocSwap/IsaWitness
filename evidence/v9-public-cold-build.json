@@ -1,0 +1,81 @@
+{
+  "schema": "isawitness-v9-public-cold-build-v1",
+  "tested_code_checkout": "51f5e8ccdda52ff2f8913e19ab42a6d137596b31",
+  "platform": "Linux aarch64",
+  "lean_version": "4.35.0",
+  "artifact_restoration": false,
+  "status": "PASS",
+  "fetch_exit_code": 0,
+  "fetch_seconds": 0.05561889987438917,
+  "packages": [
+    {
+      "package": "lean-sail",
+      "exit_code": 0,
+      "wall_seconds": 27.141087193973362,
+      "owned_declarations": 1398,
+      "source_errors": 0,
+      "axiom_errors": 0,
+      "gate_receipt_sha256": "5d3802d3b0060eecc9d1a915ea31c6c08b27fcb05be0f3a06a2006389985baa0"
+    },
+    {
+      "package": "ArmFull",
+      "exit_code": 0,
+      "wall_seconds": 261.92175997188315,
+      "owned_declarations": 46288,
+      "source_errors": 0,
+      "axiom_errors": 0,
+      "gate_receipt_sha256": "b2aa1babab80d2d6dbd1de8fadd395e48a90f733f540ddeee97fcd60b51ef6f2"
+    },
+    {
+      "package": "ArmCertObservers",
+      "exit_code": 0,
+      "wall_seconds": 34.900763815734535,
+      "owned_declarations": 4158,
+      "source_errors": 0,
+      "axiom_errors": 0,
+      "gate_receipt_sha256": "af78fa02a9fa749de6dec10c90ec71b3b40ce81ac0b4b00489e66d4586ce9b1c"
+    },
+    {
+      "package": "ArmCert",
+      "exit_code": 0,
+      "wall_seconds": 61.31233884487301,
+      "owned_declarations": 0,
+      "source_errors": 0,
+      "axiom_errors": 0,
+      "gate_receipt_sha256": "08fee28d6444ebec415353ecac00e17c46ed03f7ba45984eb41eab61d8a95c1a"
+    }
+  ],
+  "wall_seconds": 385.60494424402714,
+  "within_600_seconds": true,
+  "canonical_module_check_exit": 0,
+  "scope": "Fresh owned-package builds/gates and all canonical source hashes and built module inventory. For a cold measurement use a fresh source checkout without build products.",
+  "canonical_model": {
+    "status": "PASS",
+    "revision": "83c8f981a6f3c6186784275044845c1ed643cbc1",
+    "sources": 1571,
+    "built_modules_checked": true,
+    "errors": []
+  },
+  "source_manifest_sha256": "c61f8e71be34a623cd4911f04943390444793e91cdfb0691e77393065aab96b7",
+  "cold_summary_sha256": "4e3c1b8a17f1126e37aa7e3eb948e944bc2f5f230c1da35f462898678776c1e7",
+  "observer_equations": {
+    "modules": 22,
+    "axiom_reports": 771,
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "axiom_log_sha256": "d158e493d19e2d3d3edc3b49dfbc63a980a4a67df33e9243b24c66af90204800"
+  },
+  "artifact_equivalence_replay": {
+    "verdict": "MATCH_MODULO_ACCEPTED_CLASSES",
+    "strict_changed": 9,
+    "strict_missing": 3,
+    "strict_added": 0,
+    "private_signatures_checked": 3371,
+    "residuals_certified": 12,
+    "misfits": 0,
+    "comparison_receipt_sha256": "8ad996ff3d630da5b1a3530da34bba6a732e0535861e2f2e69577cb063cd19f8"
+  }
+}

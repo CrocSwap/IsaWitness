@@ -1,0 +1,39 @@
+{
+  "schema": "isawitness-runtime-edit-audit-v1",
+  "upstream": {
+    "url": "https://github.com/rems-project/lean-sail",
+    "commit": "c816ea7ad03cce98d51acee252540fd4215fede8",
+    "tree": "dec6a0e5c2f7025517cdaddf02bdf550e3acab04"
+  },
+  "previous_public_commit": "549a0ba3cd93f2070aba1259673ca9749fe065b5",
+  "recipe_sha256": "f3d51bd1bc553042e5e31a053852bfeb896a8d449a29f01ee96a04bd829cc63f",
+  "comparison": "The two mechanically converted stages produce the same entire payload as applying the previous patches with Git to the pinned files.",
+  "audit_rule": "Compare nonblank added lines with all tracked files at the pinned upstream commit after trimming outer whitespace. Exact matches use byte-range references. Context and copied slices from replaced lines also use range references.",
+  "stages": [
+    {
+      "stage": "0001",
+      "original_patch_sha256": "ddbf6b01441032d9705af39bfc1c90ca1b29692ce824afdcdfc022b78551a40e",
+      "files": 10,
+      "hunks": 90,
+      "added_nonblank": 474,
+      "removed_nonblank": 89,
+      "added_blank": 64,
+      "added_exact_upstream_line_matches": 20,
+      "removed_blank": 3,
+      "literal_exact_upstream_line_matches": 0
+    },
+    {
+      "stage": "0002",
+      "original_patch_sha256": "b44e62294fa9c15bc031317bd491d417b6f143eee55db98ec04cf9c442cd1661",
+      "files": 6,
+      "hunks": 8,
+      "added_nonblank": 46,
+      "added_blank": 6,
+      "removed_nonblank": 14,
+      "removed_blank": 2,
+      "literal_exact_upstream_line_matches": 0,
+      "added_exact_upstream_line_matches": 0
+    }
+  ],
+  "legacy_payload_files": 18
+}

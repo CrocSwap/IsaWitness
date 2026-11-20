@@ -70,5 +70,6 @@
   "swap_enabled": false,
   "artifact_cache_restore": false,
   "publication_approved": false,
-  "qualification": "Fresh complete source-tree precommit measurement. Committed fleet input pin, license/name decisions, tool-boundary ratification and independent public-source hygiene admission are separate."
+  "qualification": "Fresh complete source-tree precommit measurement. Committed private workspace input pin, license/name decisions, tool-boundary ratification and independent public-source hygiene admission are separate.",
+  "public_projection_of_sha256": "267ffa58ed4666d79b61de20fb4d400db488d1455cdf4633fb9e1a81eb1a6037"
 }

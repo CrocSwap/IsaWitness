@@ -1,14 +1,14 @@
-# IsaWitness v1: trust base
+# IsaWitness v9 trust base
 
 A result proved over IsaWitness depends on the items below. Each is listed with the evidence the release supplies for it.
 
 | Trusted item | What you rely on | Evidence in this release |
 |---|---|---|
 | Arm architecture sources (2023-03) | That the source pseudocode describes the architecture | None. Known issues are listed in [LIMITATIONS](LIMITATIONS.md) |
-| Sail and its Lean backend | That the translation preserves the pseudocode's meaning | Finite Isla cross-validation, with mismatches and partials kept visible |
-| `lean-sail` runtime | The runtime definitions, plus the recorded choices and corrections | Pinned upstream commit, patch series and per-file SHA256 |
+| Sail and its Lean backend | That the translation preserves the pseudocode's meaning | Historical finite Isla comparisons, with mismatches and partials retained and a scoped v9 transfer report |
+| `lean-sail` runtime | The runtime definitions, plus the recorded choices and corrections | Pinned upstream commit, source-coordinate edit recipe and per-file SHA256 |
 | Lean 4.35.0 kernel | Proof checking | Standard. Only `propext`, `Classical.choice` and `Quot.sound` are allowed |
-| Build recipe | That the artifacts come from the sources | Canonical artifact hashes and [REPRODUCIBILITY](REPRODUCIBILITY.md) |
+| Build recipe | That the artifacts come from the sources | Canonical source hashes and [the build recipe](REPRODUCIBILITY.md) |
 
 ## Proof checking
 - Each owned package has a fresh gate that does three things:

@@ -1,36 +1,13 @@
-# Reproducing the model bit for bit
+# Reproducing the canonical v9 model
 
-IsaWitness pins the model by its exact bytes. A fresh build from the pinned sources must reproduce the canonical SHA256 of all 1,481 `ArmFull` artifacts listed in `model/SOURCES.json`. Downstream proofs depend on generated declaration names, so reproducibility is a correctness requirement, not just a nicety.
+[REVISION.json](../model/REVISION.json) identifies the exact proof commit. [CANONICAL-SOURCES.sha256](../model/CANONICAL-SOURCES.sha256) records the raw bytes of 1,560 `ArmFull` and 11 `Sail` modules, including the two root modules. The default Lake build compiles the pinned inventory and its dependencies.
 
-## Recipe
+1. Use Lean 4.35.0 as specified by `lean-toolchain`.
+2. Run `./scripts/fetch-lean-sail` to verify the upstream Git identity, replay the source edits and verify the resulting runtime.
+3. Run `python3 tools/check-model-reproduction.py` to check canonical source hashes and source inventory.
+4. Run `lake build` with the package settings. The model and runtime use `-j1` and Lean's default asynchronous elaboration, as in the reviewed v9 build. Changing elaboration settings can change generated matcher names and private declarations.
+5. Run `python3 tools/check-model-reproduction.py --built` to check the source pins and the entire built `.olean` inventory. Use [the fresh gate recipe](BUILD.md) when checking axioms and build provenance.
 
-1. **Toolchain.** Lean 4.35.0, set in `lean-toolchain`. Use the standard elan toolchain.
-2. **Runtime.** Run `./scripts/fetch-lean-sail` before Lake resolves dependencies. It refuses to proceed unless every fetched and patched file matches its pinned hash.
-3. **Elaboration options.** Keep them as the packages set them:
-   - `model/lakefile.lean` and the runtime package configuration compile every module with `-j1 -DElab.async=false`.
-   - Asynchronous elaboration can renumber auxiliary declarations such as `match_N` matchers and macro hygiene indices. The artifacts then change, and so do the generated names that downstream proofs may mention.
-   - Do not override `moreLeanArgs`, and do not set `Elab.async` globally.
-4. **Build with Lake.** Lake follows every import form used here: plain `import`, plus 8 `public import` and 15 `public meta import` lines.
-   - If you schedule modules yourself (for example, a per-module `lean` driver), your dependency scan must also recognize `public import`, `meta import` and `import all`. Otherwise modules can build out of order against stale artifacts.
-   - The regular expression `^(?:public\s+)?(?:meta\s+)?import\s+(?:all\s+)?(\S+)` is sufficient for these sources.
-5. **No restored artifacts.** Lake's artifact cache and restoration must be off for a fresh measurement: `LAKE_ARTIFACT_CACHE=false` and `LAKE_RESTORE_ARTIFACTS=false`, as `tools/run-cold-build.sh` sets them.
-6. **Check.** Run:
-   ```sh
-   python3 tools/check-model-reproduction.py --artifacts
-   ```
-   It compares every model artifact against `model/SOURCES.json`.
+Lake records package metadata in its artifacts. A per-module driver can produce different artifact bytes from the same model sources. A cross-recipe comparison should inspect the kernel declarations and their types and values in addition to source hashes. The v9 manifest pins sources and the built check verifies artifact inventory. The reviewed comparison of the legacy and public v9 header builds records the accepted kernel residuals. [Equivalence report](../evidence/model-equivalence/README.md)
 
-## Receipts
-- [complete-cold-build.json](../evidence/complete-cold-build.json), [complete-cold-build-v6.json](../evidence/complete-cold-build-v6.json), [source-fetch-cold.json](../evidence/source-fetch-cold.json): fresh four-package builds and gates that reproduced all 1,481 canonical model hashes.
-- Repeated builds with identical options were byte-stable.
-
-## Cross-recipe equivalence
-
-Byte identity holds only within one recipe. A downstream project that compiles the same sources a different way gets different `.olean` bytes. For example, Lake adds package metadata, and a per-module `lean` driver does not. In that case, compare the kernel content instead: every constant's name, type hash and value hash, for every `ArmFull` and `Sail` module.
-
-Both packages now compile with `-j1 -DElab.async=false`, so auxiliary declaration numbering no longer depends on the recipe. We compared this Lake build against an independent per-module build of the same sources, made with direct `lean` invocations from a different source root. All 50,157 constants in the model and runtime were identical. The `.olean` bytes differ between the two recipes, as expected (Lake records package metadata, for example), so compare kernel content across recipes and bytes within one.
-
-## What is and is not covered
-- The model's canonical hashes cover the 1,481 `ArmFull` artifacts.
-- The runtime is accepted by a fresh build plus its axiom gate, using uniform standard options. Some historical runtime artifacts were built under other options. They are documented in [RUNTIME-REPRODUCTION](RUNTIME-REPRODUCTION.md), not reproduced.
-- The release measurements were made on Linux AArch64 with Lean 4.35.0. Other platforms are not covered by these receipts.
+The preceding publication pinned SHA256 values for artifacts from a 1,481-module model. Its receipt and historical measurements remain available. [Previous model receipt](../evidence/v1-frozen-model-sources.json) · [Historical cold build](../evidence/source-fetch-cold.json)

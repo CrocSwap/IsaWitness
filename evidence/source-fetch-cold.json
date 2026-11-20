@@ -70,10 +70,11 @@
   "entrypoint_fetch_failure_stops_before_lake": true,
   "qualification": "Final fetch safety guards and entrypoint wiring postdate the full measurement. All resulting Lean source/package configuration inputs are byte-identical; final helper wiring has separate tests. No exact-final-entrypoint cold timing claim.",
   "layouts": {
-    "public_source_only": "Verified fetch then native Lake; enclosing public Git input is not admitted by the unchanged fleet guard for model/observer/root path dependencies.",
-    "private_materialized_source": "Separate source-only private Git input passes all four canonical fleet input checks; no compiled artifacts added."
+    "public_source_only": "Verified fetch then native Lake; enclosing public Git input is not admitted by the unchanged private workspace guard for model/observer/root path dependencies.",
+    "private_materialized_source": "Separate source-only private Git input passes all four canonical private workspace input checks; no compiled artifacts added."
   },
   "cache_policy": "All model/runtime/native caches remain private pending runtime permission; model artifacts embed runtime implementations.",
   "publication_approved": false,
-  "upstream_license_cleared": false
+  "upstream_license_cleared": false,
+  "public_projection_of_sha256": "5101da6b82452fd02bc1db0d550cfad83523f7ec133d4190d15b2fe0faeecc94"
 }

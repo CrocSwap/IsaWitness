@@ -1,43 +1,36 @@
-# Building and checking the frozen packages
+# Build and validate IsaWitness
 
-This repository targets Lean 4.35.0. Install its standard toolchain with elan, then run commands from this checkout. Python 3 is required for the vendored gate. Package dependencies use local relative paths; the pinned lean-sail source overlay must be materialized before Lake resolves those paths. No private Git remote is required for the upstream fetch.
+Install the Lean 4.35.0 toolchain, Git and Python 3.11 or later. IsaWitness contains 1,560 `ArmFull` modules, 11 canonical `Sail` modules and 22 ObsGen modules. Lake resolves dependencies from paths inside the checkout.
 
-The model contains 1,481 modules. Full builds belong on a machine with sufficient memory. The release measurement is performed on GB10 with the native Lake scheduler, a shared 110 GiB memory ceiling, swap disabled and `-M12288` on Lean processes. The model's reviewed elaboration options are retained in its Lake configuration. `LEAN_NUM_THREADS` controls Lake scheduling; it is separate from the model compiler's `-j1` option.
-
-This fallback is source-only. No prebuilt model, runtime or native cache is redistributed while upstream runtime permissions remain unresolved. Model-generated C contains runtime specialization bodies, so omitting the separate runtime archive does not make a model cache runtime-free. Candidate archives and cache tooling remain private pending permission review.
-
-The cold-build entrypoint invokes the verified fetch before its first Lake update and includes fetch time. To materialize the runtime separately, run (POSIX sh, Git and one supported SHA256 utility):
+Run these commands from the repository root to materialize the runtime and check all 1,571 canonical source hashes.
 
 ```sh
 ./scripts/fetch-lean-sail
+python3 tools/check-model-reproduction.py
+lake update
+lake build
 ```
 
-The clean GB10 fallback test took about 465 seconds including fetch, passed all four fresh owned-package gates and reproduced all 1,481 canonical model hashes. This is a measured preparation result, not a general build-time promise or publication approval. See [source-fetch-cold.json](../evidence/source-fetch-cold.json) for the measured source/configuration identity and separate final-wiring tests; [Getting started](../README.md#getting-started) records the source/mirror and unconfirmed Software Heritage provenance boundary.
-
-Check source identity before building:
+The cold-build entry point fetches the source, disables Lake artifact restoration, builds and gates all four packages, then confirms that every canonical model and runtime module produced an `.olean`.
 
 ```sh
-python3 tools/check-model-reproduction.py
+bash tools/run-cold-build.sh
 ```
 
-Build and gate the runtime, then the complete model:
+Start with a clean checkout for a cold measurement. Set `ISAWITNESS_LEAN_SAIL_SOURCE` to a local pinned Git mirror when needed. The gate records its receipts under `.lake/validation/` by default. `LEAN_NUM_THREADS` controls Lake scheduling. The model and runtime packages set a separate per-process Lean thread and memory limit in their Lake configuration. Use a host sized for the number of concurrent builds.
+
+## Package gates
+
+The complete check runs the package gates in this order.
 
 ```sh
 (cd vendor/lean-sail && lake update && lake run gate)
 (cd model && lake update && lake run gate)
-python3 tools/check-model-reproduction.py --artifacts
-```
-
-Each fresh gate cleans that package's owned build products, disables artifact restoration, builds its complete default target, scans sources, reads full-private declaration bodies and checks the transitive axiom closure. Gate receipts live in that package's `.lake/diagnostics/gate-*/gate.json`. Incremental diagnostic receipts do not attest a fresh build.
-
-The opted-in timing policy allows at most 600 seconds for the complete fresh build and gate, and 300 seconds for configuration preflight, source scanning and raw-body checking together. It never omits declarations to meet those limits. A receipt that exceeds either limit fails. Configurations without the opt-in retain the legacy combined gate budget; the release package explicitly opts in.
-
-The observer package has its own default build and gate:
-
-```sh
 (cd observers && lake update && lake run gate)
+lake update && lake run gate
+python3 tools/check-model-reproduction.py --built
 ```
 
-The enclosing package also has a gate. Its default target builds the import entry point and a separate `RuntimeChecks` root containing all four runtime regression modules. Applications import only `ArmCert`. Its successful receipt does not replace checking each package's complete owned default target. The source-only fallback cold test passed all four fresh owned-package gates and every canonical model artifact hash in465.128seconds including fetch; see [source-fetch-cold.json](../evidence/source-fetch-cold.json) for its input-equivalence/final-wiring qualification. Earlier full-vendor cold-build and precommit receipts remain historical evidence. The public fetch layout supports native Lake; separate private materialized-source Git inputs passed fleet validation. Final source-export/patch review, hygiene, CI rollout and owner approval remain separate steps. All prebuilt model/runtime/native caches stay private; no download endpoint is enabled.
+Each gate cleans the owned package's build products, builds the complete default target, scans sources and checks the transitive axiom closure of the owned declarations, including private bodies. The root package builds both the `ArmCert` import entry point and `RuntimeChecks`, which imports the four runtime regression modules. The timing policy allows 600 seconds for the complete fresh run and a separate 300-second limit for package preflight, source scanning and raw-body checking.
 
-The runtime uses uniform standard options without a monitor plugin. Historical artifact reconstruction and its limitations are documented in [runtime reproduction](RUNTIME-REPRODUCTION.md). Model artifacts must match every SHA256 in `model/SOURCES.json`. Assertion diagnostic strings retained in the model are inert data; see [limitations](LIMITATIONS.md).
+The previous source-only release preparation completed the four gates in about 465 seconds, including fetch. That measurement used the preceding 1,481-module model and runtime wiring. [Historical timing](../evidence/source-fetch-cold.json) · [Current provider status](PROVIDER-STATUS.md)

@@ -1,6 +1,6 @@
 {
   "schema": "armcert-provider-precommit-evidence-v1",
-  "scope": "Runtime and model fresh owned-package precommit checks; not final fleet consumer registration, complete cold-root acceptance or publication.",
+  "scope": "Runtime and model fresh owned-package precommit checks; not final private workspace consumer registration, complete cold-root acceptance or publication.",
   "packages": [
     {
       "package": "lean-sail",
@@ -42,5 +42,6 @@
   "lean": "4.35.0",
   "scheduler_threads": 40,
   "shared_memory_limit_gib": 110,
-  "swap_enabled": false
+  "swap_enabled": false,
+  "public_projection_of_sha256": "24ac0fecb14654aa1e8eaeb795d37756eea59d7ac37cce3aed8f7ff7571d1868"
 }

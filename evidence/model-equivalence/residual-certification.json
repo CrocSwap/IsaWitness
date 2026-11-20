@@ -1,0 +1,338 @@
+{
+  "schema": "armcert.model-accepted-artifact-classes.v1",
+  "verdict": "MATCH_MODULO_ACCEPTED_CLASSES",
+  "strict_verdict": "DIFF",
+  "strict_changed": 9,
+  "strict_missing": 3,
+  "strict_added": 0,
+  "classifications": [
+    {
+      "name": "Sail.ArchSem.PreSail.sailTryCatch.eq_3",
+      "class": "EQUATION_LEMMA_BINDER_RENAMING",
+      "fits": true,
+      "checks": {
+        "raw_identity_unchanged": true,
+        "owner_unchanged": true,
+        "universes_unchanged": true,
+        "actual_proposition_not_computational_function": true,
+        "binder_names_only_in_statement": true,
+        "actual_equation_conclusion": true
+      },
+      "misfit": null
+    },
+    {
+      "name": "_private.ArmFull.Fn.M1138.0.PSigma.casesOn._arg_pusher",
+      "class": "PRIVATE_COMPILER_HELPER_NOT_EXPORTED",
+      "fits": true,
+      "checks": {
+        "raw_identity_unchanged": true,
+        "owner_unchanged": true,
+        "universes_unchanged": true,
+        "missing_only_from_public_view": true,
+        "private_kind_unchanged": true,
+        "private_type_unchanged": true,
+        "no_cross_module_references_before_or_after": true
+      },
+      "misfit": null
+    },
+    {
+      "name": "_private.Sail.ArchSem.0.Sail.ArchSem.PreSail.sailTryCatch.match_1.splitter",
+      "class": "COMPILER_SPLITTER_CERTIFIED_HELPER_SUBSTITUTION",
+      "fits": true,
+      "checks": {
+        "raw_identity_unchanged": true,
+        "owner_unchanged": true,
+        "universes_unchanged": true,
+        "splitter_types_binder_rename_equal": true,
+        "splitter_universes_exact": true,
+        "splitter_owner_unchanged": true,
+        "at_least_one_actual_helper_pair": true,
+        "helper_0_private_per_splitter": true,
+        "helper_0_both_actually_referenced": true,
+        "helper_0_kind_exact": true,
+        "helper_0_owner_exact": true,
+        "helper_0_universes_exact": true,
+        "helper_0_types_binder_rename_equal": true,
+        "helper_0_values_binder_rename_equal": true,
+        "helper_1_private_per_splitter": true,
+        "helper_1_both_actually_referenced": true,
+        "helper_1_kind_exact": true,
+        "helper_1_owner_exact": true,
+        "helper_1_universes_exact": true,
+        "helper_1_types_binder_rename_equal": true,
+        "helper_1_values_binder_rename_equal": true,
+        "helper_2_private_per_splitter": true,
+        "helper_2_both_actually_referenced": true,
+        "helper_2_kind_exact": true,
+        "helper_2_owner_exact": true,
+        "helper_2_universes_exact": true,
+        "helper_2_types_binder_rename_equal": true,
+        "helper_2_values_binder_rename_equal": true,
+        "every_new_private_splitter_helper_covered": true,
+        "whole_splitter_value_equal_after_certified_substitution": true,
+        "substitution_inputs_bound_to_actual_types": true
+      },
+      "misfit": null
+    },
+    {
+      "name": "_private.Sail.Common.0.PSigma.casesOn._arg_pusher",
+      "class": "PRIVATE_COMPILER_HELPER_NOT_EXPORTED",
+      "fits": true,
+      "checks": {
+        "raw_identity_unchanged": true,
+        "owner_unchanged": true,
+        "universes_unchanged": true,
+        "missing_only_from_public_view": true,
+        "private_kind_unchanged": true,
+        "private_type_unchanged": true,
+        "no_cross_module_references_before_or_after": true
+      },
+      "misfit": null
+    },
+    {
+      "name": "_private.Sail.ConcurrencyInterfaceV1.0.Sail.ConcurrencyInterfaceV1.PreSail.readByte.match_1.splitter",
+      "class": "COMPILER_SPLITTER_CERTIFIED_HELPER_SUBSTITUTION",
+      "fits": true,
+      "checks": {
+        "raw_identity_unchanged": true,
+        "owner_unchanged": true,
+        "universes_unchanged": true,
+        "splitter_types_binder_rename_equal": true,
+        "splitter_universes_exact": true,
+        "splitter_owner_unchanged": true,
+        "at_least_one_actual_helper_pair": true,
+        "helper_0_private_per_splitter": true,
+        "helper_0_both_actually_referenced": true,
+        "helper_0_kind_exact": true,
+        "helper_0_owner_exact": true,
+        "helper_0_universes_exact": true,
+        "helper_0_types_binder_rename_equal": true,
+        "helper_0_values_binder_rename_equal": true,
+        "every_new_private_splitter_helper_covered": true,
+        "whole_splitter_value_equal_after_certified_substitution": true,
+        "substitution_inputs_bound_to_actual_types": true
+      },
+      "misfit": null
+    },
+    {
+      "name": "_private.Sail.IntRange.0.PSigma.casesOn._arg_pusher",
+      "class": "PRIVATE_COMPILER_HELPER_NOT_EXPORTED",
+      "fits": true,
+      "checks": {
+        "raw_identity_unchanged": true,
+        "owner_unchanged": true,
+        "universes_unchanged": true,
+        "missing_only_from_public_view": true,
+        "private_kind_unchanged": true,
+        "private_type_unchanged": true,
+        "no_cross_module_references_before_or_after": true
+      },
+      "misfit": null
+    },
+    {
+      "name": "elabMatchBv",
+      "class": "META_ONLY_ELABORATION",
+      "fits": true,
+      "checks": {
+        "raw_identity_unchanged": true,
+        "owner_unchanged": true,
+        "universes_unchanged": true,
+        "type_unchanged": true,
+        "elaborator_root_marked_meta_and_comptime": true,
+        "no_runtime_consumers": true
+      },
+      "misfit": null
+    },
+    {
+      "name": "elabMatchBv.match_11",
+      "class": "META_ONLY_ELABORATION",
+      "fits": true,
+      "checks": {
+        "raw_identity_unchanged": true,
+        "owner_unchanged": true,
+        "universes_unchanged": true,
+        "type_unchanged": true,
+        "elaborator_root_marked_meta_and_comptime": true,
+        "only_actual_comptime_elaborator_consumes_helper": true
+      },
+      "misfit": null
+    },
+    {
+      "name": "elabMatchBv.match_13",
+      "class": "META_ONLY_ELABORATION",
+      "fits": true,
+      "checks": {
+        "raw_identity_unchanged": true,
+        "owner_unchanged": true,
+        "universes_unchanged": true,
+        "type_unchanged": true,
+        "elaborator_root_marked_meta_and_comptime": true,
+        "only_actual_comptime_elaborator_consumes_helper": true
+      },
+      "misfit": null
+    },
+    {
+      "name": "elabMatchBv.match_15",
+      "class": "META_ONLY_ELABORATION",
+      "fits": true,
+      "checks": {
+        "raw_identity_unchanged": true,
+        "owner_unchanged": true,
+        "universes_unchanged": true,
+        "type_unchanged": true,
+        "elaborator_root_marked_meta_and_comptime": true,
+        "only_actual_comptime_elaborator_consumes_helper": true
+      },
+      "misfit": null
+    },
+    {
+      "name": "ext._@.Sail.Attr.1247458564._hygCtx._hyg.3",
+      "class": "OPAQUE_INITIALIZER_PUBLIC_ERASURE",
+      "fits": true,
+      "checks": {
+        "raw_identity_unchanged": true,
+        "owner_unchanged": true,
+        "universes_unchanged": true,
+        "private_kind_remains_opaque": true,
+        "actual_public_erasure": true,
+        "type_unchanged": true,
+        "no_model_axiom_declarations": true
+      },
+      "misfit": null
+    },
+    {
+      "name": "extProc._@.Sail.Attr.1247458564._hygCtx._hyg.3",
+      "class": "OPAQUE_INITIALIZER_PUBLIC_ERASURE",
+      "fits": true,
+      "checks": {
+        "raw_identity_unchanged": true,
+        "owner_unchanged": true,
+        "universes_unchanged": true,
+        "private_kind_remains_opaque": true,
+        "actual_public_erasure": true,
+        "type_unchanged": true,
+        "no_model_axiom_declarations": true
+      },
+      "misfit": null
+    }
+  ],
+  "misfits": [],
+  "global_errors": [],
+  "additional_fact_witnesses": [],
+  "tool_input_pins": {
+    "compare_model_classes.py": "cef976ff40d4de145801f629b9b9145ef42c1d42e36e6593a4809d92c81da078",
+    "ModelClassFacts.lean": "72a1d6759defd3f7bc4398172884fd91c7d18a8c06753c2049229f65038375cb",
+    "ModelSplitterProofs.lean": "4c8274796d75e9f7273739df8edc1dd435bbcbee7fa376f45ae197e4401f4a92",
+    "CompareExports.lean": "960630959c3b22186c135f3fb8885bd65723609c3eb9cbd090ff2576d538093e",
+    "compare_exports.py": "0403803561f06dfc2d7d120499243462cf0b6905bf7ea147acc0cb2379c15d0f",
+    "MODULES.txt": "44eb222594bca35bbedd1fc9c081351bcaf1ef49bd296257848ed325c2868260",
+    "lean": "72d674b469a5732f69b4d6408c215040c227cc25b4c6b7c7826c16fe19e088b3",
+    "packed_module_postpass.py": "2933023bb15a513e4d7ee4236e1537ac31fb8e69e8c4cf28ade9363a06c380bc",
+    "expose_syntax_postpass.py": "3a2beba5163798e8598779c6fb70828fa8ef7fc10d6804fcd91392586e126dc6"
+  },
+  "postpass_scripts_to_ship": [
+    {
+      "path": "packed_module_postpass.py",
+      "sha256": "2933023bb15a513e4d7ee4236e1537ac31fb8e69e8c4cf28ade9363a06c380bc"
+    },
+    {
+      "path": "expose_syntax_postpass.py",
+      "sha256": "3a2beba5163798e8598779c6fb70828fa8ef7fc10d6804fcd91392586e126dc6"
+    }
+  ],
+  "reference_scope": "All type/value dependencies of all declarations in the complete compared-model import closures, including private declarations; consumer release closures and native linking remain separate checks.",
+  "imported_declarations_inspected": {
+    "old": 258250,
+    "new": 258260
+  },
+  "comparison_rule": "Bound variable labels alone may be renamed in equation statements; all annotations, constants, universes and fixed literals remain significant. No blanket alpha or metadata waiver.",
+  "evidence": [
+    {
+      "path": "FINAL-ACCEPTED-CLASSES.strict.json",
+      "sha256": "a1fe3ebbd98e972169d9080e5f9bb59e227d72fd70c42802688e04f9ec187534"
+    },
+    {
+      "path": "FINAL-ACCEPTED-CLASSES.names.json",
+      "sha256": "9ca4ca9a3fc0ed26b6732d2a304b44e40bd6f800e34788aa83ce2d5354fafc50"
+    },
+    {
+      "path": "FINAL-ACCEPTED-CLASSES.old.json",
+      "sha256": "6e20a808894a86c8e0012c617f477b162a77a95d335277790b3d758c30ba0a7e"
+    },
+    {
+      "path": "FINAL-ACCEPTED-CLASSES.new.json",
+      "sha256": "7fdfb97f0954c446209aa8dc2ad74248c030f10e35b1a82c8bc352b4dd888d9d"
+    },
+    {
+      "path": "FINAL-ACCEPTED-CLASSES.splitters.json",
+      "sha256": "3b8784094dcddbf040510554e5346bda7d63421b4a88723f599ca7300741ad12"
+    },
+    {
+      "path": "compare_model_classes.py",
+      "sha256": "cef976ff40d4de145801f629b9b9145ef42c1d42e36e6593a4809d92c81da078"
+    },
+    {
+      "path": "ModelClassFacts.lean",
+      "sha256": "72a1d6759defd3f7bc4398172884fd91c7d18a8c06753c2049229f65038375cb"
+    },
+    {
+      "path": "ModelSplitterProofs.lean",
+      "sha256": "4c8274796d75e9f7273739df8edc1dd435bbcbee7fa376f45ae197e4401f4a92"
+    },
+    {
+      "path": "CompareExports.lean",
+      "sha256": "960630959c3b22186c135f3fb8885bd65723609c3eb9cbd090ff2576d538093e"
+    },
+    {
+      "path": "compare_exports.py",
+      "sha256": "0403803561f06dfc2d7d120499243462cf0b6905bf7ea147acc0cb2379c15d0f"
+    },
+    {
+      "path": "MODULES.txt",
+      "sha256": "44eb222594bca35bbedd1fc9c081351bcaf1ef49bd296257848ed325c2868260"
+    }
+  ],
+  "elapsed_seconds": 46.05027775792405,
+  "grants_merge_gate": false,
+  "grants_consumer_seal": false,
+  "grants_release_or_publication": false,
+  "release_evidence_requirement": "Ship the pinned module/syntax post-pass scripts together with this equivalence report; Doug explicit approval and signed claims remain required.",
+  "review_source_sha256": "78aacd92c8636ce40143ee5474518a1c042ab3870a0b20a56b9ed91dd67f5295",
+  "packaged_evidence": {
+    "controls.json": "f5a1e17525a7d1d3630f05a30768bffb183c91dbc292415ae79ae7cd1c8d0597",
+    "expose_syntax_postpass.py": "3a2beba5163798e8598779c6fb70828fa8ef7fc10d6804fcd91392586e126dc6",
+    "names.json": "9ca4ca9a3fc0ed26b6732d2a304b44e40bd6f800e34788aa83ce2d5354fafc50",
+    "new.json": "7fdfb97f0954c446209aa8dc2ad74248c030f10e35b1a82c8bc352b4dd888d9d",
+    "old.json": "6e20a808894a86c8e0012c617f477b162a77a95d335277790b3d758c30ba0a7e",
+    "packed_module_postpass.py": "2933023bb15a513e4d7ee4236e1537ac31fb8e69e8c4cf28ade9363a06c380bc",
+    "splitters.json": "3b8784094dcddbf040510554e5346bda7d63421b4a88723f599ca7300741ad12"
+  },
+  "projection": "Original comparison predicates and outcomes with review routing metadata omitted and audit inputs identified by basename and SHA256.",
+  "candidate_source_binding": {
+    "candidate_commit": "66996aa6c2999ee014d1e222294a2601a76ffbdd",
+    "review_source_manifest_sha256": "2138bb280aeeb458fb085ef84707d3a8b9ff7878d3c219bfc83563000e4b3f7a",
+    "canonical_source_manifest_sha256": "c61f8e71be34a623cd4911f04943390444793e91cdfb0691e77393065aab96b7",
+    "module_source_hashes_matched": 1571
+  },
+  "source_postpass_replay": {
+    "legacy_source_commit": "c0615b9e0b13bd248ecfd4fd6693a46651ae4587",
+    "stage_manifest_sha256": {
+      "module": "f26ecafa83d6fc4f85cfcb8aadb576b7b3ac094f0be80968626a3cf79c1df286",
+      "syntax": "7d0244f1ea6524eadf84b3af9cc1de6fd05d7f719c7ccf55937a2146f7f63a63"
+    },
+    "canonical_source_matches": 1571,
+    "canonical_source_mismatches": 0
+  },
+  "clean_public_artifact_replay": {
+    "verdict": "MATCH_MODULO_ACCEPTED_CLASSES",
+    "strict_changed": 9,
+    "strict_missing": 3,
+    "strict_added": 0,
+    "private_signatures_checked": 3371,
+    "residuals_certified": 12,
+    "misfits": 0,
+    "comparison_receipt_sha256": "8ad996ff3d630da5b1a3530da34bba6a732e0535861e2f2e69577cb063cd19f8",
+    "cold_build_receipt": "../v9-public-cold-build.json",
+    "cold_build_receipt_sha256": "c26fcf09c81eefd243f9878c16d5d82111ceea88bd39623c6d2fdf1ef699fd86"
+  }
+}

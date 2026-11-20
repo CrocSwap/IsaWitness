@@ -1,11 +1,12 @@
 {
-  "status": "ISAWITNESS_V1_DOCUMENTATION_CANDIDATE",
-  "scope": "FROZEN_MODEL_RUNTIME_INVENTORY_OBSERVER",
+  "status": "ISAWITNESS_V9_DOCUMENTATION_CANDIDATE",
+  "scope": "CANONICAL_MODEL_RUNTIME_INVENTORY_AND_OBSERVER_EVIDENCE",
   "files": {
-    "CLAIMS.md": "fbd440a0169bf90db78e966238888c5ea72eb0cba053dee30ba9d9886278f98f",
-    "LIMITATIONS.md": "9c0388317be17effd9f9c22ca16a335d9a1acb8df3e3cee3d5a9b10ff11a5ed7",
-    "REPRODUCIBILITY.md": "dc79e9c6913fe8bc786760cb82e147589b0abba176cc40def3bac8cfa638f2b3",
-    "TRUST-BASE.md": "9b30f1f1453210c9c1bb73c794d3fec604c6c7476ba4ef1d74d3739c55f3cc9b"
+    "CLAIMS.md": "2e39e1a214e1410c74ed0e49a5505af54093f830c538be9699d5ac136003d6fa",
+    "LIMITATIONS.md": "bfd4fab3abe62c05b7cf43c173a39d6f28e4a90ce6a861b7d718d34c79077a8d",
+    "REPRODUCIBILITY.md": "dd1cfb282365fe2187ccb39f6c054a79b16c04e500ba99c17941f07d7cdf524b",
+    "TRUST-BASE.md": "961ae610c822e106f62fc342212665785a18244b38ab0e0c0ce8e4206880b917"
   },
-  "private_provenance_exported": false
+  "private_provenance_exported": false,
+  "model_revision": "v9"
 }

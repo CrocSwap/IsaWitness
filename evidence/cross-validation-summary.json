@@ -41,5 +41,12 @@
     "CSDB/SSBB ordinary traces remain mismatches; observer-only barrier diagnostics do not repair ordinary traces",
     "No native instruction equivalence, constant-time, exact write-set or consumer-total-correctness theorem is credited",
     "This aggregate summary is a projection of retained historical receipts; detailed portable evidence packaging remains in preparation"
-  ]
+  ],
+  "model_revision_and_transfer": {
+    "isla_run_context": "Earlier frozen model; original receipt identities above.",
+    "publication_model_revision": "v9",
+    "model_equivalence_report": "model-equivalence/README.md",
+    "residual_certification": "model-equivalence/residual-certification.json",
+    "transfer_scope": "The comparison supports transfer across the legacy-header to public-header v9 transition for covered observations under the same model premises. A historical fixture also needs a binding to that legacy v9 model and its observed inputs, outputs and choices. The aggregate historical counts are retained under their original source context."
+  }
 }
