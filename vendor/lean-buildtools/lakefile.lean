@@ -5,6 +5,10 @@ package «lean-buildtools» where
   version := v!"0.3.0"
   moreLeanArgs := #["-M12288"]
 
+lean_lib ArmCertCanonicalDeriving where
+  roots := #[]
+  globs := #[.submodules `ArmCert.BuildTools]
+
 -- Scripts are deliberately always-run actions, never cached gate receipts.
 private def tool (command : String) (args : List String) : ScriptM UInt32 := do
   let child ← IO.Process.spawn {

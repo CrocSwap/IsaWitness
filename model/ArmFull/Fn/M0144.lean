@@ -1,24 +1,24 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0017
-import ArmFull.Fn.M0018
-import ArmFull.Fn.M0019
-import ArmFull.Fn.M0040
-import ArmFull.Fn.M0041
-import ArmFull.Fn.M0087
-import ArmFull.Fn.M0092
-import ArmFull.Fn.M0097
-import ArmFull.Fn.M0098
-import ArmFull.Fn.M0099
-import ArmFull.Fn.M0108
-import ArmFull.Fn.M0111
-import ArmFull.Fn.M0113
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0017
+public import ArmFull.Fn.M0018
+public import ArmFull.Fn.M0019
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0041
+public import ArmFull.Fn.M0087
+public import ArmFull.Fn.M0092
+public import ArmFull.Fn.M0097
+public import ArmFull.Fn.M0098
+public import ArmFull.Fn.M0100
+public import ArmFull.Fn.M0108
+public import ArmFull.Fn.M0111
+public import ArmFull.Fn.M0113 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -131,7 +131,7 @@ def C27bDebugCount (extended : Bool) : SailM Int := do
 
 /-- Type quantifiers: b : Int -/
 def C27bContextCount (b : Int) : SailM Int := do
-  ArmFull.assert (b ≥b 1) "armcert/armcert_c27b.sail:59.17-59.18"
+  ArmFull.assert (b ≥b 1) "sail-inputs/27-armcert_c27b.sail:59.17-59.18"
   (undefined_range_at (.site 8673) 1 b)
 
 
@@ -268,6 +268,28 @@ def Align_bits (x : (BitVec k_n)) (y : Int) : (BitVec k_n) :=
 /-- Type quantifiers: k_N : Nat, k_N ≥ 0 -/
 def CountLeadingZeroBits (x : (BitVec k_N)) : Int :=
   ((Sail.BitVec.length x) -i ((HighestSetBit x) +i 1))
+
+
+def HaveAArch32EL (el : (BitVec 2)) : SailM Bool := do
+  if ((el == EL0) : Bool)
+  then
+    (do
+      (IsFeatureImplemented FEAT_AA32EL0))
+  else
+    (do
+      if ((el == EL1) : Bool)
+      then
+        (do
+          (IsFeatureImplemented FEAT_AA32EL1))
+      else
+        (do
+          if ((el == EL2) : Bool)
+          then
+            (do
+              (IsFeatureImplemented FEAT_AA32EL2))
+          else
+            (do
+              (IsFeatureImplemented FEAT_AA32EL3))))
 
 
 def Havev8p9Debug (_ : Unit) : SailM Bool := do
@@ -484,6 +506,30 @@ def HaveVirtHostExt (_ : Unit) : SailM Bool := do
   (IsFeatureImplemented FEAT_VHE)
 
 
+def HaveEL (el : (BitVec 2)) : SailM Bool := do
+  if (((el == EL0) || (el == EL1)) : Bool)
+  then (pure (true))
+  else
+    (do
+      if ((el == EL2) : Bool)
+      then
+        (do
+          if ((← do
+               (IsFeatureImplemented FEAT_AA64EL2)) : Bool)
+          then (pure true)
+          else
+            (do
+              (IsFeatureImplemented FEAT_AA32EL2)))
+      else
+        (do
+          if ((← do
+               (IsFeatureImplemented FEAT_AA64EL3)) : Bool)
+          then (pure true)
+          else
+            (do
+              (IsFeatureImplemented FEAT_AA32EL3))))
+
+
 def HaveStatisticalProfilingv1p2 (_ : Unit) : SailM Bool := do
   (IsFeatureImplemented FEAT_SPEv1p2)
 
@@ -494,6 +540,10 @@ def HaveFeatHPMN0 (_ : Unit) : SailM Bool := do
 
 def HavePMUv3ICNTR (_ : Unit) : SailM Bool := do
   (IsFeatureImplemented FEAT_PMUv3_ICNTR)
+
+
+def HaveAArch32 (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_AA32EL0)
 
 
 def HavePMUv3 (_ : Unit) : SailM Bool := do
@@ -562,95 +612,13 @@ def HavePACExt (_ : Unit) : SailM Bool := do
   (IsFeatureImplemented FEAT_PAuth)
 
 
-def BranchEncCycleCount (_ : Unit) : SailM ((BitVec 1) × (BitVec 14)) := do
-  let cc ← (( do (BranchRawCycleCount ()) ) : SailM Int )
-  let w__2 ← (( do
-    if ((← do
-         let w__0 ← (( do (BRBCycleCountingEnabled ()) ) : SailM Bool )
-         (pure (((! w__0) : Bool)))) : Bool)
-    then (pure true)
-    else
-      (do
-        (FirstBranchAfterProhibited ())) ) : SailM Bool )
-  if (w__2 : Bool)
-  then (pure ((1#1, (Zeros (n := 14)))))
-  else
-    (do
-      let E ← (( do (undefined_bitvector_at (← occLabel 569) 6) ) : SailM (BitVec 6) )
-      let M ← (( do (undefined_bitvector_at (← occLabel 570) 8) ) : SailM (BitVec 8) )
-      let (E, M) ← (( do
-        if ((cc <b (2 ^i 8)) : Bool)
-        then
-          (let E : (BitVec 6) := (Zeros (n := 6))
-          let M : (BitVec 8) := (integer_subrange cc 7 0)
-          (pure (E, M)))
-        else
-          (do
-            let (E, M) ← (( do
-              if ((cc ≥b (2 ^i 20)) : Bool)
-              then
-                (let E : (BitVec 6) := (Ones (n := 6))
-                let M : (BitVec 8) := (Ones (n := 8))
-                (pure (E, M)))
-              else
-                (do
-                  let E : (BitVec 6) := (integer_subrange 1 5 0)
-                  let (E, cc) ← (( do
-                    let loop_vars ← sailWhileFuelM (fuel := 1048576) (fun (E, cc) => (pure (cc ≥b (2 ^i 9)))) (E, cc)
-                      fun (E, cc) => do
-                        (pure (let E : (BitVec 6) := (BitVec.addInt E 1)
-                          let cc : Int := (fdiv_int cc 2)
-                          (E, cc) : ((BitVec 6) × Int)))
-                    (pure loop_vars) ) : SailM ((BitVec 6) × Int) )
-                  let cc : Int := cc
-                  let M : (BitVec 8) := (integer_subrange cc 7 0)
-                  (pure (E, M))) ) : SailM ((BitVec 6) × (BitVec 8)) )
-            (pure (E, M))) ) : SailM ((BitVec 6) × (BitVec 8)) )
-      (pure ((0#1, (E +++ M)))))
-
-
 def HaveTME (_ : Unit) : SailM Bool := do
   (IsFeatureImplemented FEAT_TME)
 
 
-def BadMode (mode : (BitVec 5)) : SailM Bool := do
-  let valid_name ← (( do (undefined_bool_at (← occLabel 572) ()) ) : SailM Bool )
-  let questionMark := mode
-  let valid_name : Bool :=
-    if ((questionMark == M32_Monitor) : Bool)
-    then (HaveAArch32EL EL3)
-    else
-      (if ((questionMark == M32_Hyp) : Bool)
-      then (HaveAArch32EL EL2)
-      else
-        (if ((questionMark == M32_FIQ) : Bool)
-        then (HaveAArch32EL EL1)
-        else
-          (if ((questionMark == M32_IRQ) : Bool)
-          then (HaveAArch32EL EL1)
-          else
-            (if ((questionMark == M32_Svc) : Bool)
-            then (HaveAArch32EL EL1)
-            else
-              (if ((questionMark == M32_Abort) : Bool)
-              then (HaveAArch32EL EL1)
-              else
-                (if ((questionMark == M32_Undef) : Bool)
-                then (HaveAArch32EL EL1)
-                else
-                  (if ((questionMark == M32_System) : Bool)
-                  then (HaveAArch32EL EL1)
-                  else
-                    (if ((questionMark == M32_User) : Bool)
-                    then (HaveAArch32EL EL0)
-                    else false))))))))
-  let valid_name := valid_name
-  (pure ((! valid_name)))
-
-
 /-- Type quantifiers: n : Nat, n ≥ 0 ∧ n ≤ 15 -/
 def LookUpRIndex (n : Nat) (mode : (BitVec 5)) : SailM Int := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 14)) "sail-arm/v8_base.sail:6344.27-6344.28"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 14)) "sail-inputs/03-v8_base.sail:6344.27-6344.28"
   match n with
   | 8 =>
     (do
@@ -695,6 +663,17 @@ def IsPow2 (x : Int) : SailM Bool := do
       (pure ((w__0 == w__1))))
 
 
+def MaxImplementedVL (_ : Unit) : SailM Int := do
+  let max_vl ← (( do readReg __max_implemented_sveveclen ) : SailM Int )
+  let w__0 ← (( do (IsFeatureImplemented FEAT_SME_FA64) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let w__1 ← (( do readReg __max_implemented_smeveclen ) : SailM Int )
+      (pure ((Max.max max_vl w__1))))
+  else (pure (max_vl))
+
+
 def HaveSME (_ : Unit) : SailM Bool := do
   (IsFeatureImplemented FEAT_SME)
 
@@ -709,8 +688,8 @@ def HaveSVE (_ : Unit) : SailM Bool := do
 
 /-- Type quantifiers: n : Int, width : Nat, List.elem width [32, 64] -/
 def X_set (n : Int) (width : Nat) (value_name : (BitVec width)) : SailM Unit := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-arm/v8_base.sail:7435.27-7435.28"
-  ArmFull.assert ((width == 32) || (width == 64)) "sail-arm/v8_base.sail:7436.36-7436.37"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-inputs/03-v8_base.sail:7442.27-7442.28"
+  ArmFull.assert ((width == 32) || (width == 64)) "sail-inputs/03-v8_base.sail:7443.36-7443.37"
   if ((n != 31) : Bool)
   then
     (do
@@ -754,17 +733,13 @@ def HavePMUv3p9 (_ : Unit) : SailM Bool := do
   (IsFeatureImplemented FEAT_PMUv3p9)
 
 
-def IsHighestEL (el : (BitVec 2)) : Bool :=
-  ((HighestEL ()) == el)
-
-
 def HavePFAR (_ : Unit) : SailM Bool := do
   (IsFeatureImplemented FEAT_PFAR)
 
 
 def ELR_set__1 (value_name : (BitVec 64)) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  ArmFull.assert (w__0.EL != EL0) "sail-arm/v8_base.sail:9418.27-9418.28"
+  ArmFull.assert (w__0.EL != EL0) "sail-inputs/03-v8_base.sail:9425.27-9425.28"
   let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
   (ELR_set w__1.EL value_name)
 
@@ -804,6 +779,36 @@ def HaveFeatWFxT (_ : Unit) : SailM Bool := do
 
 def HaveTWEDExt (_ : Unit) : SailM Bool := do
   (IsFeatureImplemented FEAT_TWED)
+
+
+def EL3SDDUndef (_ : Unit) : SailM Bool := do
+  if ((← do
+       (Halted ())) : Bool)
+  then
+    (do
+      let w__1 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
+      (pure ((((_get_EDSCR_Type_SDD w__1) == 1#1) : Bool))))
+  else (pure false)
+
+
+def HaveFeatHCX (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_HCX)
+
+
+def HaveMTE4Ext (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_MTE4)
+
+
+def DefaultMPAMinfo (partidspace : PARTIDspaceType) : SailM MPAMinfo := do
+  let DefaultInfo ← (( do (undefined_MPAMinfo (← occLabel 746) ()) ) : SailM MPAMinfo )
+  let DefaultInfo : MPAMinfo := { DefaultInfo with mpam_sp := partidspace }
+  let DefaultInfo : MPAMinfo := { DefaultInfo with partid := DefaultPARTID }
+  let DefaultInfo : MPAMinfo := { DefaultInfo with pmg := DefaultPMG }
+  (pure (DefaultInfo))
+
+
+def HaveMPAMv0p1Ext (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_MPAMv0p1)
 
 
 end ArmFull.Functions

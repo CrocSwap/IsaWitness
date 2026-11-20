@@ -1,17 +1,17 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0017
-import ArmFull.Fn.M0019
-import ArmFull.Fn.M0020
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0036
-import ArmFull.Fn.M0041
-import ArmFull.Fn.M0048
-import ArmFull.Fn.M0049
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0017
+public import ArmFull.Fn.M0019
+public import ArmFull.Fn.M0020
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0036
+public import ArmFull.Fn.M0042
+public import ArmFull.Fn.M0048
+public import ArmFull.Fn.M0049 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -112,21 +112,6 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
-
-def _set_CNTHP_CTL_Type_IMASK (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_CNTHP_CTL_Type_IMASK r v)
-
-
-def _set_CNTHVS_CTL_EL2_Type_IMASK (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_CNTHVS_CTL_EL2_Type_IMASK r v)
-
-
-def _set_CNTHVS_CTL_Type_IMASK (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_CNTHVS_CTL_Type_IMASK r v)
-
 
 def _set_CNTHV_CTL_EL2_Type_IMASK (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
   let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
@@ -407,7 +392,7 @@ def ConstrainUnpredictable (which : Unpredictable) : SailM Constraint := do
       (C47PickWBOVERLAPST ()))
   | _ =>
     (do
-      ArmFull.assert false "armcert/armcert-c47.sail:156.25-156.26"
+      ArmFull.assert false "sail-inputs/30-armcert-c47.sail:156.25-156.26"
       throw Error.Exit)
 
 

@@ -1,14 +1,14 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0041
-import ArmFull.Fn.M0042
-import ArmFull.Fn.M0043
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0041
+public import ArmFull.Fn.M0042
+public import ArmFull.Fn.M0043 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -109,61 +109,6 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
-
-def _set_CPACR_EL1_Type_SMEN (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 2)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_CPACR_EL1_Type_SMEN r v)
-
-
-def _set_CPTR_EL2_Type_SMEN (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 2)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_CPTR_EL2_Type_SMEN r v)
-
-
-def _set_CPACR_EL1_Type_TTA (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_CPACR_EL1_Type_TTA r v)
-
-
-def _set_CPTR_EL3_Type_TTA (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_CPTR_EL3_Type_TTA r v)
-
-
-def _set_HCPTR_Type_TTA (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_HCPTR_Type_TTA r v)
-
-
-def _set_CPACR_EL1_Type_ZEN (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 2)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_CPACR_EL1_Type_ZEN r v)
-
-
-def _set_CPTR_EL2_Type_ZEN (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 2)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_CPTR_EL2_Type_ZEN r v)
-
-
-def _set_CPTR_EL2_Type_TAM (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_CPTR_EL2_Type_TAM r v)
-
-
-def _set_CPTR_EL3_Type_TAM (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_CPTR_EL3_Type_TAM r v)
-
-
-def _set_HCPTR_Type_TAM (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_HCPTR_Type_TAM r v)
-
-
-def _set_CPTR_EL2_Type_TCPAC (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_CPTR_EL2_Type_TCPAC r v)
-
 
 def _set_CPTR_EL3_Type_TCPAC (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
   let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
@@ -847,6 +792,61 @@ def _set_SCTLR_EL2_Type_TCF (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 2))
 def _set_SCTLR_EL1_Type_TCF (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 2)) : SailM Unit := do
   let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
   writeRegRef r_ref (_update_SCTLR_EL1_Type_TCF r v)
+
+
+def _set_SCTLR_EL3_Type_TCF (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 2)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_SCTLR_EL3_Type_TCF r v)
+
+
+def _set_SCTLR_EL2_Type_TCF0 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 2)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_SCTLR_EL2_Type_TCF0 r v)
+
+
+def _set_SCTLR_EL1_Type_TCF0 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 2)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_SCTLR_EL1_Type_TCF0 r v)
+
+
+def _set_SCTLR_EL2_Type_TCSO (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_SCTLR_EL2_Type_TCSO r v)
+
+
+def _set_SCTLR_EL1_Type_TCSO (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_SCTLR_EL1_Type_TCSO r v)
+
+
+def _set_SCTLR_EL3_Type_TCSO (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_SCTLR_EL3_Type_TCSO r v)
+
+
+def _set_SCTLR_EL2_Type_TCSO0 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_SCTLR_EL2_Type_TCSO0 r v)
+
+
+def _set_SCTLR_EL1_Type_TCSO0 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_SCTLR_EL1_Type_TCSO0 r v)
+
+
+def _set_SCTLR_EL1_Type_BT1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_SCTLR_EL1_Type_BT1 r v)
+
+
+def _set_SCTLR_Type_AFE (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
+  writeRegRef r_ref (_update_SCTLR_Type_AFE r v)
+
+
+def _set_SCTLR_Type_TRE (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
+  writeRegRef r_ref (_update_SCTLR_Type_TRE r v)
 
 
 end ArmFull.Functions

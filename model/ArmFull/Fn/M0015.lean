@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,10 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def Mk_ESRType (v : (BitVec 64)) : (BitVec 64) :=
+  v
+
 
 def _get_ESRType_EC (v : (BitVec 64)) : (BitVec 6) :=
   (Sail.BitVec.extractLsb v 31 26)
@@ -898,10 +902,6 @@ def _update_BRBINFINJ_EL1_Type_CC (v : (BitVec 64)) (x : (BitVec 14)) : (BitVec 
 
 def _update_BRBINF_EL1_Type_CC (v : (BitVec 64)) (x : (BitVec 14)) : (BitVec 64) :=
   (Sail.BitVec.updateSubrange v 45 32 x)
-
-
-def _update_PMCFGR_Type_CC (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 14 14 x)
 
 
 end ArmFull.Functions

@@ -1,18 +1,18 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0010
-import ArmFull.Fn.M0014
-import ArmFull.Fn.M0017
-import ArmFull.Fn.M0019
-import ArmFull.Fn.M0038
-import ArmFull.Fn.M0049
-import ArmFull.Fn.M0050
-import ArmFull.Fn.M0051
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0010
+public import ArmFull.Fn.M0014
+public import ArmFull.Fn.M0017
+public import ArmFull.Fn.M0019
+public import ArmFull.Fn.M0038
+public import ArmFull.Fn.M0049
+public import ArmFull.Fn.M0050
+public import ArmFull.Fn.M0051 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -255,7 +255,7 @@ def AArch64_S1ICacheEnabled (regime : Regime) : SailM Bool := do
 
 
 def AArch64_S1EPD (regime : Regime) (va : (BitVec 64)) : SailM (BitVec 1) := do
-  ArmFull.assert (HasUnprivileged regime) "sail-arm/v8_base.sail:25151.34-25151.35"
+  ArmFull.assert (HasUnprivileged regime) "sail-inputs/03-v8_base.sail:25161.34-25161.35"
   let varange : VARange := (AArch64_GetVARange va)
   match regime with
   | .Regime_EL20 =>

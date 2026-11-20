@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -152,6 +152,9 @@ def EL0 : (BitVec 2) := 0b00#2
 
 
 def EL1 : (BitVec 2) := 0b01#2
+
+
+def EL2 : (BitVec 2) := 0b10#2
 
 
 def undefined_SCRType (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
@@ -886,10 +889,6 @@ def _update_PMCNTENCLR_EL0_Type_C (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 6
 
 
 def _update_PMCNTENCLR_Type_C (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 31 31 x)
-
-
-def _update_PMCNTENSET_EL0_Type_C (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
   (Sail.BitVec.updateSubrange v 31 31 x)
 
 

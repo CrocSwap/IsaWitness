@@ -1,19 +1,14 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0023
-import ArmFull.Fn.M0044
-import ArmFull.Fn.M0087
-import ArmFull.Fn.M0092
-import ArmFull.Fn.M0113
-import ArmFull.Fn.M0116
-import ArmFull.Fn.M0121
-import ArmFull.Fn.M0145
-import ArmFull.Fn.M0147
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0036
+public import ArmFull.Fn.M0056
+public import ArmFull.Fn.M0087
+public import ArmFull.Fn.M0144 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -115,1163 +110,1119 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-/-- Type quantifiers: N : Nat, N = 32 -/
-def BFRound (op : real) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert (N == 32) "sail-arm/v8_base.sail:32006.18-32006.19"
-  ArmFull.assert (bne op (0)) "sail-arm/v8_base.sail:32007.20-32007.21"
-  let result ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1764)
-      (Sail.Int.toNatChecked (N)))) ) : SailM (BitVec N) )
-  let minimum_exp : Int := (Neg.neg 126)
-  let E : Nat := 8
-  let F : Nat := 23
-  let sign ← (( do (undefined_bitvector_at (← occLabel 1765) 1) ) : SailM (BitVec 1) )
-  let mantissa ← (( do (undefined_real_at (← occLabel 1766) ()) ) : SailM real )
-  let (mantissa, sign) : (real × (BitVec 1)) :=
-    if ((lt_real op (0)) : Bool)
-    then
-      (let sign : (BitVec 1) := 1#1
-      let mantissa : real := (neg_real op)
-      (mantissa, sign))
-    else
-      (let sign : (BitVec 1) := 0#1
-      let mantissa : real := op
-      (mantissa, sign))
-  let exponent : Int := 0
-  let (exponent, mantissa) ← (( do
-    let loop_vars ← sailWhileFuelM (fuel := 1048576) (fun (exponent, mantissa) => (pure (lt_real
-        mantissa (1)))) (exponent, mantissa)
-      fun (exponent, mantissa) => do
-        (pure (let mantissa : real := (mult_real mantissa (2))
-          let exponent : Int := (exponent -i 1)
-          (exponent, mantissa) : (Int × real)))
-    (pure loop_vars) ) : SailM (Int × real) )
-  let (exponent, mantissa) ← (( do
-    let loop_vars_1 ← sailWhileFuelM (fuel := 1048576) (fun (exponent, mantissa) => (pure (gteq_real
-        mantissa (2)))) (exponent, mantissa)
-      fun (exponent, mantissa) => do
-        (pure (let mantissa : real := (div_real mantissa (2))
-          let exponent : Int := (exponent +i 1)
-          (exponent, mantissa) : (Int × real)))
-    (pure loop_vars_1) ) : SailM (Int × real) )
-  let exponent : Int := exponent
-  if ((exponent <b minimum_exp) : Bool)
-  then
-    (do
-      ((Sail.BitVec.castWidth ) <$> (FPZero sign N)))
-  else
-    (do
-      let biased_exp : Int := (Max.max ((exponent -i minimum_exp) +i 1) 0)
-      let mantissa := mantissa
-      let int_mant : Int := (round_down (mult_real mantissa (real_power (2) F)))
-      let error : real := (sub_real (mult_real mantissa (real_power (2) F)) (to_real int_mant))
-      let int_mant : Int :=
-        if ((bne error (0)) : Bool)
-        then (integer_update_subrange int_mant 0 0 1#1)
-        else int_mant
-      let int_mant : Int := int_mant
-      if ((biased_exp ≥b ((2 ^i E) -i 1)) : Bool)
-      then
-        (do
-          ((Sail.BitVec.castWidth ) <$> (FPInfinity sign N)))
-      else
-        (let result : (BitVec N) :=
-          (Sail.BitVec.castWidth ((sign +++ (integer_subrange biased_exp ((N -i 2) -i F) 0)) +++ (integer_subrange
-              int_mant (F -i 1) 0)))
-        (pure (result))))
-
-
 /-- Type quantifiers: k_cold : Bool -/
-def AArch64_AutoGen_ArchitectureReset__seg4 (cold : Bool) : SailM Bool := do
-  let w__1250 ← (( do readReg HDFGWTR_EL2 ) : SailM (BitVec 64) )
-  writeReg HDFGWTR_EL2 (Sail.BitVec.updateSubrange w__1250 5 5 0#1)
-  let w__1251 ← (( do readReg HDFGWTR_EL2 ) : SailM (BitVec 64) )
-  writeReg HDFGWTR_EL2 (Sail.BitVec.updateSubrange w__1251 4 4 0#1)
-  let w__1252 ← (( do readReg HDFGWTR_EL2 ) : SailM (BitVec 64) )
-  writeReg HDFGWTR_EL2 (Sail.BitVec.updateSubrange w__1252 3 3 0#1)
-  let w__1253 ← (( do readReg HDFGWTR_EL2 ) : SailM (BitVec 64) )
-  writeReg HDFGWTR_EL2 (Sail.BitVec.updateSubrange w__1253 2 2 0#1)
-  let w__1254 ← (( do readReg HDFGWTR_EL2 ) : SailM (BitVec 64) )
-  writeReg HDFGWTR_EL2 (Sail.BitVec.updateSubrange w__1254 1 1 0#1)
-  let w__1255 ← (( do readReg HDFGWTR_EL2 ) : SailM (BitVec 64) )
-  writeReg HDFGWTR_EL2 (Sail.BitVec.updateSubrange w__1255 0 0 0#1)
-  let w__1256 ← (( do readReg CNTPS_TVAL_EL1 ) : SailM (BitVec 64) )
-  writeReg CNTPS_TVAL_EL1 (Sail.BitVec.updateSubrange w__1256 63 32
+def AArch64_AutoGen_ArchitectureReset__seg3 (cold : Bool) : SailM Bool := do
+  let w__1094 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1093 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1093) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1094 : Bool)
+  then
+    (do
+      let w__1095 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1095 14 14 0#1))
+  else
+    (do
+      let w__1096 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1097 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1096 14 14 w__1097))
+  let w__1099 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1098 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1098) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1099 : Bool)
+  then
+    (do
+      let w__1100 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1100 13 13 0#1))
+  else
+    (do
+      let w__1101 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1102 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1101 13 13 w__1102))
+  let w__1104 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1103 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1103) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1104 : Bool)
+  then
+    (do
+      let w__1105 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1105 12 12 0#1))
+  else
+    (do
+      let w__1106 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1107 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1106 12 12 w__1107))
+  let w__1109 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1108 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1108) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1109 : Bool)
+  then
+    (do
+      let w__1110 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1110 11 11 0#1))
+  else
+    (do
+      let w__1111 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1112 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1111 11 11 w__1112))
+  let w__1114 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1113 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1113) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1114 : Bool)
+  then
+    (do
+      let w__1115 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1115 10 10 0#1))
+  else
+    (do
+      let w__1116 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1117 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1116 10 10 w__1117))
+  let w__1119 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1118 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1118) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1119 : Bool)
+  then
+    (do
+      let w__1120 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1120 9 9 0#1))
+  else
+    (do
+      let w__1121 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1122 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1121 9 9 w__1122))
+  let w__1124 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1123 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1123) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1124 : Bool)
+  then
+    (do
+      let w__1125 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1125 8 8 0#1))
+  else
+    (do
+      let w__1126 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1127 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1126 8 8 w__1127))
+  let w__1129 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1128 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1128) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1129 : Bool)
+  then
+    (do
+      let w__1130 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1130 7 7 0#1))
+  else
+    (do
+      let w__1131 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1132 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1131 7 7 w__1132))
+  let w__1134 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1133 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1133) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1134 : Bool)
+  then
+    (do
+      let w__1135 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1135 6 6 0#1))
+  else
+    (do
+      let w__1136 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1137 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1136 6 6 w__1137))
+  let w__1139 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1138 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1138) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1139 : Bool)
+  then
+    (do
+      let w__1140 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1140 5 5 0#1))
+  else
+    (do
+      let w__1141 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1142 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1141 5 5 w__1142))
+  let w__1144 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1143 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1143) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1144 : Bool)
+  then
+    (do
+      let w__1145 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1145 4 4 0#1))
+  else
+    (do
+      let w__1146 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1147 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1146 4 4 w__1147))
+  let w__1149 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1148 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1148) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1149 : Bool)
+  then
+    (do
+      let w__1150 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1150 3 3 0#1))
+  else
+    (do
+      let w__1151 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1152 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1151 3 3 w__1152))
+  let w__1154 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1153 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1153) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1154 : Bool)
+  then
+    (do
+      let w__1155 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1155 2 2 0#1))
+  else
+    (do
+      let w__1156 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1157 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1156 2 2 w__1157))
+  let w__1159 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1158 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1158) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1159 : Bool)
+  then
+    (do
+      let w__1160 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1160 1 1 0#1))
+  else
+    (do
+      let w__1161 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1162 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1161 1 1 w__1162))
+  let w__1164 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1163 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1163) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1164 : Bool)
+  then
+    (do
+      let w__1165 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1165 0 0 0#1))
+  else
+    (do
+      let w__1166 ← (( do readReg HDFGRTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1167 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HDFGRTR2_EL2 (Sail.BitVec.updateSubrange w__1166 0 0 w__1167))
+  let w__1168 ← (( do readReg DBGPRCR_EL1 ) : SailM (BitVec 64) )
+  writeReg DBGPRCR_EL1 (Sail.BitVec.updateSubrange w__1168 63 1
+    0b000000000000000000000000000000000000000000000000000000000000000#63)
+  let w__1169 ← (( do readReg PMCNTENCLR_EL0 ) : SailM (BitVec 64) )
+  writeReg PMCNTENCLR_EL0 (Sail.BitVec.updateSubrange w__1169 63 33
+    0b0000000000000000000000000000000#31)
+  let w__1170 ← (( do readReg PMCNTENCLR_EL0 ) : SailM (BitVec 64) )
+  writeReg PMCNTENCLR_EL0 (BitVec.update w__1170 32 (Bit 0#1))
+  let w__1171 ← (( do (SDER32_EL3_read ()) ) : SailM (BitVec 64) )
+  (SDER32_EL3_write
+    (Mk_SDER32_EL3_Type
+      (set_slice 62 w__1171 2 0b00000000000000000000000000000000000000000000000000000000000000#62)))
+  let w__1172 ← (( do readReg HPFAR_EL2 ) : SailM (BitVec 64) )
+  writeReg HPFAR_EL2 (Sail.BitVec.updateSubrange w__1172 62 48 0b000000000000000#15)
+  let w__1173 ← (( do readReg HPFAR_EL2 ) : SailM (BitVec 64) )
+  writeReg HPFAR_EL2 (Sail.BitVec.updateSubrange w__1173 3 0 0b0000#4)
+  let w__1174 ← (( do readReg VMPIDR_EL2 ) : SailM (BitVec 64) )
+  writeReg VMPIDR_EL2 (Sail.BitVec.updateSubrange w__1174 63 40 0b000000000000000000000000#24)
+  let w__1175 ← (( do readReg VMPIDR_EL2 ) : SailM (BitVec 64) )
+  writeReg VMPIDR_EL2 (BitVec.update w__1175 31 (Bit 1#1))
+  let w__1176 ← (( do readReg VMPIDR_EL2 ) : SailM (BitVec 64) )
+  writeReg VMPIDR_EL2 (Sail.BitVec.updateSubrange w__1176 29 25 0b00000#5)
+  let w__1177 ← (( do readReg ID_AA64MMFR3_EL1 ) : SailM (BitVec 64) )
+  writeReg ID_AA64MMFR3_EL1 (Sail.BitVec.updateSubrange w__1177 51 48 0b0000#4)
+  let w__1178 ← (( do readReg ICH_VTR_EL2 ) : SailM (BitVec 64) )
+  writeReg ICH_VTR_EL2 (Sail.BitVec.updateSubrange w__1178 63 32
     0b00000000000000000000000000000000#32)
-  let w__1257 ← (( do readReg ID_AA64AFR1_EL1 ) : SailM (BitVec 64) )
-  writeReg ID_AA64AFR1_EL1 (Sail.BitVec.updateSubrange w__1257 63 0
+  let w__1179 ← (( do readReg ICH_VTR_EL2 ) : SailM (BitVec 64) )
+  writeReg ICH_VTR_EL2 (Sail.BitVec.updateSubrange w__1179 17 5 0b0000000000000#13)
+  let w__1180 ← (( do readReg ID_PFR1_EL1 ) : SailM (BitVec 64) )
+  writeReg ID_PFR1_EL1 (Sail.BitVec.updateSubrange w__1180 63 32
+    0b00000000000000000000000000000000#32)
+  let w__1181 ← (( do readReg ID_PFR1_EL1 ) : SailM (BitVec 64) )
+  writeReg ID_PFR1_EL1 (Sail.BitVec.updateSubrange w__1181 63 0
     0b0000000000000000000000000000000000000000000000000000000000000000#64)
-  let w__1258 ← (( do readReg LOREA_EL1 ) : SailM (BitVec 64) )
-  writeReg LOREA_EL1 (Sail.BitVec.updateSubrange w__1258 63 56 0b00000000#8)
-  let w__1259 ← (( do readReg LOREA_EL1 ) : SailM (BitVec 64) )
-  writeReg LOREA_EL1 (Sail.BitVec.updateSubrange w__1259 15 0 0b0000000000000000#16)
-  let w__1260 ← (( do readReg CNTV_TVAL_EL0 ) : SailM (BitVec 64) )
-  writeReg CNTV_TVAL_EL0 (Sail.BitVec.updateSubrange w__1260 63 32
-    0b00000000000000000000000000000000#32)
-  let w__1261 ← (( do readReg ICV_DIR_EL1 ) : SailM (BitVec 64) )
-  writeReg ICV_DIR_EL1 (Sail.BitVec.updateSubrange w__1261 63 24
+  let w__1182 ← (( do readReg MDSELR_EL1 ) : SailM (BitVec 64) )
+  writeReg MDSELR_EL1 (Sail.BitVec.updateSubrange w__1182 63 6
+    0b0000000000000000000000000000000000000000000000000000000000#58)
+  let w__1183 ← (( do readReg MDSELR_EL1 ) : SailM (BitVec 64) )
+  writeReg MDSELR_EL1 (Sail.BitVec.updateSubrange w__1183 3 0 0b0000#4)
+  let w__1184 ← (( do readReg ICV_EOIR0_EL1 ) : SailM (BitVec 64) )
+  writeReg ICV_EOIR0_EL1 (Sail.BitVec.updateSubrange w__1184 63 24
     0b0000000000000000000000000000000000000000#40)
-  let w__1262 ← (( do readReg ICC_IAR1_EL1 ) : SailM (BitVec 64) )
-  writeReg ICC_IAR1_EL1 (Sail.BitVec.updateSubrange w__1262 63 24
-    0b0000000000000000000000000000000000000000#40)
-  let w__1263 ← (( do readReg MPIDR_EL1 ) : SailM (BitVec 64) )
-  writeReg MPIDR_EL1 (Sail.BitVec.updateSubrange w__1263 63 40 0b000000000000000000000000#24)
-  let w__1264 ← (( do readReg MPIDR_EL1 ) : SailM (BitVec 64) )
-  writeReg MPIDR_EL1 (BitVec.update w__1264 31 (Bit 1#1))
-  let w__1265 ← (( do readReg MPIDR_EL1 ) : SailM (BitVec 64) )
-  writeReg MPIDR_EL1 (Sail.BitVec.updateSubrange w__1265 29 25 0b00000#5)
-  let w__1266 ← (( do readReg DBGCLAIMCLR_EL1 ) : SailM (BitVec 64) )
-  writeReg DBGCLAIMCLR_EL1 (Sail.BitVec.updateSubrange w__1266 63 32
-    0b00000000000000000000000000000000#32)
-  let w__1267 ← (( do readReg DBGCLAIMCLR_EL1 ) : SailM (BitVec 64) )
-  writeReg DBGCLAIMCLR_EL1 (Sail.BitVec.updateSubrange w__1267 31 8 0b000000000000000000000000#24)
+  let w__1185 ← (( do readReg ID_DFR1_EL1 ) : SailM (BitVec 64) )
+  writeReg ID_DFR1_EL1 (Sail.BitVec.updateSubrange w__1185 63 8
+    0b00000000000000000000000000000000000000000000000000000000#56)
+  let w__1186 ← (( do readReg ID_DFR1_EL1 ) : SailM (BitVec 64) )
+  writeReg ID_DFR1_EL1 (Sail.BitVec.updateSubrange w__1186 63 0
+    0b0000000000000000000000000000000000000000000000000000000000000000#64)
+  let w__1187 ← (( do readReg VBAR_EL3 ) : SailM (BitVec 64) )
+  writeReg VBAR_EL3 (Sail.BitVec.updateSubrange w__1187 10 0 0b00000000000#11)
+  let w__1188 ← (( do readReg ID_AFR0_EL1 ) : SailM (BitVec 64) )
+  writeReg ID_AFR0_EL1 (Sail.BitVec.updateSubrange w__1188 63 16
+    0b000000000000000000000000000000000000000000000000#48)
+  let w__1189 ← (( do readReg ID_AFR0_EL1 ) : SailM (BitVec 64) )
+  writeReg ID_AFR0_EL1 (Sail.BitVec.updateSubrange w__1189 63 0
+    0b0000000000000000000000000000000000000000000000000000000000000000#64)
+  let w__1190 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
+  writeReg MDCR_EL2 (Sail.BitVec.updateSubrange w__1190 63 44 0b00000000000000000000#20)
+  let w__1192 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1191 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1191) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1192 : Bool)
+  then
+    (do
+      let w__1193 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
+      writeReg MDCR_EL2 (Sail.BitVec.updateSubrange w__1193 43 43 0#1))
+  else
+    (do
+      let w__1194 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
+      let w__1195 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg MDCR_EL2 (Sail.BitVec.updateSubrange w__1194 43 43 w__1195))
+  let w__1196 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
+  writeReg MDCR_EL2 (BitVec.update w__1196 42 (Bit 0#1))
+  let w__1197 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
+  writeReg MDCR_EL2 (Sail.BitVec.updateSubrange w__1197 39 37 0b000#3)
+  let w__1198 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
+  writeReg MDCR_EL2 (Sail.BitVec.updateSubrange w__1198 35 32 0b0000#4)
+  let w__1200 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1199 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1199) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1200 : Bool)
+  then
+    (do
+      let w__1201 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
+      writeReg MDCR_EL2 (Sail.BitVec.updateSubrange w__1201 31 30 0b00#2))
+  else
+    (do
+      let w__1202 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
+      let w__1203 ← (( do (__UNKNOWN_bits 2) ) : SailM (BitVec 2) )
+      writeReg MDCR_EL2 (Sail.BitVec.updateSubrange w__1202 31 30 w__1203))
   if (cold : Bool)
   then
     (do
-      let w__1268 ← (( do readReg DBGCLAIMCLR_EL1 ) : SailM (BitVec 64) )
-      writeReg DBGCLAIMCLR_EL1 (Sail.BitVec.updateSubrange w__1268 7 0 0b00000000#8))
+      let w__1204 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
+      writeReg MDCR_EL2 (Sail.BitVec.updateSubrange w__1204 28 28 1#1))
   else (pure (()))
-  let w__1269 ← (( do readReg ICV_HPPIR1_EL1 ) : SailM (BitVec 64) )
-  writeReg ICV_HPPIR1_EL1 (Sail.BitVec.updateSubrange w__1269 63 24
-    0b0000000000000000000000000000000000000000#40)
-  let w__1270 ← (( do readReg ID_AA64AFR0_EL1 ) : SailM (BitVec 64) )
-  writeReg ID_AA64AFR0_EL1 (Sail.BitVec.updateSubrange w__1270 63 32
-    0b00000000000000000000000000000000#32)
-  let w__1271 ← (( do readReg ID_PFR2_EL1 ) : SailM (BitVec 64) )
-  writeReg ID_PFR2_EL1 (Sail.BitVec.updateSubrange w__1271 63 12
-    0b0000000000000000000000000000000000000000000000000000#52)
-  let w__1272 ← (( do readReg ID_PFR2_EL1 ) : SailM (BitVec 64) )
-  writeReg ID_PFR2_EL1 (Sail.BitVec.updateSubrange w__1272 63 0
-    0b0000000000000000000000000000000000000000000000000000000000000000#64)
-  let w__1273 ← (( do readReg CNTHV_CTL_EL2 ) : SailM (BitVec 64) )
-  writeReg CNTHV_CTL_EL2 (Sail.BitVec.updateSubrange w__1273 63 3
-    0b0000000000000000000000000000000000000000000000000000000000000#61)
-  let w__1274 ← (( do readReg ICC_EOIR0_EL1 ) : SailM (BitVec 64) )
-  writeReg ICC_EOIR0_EL1 (Sail.BitVec.updateSubrange w__1274 63 24
-    0b0000000000000000000000000000000000000000#40)
-  let w__1275 ← (( do readReg ID_AA64ZFR0_EL1 ) : SailM (BitVec 64) )
-  writeReg ID_AA64ZFR0_EL1 (Sail.BitVec.updateSubrange w__1275 63 60 0b0000#4)
-  let w__1276 ← (( do readReg ID_AA64ZFR0_EL1 ) : SailM (BitVec 64) )
-  writeReg ID_AA64ZFR0_EL1 (Sail.BitVec.updateSubrange w__1276 51 48 0b0000#4)
-  let w__1277 ← (( do readReg ID_AA64ZFR0_EL1 ) : SailM (BitVec 64) )
-  writeReg ID_AA64ZFR0_EL1 (Sail.BitVec.updateSubrange w__1277 39 36 0b0000#4)
-  let w__1278 ← (( do readReg ID_AA64ZFR0_EL1 ) : SailM (BitVec 64) )
-  writeReg ID_AA64ZFR0_EL1 (Sail.BitVec.updateSubrange w__1278 31 28 0b0000#4)
-  let w__1279 ← (( do readReg ID_AA64ZFR0_EL1 ) : SailM (BitVec 64) )
-  writeReg ID_AA64ZFR0_EL1 (Sail.BitVec.updateSubrange w__1279 15 8 0b00000000#8)
-  let w__1280 ← (( do readReg ZCR_EL3 ) : SailM (BitVec 64) )
-  writeReg ZCR_EL3 (Sail.BitVec.updateSubrange w__1280 63 9
-    0b0000000000000000000000000000000000000000000000000000000#55)
-  let w__1281 ← (( do readReg ZCR_EL3 ) : SailM (BitVec 64) )
-  writeReg ZCR_EL3 (Sail.BitVec.updateSubrange w__1281 8 4 0b00000#5)
-  let w__1282 ← (( do readReg ZCR_EL1 ) : SailM (BitVec 64) )
-  writeReg ZCR_EL1 (Sail.BitVec.updateSubrange w__1282 63 9
-    0b0000000000000000000000000000000000000000000000000000000#55)
-  let w__1283 ← (( do readReg ZCR_EL1 ) : SailM (BitVec 64) )
-  writeReg ZCR_EL1 (Sail.BitVec.updateSubrange w__1283 8 4 0b00000#5)
-  let w__1284 ← (( do readReg ZCR_EL2 ) : SailM (BitVec 64) )
-  writeReg ZCR_EL2 (Sail.BitVec.updateSubrange w__1284 63 9
-    0b0000000000000000000000000000000000000000000000000000000#55)
-  let w__1285 ← (( do readReg ZCR_EL2 ) : SailM (BitVec 64) )
-  writeReg ZCR_EL2 (Sail.BitVec.updateSubrange w__1285 8 4 0b00000#5)
-  let w__1286 ← (( do readReg SMCR_EL3 ) : SailM (BitVec 64) )
-  writeReg SMCR_EL3 (Sail.BitVec.updateSubrange w__1286 63 32 0b00000000000000000000000000000000#32)
-  let w__1287 ← (( do readReg SMCR_EL3 ) : SailM (BitVec 64) )
-  writeReg SMCR_EL3 (Sail.BitVec.updateSubrange w__1287 29 9 0b000000000000000000000#21)
-  let w__1288 ← (( do readReg SMCR_EL3 ) : SailM (BitVec 64) )
-  writeReg SMCR_EL3 (Sail.BitVec.updateSubrange w__1288 8 4 0b00000#5)
-  let w__1289 ← (( do readReg SMCR_EL1 ) : SailM (BitVec 64) )
-  writeReg SMCR_EL1 (Sail.BitVec.updateSubrange w__1289 63 32 0b00000000000000000000000000000000#32)
-  let w__1290 ← (( do readReg SMCR_EL1 ) : SailM (BitVec 64) )
-  writeReg SMCR_EL1 (Sail.BitVec.updateSubrange w__1290 29 9 0b000000000000000000000#21)
-  let w__1291 ← (( do readReg SMCR_EL1 ) : SailM (BitVec 64) )
-  writeReg SMCR_EL1 (Sail.BitVec.updateSubrange w__1291 8 4 0b00000#5)
-  let w__1292 ← (( do readReg SMCR_EL2 ) : SailM (BitVec 64) )
-  writeReg SMCR_EL2 (Sail.BitVec.updateSubrange w__1292 63 32 0b00000000000000000000000000000000#32)
-  let w__1293 ← (( do readReg SMCR_EL2 ) : SailM (BitVec 64) )
-  writeReg SMCR_EL2 (Sail.BitVec.updateSubrange w__1293 29 9 0b000000000000000000000#21)
-  let w__1294 ← (( do readReg SMCR_EL2 ) : SailM (BitVec 64) )
-  writeReg SMCR_EL2 (Sail.BitVec.updateSubrange w__1294 8 4 0b00000#5)
-  let w__1295 ← (( do readReg ID_AA64SMFR0_EL1 ) : SailM (BitVec 64) )
-  writeReg ID_AA64SMFR0_EL1 (Sail.BitVec.updateSubrange w__1295 62 60 0b000#3)
-  let w__1296 ← (( do readReg ID_AA64SMFR0_EL1 ) : SailM (BitVec 64) )
-  writeReg ID_AA64SMFR0_EL1 (Sail.BitVec.updateSubrange w__1296 51 49 0b000#3)
-  let w__1297 ← (( do readReg ID_AA64SMFR0_EL1 ) : SailM (BitVec 64) )
-  writeReg ID_AA64SMFR0_EL1 (Sail.BitVec.updateSubrange w__1297 41 40 0b00#2)
-  let w__1298 ← (( do readReg ID_AA64SMFR0_EL1 ) : SailM (BitVec 64) )
-  writeReg ID_AA64SMFR0_EL1 (Sail.BitVec.updateSubrange w__1298 31 0
-    0b00000000000000000000000000000000#32)
-  let w__1299 ← (( do readReg MPAMHCR_EL2 ) : SailM (BitVec 64) )
-  writeReg MPAMHCR_EL2 (Sail.BitVec.updateSubrange w__1299 63 32
-    0b00000000000000000000000000000000#32)
-  if ((HaveEL EL3) : Bool)
-  then
-    (do
-      let w__1300 ← (( do readReg MPAMHCR_EL2 ) : SailM (BitVec 64) )
-      let w__1301 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg MPAMHCR_EL2 (Sail.BitVec.updateSubrange w__1300 31 31 w__1301))
-  else
-    (do
-      if (((! cold) && (! (HaveEL EL3))) : Bool)
-      then
-        (do
-          let w__1302 ← (( do readReg MPAMHCR_EL2 ) : SailM (BitVec 64) )
-          writeReg MPAMHCR_EL2 (Sail.BitVec.updateSubrange w__1302 31 31 1#1))
-      else (pure (())))
-  let w__1303 ← (( do readReg MPAMHCR_EL2 ) : SailM (BitVec 64) )
-  writeReg MPAMHCR_EL2 (Sail.BitVec.updateSubrange w__1303 30 9 0b0000000000000000000000#22)
-  let w__1304 ← (( do readReg MPAMHCR_EL2 ) : SailM (BitVec 64) )
-  writeReg MPAMHCR_EL2 (Sail.BitVec.updateSubrange w__1304 7 2 0b000000#6)
-  let w__1305 ← (( do readReg MPAMIDR_EL1 ) : SailM (BitVec 64) )
-  writeReg MPAMIDR_EL1 (Sail.BitVec.updateSubrange w__1305 63 62 0b00#2)
-  let w__1306 ← (( do readReg MPAMIDR_EL1 ) : SailM (BitVec 64) )
-  writeReg MPAMIDR_EL1 (Sail.BitVec.updateSubrange w__1306 56 40 0b00000000000000000#17)
-  let w__1307 ← (( do readReg MPAMIDR_EL1 ) : SailM (BitVec 64) )
-  writeReg MPAMIDR_EL1 (Sail.BitVec.updateSubrange w__1307 31 21 0b00000000000#11)
-  let w__1308 ← (( do readReg MPAMIDR_EL1 ) : SailM (BitVec 64) )
-  writeReg MPAMIDR_EL1 (BitVec.update w__1308 16 (Bit 0#1))
-  let w__1309 ← (( do readReg MPAM2_EL2 ) : SailM (BitVec 64) )
-  writeReg MPAM2_EL2 (Sail.BitVec.updateSubrange w__1309 63 63 0#1)
-  let w__1310 ← (( do readReg MPAM2_EL2 ) : SailM (BitVec 64) )
-  writeReg MPAM2_EL2 (Sail.BitVec.updateSubrange w__1310 62 59 0b0000#4)
-  let w__1311 ← (( do readReg MPAM2_EL2 ) : SailM (BitVec 64) )
-  writeReg MPAM2_EL2 (BitVec.update w__1311 57 (Bit 0#1))
-  let w__1312 ← (( do readReg MPAM2_EL2 ) : SailM (BitVec 64) )
-  writeReg MPAM2_EL2 (Sail.BitVec.updateSubrange w__1312 53 51 0b000#3)
-  if ((HaveEL EL3) : Bool)
-  then
-    (do
-      let w__1313 ← (( do readReg MPAM2_EL2 ) : SailM (BitVec 64) )
-      let w__1314 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg MPAM2_EL2 (Sail.BitVec.updateSubrange w__1313 49 49 w__1314))
-  else
-    (do
-      if (((! cold) && (! (HaveEL EL3))) : Bool)
-      then
-        (do
-          let w__1315 ← (( do readReg MPAM2_EL2 ) : SailM (BitVec 64) )
-          writeReg MPAM2_EL2 (Sail.BitVec.updateSubrange w__1315 49 49 1#1))
-      else (pure (())))
-  if ((HaveEL EL3) : Bool)
-  then
-    (do
-      let w__1316 ← (( do readReg MPAM2_EL2 ) : SailM (BitVec 64) )
-      let w__1317 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg MPAM2_EL2 (Sail.BitVec.updateSubrange w__1316 48 48 w__1317))
-  else
-    (do
-      if (((! cold) && (! (HaveEL EL3))) : Bool)
-      then
-        (do
-          let w__1318 ← (( do readReg MPAM2_EL2 ) : SailM (BitVec 64) )
-          writeReg MPAM2_EL2 (Sail.BitVec.updateSubrange w__1318 48 48 1#1))
-      else (pure (())))
-  let w__1319 ← (( do (MPAM3_EL3_read ()) ) : SailM (BitVec 64) )
-  (MPAM3_EL3_write (_update_MPAM3_EL3_Type_MPAMEN w__1319 0#1))
-  let w__1320 ← (( do (MPAM3_EL3_read ()) ) : SailM (BitVec 64) )
-  (MPAM3_EL3_write (_update_MPAM3_EL3_Type_TRAPLOWER w__1320 1#1))
-  let w__1321 ← (( do (MPAM3_EL3_read ()) ) : SailM (BitVec 64) )
-  (MPAM3_EL3_write (Mk_MPAM3_EL3_Type (set_slice 2 w__1321 58 0b00#2)))
-  let w__1322 ← (( do (MPAM3_EL3_read ()) ) : SailM (BitVec 64) )
-  (MPAM3_EL3_write (Mk_MPAM3_EL3_Type (set_slice 2 w__1322 53 0b00#2)))
-  let w__1323 ← (( do (MPAM3_EL3_read ()) ) : SailM (BitVec 64) )
-  (MPAM3_EL3_write (Mk_MPAM3_EL3_Type (set_slice 4 w__1323 48 0b0000#4)))
-  let w__1324 ← (( do readReg MPAM0_EL1 ) : SailM (BitVec 64) )
-  writeReg MPAM0_EL1 (Sail.BitVec.updateSubrange w__1324 63 48 0b0000000000000000#16)
-  let w__1325 ← (( do readReg MPAMSM_EL1 ) : SailM (BitVec 64) )
-  writeReg MPAMSM_EL1 (Sail.BitVec.updateSubrange w__1325 63 48 0b0000000000000000#16)
-  let w__1326 ← (( do readReg MPAMSM_EL1 ) : SailM (BitVec 64) )
-  writeReg MPAMSM_EL1 (Sail.BitVec.updateSubrange w__1326 39 32 0b00000000#8)
-  let w__1327 ← (( do readReg MPAMSM_EL1 ) : SailM (BitVec 64) )
-  writeReg MPAMSM_EL1 (Sail.BitVec.updateSubrange w__1327 15 0 0b0000000000000000#16)
-  let w__1328 ← (( do (MPAM1_EL1_read ()) ) : SailM (BitVec 64) )
-  (MPAM1_EL1_write (_update_MPAM1_EL1_Type_MPAMEN w__1328 0#1))
-  let w__1329 ← (( do (MPAM1_EL1_read ()) ) : SailM (BitVec 64) )
-  (MPAM1_EL1_write (Mk_MPAM1_EL1_Type (set_slice 2 w__1329 61 0b00#2)))
-  let w__1330 ← (( do (MPAM1_EL1_read ()) ) : SailM (BitVec 64) )
-  (MPAM1_EL1_write (Mk_MPAM1_EL1_Type (set_slice 5 w__1330 55 0b00000#5)))
-  let w__1331 ← (( do (MPAM1_EL1_read ()) ) : SailM (BitVec 64) )
-  (MPAM1_EL1_write (Mk_MPAM1_EL1_Type (set_slice 6 w__1331 48 0b000000#6)))
-  let w__1332 ← (( do readReg MPAMVPMV_EL2 ) : SailM (BitVec 64) )
-  writeReg MPAMVPMV_EL2 (Sail.BitVec.updateSubrange w__1332 63 32
-    0b00000000000000000000000000000000#32)
-  let w__1333 ← (( do readReg GMID_EL1 ) : SailM (BitVec 64) )
-  writeReg GMID_EL1 (Sail.BitVec.updateSubrange w__1333 63 4
-    0b000000000000000000000000000000000000000000000000000000000000#60)
-  let w__1334 ← (( do readReg TFSR_EL3 ) : SailM (BitVec 64) )
-  writeReg TFSR_EL3 (Sail.BitVec.updateSubrange w__1334 63 1
-    0b000000000000000000000000000000000000000000000000000000000000000#63)
-  let w__1335 ← (( do readReg TFSRE0_EL1 ) : SailM (BitVec 64) )
-  writeReg TFSRE0_EL1 (Sail.BitVec.updateSubrange w__1335 63 2
-    0b00000000000000000000000000000000000000000000000000000000000000#62)
-  let w__1336 ← (( do readReg TFSR_EL2 ) : SailM (BitVec 64) )
-  writeReg TFSR_EL2 (Sail.BitVec.updateSubrange w__1336 63 2
-    0b00000000000000000000000000000000000000000000000000000000000000#62)
-  let w__1337 ← (( do readReg TFSR_EL1 ) : SailM (BitVec 64) )
-  writeReg TFSR_EL1 (Sail.BitVec.updateSubrange w__1337 63 2
-    0b00000000000000000000000000000000000000000000000000000000000000#62)
-  let w__1338 ← (( do readReg RGSR_EL1 ) : SailM (BitVec 64) )
-  writeReg RGSR_EL1 (Sail.BitVec.updateSubrange w__1338 63 24
-    0b0000000000000000000000000000000000000000#40)
-  let w__1339 ← (( do readReg RGSR_EL1 ) : SailM (BitVec 64) )
-  writeReg RGSR_EL1 (Sail.BitVec.updateSubrange w__1339 7 4 0b0000#4)
-  let w__1340 ← (( do readReg RGSR_EL1 ) : SailM (BitVec 64) )
-  writeReg RGSR_EL1 (Sail.BitVec.updateSubrange w__1340 63 56 0b00000000#8)
-  let w__1341 ← (( do readReg RGSR_EL1 ) : SailM (BitVec 64) )
-  writeReg RGSR_EL1 (Sail.BitVec.updateSubrange w__1341 7 4 0b0000#4)
-  let w__1342 ← (( do readReg GCR_EL1 ) : SailM (BitVec 64) )
-  writeReg GCR_EL1 (Sail.BitVec.updateSubrange w__1342 63 17
-    0b00000000000000000000000000000000000000000000000#47)
-  let w__1343 ← (( do readReg AMCR_EL0 ) : SailM (BitVec 64) )
-  writeReg AMCR_EL0 (Sail.BitVec.updateSubrange w__1343 63 18
+  let w__1205 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
+  writeReg MDCR_EL2 (Sail.BitVec.updateSubrange w__1205 25 24 0b00#2)
+  let w__1206 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
+  writeReg MDCR_EL2 (Sail.BitVec.updateSubrange w__1206 23 23 0#1)
+  let w__1207 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
+  writeReg MDCR_EL2 (Sail.BitVec.updateSubrange w__1207 22 20 0b000#3)
+  let w__1208 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
+  writeReg MDCR_EL2 (BitVec.update w__1208 18 (Bit 0#1))
+  let w__1209 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
+  writeReg MDCR_EL2 (Sail.BitVec.updateSubrange w__1209 17 17 0#1)
+  let w__1210 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
+  writeReg MDCR_EL2 (BitVec.update w__1210 16 (Bit 0#1))
+  let w__1211 ← (( do readReg CNTKCTL_EL1 ) : SailM (BitVec 64) )
+  writeReg CNTKCTL_EL1 (Sail.BitVec.updateSubrange w__1211 63 18
     0b0000000000000000000000000000000000000000000000#46)
-  let w__1344 ← (( do readReg AMCR_EL0 ) : SailM (BitVec 64) )
-  writeReg AMCR_EL0 (Sail.BitVec.updateSubrange w__1344 16 11 0b000000#6)
-  let w__1345 ← (( do readReg AMCR_EL0 ) : SailM (BitVec 64) )
-  writeReg AMCR_EL0 (Sail.BitVec.updateSubrange w__1345 9 0 0b0000000000#10)
-  let w__1346 ← (( do readReg AMCNTENSET0_EL0 ) : SailM (BitVec 64) )
-  writeReg AMCNTENSET0_EL0 (Sail.BitVec.updateSubrange w__1346 63 16
-    0b000000000000000000000000000000000000000000000000#48)
-  let w__1347 ← (( do readReg AMCNTENSET0_EL0 ) : SailM (BitVec 64) )
-  writeReg AMCNTENSET0_EL0 (Sail.BitVec.updateSubrange w__1347 15 4 0b000000000000#12)
-  if (cold : Bool)
-  then
-    (do
-      let w__1348 ← (( do readReg AMCNTENSET0_EL0 ) : SailM (BitVec 64) )
-      writeReg AMCNTENSET0_EL0 (Sail.BitVec.updateSubrange w__1348 3 0 0b0000#4))
-  else (pure (()))
-  let w__1349 ← (( do readReg AMCNTENCLR0_EL0 ) : SailM (BitVec 64) )
-  writeReg AMCNTENCLR0_EL0 (Sail.BitVec.updateSubrange w__1349 63 16
-    0b000000000000000000000000000000000000000000000000#48)
-  let w__1350 ← (( do readReg AMCNTENCLR0_EL0 ) : SailM (BitVec 64) )
-  writeReg AMCNTENCLR0_EL0 (Sail.BitVec.updateSubrange w__1350 15 4 0b000000000000#12)
-  if (cold : Bool)
-  then
-    (do
-      let w__1351 ← (( do readReg AMCNTENCLR0_EL0 ) : SailM (BitVec 64) )
-      writeReg AMCNTENCLR0_EL0 (Sail.BitVec.updateSubrange w__1351 3 0 0b0000#4))
-  else (pure (()))
-  let w__1352 ← (( do readReg AMCNTENSET1_EL0 ) : SailM (BitVec 64) )
-  writeReg AMCNTENSET1_EL0 (Sail.BitVec.updateSubrange w__1352 63 16
-    0b000000000000000000000000000000000000000000000000#48)
-  if (cold : Bool)
-  then
-    (do
-      let w__1353 ← (( do readReg AMCNTENSET1_EL0 ) : SailM (BitVec 64) )
-      writeReg AMCNTENSET1_EL0 (Sail.BitVec.updateSubrange w__1353 15 0 0b0000000000000000#16))
-  else (pure (()))
-  let w__1354 ← (( do readReg AMCNTENCLR1_EL0 ) : SailM (BitVec 64) )
-  writeReg AMCNTENCLR1_EL0 (Sail.BitVec.updateSubrange w__1354 63 16
-    0b000000000000000000000000000000000000000000000000#48)
-  if (cold : Bool)
-  then
-    (do
-      let w__1355 ← (( do readReg AMCNTENCLR1_EL0 ) : SailM (BitVec 64) )
-      writeReg AMCNTENCLR1_EL0 (Sail.BitVec.updateSubrange w__1355 15 0 0b0000000000000000#16))
-  else (pure (()))
-  let w__1356 ← (( do readReg AMCFGR_EL0 ) : SailM (BitVec 64) )
-  writeReg AMCFGR_EL0 (Sail.BitVec.updateSubrange w__1356 63 32
-    0b00000000000000000000000000000000#32)
-  let w__1357 ← (( do readReg AMCFGR_EL0 ) : SailM (BitVec 64) )
-  writeReg AMCFGR_EL0 (Sail.BitVec.updateSubrange w__1357 27 25 0b000#3)
-  let w__1358 ← (( do readReg AMCFGR_EL0 ) : SailM (BitVec 64) )
-  writeReg AMCFGR_EL0 (Sail.BitVec.updateSubrange w__1358 23 14 0b0000000000#10)
-  let w__1359 ← (( do readReg AMUSERENR_EL0 ) : SailM (BitVec 64) )
-  writeReg AMUSERENR_EL0 (Sail.BitVec.updateSubrange w__1359 63 1
+  let w__1212 ← (( do readReg CNTKCTL_EL1 ) : SailM (BitVec 64) )
+  writeReg CNTKCTL_EL1 (Sail.BitVec.updateSubrange w__1212 16 10 0b0000000#7)
+  let w__1213 ← (( do readReg LORN_EL1 ) : SailM (BitVec 64) )
+  writeReg LORN_EL1 (Sail.BitVec.updateSubrange w__1213 63 8
+    0b00000000000000000000000000000000000000000000000000000000#56)
+  let w__1214 ← (( do readReg ICV_IGRPEN0_EL1 ) : SailM (BitVec 64) )
+  writeReg ICV_IGRPEN0_EL1 (Sail.BitVec.updateSubrange w__1214 63 1
     0b000000000000000000000000000000000000000000000000000000000000000#63)
-  let w__1360 ← (( do readReg AMCG1IDR_EL0 ) : SailM (BitVec 64) )
-  writeReg AMCG1IDR_EL0 (Sail.BitVec.updateSubrange w__1360 63 32
+  let w__1215 ← (( do readReg SPSR_EL3 ) : SailM (BitVec 64) )
+  writeReg SPSR_EL3 (Sail.BitVec.updateSubrange w__1215 63 34 0b000000000000000000000000000000#30)
+  let w__1216 ← (( do readReg SPSR_EL3 ) : SailM (BitVec 64) )
+  writeReg SPSR_EL3 (BitVec.update w__1216 32 (Bit 0#1))
+  let w__1217 ← (( do readReg SPSR_EL3 ) : SailM (BitVec 64) )
+  writeReg SPSR_EL3 (Sail.BitVec.updateSubrange w__1217 63 35 0b00000000000000000000000000000#29)
+  let w__1218 ← (( do readReg SPSR_EL3 ) : SailM (BitVec 64) )
+  writeReg SPSR_EL3 (Sail.BitVec.updateSubrange w__1218 27 26 0b00#2)
+  let w__1219 ← (( do readReg SPSR_EL3 ) : SailM (BitVec 64) )
+  writeReg SPSR_EL3 (Sail.BitVec.updateSubrange w__1219 19 14 0b000000#6)
+  let w__1220 ← (( do readReg SPSR_EL3 ) : SailM (BitVec 64) )
+  writeReg SPSR_EL3 (BitVec.update w__1220 5 (Bit 0#1))
+  let w__1221 ← (( do readReg CCSIDR_EL1 ) : SailM (BitVec 64) )
+  writeReg CCSIDR_EL1 (Sail.BitVec.updateSubrange w__1221 63 56 0b00000000#8)
+  let w__1222 ← (( do readReg CCSIDR_EL1 ) : SailM (BitVec 64) )
+  writeReg CCSIDR_EL1 (Sail.BitVec.updateSubrange w__1222 31 24 0b00000000#8)
+  let w__1223 ← (( do readReg CCSIDR_EL1 ) : SailM (BitVec 64) )
+  writeReg CCSIDR_EL1 (Sail.BitVec.updateSubrange w__1223 63 32
     0b00000000000000000000000000000000#32)
-  let w__1361 ← (( do readReg AMCGCR_EL0 ) : SailM (BitVec 64) )
-  writeReg AMCGCR_EL0 (Sail.BitVec.updateSubrange w__1361 63 16
+  let w__1224 ← (( do readReg CCSIDR_EL1 ) : SailM (BitVec 64) )
+  writeReg CCSIDR_EL1 (Sail.BitVec.updateSubrange w__1224 31 28 0b0000#4)
+  let w__1225 ← (( do readReg VMECID_P_EL2 ) : SailM (BitVec 64) )
+  writeReg VMECID_P_EL2 (Sail.BitVec.updateSubrange w__1225 63 16
     0b000000000000000000000000000000000000000000000000#48)
-  let w__1362 ← (( do readReg PMSFCR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMSFCR_EL1 (Sail.BitVec.updateSubrange w__1362 63 19
-    0b000000000000000000000000000000000000000000000#45)
-  let w__1363 ← (( do readReg PMSFCR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMSFCR_EL1 (Sail.BitVec.updateSubrange w__1363 15 5 0b00000000000#11)
-  let w__1364 ← (( do readReg PMSIRR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMSIRR_EL1 (Sail.BitVec.updateSubrange w__1364 63 32
+  let w__1226 ← (( do readReg OSECCR_EL1 ) : SailM (BitVec 64) )
+  writeReg OSECCR_EL1 (Sail.BitVec.updateSubrange w__1226 63 32
     0b00000000000000000000000000000000#32)
-  let w__1365 ← (( do readReg PMSIRR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMSIRR_EL1 (Sail.BitVec.updateSubrange w__1365 7 1 0b0000000#7)
-  let w__1366 ← (( do readReg PMSICR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMSICR_EL1 (Sail.BitVec.updateSubrange w__1366 55 32 0b000000000000000000000000#24)
-  let w__1367 ← (( do readReg PMSEVFR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMSEVFR_EL1 (Sail.BitVec.updateSubrange w__1367 47 32 0b0000000000000000#16)
-  let w__1368 ← (( do readReg PMSEVFR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMSEVFR_EL1 (BitVec.update w__1368 0 (Bit 0#1))
-  let w__1369 ← (( do readReg PMBLIMITR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMBLIMITR_EL1 (Sail.BitVec.updateSubrange w__1369 11 6 0b000000#6)
-  let w__1370 ← (( do readReg PMBLIMITR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMBLIMITR_EL1 (Sail.BitVec.updateSubrange w__1370 4 3 0b00#2)
-  let w__1371 ← (( do readReg PMBLIMITR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMBLIMITR_EL1 (Sail.BitVec.updateSubrange w__1371 0 0 0#1)
-  let w__1372 ← (( do readReg PMBSR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMBSR_EL1 (Sail.BitVec.updateSubrange w__1372 63 40 0b000000000000000000000000#24)
-  let w__1373 ← (( do readReg PMBSR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMBSR_EL1 (Sail.BitVec.updateSubrange w__1373 36 32 0b00000#5)
-  let w__1374 ← (( do readReg PMBSR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMBSR_EL1 (Sail.BitVec.updateSubrange w__1374 25 20 0b000000#6)
-  let w__1375 ← (( do readReg PMSCR_EL2 ) : SailM (BitVec 64) )
-  writeReg PMSCR_EL2 (Sail.BitVec.updateSubrange w__1375 63 8
+  let w__1227 ← (( do readReg DBGVCR32_EL2 ) : SailM (BitVec 64) )
+  writeReg DBGVCR32_EL2 (Sail.BitVec.updateSubrange w__1227 63 32
+    0b00000000000000000000000000000000#32)
+  let w__1228 ← (( do readReg DBGVCR32_EL2 ) : SailM (BitVec 64) )
+  writeReg DBGVCR32_EL2 (BitVec.update w__1228 29 (Bit 0#1))
+  let w__1229 ← (( do readReg DBGVCR32_EL2 ) : SailM (BitVec 64) )
+  writeReg DBGVCR32_EL2 (Sail.BitVec.updateSubrange w__1229 24 8 0b00000000000000000#17)
+  let w__1230 ← (( do readReg DBGVCR32_EL2 ) : SailM (BitVec 64) )
+  writeReg DBGVCR32_EL2 (BitVec.update w__1230 5 (Bit 0#1))
+  let w__1231 ← (( do readReg DBGVCR32_EL2 ) : SailM (BitVec 64) )
+  writeReg DBGVCR32_EL2 (BitVec.update w__1231 0 (Bit 0#1))
+  let w__1232 ← (( do readReg DBGVCR32_EL2 ) : SailM (BitVec 64) )
+  writeReg DBGVCR32_EL2 (Sail.BitVec.updateSubrange w__1232 63 8
     0b00000000000000000000000000000000000000000000000000000000#56)
-  let w__1376 ← (( do readReg PMSCR_EL2 ) : SailM (BitVec 64) )
-  writeReg PMSCR_EL2 (BitVec.update w__1376 2 (Bit 0#1))
-  let w__1377 ← (( do readReg PMSCR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMSCR_EL1 (Sail.BitVec.updateSubrange w__1377 63 8
-    0b00000000000000000000000000000000000000000000000000000000#56)
-  let w__1378 ← (( do readReg PMSCR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMSCR_EL1 (BitVec.update w__1378 2 (Bit 0#1))
-  let w__1379 ← (( do readReg PMSIDR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMSIDR_EL1 (Sail.BitVec.updateSubrange w__1379 63 26
-    0b00000000000000000000000000000000000000#38)
-  let w__1380 ← (( do readReg PMSNEVFR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMSNEVFR_EL1 (Sail.BitVec.updateSubrange w__1380 47 32 0b0000000000000000#16)
-  let w__1381 ← (( do readReg PMSNEVFR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMSNEVFR_EL1 (BitVec.update w__1381 0 (Bit 0#1))
-  let w__1382 ← (( do readReg PMBIDR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMBIDR_EL1 (Sail.BitVec.updateSubrange w__1382 63 12
-    0b0000000000000000000000000000000000000000000000000000#52)
-  let w__1383 ← (( do readReg PMBIDR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMBIDR_EL1 (Sail.BitVec.updateSubrange w__1383 7 6 0b00#2)
-  let w__1384 ← (( do readReg PMSLATFR_EL1 ) : SailM (BitVec 64) )
-  writeReg PMSLATFR_EL1 (Sail.BitVec.updateSubrange w__1384 63 16
-    0b000000000000000000000000000000000000000000000000#48)
-  let w__1385 ← (( do readReg VDISR_EL2 ) : SailM (BitVec 64) )
-  writeReg VDISR_EL2 (Sail.BitVec.updateSubrange w__1385 63 32 0b00000000000000000000000000000000#32)
-  let w__1386 ← (( do readReg VDISR_EL2 ) : SailM (BitVec 64) )
-  writeReg VDISR_EL2 (Sail.BitVec.updateSubrange w__1386 30 25 0b000000#6)
-  let w__1387 ← (( do readReg VDISR_EL2 ) : SailM (BitVec 64) )
-  writeReg VDISR_EL2 (Sail.BitVec.updateSubrange w__1387 63 32 0b00000000000000000000000000000000#32)
-  let w__1388 ← (( do readReg VDISR_EL2 ) : SailM (BitVec 64) )
-  writeReg VDISR_EL2 (Sail.BitVec.updateSubrange w__1388 30 16 0b000000000000000#15)
-  let w__1389 ← (( do readReg VDISR_EL2 ) : SailM (BitVec 64) )
-  writeReg VDISR_EL2 (BitVec.update w__1389 13 (Bit 0#1))
-  let w__1390 ← (( do readReg VDISR_EL2 ) : SailM (BitVec 64) )
-  writeReg VDISR_EL2 (BitVec.update w__1390 11 (Bit 0#1))
-  let w__1391 ← (( do readReg VDISR_EL2 ) : SailM (BitVec 64) )
-  writeReg VDISR_EL2 (Sail.BitVec.updateSubrange w__1391 8 4 0b00000#5)
-  let w__1392 ← (( do readReg VDISR_EL2 ) : SailM (BitVec 64) )
-  writeReg VDISR_EL2 (Sail.BitVec.updateSubrange w__1392 63 32 0b00000000000000000000000000000000#32)
-  let w__1393 ← (( do readReg VDISR_EL2 ) : SailM (BitVec 64) )
-  writeReg VDISR_EL2 (Sail.BitVec.updateSubrange w__1393 30 16 0b000000000000000#15)
-  let w__1394 ← (( do readReg VDISR_EL2 ) : SailM (BitVec 64) )
-  writeReg VDISR_EL2 (BitVec.update w__1394 13 (Bit 0#1))
-  let w__1395 ← (( do readReg VDISR_EL2 ) : SailM (BitVec 64) )
-  writeReg VDISR_EL2 (Sail.BitVec.updateSubrange w__1395 11 10 0b00#2)
-  let w__1396 ← (( do readReg VDISR_EL2 ) : SailM (BitVec 64) )
-  writeReg VDISR_EL2 (Sail.BitVec.updateSubrange w__1396 8 6 0b000#3)
-  let w__1397 ← (( do readReg ERRIDR_EL1 ) : SailM (BitVec 64) )
-  writeReg ERRIDR_EL1 (Sail.BitVec.updateSubrange w__1397 63 16
-    0b000000000000000000000000000000000000000000000000#48)
-  let w__1398 ← (( do readReg DISR_EL1 ) : SailM (BitVec 64) )
-  writeReg DISR_EL1 (Sail.BitVec.updateSubrange w__1398 63 32 0b00000000000000000000000000000000#32)
-  let w__1399 ← (( do readReg DISR_EL1 ) : SailM (BitVec 64) )
-  writeReg DISR_EL1 (Sail.BitVec.updateSubrange w__1399 30 25 0b000000#6)
-  let w__1400 ← (( do readReg DISR_EL1 ) : SailM (BitVec 64) )
-  writeReg DISR_EL1 (Sail.BitVec.updateSubrange w__1400 23 13 0b00000000000#11)
-  let w__1401 ← (( do readReg DISR_EL1 ) : SailM (BitVec 64) )
-  writeReg DISR_EL1 (Sail.BitVec.updateSubrange w__1401 8 6 0b000#3)
-  let w__1402 ← (( do readReg DISR_EL1 ) : SailM (BitVec 64) )
-  writeReg DISR_EL1 (Sail.BitVec.updateSubrange w__1402 63 32 0b00000000000000000000000000000000#32)
-  let w__1403 ← (( do readReg DISR_EL1 ) : SailM (BitVec 64) )
-  writeReg DISR_EL1 (Sail.BitVec.updateSubrange w__1403 30 25 0b000000#6)
-  let w__1404 ← (( do readReg ERRSELR_EL1 ) : SailM (BitVec 64) )
-  writeReg ERRSELR_EL1 (Sail.BitVec.updateSubrange w__1404 63 16
-    0b000000000000000000000000000000000000000000000000#48)
-  let w__1405 ← (( do readReg VSESR_EL2 ) : SailM (BitVec 64) )
-  writeReg VSESR_EL2 (Sail.BitVec.updateSubrange w__1405 63 16
-    0b000000000000000000000000000000000000000000000000#48)
-  let w__1406 ← (( do readReg VSESR_EL2 ) : SailM (BitVec 64) )
-  writeReg VSESR_EL2 (BitVec.update w__1406 13 (Bit 0#1))
-  let w__1407 ← (( do readReg VSESR_EL2 ) : SailM (BitVec 64) )
-  writeReg VSESR_EL2 (Sail.BitVec.updateSubrange w__1407 11 0 0b000000000000#12)
-  let w__1408 ← (( do readReg VSESR_EL2 ) : SailM (BitVec 64) )
-  writeReg VSESR_EL2 (Sail.BitVec.updateSubrange w__1408 63 25
-    0b000000000000000000000000000000000000000#39)
-  let w__1409 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-  writeReg BRBCR_EL2 (Sail.BitVec.updateSubrange w__1409 63 24
-    0b0000000000000000000000000000000000000000#40)
-  let w__1411 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1411 : Bool)
-  then
-    (do
-      let w__1412 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-      let w__1413 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL2 (Sail.BitVec.updateSubrange w__1412 23 23 w__1413))
-  else (pure (()))
-  let w__1415 ← (( do
+  let w__1233 ← (( do readReg DBGVCR32_EL2 ) : SailM (BitVec 64) )
+  writeReg DBGVCR32_EL2 (BitVec.update w__1233 5 (Bit 0#1))
+  let w__1234 ← (( do readReg DBGVCR32_EL2 ) : SailM (BitVec 64) )
+  writeReg DBGVCR32_EL2 (BitVec.update w__1234 0 (Bit 0#1))
+  let w__1235 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1235 63 63 0#1)
+  let w__1236 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1236 62 62 0#1)
+  let w__1237 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1237 61 61 0#1)
+  let w__1238 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1238 60 60 0#1)
+  let w__1239 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1239 59 59 0#1)
+  let w__1240 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1240 58 58 0#1)
+  let w__1241 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1241 57 57 0#1)
+  let w__1242 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1242 56 56 0#1)
+  let w__1243 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1243 55 55 0#1)
+  let w__1244 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1244 54 54 0#1)
+  let w__1245 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1245 53 53 0#1)
+  let w__1246 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1246 52 52 0#1)
+  let w__1247 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (BitVec.update w__1247 51 (Bit 0#1))
+  let w__1248 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1248 50 50 0#1)
+  let w__1250 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
-        let w__1414 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1414) : Bool))))
+        let w__1249 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1249) : Bool))))
     else (pure false) ) : SailM Bool )
-  if (w__1415 : Bool)
+  if (w__1250 : Bool)
   then
     (do
-      let w__1416 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-      let w__1417 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL2 (Sail.BitVec.updateSubrange w__1416 23 23 w__1417))
-  else (pure (()))
-  let w__1419 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1419 : Bool)
-  then
+      let w__1251 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1251 49 49 0#1))
+  else
     (do
-      let w__1420 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-      let w__1421 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL2 (Sail.BitVec.updateSubrange w__1420 22 22 w__1421))
-  else (pure (()))
-  let w__1423 ← (( do
+      let w__1252 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      let w__1253 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1252 49 49 w__1253))
+  let w__1255 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
-        let w__1422 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1422) : Bool))))
+        let w__1254 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1254) : Bool))))
     else (pure false) ) : SailM Bool )
-  if (w__1423 : Bool)
+  if (w__1255 : Bool)
   then
     (do
-      let w__1424 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
+      let w__1256 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1256 48 48 0#1))
+  else
+    (do
+      let w__1257 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      let w__1258 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1257 48 48 w__1258))
+  let w__1260 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1259 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1259) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1260 : Bool)
+  then
+    (do
+      let w__1261 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1261 47 47 0#1))
+  else
+    (do
+      let w__1262 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      let w__1263 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1262 47 47 w__1263))
+  let w__1265 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1264 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1264) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1265 : Bool)
+  then
+    (do
+      let w__1266 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1266 46 46 0#1))
+  else
+    (do
+      let w__1267 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      let w__1268 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1267 46 46 w__1268))
+  let w__1270 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1269 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1269) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1270 : Bool)
+  then
+    (do
+      let w__1271 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1271 45 45 0#1))
+  else
+    (do
+      let w__1272 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      let w__1273 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1272 45 45 w__1273))
+  let w__1275 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1274 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1274) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1275 : Bool)
+  then
+    (do
+      let w__1276 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1276 44 44 0#1))
+  else
+    (do
+      let w__1277 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      let w__1278 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1277 44 44 w__1278))
+  let w__1280 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1279 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1279) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1280 : Bool)
+  then
+    (do
+      let w__1281 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1281 43 43 0#1))
+  else
+    (do
+      let w__1282 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      let w__1283 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1282 43 43 w__1283))
+  let w__1285 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1284 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1284) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1285 : Bool)
+  then
+    (do
+      let w__1286 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1286 42 42 0#1))
+  else
+    (do
+      let w__1287 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      let w__1288 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1287 42 42 w__1288))
+  let w__1290 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1289 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1289) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1290 : Bool)
+  then
+    (do
+      let w__1291 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1291 41 41 0#1))
+  else
+    (do
+      let w__1292 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      let w__1293 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1292 41 41 w__1293))
+  let w__1295 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1294 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1294) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1295 : Bool)
+  then
+    (do
+      let w__1296 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1296 40 40 0#1))
+  else
+    (do
+      let w__1297 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+      let w__1298 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1297 40 40 w__1298))
+  let w__1299 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1299 39 39 0#1)
+  let w__1300 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1300 38 38 0#1)
+  let w__1301 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1301 37 37 0#1)
+  let w__1302 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1302 36 36 0#1)
+  let w__1303 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1303 35 35 0#1)
+  let w__1304 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1304 34 34 0#1)
+  let w__1305 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1305 33 33 0#1)
+  let w__1306 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1306 32 32 0#1)
+  let w__1307 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1307 31 31 0#1)
+  let w__1308 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1308 30 30 0#1)
+  let w__1309 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1309 29 29 0#1)
+  let w__1310 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1310 28 28 0#1)
+  let w__1311 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1311 27 27 0#1)
+  let w__1312 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1312 26 26 0#1)
+  let w__1313 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1313 25 25 0#1)
+  let w__1314 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1314 24 24 0#1)
+  let w__1315 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1315 23 23 0#1)
+  let w__1316 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1316 22 22 0#1)
+  let w__1317 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1317 21 21 0#1)
+  let w__1318 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1318 20 20 0#1)
+  let w__1319 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1319 19 19 0#1)
+  let w__1320 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1320 18 18 0#1)
+  let w__1321 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1321 17 17 0#1)
+  let w__1322 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1322 16 16 0#1)
+  let w__1323 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1323 15 15 0#1)
+  let w__1324 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1324 14 14 0#1)
+  let w__1325 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1325 13 13 0#1)
+  let w__1326 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1326 12 12 0#1)
+  let w__1327 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1327 11 11 0#1)
+  let w__1328 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1328 10 10 0#1)
+  let w__1329 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1329 9 9 0#1)
+  let w__1330 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1330 8 8 0#1)
+  let w__1331 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1331 7 7 0#1)
+  let w__1332 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1332 6 6 0#1)
+  let w__1333 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1333 5 5 0#1)
+  let w__1334 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1334 4 4 0#1)
+  let w__1335 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1335 3 3 0#1)
+  let w__1336 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1336 2 2 0#1)
+  let w__1337 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1337 1 1 0#1)
+  let w__1338 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGRTR_EL2 (Sail.BitVec.updateSubrange w__1338 0 0 0#1)
+  let w__1339 ← (( do readReg ID_DFR0_EL1 ) : SailM (BitVec 64) )
+  writeReg ID_DFR0_EL1 (Sail.BitVec.updateSubrange w__1339 63 32
+    0b00000000000000000000000000000000#32)
+  let w__1340 ← (( do readReg ID_DFR0_EL1 ) : SailM (BitVec 64) )
+  writeReg ID_DFR0_EL1 (Sail.BitVec.updateSubrange w__1340 63 0
+    0b0000000000000000000000000000000000000000000000000000000000000000#64)
+  let w__1341 ← (( do readReg CPTR_EL2 ) : SailM (BitVec 64) )
+  writeReg CPTR_EL2 (Sail.BitVec.updateSubrange w__1341 63 32 0b00000000000000000000000000000000#32)
+  let w__1342 ← (( do readReg CPTR_EL2 ) : SailM (BitVec 64) )
+  writeReg CPTR_EL2 (Sail.BitVec.updateSubrange w__1342 27 26 0b00#2)
+  let w__1343 ← (( do readReg CPTR_EL2 ) : SailM (BitVec 64) )
+  writeReg CPTR_EL2 (Sail.BitVec.updateSubrange w__1343 23 22 0b00#2)
+  let w__1344 ← (( do readReg CPTR_EL2 ) : SailM (BitVec 64) )
+  writeReg CPTR_EL2 (Sail.BitVec.updateSubrange w__1344 19 18 0b00#2)
+  let w__1345 ← (( do readReg CPTR_EL2 ) : SailM (BitVec 64) )
+  writeReg CPTR_EL2 (Sail.BitVec.updateSubrange w__1345 15 0 0b0000000000000000#16)
+  let w__1346 ← (( do readReg CPTR_EL2 ) : SailM (BitVec 64) )
+  writeReg CPTR_EL2 (Sail.BitVec.updateSubrange w__1346 63 32 0b00000000000000000000000000000000#32)
+  let w__1347 ← (( do readReg CPTR_EL2 ) : SailM (BitVec 64) )
+  writeReg CPTR_EL2 (Sail.BitVec.updateSubrange w__1347 29 21 0b000000000#9)
+  let w__1348 ← (( do readReg CPTR_EL2 ) : SailM (BitVec 64) )
+  writeReg CPTR_EL2 (Sail.BitVec.updateSubrange w__1348 19 14 0b000000#6)
+  let w__1349 ← (( do readReg CPTR_EL2 ) : SailM (BitVec 64) )
+  writeReg CPTR_EL2 (BitVec.update w__1349 13 (Bit 1#1))
+  let w__1350 ← (( do readReg CPTR_EL2 ) : SailM (BitVec 64) )
+  writeReg CPTR_EL2 (BitVec.update w__1350 11 (Bit 0#1))
+  let w__1351 ← (( do readReg CPTR_EL2 ) : SailM (BitVec 64) )
+  writeReg CPTR_EL2 (BitVec.update w__1351 9 (Bit 1#1))
+  let w__1352 ← (( do readReg CPTR_EL2 ) : SailM (BitVec 64) )
+  writeReg CPTR_EL2 (Sail.BitVec.updateSubrange w__1352 7 0 0b11111111#8)
+  let w__1353 ← (( do readReg CLIDR_EL1 ) : SailM (BitVec 64) )
+  writeReg CLIDR_EL1 (Sail.BitVec.updateSubrange w__1353 63 47 0b00000000000000000#17)
+  let w__1354 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+  writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1354 63 23
+    0b00000000000000000000000000000000000000000#41)
+  let w__1356 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1355 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1355) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1356 : Bool)
+  then
+    (do
+      let w__1357 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1357 22 22 0#1))
+  else
+    (do
+      let w__1358 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1359 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1358 22 22 w__1359))
+  let w__1361 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1360 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1360) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1361 : Bool)
+  then
+    (do
+      let w__1362 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1362 20 20 0#1))
+  else
+    (do
+      let w__1363 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1364 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1363 20 20 w__1364))
+  let w__1366 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1365 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1365) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1366 : Bool)
+  then
+    (do
+      let w__1367 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1367 19 19 0#1))
+  else
+    (do
+      let w__1368 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1369 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1368 19 19 w__1369))
+  let w__1371 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1370 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1370) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1371 : Bool)
+  then
+    (do
+      let w__1372 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1372 18 18 0#1))
+  else
+    (do
+      let w__1373 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1374 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1373 18 18 w__1374))
+  let w__1376 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1375 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1375) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1376 : Bool)
+  then
+    (do
+      let w__1377 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1377 17 17 0#1))
+  else
+    (do
+      let w__1378 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1379 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1378 17 17 w__1379))
+  let w__1381 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1380 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1380) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1381 : Bool)
+  then
+    (do
+      let w__1382 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1382 15 15 0#1))
+  else
+    (do
+      let w__1383 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1384 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1383 15 15 w__1384))
+  let w__1386 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1385 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1385) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1386 : Bool)
+  then
+    (do
+      let w__1387 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1387 14 14 0#1))
+  else
+    (do
+      let w__1388 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1389 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1388 14 14 w__1389))
+  let w__1390 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+  writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1390 13 12 0b00#2)
+  let w__1392 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1391 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1391) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1392 : Bool)
+  then
+    (do
+      let w__1393 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1393 11 11 0#1))
+  else
+    (do
+      let w__1394 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1395 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1394 11 11 w__1395))
+  let w__1397 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1396 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1396) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1397 : Bool)
+  then
+    (do
+      let w__1398 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1398 10 10 0#1))
+  else
+    (do
+      let w__1399 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1400 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1399 10 10 w__1400))
+  let w__1402 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1401 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1401) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1402 : Bool)
+  then
+    (do
+      let w__1403 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1403 9 9 0#1))
+  else
+    (do
+      let w__1404 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1405 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1404 9 9 w__1405))
+  let w__1407 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1406 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1406) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1407 : Bool)
+  then
+    (do
+      let w__1408 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1408 8 8 0#1))
+  else
+    (do
+      let w__1409 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1410 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1409 8 8 w__1410))
+  let w__1412 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1411 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1411) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1412 : Bool)
+  then
+    (do
+      let w__1413 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1413 7 7 0#1))
+  else
+    (do
+      let w__1414 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1415 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1414 7 7 w__1415))
+  let w__1417 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1416 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1416) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1417 : Bool)
+  then
+    (do
+      let w__1418 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1418 6 6 0#1))
+  else
+    (do
+      let w__1419 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1420 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1419 6 6 w__1420))
+  let w__1422 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__1421 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1421) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1422 : Bool)
+  then
+    (do
+      let w__1423 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1423 5 5 0#1))
+  else
+    (do
+      let w__1424 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
       let w__1425 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL2 (Sail.BitVec.updateSubrange w__1424 22 22 w__1425))
-  else (pure (()))
-  let w__1426 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-  writeReg BRBCR_EL2 (Sail.BitVec.updateSubrange w__1426 21 10 0b000000000000#12)
-  let w__1428 ← (( do
-    if ((cold : Bool) : Bool)
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1424 5 5 w__1425))
+  let w__1427 ← (( do
+    if (((! cold) : Bool) : Bool)
     then
       (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
+        let w__1426 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1426) : Bool))))
     else (pure false) ) : SailM Bool )
-  if (w__1428 : Bool)
+  if (w__1427 : Bool)
   then
     (do
-      let w__1429 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
+      let w__1428 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1428 4 4 0#1))
+  else
+    (do
+      let w__1429 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
       let w__1430 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL2 (Sail.BitVec.updateSubrange w__1429 8 8 w__1430))
-  else (pure (()))
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1429 4 4 w__1430))
   let w__1432 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
-        let w__1431 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
+        let w__1431 ← (( do (HaveEL EL3) ) : SailM Bool )
         (pure (((! w__1431) : Bool))))
     else (pure false) ) : SailM Bool )
   if (w__1432 : Bool)
   then
     (do
-      let w__1433 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-      let w__1434 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL2 (Sail.BitVec.updateSubrange w__1433 8 8 w__1434))
-  else (pure (()))
-  let w__1435 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-  writeReg BRBCR_EL2 (BitVec.update w__1435 7 (Bit 0#1))
+      let w__1433 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1433 3 3 0#1))
+  else
+    (do
+      let w__1434 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1435 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1434 3 3 w__1435))
   let w__1437 ← (( do
-    if ((cold : Bool) : Bool)
+    if (((! cold) : Bool) : Bool)
     then
       (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
+        let w__1436 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1436) : Bool))))
     else (pure false) ) : SailM Bool )
   if (w__1437 : Bool)
   then
     (do
-      let w__1438 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-      let w__1439 ← (( do (__UNKNOWN_bits 2) ) : SailM (BitVec 2) )
-      writeReg BRBCR_EL2 (Sail.BitVec.updateSubrange w__1438 6 5 w__1439))
-  else (pure (()))
-  let w__1441 ← (( do
+      let w__1438 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1438 2 2 0#1))
+  else
+    (do
+      let w__1439 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1440 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1439 2 2 w__1440))
+  let w__1442 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
-        let w__1440 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1440) : Bool))))
+        let w__1441 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1441) : Bool))))
     else (pure false) ) : SailM Bool )
-  if (w__1441 : Bool)
+  if (w__1442 : Bool)
   then
     (do
-      let w__1442 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-      let w__1443 ← (( do (__UNKNOWN_bits 2) ) : SailM (BitVec 2) )
-      writeReg BRBCR_EL2 (Sail.BitVec.updateSubrange w__1442 6 5 w__1443))
-  else (pure (()))
-  let w__1445 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1445 : Bool)
-  then
+      let w__1443 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1443 1 1 0#1))
+  else
     (do
-      let w__1446 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-      let w__1447 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL2 (Sail.BitVec.updateSubrange w__1446 4 4 w__1447))
-  else (pure (()))
-  let w__1449 ← (( do
+      let w__1444 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1445 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1444 1 1 w__1445))
+  let w__1447 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
-        let w__1448 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1448) : Bool))))
+        let w__1446 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1446) : Bool))))
     else (pure false) ) : SailM Bool )
-  if (w__1449 : Bool)
+  if (w__1447 : Bool)
   then
     (do
-      let w__1450 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-      let w__1451 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL2 (Sail.BitVec.updateSubrange w__1450 4 4 w__1451))
-  else (pure (()))
-  let w__1453 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1453 : Bool)
-  then
+      let w__1448 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1448 0 0 0#1))
+  else
     (do
-      let w__1454 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-      let w__1455 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL2 (Sail.BitVec.updateSubrange w__1454 3 3 w__1455))
-  else (pure (()))
-  let w__1457 ← (( do
+      let w__1449 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+      let w__1450 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HCRX_EL2 (Sail.BitVec.updateSubrange w__1449 0 0 w__1450))
+  let w__1451 ← (( do readReg ICV_IGRPEN1_EL1 ) : SailM (BitVec 64) )
+  writeReg ICV_IGRPEN1_EL1 (Sail.BitVec.updateSubrange w__1451 63 1
+    0b000000000000000000000000000000000000000000000000000000000000000#63)
+  let w__1452 ← (( do readReg PMXEVCNTR_EL0 ) : SailM (BitVec 64) )
+  writeReg PMXEVCNTR_EL0 (Sail.BitVec.updateSubrange w__1452 63 32
+    0b00000000000000000000000000000000#32)
+  let w__1453 ← (( do readReg HFGWTR2_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGWTR2_EL2 (Sail.BitVec.updateSubrange w__1453 63 3
+    0b0000000000000000000000000000000000000000000000000000000000000#61)
+  let w__1455 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
-        let w__1456 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1456) : Bool))))
+        let w__1454 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1454) : Bool))))
     else (pure false) ) : SailM Bool )
-  if (w__1457 : Bool)
+  if (w__1455 : Bool)
   then
     (do
-      let w__1458 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-      let w__1459 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL2 (Sail.BitVec.updateSubrange w__1458 3 3 w__1459))
-  else (pure (()))
-  let w__1460 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-  writeReg BRBCR_EL2 (BitVec.update w__1460 2 (Bit 0#1))
-  let w__1461 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-  writeReg BRBCR_EL2 (Sail.BitVec.updateSubrange w__1461 1 1 0#1)
-  let w__1462 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-  writeReg BRBCR_EL2 (Sail.BitVec.updateSubrange w__1462 0 0 0#1)
-  let w__1463 ← (( do readReg BRBTS_EL1 ) : SailM (BitVec 64) )
-  writeReg BRBTS_EL1 (Sail.BitVec.updateSubrange w__1463 63 0
-    0b0000000000000000000000000000000000000000000000000000000000000000#64)
-  let w__1464 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-  writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1464 63 30
-    0b0000000000000000000000000000000000#34)
-  let w__1465 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-  writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1465 27 23 0b00000#5)
-  let w__1467 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1467 : Bool)
-  then
+      let w__1456 ← (( do readReg HFGWTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HFGWTR2_EL2 (Sail.BitVec.updateSubrange w__1456 2 2 0#1))
+  else
     (do
-      let w__1468 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1469 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1468 22 22 w__1469))
-  else (pure (()))
-  let w__1471 ← (( do
+      let w__1457 ← (( do readReg HFGWTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1458 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HFGWTR2_EL2 (Sail.BitVec.updateSubrange w__1457 2 2 w__1458))
+  let w__1459 ← (( do readReg HFGWTR2_EL2 ) : SailM (BitVec 64) )
+  writeReg HFGWTR2_EL2 (BitVec.update w__1459 1 (Bit 0#1))
+  let w__1461 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
-        let w__1470 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1470) : Bool))))
+        let w__1460 ← (( do (HaveEL EL3) ) : SailM Bool )
+        (pure (((! w__1460) : Bool))))
     else (pure false) ) : SailM Bool )
-  if (w__1471 : Bool)
+  if (w__1461 : Bool)
   then
     (do
-      let w__1472 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1473 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1472 22 22 w__1473))
-  else (pure (()))
-  let w__1475 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1475 : Bool)
-  then
+      let w__1462 ← (( do readReg HFGWTR2_EL2 ) : SailM (BitVec 64) )
+      writeReg HFGWTR2_EL2 (Sail.BitVec.updateSubrange w__1462 0 0 0#1))
+  else
     (do
-      let w__1476 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1477 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1476 21 21 w__1477))
-  else (pure (()))
-  let w__1479 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        let w__1478 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1478) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1479 : Bool)
-  then
-    (do
-      let w__1480 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1481 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1480 21 21 w__1481))
-  else (pure (()))
-  let w__1483 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1483 : Bool)
-  then
-    (do
-      let w__1484 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1485 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1484 20 20 w__1485))
-  else (pure (()))
-  let w__1487 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        let w__1486 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1486) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1487 : Bool)
-  then
-    (do
-      let w__1488 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1489 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1488 20 20 w__1489))
-  else (pure (()))
-  let w__1491 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1491 : Bool)
-  then
-    (do
-      let w__1492 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1493 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1492 19 19 w__1493))
-  else (pure (()))
-  let w__1495 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        let w__1494 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1494) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1495 : Bool)
-  then
-    (do
-      let w__1496 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1497 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1496 19 19 w__1497))
-  else (pure (()))
-  let w__1499 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1499 : Bool)
-  then
-    (do
-      let w__1500 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1501 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1500 18 18 w__1501))
-  else (pure (()))
-  let w__1503 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        let w__1502 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1502) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1503 : Bool)
-  then
-    (do
-      let w__1504 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1505 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1504 18 18 w__1505))
-  else (pure (()))
-  let w__1507 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1507 : Bool)
-  then
-    (do
-      let w__1508 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1509 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1508 17 17 w__1509))
-  else (pure (()))
-  let w__1511 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        let w__1510 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1510) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1511 : Bool)
-  then
-    (do
-      let w__1512 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1513 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1512 17 17 w__1513))
-  else (pure (()))
-  let w__1515 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1515 : Bool)
-  then
-    (do
-      let w__1516 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1517 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1516 16 16 w__1517))
-  else (pure (()))
-  let w__1519 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        let w__1518 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1518) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1519 : Bool)
-  then
-    (do
-      let w__1520 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1521 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1520 16 16 w__1521))
-  else (pure (()))
-  let w__1522 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-  writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1522 15 8 0b00000000#8)
-  let w__1524 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1524 : Bool)
-  then
-    (do
-      let w__1525 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1526 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1525 7 7 w__1526))
-  else (pure (()))
-  let w__1528 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        let w__1527 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1527) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1528 : Bool)
-  then
-    (do
-      let w__1529 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1530 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1529 7 7 w__1530))
-  else (pure (()))
-  let w__1532 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1532 : Bool)
-  then
-    (do
-      let w__1533 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1534 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1533 6 6 w__1534))
-  else (pure (()))
-  let w__1536 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        let w__1535 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1535) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1536 : Bool)
-  then
-    (do
-      let w__1537 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      let w__1538 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1537 6 6 w__1538))
-  else (pure (()))
-  let w__1539 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-  writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__1539 5 0 0b000000#6)
-  let w__1540 ← (( do readReg BRBINFINJ_EL1 ) : SailM (BitVec 64) )
-  writeReg BRBINFINJ_EL1 (Sail.BitVec.updateSubrange w__1540 63 47 0b00000000000000000#17)
-  let w__1541 ← (( do readReg BRBINFINJ_EL1 ) : SailM (BitVec 64) )
-  writeReg BRBINFINJ_EL1 (Sail.BitVec.updateSubrange w__1541 31 18 0b00000000000000#14)
-  let w__1542 ← (( do readReg BRBINFINJ_EL1 ) : SailM (BitVec 64) )
-  writeReg BRBINFINJ_EL1 (Sail.BitVec.updateSubrange w__1542 15 14 0b00#2)
-  let w__1543 ← (( do readReg BRBINFINJ_EL1 ) : SailM (BitVec 64) )
-  writeReg BRBINFINJ_EL1 (Sail.BitVec.updateSubrange w__1543 4 2 0b000#3)
-  let w__1544 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-  writeReg BRBCR_EL1 (Sail.BitVec.updateSubrange w__1544 63 24
-    0b0000000000000000000000000000000000000000#40)
-  let w__1546 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1546 : Bool)
-  then
-    (do
-      let w__1547 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-      let w__1548 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL1 (Sail.BitVec.updateSubrange w__1547 23 23 w__1548))
-  else (pure (()))
-  let w__1550 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        let w__1549 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1549) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1550 : Bool)
-  then
-    (do
-      let w__1551 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-      let w__1552 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL1 (Sail.BitVec.updateSubrange w__1551 23 23 w__1552))
-  else (pure (()))
-  let w__1554 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1554 : Bool)
-  then
-    (do
-      let w__1555 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-      let w__1556 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL1 (Sail.BitVec.updateSubrange w__1555 22 22 w__1556))
-  else (pure (()))
-  let w__1558 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        let w__1557 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1557) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1558 : Bool)
-  then
-    (do
-      let w__1559 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-      let w__1560 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL1 (Sail.BitVec.updateSubrange w__1559 22 22 w__1560))
-  else (pure (()))
-  let w__1561 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-  writeReg BRBCR_EL1 (Sail.BitVec.updateSubrange w__1561 21 10 0b000000000000#12)
-  let w__1563 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1563 : Bool)
-  then
-    (do
-      let w__1564 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-      let w__1565 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL1 (Sail.BitVec.updateSubrange w__1564 8 8 w__1565))
-  else (pure (()))
-  let w__1567 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        let w__1566 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1566) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1567 : Bool)
-  then
-    (do
-      let w__1568 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-      let w__1569 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL1 (Sail.BitVec.updateSubrange w__1568 8 8 w__1569))
-  else (pure (()))
-  let w__1570 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-  writeReg BRBCR_EL1 (BitVec.update w__1570 7 (Bit 0#1))
-  let w__1572 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1572 : Bool)
-  then
-    (do
-      let w__1573 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-      let w__1574 ← (( do (__UNKNOWN_bits 2) ) : SailM (BitVec 2) )
-      writeReg BRBCR_EL1 (Sail.BitVec.updateSubrange w__1573 6 5 w__1574))
-  else (pure (()))
-  let w__1576 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        let w__1575 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1575) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1576 : Bool)
-  then
-    (do
-      let w__1577 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-      let w__1578 ← (( do (__UNKNOWN_bits 2) ) : SailM (BitVec 2) )
-      writeReg BRBCR_EL1 (Sail.BitVec.updateSubrange w__1577 6 5 w__1578))
-  else (pure (()))
-  let w__1580 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1580 : Bool)
-  then
-    (do
-      let w__1581 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-      let w__1582 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL1 (Sail.BitVec.updateSubrange w__1581 4 4 w__1582))
-  else (pure (()))
-  let w__1584 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        let w__1583 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1583) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1584 : Bool)
-  then
-    (do
-      let w__1585 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-      let w__1586 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL1 (Sail.BitVec.updateSubrange w__1585 4 4 w__1586))
-  else (pure (()))
-  let w__1588 ← (( do
-    if ((cold : Bool) : Bool)
-    then
-      (do
-        (IsFeatureImplemented FEAT_BRBEv1p1))
-    else (pure false) ) : SailM Bool )
-  if (w__1588 : Bool)
-  then
-    (do
-      let w__1589 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-      let w__1590 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL1 (Sail.BitVec.updateSubrange w__1589 3 3 w__1590))
-  else (pure (()))
-  let w__1592 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        let w__1591 ← (( do (IsFeatureImplemented FEAT_BRBEv1p1) ) : SailM Bool )
-        (pure (((! w__1591) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1592 : Bool)
-  then
-    (do
-      let w__1593 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-      let w__1594 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      writeReg BRBCR_EL1 (Sail.BitVec.updateSubrange w__1593 3 3 w__1594))
-  else (pure (()))
-  let w__1595 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-  writeReg BRBCR_EL1 (BitVec.update w__1595 2 (Bit 0#1))
-  let w__1596 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-  writeReg BRBCR_EL1 (Sail.BitVec.updateSubrange w__1596 1 1 0#1)
-  let w__1597 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-  writeReg BRBCR_EL1 (Sail.BitVec.updateSubrange w__1597 0 0 0#1)
-  let w__1598 ← (( do readReg BRBIDR0_EL1 ) : SailM (BitVec 64) )
-  writeReg BRBIDR0_EL1 (Sail.BitVec.updateSubrange w__1598 63 16
-    0b000000000000000000000000000000000000000000000000#48)
-  let w__1599 ← (( do readReg GCSPR_EL3 ) : SailM (BitVec 64) )
-  writeReg GCSPR_EL3 (Sail.BitVec.updateSubrange w__1599 2 0 0b000#3)
-  let w__1600 ← (( do readReg GCSPR_EL1 ) : SailM (BitVec 64) )
-  writeReg GCSPR_EL1 (Sail.BitVec.updateSubrange w__1600 2 0 0b000#3)
-  let w__1601 ← (( do readReg GCSCR_EL3 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL3 (Sail.BitVec.updateSubrange w__1601 63 10
-    0b000000000000000000000000000000000000000000000000000000#54)
-  let w__1602 ← (( do readReg GCSCR_EL3 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL3 (Sail.BitVec.updateSubrange w__1602 9 9 0#1)
-  let w__1603 ← (( do readReg GCSCR_EL3 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL3 (Sail.BitVec.updateSubrange w__1603 8 8 0#1)
-  let w__1604 ← (( do readReg GCSCR_EL3 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL3 (BitVec.update w__1604 7 (Bit 0#1))
-  let w__1605 ← (( do readReg GCSCR_EL3 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL3 (Sail.BitVec.updateSubrange w__1605 6 6 0#1)
-  let w__1606 ← (( do readReg GCSCR_EL3 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL3 (Sail.BitVec.updateSubrange w__1606 4 1 0b0000#4)
-  let w__1607 ← (( do readReg GCSCR_EL3 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL3 (Sail.BitVec.updateSubrange w__1607 0 0 0#1)
-  let w__1608 ← (( do readReg GCSCR_EL1 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL1 (Sail.BitVec.updateSubrange w__1608 63 10
-    0b000000000000000000000000000000000000000000000000000000#54)
-  let w__1609 ← (( do readReg GCSCR_EL1 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL1 (Sail.BitVec.updateSubrange w__1609 9 9 0#1)
-  let w__1610 ← (( do readReg GCSCR_EL1 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL1 (Sail.BitVec.updateSubrange w__1610 8 8 0#1)
-  let w__1611 ← (( do readReg GCSCR_EL1 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL1 (BitVec.update w__1611 7 (Bit 0#1))
-  let w__1612 ← (( do readReg GCSCR_EL1 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL1 (Sail.BitVec.updateSubrange w__1612 6 6 0#1)
-  let w__1613 ← (( do readReg GCSCR_EL1 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL1 (Sail.BitVec.updateSubrange w__1613 4 1 0b0000#4)
-  let w__1614 ← (( do readReg GCSCR_EL1 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL1 (Sail.BitVec.updateSubrange w__1614 0 0 0#1)
-  let w__1615 ← (( do readReg GCSPR_EL2 ) : SailM (BitVec 64) )
-  writeReg GCSPR_EL2 (Sail.BitVec.updateSubrange w__1615 2 0 0b000#3)
-  let w__1616 ← (( do readReg GCSCR_EL2 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL2 (Sail.BitVec.updateSubrange w__1616 63 10
-    0b000000000000000000000000000000000000000000000000000000#54)
-  let w__1617 ← (( do readReg GCSCR_EL2 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL2 (Sail.BitVec.updateSubrange w__1617 9 9 0#1)
-  let w__1618 ← (( do readReg GCSCR_EL2 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL2 (Sail.BitVec.updateSubrange w__1618 8 8 0#1)
-  let w__1619 ← (( do readReg GCSCR_EL2 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL2 (BitVec.update w__1619 7 (Bit 0#1))
-  let w__1620 ← (( do readReg GCSCR_EL2 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL2 (Sail.BitVec.updateSubrange w__1620 6 6 0#1)
-  let w__1621 ← (( do readReg GCSCR_EL2 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL2 (Sail.BitVec.updateSubrange w__1621 4 1 0b0000#4)
-  let w__1622 ← (( do readReg GCSCR_EL2 ) : SailM (BitVec 64) )
-  writeReg GCSCR_EL2 (Sail.BitVec.updateSubrange w__1622 0 0 0#1)
-  let w__1623 ← (( do readReg GCSCRE0_EL1 ) : SailM (BitVec 64) )
-  writeReg GCSCRE0_EL1 (Sail.BitVec.updateSubrange w__1623 63 11
-    0b00000000000000000000000000000000000000000000000000000#53)
-  let w__1624 ← (( do readReg GCSCRE0_EL1 ) : SailM (BitVec 64) )
-  writeReg GCSCRE0_EL1 (Sail.BitVec.updateSubrange w__1624 10 10 0#1)
-  let w__1625 ← (( do readReg GCSCRE0_EL1 ) : SailM (BitVec 64) )
-  writeReg GCSCRE0_EL1 (Sail.BitVec.updateSubrange w__1625 9 9 0#1)
-  let w__1626 ← (( do readReg GCSCRE0_EL1 ) : SailM (BitVec 64) )
-  writeReg GCSCRE0_EL1 (Sail.BitVec.updateSubrange w__1626 8 8 0#1)
-  let w__1627 ← (( do readReg GCSCRE0_EL1 ) : SailM (BitVec 64) )
-  writeReg GCSCRE0_EL1 (Sail.BitVec.updateSubrange w__1627 7 6 0b00#2)
-  let w__1628 ← (( do readReg GCSCRE0_EL1 ) : SailM (BitVec 64) )
-  writeReg GCSCRE0_EL1 (Sail.BitVec.updateSubrange w__1628 4 1 0b0000#4)
-  let w__1629 ← (( do readReg GCSCRE0_EL1 ) : SailM (BitVec 64) )
-  writeReg GCSCRE0_EL1 (Sail.BitVec.updateSubrange w__1629 0 0 0#1)
+      let w__1463 ← (( do readReg HFGWTR2_EL2 ) : SailM (BitVec 64) )
+      let w__1464 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      writeReg HFGWTR2_EL2 (Sail.BitVec.updateSubrange w__1463 0 0 w__1464))
   (pure true)
 
 

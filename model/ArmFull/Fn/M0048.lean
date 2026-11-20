@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,73 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _get_FPEXC_Type_TFV (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 26 26)
+
+
+def _get_FPEXC32_EL2_Type_UFF (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 3 3)
+
+
+def _update_FPEXC32_EL2_Type_UFF (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 3 3 x)
+
+
+def _update_FPEXC_Type_UFF (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 3 3 x)
+
+
+def _get_FPEXC_Type_UFF (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 3 3)
+
+
+def _get_FPEXC32_EL2_Type_VECITR (v : (BitVec 64)) : (BitVec 3) :=
+  (Sail.BitVec.extractLsb v 10 8)
+
+
+def _update_FPEXC32_EL2_Type_VECITR (v : (BitVec 64)) (x : (BitVec 3)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 10 8 x)
+
+
+def _update_FPEXC_Type_VECITR (v : (BitVec 32)) (x : (BitVec 3)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 10 8 x)
+
+
+def _get_FPEXC_Type_VECITR (v : (BitVec 32)) : (BitVec 3) :=
+  (Sail.BitVec.extractLsb v 10 8)
+
+
+def _get_FPEXC32_EL2_Type_VV (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 27 27)
+
+
+def _update_FPEXC32_EL2_Type_VV (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 27 27 x)
+
+
+def _update_FPEXC_Type_VV (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 27 27 x)
+
+
+def _get_FPEXC_Type_VV (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 27 27)
+
+
+def undefined_FPEXC_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
+  (undefined_bitvector_at (ℓ.child 0) 32)
+
+
+def Mk_FPEXC_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def FPEXC_read (_ : Unit) : SailM (BitVec 32) := do
+  let r ← (( do readReg _FPEXC ) : SailM FPEXC_Type )
+  let w__0 ← (( do readReg FPEXC32_EL2 ) : SailM (BitVec 64) )
+  let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__0 0 32)) : (BitVec 32))
+  (pure (r))
+
 
 def FPEXC_write (value_name : (BitVec 32)) : SailM Unit := do
   let r : FPEXC_Type := value_name
@@ -828,66 +895,6 @@ def C47PickBPNOTCTXCMP (_ : Unit) : SailM Constraint := do
     else
       (if ((rank == 1) : Bool)
       then Constraint_NONE
-      else Constraint_UNKNOWN)))
-
-
-def C47PickBPNOTIMPL (_ : Unit) : SailM Constraint := do
-  let rank ← (( do
-    ((fun n => Sail.Int.toNatChecked n) <$> ((undefined_range_at (← occLabel 1192) 0 1))) ) :
-    SailM Nat )
-  (pure (if ((rank == 0) : Bool)
-    then Constraint_DISABLED
-    else Constraint_UNKNOWN))
-
-
-def C47PickDATAOVERLAP (_ : Unit) : SailM Constraint := do
-  let rank ← (( do
-    ((fun n => Sail.Int.toNatChecked n) <$> ((undefined_range_at (← occLabel 1193) 0 2))) ) :
-    SailM Nat )
-  (pure (if ((rank == 0) : Bool)
-    then Constraint_NOP
-    else
-      (if ((rank == 1) : Bool)
-      then Constraint_UNDEF
-      else Constraint_UNKNOWN)))
-
-
-def C47PickDEVICETAGSTORE (_ : Unit) : SailM Constraint := do
-  let rank ← (( do
-    ((fun n => Sail.Int.toNatChecked n) <$> ((undefined_range_at (← occLabel 1194) 0 1))) ) :
-    SailM Nat )
-  (pure (if ((rank == 0) : Bool)
-    then Constraint_FAULT
-    else Constraint_NONE))
-
-
-def C47PickDEVPAGE2 (_ : Unit) : SailM Constraint := do
-  let rank ← (( do
-    ((fun n => Sail.Int.toNatChecked n) <$> ((undefined_range_at (← occLabel 1195) 0 1))) ) :
-    SailM Nat )
-  (pure (if ((rank == 0) : Bool)
-    then Constraint_FAULT
-    else Constraint_NONE))
-
-
-def C47PickINSTRDEVICE (_ : Unit) : SailM Constraint := do
-  let rank ← (( do
-    ((fun n => Sail.Int.toNatChecked n) <$> ((undefined_range_at (← occLabel 1196) 0 1))) ) :
-    SailM Nat )
-  (pure (if ((rank == 0) : Bool)
-    then Constraint_FAULT
-    else Constraint_NONE))
-
-
-def C47PickLDPOVERLAP (_ : Unit) : SailM Constraint := do
-  let rank ← (( do
-    ((fun n => Sail.Int.toNatChecked n) <$> ((undefined_range_at (← occLabel 1197) 0 2))) ) :
-    SailM Nat )
-  (pure (if ((rank == 0) : Bool)
-    then Constraint_NOP
-    else
-      (if ((rank == 1) : Bool)
-      then Constraint_UNDEF
       else Constraint_UNKNOWN)))
 
 

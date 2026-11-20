@@ -1,28 +1,20 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0021
-import ArmFull.Fn.M0022
-import ArmFull.Fn.M0023
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0050
-import ArmFull.Fn.M0058
-import ArmFull.Fn.M0063
-import ArmFull.Fn.M0087
-import ArmFull.Fn.M0100
-import ArmFull.Fn.M0124
-import ArmFull.Fn.M0146
-import ArmFull.Fn.M0166
-import ArmFull.Fn.M0175
-import ArmFull.Fn.M0181
-import ArmFull.Fn.M0254
-import ArmFull.Fn.M1174
-import ArmFull.Fn.M1175
-import ArmFull.Fn.M1176
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0034
+public import ArmFull.Fn.M0051
+public import ArmFull.Fn.M0087
+public import ArmFull.Fn.M0120
+public import ArmFull.Fn.M0147
+public import ArmFull.Fn.M0214
+public import ArmFull.Fn.M0217
+public import ArmFull.Fn.M0237
+public import ArmFull.Fn.M0882
+public import ArmFull.Fn.M1123
+public import ArmFull.Fn.M1197 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -124,630 +116,637 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-/-- Type quantifiers: t : Int, t2 : Int -/
-def VTTBR_EL2_SysRegWrite128_3ec09d9d33270957 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) (t2 : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
-  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
-  let w__3 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_D128En : (BitVec 1) := (_get_SCR_EL3_Type_D128En w__3)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else
+/-- Type quantifiers: VL : Nat, esize : Nat, g : Nat, k_is_unsigned : Bool, msize : Nat, n : Nat, offset
+  : Nat, t : Nat, 0 ≤ t ∧
+  t ≤ 31 ∧
+  0 ≤ offset ∧
+  offset ≤ 31 ∧
+  0 ≤ n ∧
+  n ≤ 31 ∧ msize = 16 ∧ List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧ esize = 64 ∧ (is_VL VL) -/
+def execute_LD1SH_Z_P_AI_D (VL : Nat) (esize : Nat) (g : Nat) (msize : Nat) (n : Nat) (offset : Nat) (t : Nat) (is_unsigned : Bool) : SailM Unit := do
+  (CheckNonStreamingSVEEnabled ())
+  let VL : Nat := VL
+  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let base ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6419)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6420)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let data ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6421)
+      (Sail.Int.toNatChecked (msize)))) ) : SailM (BitVec msize) )
+  let mbytes : Nat := (Sail.Int.toNatChecked ((Int.ediv msize 8)))
+  let contiguous : Bool := false
+  let nontemporal : Bool := false
+  let tagchecked : Bool := true
+  let accdesc ← (( do (CreateAccDescSVE MemOp_LOAD nontemporal contiguous tagchecked) ) : SailM
+    AccessDescriptor )
+  let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
+  let base ← (( do
+    if (w__0 : Bool)
+    then
+      (do
+        ((Sail.BitVec.castWidth ) <$> (Z_read n VL)))
+    else (pure (base)) ) : SailM (BitVec VL) )
+  let base := base
+  let (data, result) ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
     (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__7 ← (( do
-            if ((← do
-                 (EL2Enabled ())) : Bool)
+      let mut loop_vars := (data, result)
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let (data, result) := loop_vars
+        loop_vars ← do
+          let w__2 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
+          if (w__2 : Bool)
+          then
+            (do
+              let w__3 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read base e esize)) ) : SailM
+                (BitVec esize) )
+              let addr : (BitVec 64) :=
+                (BitVec.addInt (Sail.BitVec.zeroExtend w__3 64) (offset *i mbytes))
+              let w__4 ← (( do ((Sail.BitVec.castWidth ) <$> (Mem_read addr mbytes accdesc)) ) :
+                SailM (BitVec (msize / 8 * 8)) )
+              let data := ((Sail.BitVec.castWidth w__4) : (BitVec msize))
+              let w__5 ← (( do ((Sail.BitVec.castWidth ) <$> (Extend data esize is_unsigned)) ) :
+                SailM (BitVec esize) )
+              let w__6 ← (( do (Elem_set result e esize (Sail.BitVec.castWidth w__5)) ) : SailM
+                (BitVec VL) )
+              let result := (w__6 : (BitVec VL))
+              (pure ((data, result))))
+          else
+            (do
+              let w__7 ← (( do
+                (Elem_set result e esize (Sail.BitVec.castWidth (Zeros (n := esize)))) ) : SailM
+                (BitVec VL) )
+              let result := (w__7 : (BitVec VL))
+              (pure ((data, result))))
+      (pure loop_vars)) ) : SailM ((BitVec msize) × (BitVec VL)) )
+  (Z_set t VL (Sail.BitVec.castWidth result))
+
+
+/-- Type quantifiers: VL : Nat, esize : Nat, g : Nat, k_is_unsigned : Bool, msize : Nat, n : Nat, offset
+  : Nat, t : Nat, 0 ≤ t ∧
+  t ≤ 31 ∧
+  0 ≤ offset ∧
+  offset ≤ 31 ∧
+  0 ≤ n ∧
+  n ≤ 31 ∧ msize = 16 ∧ List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧ esize = 64 ∧ (is_VL VL) -/
+def execute_LDFF1H_Z_P_AI_D (VL : Nat) (esize : Nat) (g : Nat) (msize : Nat) (n : Nat) (offset : Nat) (t : Nat) (is_unsigned : Bool) : SailM Unit := do
+  (CheckNonStreamingSVEEnabled ())
+  let VL : Nat := VL
+  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let base ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6422)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6423)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let orig ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read t VL)) ) : SailM (BitVec VL) )
+  let data ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6424)
+      (Sail.Int.toNatChecked (msize)))) ) : SailM (BitVec msize) )
+  let mbytes : Nat := (Sail.Int.toNatChecked ((Int.ediv msize 8)))
+  let fault : Bool := false
+  let faulted : Bool := false
+  let unknown : Bool := false
+  let contiguous : Bool := false
+  let tagchecked : Bool := true
+  let accdesc ← (( do (CreateAccDescSVEFF contiguous tagchecked) ) : SailM AccessDescriptor )
+  let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
+  let base ← (( do
+    if (w__0 : Bool)
+    then
+      (do
+        ((Sail.BitVec.castWidth ) <$> (Z_read n VL)))
+    else (pure (base)) ) : SailM (BitVec VL) )
+  let base := base
+  ArmFull.assert accdesc.first "sail-inputs/16-instrs64_sve.sail:77764.24-77764.25"
+  let (accdesc, data, fault, faulted, result, unknown) ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
+    (do
+      let mut loop_vars := (accdesc, data, fault, faulted, result, unknown)
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let (accdesc, data, fault, faulted, result, unknown) := loop_vars
+        loop_vars ← do
+          let w__2 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
+          let (accdesc, data, fault) ← (( do
+            if (w__2 : Bool)
             then
               (do
-                let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                (pure (((((_get_HCR_EL2_Type_NV2 w__5) +++ (_get_HCR_EL2_Type_NV w__6)) == 0b11#2) : Bool))))
-            else (pure false) ) : SailM Bool )
-          if (w__7 : Bool)
+                let w__3 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read base e esize)) ) : SailM
+                  (BitVec esize) )
+                let addr : (BitVec 64) :=
+                  (BitVec.addInt (Sail.BitVec.zeroExtend w__3 64) (offset *i mbytes))
+                if (accdesc.first : Bool)
+                then
+                  (do
+                    let w__4 ← (( do ((Sail.BitVec.castWidth ) <$> (Mem_read addr mbytes accdesc))
+                      ) : SailM (BitVec (msize / 8 * 8)) )
+                    let data := ((Sail.BitVec.castWidth w__4) : (BitVec msize))
+                    let accdesc : AccessDescriptor := { accdesc with first := false }
+                    (pure ((accdesc, data, fault))))
+                else
+                  (do
+                    let w__5 ← (( do
+                      ((fun (x0, x1) => ((Sail.BitVec.castWidth x0), x1)) <$> (MemNF_read addr
+                        mbytes accdesc)) ) : SailM
+                      ((BitVec (8 * (Sail.Int.toNatChecked mbytes))) × Bool) )
+                    let (tup__0, tup__1) :=
+                      (w__5 : ((BitVec (8 * (Sail.Int.toNatChecked mbytes))) × Bool))
+                    let data : (BitVec msize) := (Sail.BitVec.castWidth tup__0)
+                    let fault : Bool := tup__1
+                    (pure ((accdesc, data, fault)))))
+            else
+              (let (tup__0, tup__1) :=
+                (((Sail.BitVec.castWidth (Zeros (n := msize))), false) : ((BitVec msize) × Bool))
+              let data : (BitVec msize) := tup__0
+              let fault : Bool := tup__1
+              (pure ((accdesc, data, fault)))) ) : SailM
+            (AccessDescriptor × (BitVec msize) × Bool) )
+          let faulted : Bool := (faulted || fault)
+          if (faulted : Bool)
           then
             (do
-              let w__8 ← (( do (X_read (t +i 1) 64) ) : SailM (BitVec 64) )
-              let w__9 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-              (NVMem_set__1 (BitVec.toNat 0x020#12) 128 (w__8 +++ w__9)))
-          else
-            (do
-              let w__11 ← (( do
-                (pure ((← do
-                      (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
-              if (w__11 : Bool)
-              then
-                (do
-                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x14#8)))
-              else sailThrow ((Error_Undefined ()))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              let w__17 ← (( do
-                (pure ((← do
-                      if ((← do
-                           (pure ((← do
-                                 (pure ((← do
-                                       (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                      then
-                        (do
-                          (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                      else (pure false)) && ((__SCR_EL3_D128En == 0#1) : Bool))) ) : SailM Bool )
-              if (w__17 : Bool)
-              then sailThrow ((Error_Undefined ()))
-              else
-                (do
-                  if (((HaveEL EL3) && (__SCR_EL3_D128En == 0#1)) : Bool)
+              (ElemFFR_set e esize 0#1))
+          else (pure (()))
+          let w__7 ← (( do
+            if ((unknown : Bool) : Bool)
+            then (pure true)
+            else
+              (do
+                let w__6 ← (( do (ElemFFR_read e esize) ) : SailM (BitVec 1) )
+                (pure (((w__6 == 0#1) : Bool)))) ) : SailM Bool )
+          let unknown := (w__7 : Bool)
+          let result ← (( do
+            if (unknown : Bool)
+            then
+              (do
+                let w__9 ← (( do
+                  if (((! fault) : Bool) : Bool)
                   then
                     (do
-                      let w__19 ← (( do
-                        (pure ((← do
-                              (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
-                      if (w__19 : Bool)
-                      then sailThrow ((Error_Undefined ()))
-                      else
-                        (do
-                          (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x14#8))))
-                  else
+                      (ConstrainUnpredictableBool Unpredictable_SVELDNFDATA))
+                  else (pure false) ) : SailM Bool )
+                if (w__9 : Bool)
+                then
+                  (do
+                    let w__10 ← (( do
+                      ((Sail.BitVec.castWidth ) <$> (Extend data esize is_unsigned)) ) : SailM
+                      (BitVec esize) )
+                    (Elem_set result e esize (Sail.BitVec.castWidth w__10)))
+                else
+                  (do
+                    let w__12 ← (( do (ConstrainUnpredictableBool Unpredictable_SVELDNFZERO) ) :
+                      SailM Bool )
+                    if (w__12 : Bool)
+                    then
+                      (do
+                        (Elem_set result e esize (Sail.BitVec.castWidth (Zeros (n := esize)))))
+                    else
+                      (do
+                        let w__14 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read orig e esize))
+                          ) : SailM (BitVec esize) )
+                        (Elem_set result e esize (Sail.BitVec.castWidth w__14)))))
+            else
+              (do
+                let w__16 ← (( do ((Sail.BitVec.castWidth ) <$> (Extend data esize is_unsigned)) )
+                  : SailM (BitVec esize) )
+                (Elem_set result e esize (Sail.BitVec.castWidth w__16))) ) : SailM (BitVec VL) )
+          (pure ((accdesc, data, fault, faulted, result, unknown)))
+      (pure loop_vars)) ) : SailM
+    (AccessDescriptor × (BitVec msize) × Bool × Bool × (BitVec VL) × Bool) )
+  (Z_set t VL (Sail.BitVec.castWidth result))
+
+
+/-- Type quantifiers: VL : Nat, esize : Nat, g : Nat, k_is_unsigned : Bool, msize : Nat, n : Nat, offset
+  : Nat, t : Nat, 0 ≤ t ∧
+  t ≤ 31 ∧
+  0 ≤ offset ∧
+  offset ≤ 31 ∧
+  0 ≤ n ∧
+  n ≤ 31 ∧ msize = 16 ∧ List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧ esize = 64 ∧ (is_VL VL) -/
+def execute_LDFF1SH_Z_P_AI_D (VL : Nat) (esize : Nat) (g : Nat) (msize : Nat) (n : Nat) (offset : Nat) (t : Nat) (is_unsigned : Bool) : SailM Unit := do
+  (CheckNonStreamingSVEEnabled ())
+  let VL : Nat := VL
+  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let base ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6425)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6426)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let orig ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read t VL)) ) : SailM (BitVec VL) )
+  let data ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6427)
+      (Sail.Int.toNatChecked (msize)))) ) : SailM (BitVec msize) )
+  let mbytes : Nat := (Sail.Int.toNatChecked ((Int.ediv msize 8)))
+  let fault : Bool := false
+  let faulted : Bool := false
+  let unknown : Bool := false
+  let contiguous : Bool := false
+  let tagchecked : Bool := true
+  let accdesc ← (( do (CreateAccDescSVEFF contiguous tagchecked) ) : SailM AccessDescriptor )
+  let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
+  let base ← (( do
+    if (w__0 : Bool)
+    then
+      (do
+        ((Sail.BitVec.castWidth ) <$> (Z_read n VL)))
+    else (pure (base)) ) : SailM (BitVec VL) )
+  let base := base
+  ArmFull.assert accdesc.first "sail-inputs/16-instrs64_sve.sail:77868.24-77868.25"
+  let (accdesc, data, fault, faulted, result, unknown) ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
+    (do
+      let mut loop_vars := (accdesc, data, fault, faulted, result, unknown)
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let (accdesc, data, fault, faulted, result, unknown) := loop_vars
+        loop_vars ← do
+          let w__2 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
+          let (accdesc, data, fault) ← (( do
+            if (w__2 : Bool)
+            then
+              (do
+                let w__3 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read base e esize)) ) : SailM
+                  (BitVec esize) )
+                let addr : (BitVec 64) :=
+                  (BitVec.addInt (Sail.BitVec.zeroExtend w__3 64) (offset *i mbytes))
+                if (accdesc.first : Bool)
+                then
+                  (do
+                    let w__4 ← (( do ((Sail.BitVec.castWidth ) <$> (Mem_read addr mbytes accdesc))
+                      ) : SailM (BitVec (msize / 8 * 8)) )
+                    let data := ((Sail.BitVec.castWidth w__4) : (BitVec msize))
+                    let accdesc : AccessDescriptor := { accdesc with first := false }
+                    (pure ((accdesc, data, fault))))
+                else
+                  (do
+                    let w__5 ← (( do
+                      ((fun (x0, x1) => ((Sail.BitVec.castWidth x0), x1)) <$> (MemNF_read addr
+                        mbytes accdesc)) ) : SailM
+                      ((BitVec (8 * (Sail.Int.toNatChecked mbytes))) × Bool) )
+                    let (tup__0, tup__1) :=
+                      (w__5 : ((BitVec (8 * (Sail.Int.toNatChecked mbytes))) × Bool))
+                    let data : (BitVec msize) := (Sail.BitVec.castWidth tup__0)
+                    let fault : Bool := tup__1
+                    (pure ((accdesc, data, fault)))))
+            else
+              (let (tup__0, tup__1) :=
+                (((Sail.BitVec.castWidth (Zeros (n := msize))), false) : ((BitVec msize) × Bool))
+              let data : (BitVec msize) := tup__0
+              let fault : Bool := tup__1
+              (pure ((accdesc, data, fault)))) ) : SailM
+            (AccessDescriptor × (BitVec msize) × Bool) )
+          let faulted : Bool := (faulted || fault)
+          if (faulted : Bool)
+          then
+            (do
+              (ElemFFR_set e esize 0#1))
+          else (pure (()))
+          let w__7 ← (( do
+            if ((unknown : Bool) : Bool)
+            then (pure true)
+            else
+              (do
+                let w__6 ← (( do (ElemFFR_read e esize) ) : SailM (BitVec 1) )
+                (pure (((w__6 == 0#1) : Bool)))) ) : SailM Bool )
+          let unknown := (w__7 : Bool)
+          let result ← (( do
+            if (unknown : Bool)
+            then
+              (do
+                let w__9 ← (( do
+                  if (((! fault) : Bool) : Bool)
+                  then
                     (do
-                      let w__20 ← (( do (VTTBR_EL2_read ()) ) : SailM (BitVec 128) )
-                      let w__21 ← (( do (X_read (t +i 1) 64) ) : SailM (BitVec 64) )
-                      let w__22 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-                      (VTTBR_EL2_write
-                        (Mk_VTTBR_EL2_Type
-                          (Sail.BitVec.updateSubrange w__20 127 0 (w__21 +++ w__22)))))))
+                      (ConstrainUnpredictableBool Unpredictable_SVELDNFDATA))
+                  else (pure false) ) : SailM Bool )
+                if (w__9 : Bool)
+                then
+                  (do
+                    let w__10 ← (( do
+                      ((Sail.BitVec.castWidth ) <$> (Extend data esize is_unsigned)) ) : SailM
+                      (BitVec esize) )
+                    (Elem_set result e esize (Sail.BitVec.castWidth w__10)))
+                else
+                  (do
+                    let w__12 ← (( do (ConstrainUnpredictableBool Unpredictable_SVELDNFZERO) ) :
+                      SailM Bool )
+                    if (w__12 : Bool)
+                    then
+                      (do
+                        (Elem_set result e esize (Sail.BitVec.castWidth (Zeros (n := esize)))))
+                    else
+                      (do
+                        let w__14 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read orig e esize))
+                          ) : SailM (BitVec esize) )
+                        (Elem_set result e esize (Sail.BitVec.castWidth w__14)))))
+            else
+              (do
+                let w__16 ← (( do ((Sail.BitVec.castWidth ) <$> (Extend data esize is_unsigned)) )
+                  : SailM (BitVec esize) )
+                (Elem_set result e esize (Sail.BitVec.castWidth w__16))) ) : SailM (BitVec VL) )
+          (pure ((accdesc, data, fault, faulted, result, unknown)))
+      (pure loop_vars)) ) : SailM
+    (AccessDescriptor × (BitVec msize) × Bool × Bool × (BitVec VL) × Bool) )
+  (Z_set t VL (Sail.BitVec.castWidth result))
+
+
+/-- Type quantifiers: VL : Nat, esize : Nat, g : Nat, k_is_unsigned : Bool, msize : Nat, n : Nat, offset
+  : Nat, t : Nat, 0 ≤ t ∧
+  t ≤ 31 ∧
+  0 ≤ offset ∧
+  offset ≤ 31 ∧
+  0 ≤ n ∧
+  n ≤ 31 ∧ msize = 32 ∧ List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧ esize = 64 ∧ (is_VL VL) -/
+def execute_LD1W_Z_P_AI_D (VL : Nat) (esize : Nat) (g : Nat) (msize : Nat) (n : Nat) (offset : Nat) (t : Nat) (is_unsigned : Bool) : SailM Unit := do
+  (CheckNonStreamingSVEEnabled ())
+  let VL : Nat := VL
+  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let base ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6428)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6429)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let data ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6430)
+      (Sail.Int.toNatChecked (msize)))) ) : SailM (BitVec msize) )
+  let mbytes : Nat := (Sail.Int.toNatChecked ((Int.ediv msize 8)))
+  let contiguous : Bool := false
+  let nontemporal : Bool := false
+  let tagchecked : Bool := true
+  let accdesc ← (( do (CreateAccDescSVE MemOp_LOAD nontemporal contiguous tagchecked) ) : SailM
+    AccessDescriptor )
+  let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
+  let base ← (( do
+    if (w__0 : Bool)
+    then
+      (do
+        ((Sail.BitVec.castWidth ) <$> (Z_read n VL)))
+    else (pure (base)) ) : SailM (BitVec VL) )
+  let base := base
+  let (data, result) ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
+    (do
+      let mut loop_vars := (data, result)
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let (data, result) := loop_vars
+        loop_vars ← do
+          let w__2 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
+          if (w__2 : Bool)
+          then
+            (do
+              let w__3 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read base e esize)) ) : SailM
+                (BitVec esize) )
+              let addr : (BitVec 64) :=
+                (BitVec.addInt (Sail.BitVec.zeroExtend w__3 64) (offset *i mbytes))
+              let w__4 ← (( do ((Sail.BitVec.castWidth ) <$> (Mem_read addr mbytes accdesc)) ) :
+                SailM (BitVec (msize / 8 * 8)) )
+              let data := ((Sail.BitVec.castWidth w__4) : (BitVec msize))
+              let w__5 ← (( do ((Sail.BitVec.castWidth ) <$> (Extend data esize is_unsigned)) ) :
+                SailM (BitVec esize) )
+              let w__6 ← (( do (Elem_set result e esize (Sail.BitVec.castWidth w__5)) ) : SailM
+                (BitVec VL) )
+              let result := (w__6 : (BitVec VL))
+              (pure ((data, result))))
           else
             (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  let w__23 ← (( do (VTTBR_EL2_read ()) ) : SailM (BitVec 128) )
-                  let w__24 ← (( do (X_read (t +i 1) 64) ) : SailM (BitVec 64) )
-                  let w__25 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-                  (VTTBR_EL2_write
-                    (Mk_VTTBR_EL2_Type (Sail.BitVec.updateSubrange w__23 127 0 (w__24 +++ w__25)))))
-              else (pure (())))))
+              let w__7 ← (( do
+                (Elem_set result e esize (Sail.BitVec.castWidth (Zeros (n := esize)))) ) : SailM
+                (BitVec VL) )
+              let result := (w__7 : (BitVec VL))
+              (pure ((data, result))))
+      (pure loop_vars)) ) : SailM ((BitVec msize) × (BitVec VL)) )
+  (Z_set t VL (Sail.BitVec.castWidth result))
 
 
-def decode_aarch32_instrs_LDM_A1enc_A_txt (cond : (BitVec 4)) (W : (BitVec 1)) (Rn : (BitVec 4)) (register_list : (BitVec 16)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
+/-- Type quantifiers: VL : Nat, esize : Nat, g : Nat, k_is_unsigned : Bool, msize : Nat, n : Nat, offset
+  : Nat, t : Nat, 0 ≤ t ∧
+  t ≤ 31 ∧
+  0 ≤ offset ∧
+  offset ≤ 31 ∧
+  0 ≤ n ∧
+  n ≤ 31 ∧ msize = 32 ∧ List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧ esize = 64 ∧ (is_VL VL) -/
+def execute_LD1SW_Z_P_AI_D (VL : Nat) (esize : Nat) (g : Nat) (msize : Nat) (n : Nat) (offset : Nat) (t : Nat) (is_unsigned : Bool) : SailM Unit := do
+  (CheckNonStreamingSVEEnabled ())
+  let VL : Nat := VL
+  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let base ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6431)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6432)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let data ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6433)
+      (Sail.Int.toNatChecked (msize)))) ) : SailM (BitVec msize) )
+  let mbytes : Nat := (Sail.Int.toNatChecked ((Int.ediv msize 8)))
+  let contiguous : Bool := false
+  let nontemporal : Bool := false
+  let tagchecked : Bool := true
+  let accdesc ← (( do (CreateAccDescSVE MemOp_LOAD nontemporal contiguous tagchecked) ) : SailM
+    AccessDescriptor )
+  let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
+  let base ← (( do
+    if (w__0 : Bool)
+    then
+      (do
+        ((Sail.BitVec.castWidth ) <$> (Z_read n VL)))
+    else (pure (base)) ) : SailM (BitVec VL) )
+  let base := base
+  let (data, result) ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
     (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:3589.29-3589.30"
-      let n : Int := (BitVec.toNat Rn)
-      let registers : (BitVec 16) := register_list
-      let wback : Bool := (W == 1#1)
-      if (((n == 15) || ((BitCount registers) <b 1)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if ((wback && ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access registers
-                 (Sail.Int.toNatChecked (n)))])) == 1#1)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDM_Op_A_txt (Sail.Int.toNatChecked (n)) registers wback))
-  else (pure (()))
+      let mut loop_vars := (data, result)
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let (data, result) := loop_vars
+        loop_vars ← do
+          let w__2 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
+          if (w__2 : Bool)
+          then
+            (do
+              let w__3 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read base e esize)) ) : SailM
+                (BitVec esize) )
+              let addr : (BitVec 64) :=
+                (BitVec.addInt (Sail.BitVec.zeroExtend w__3 64) (offset *i mbytes))
+              let w__4 ← (( do ((Sail.BitVec.castWidth ) <$> (Mem_read addr mbytes accdesc)) ) :
+                SailM (BitVec (msize / 8 * 8)) )
+              let data := ((Sail.BitVec.castWidth w__4) : (BitVec msize))
+              let w__5 ← (( do ((Sail.BitVec.castWidth ) <$> (Extend data esize is_unsigned)) ) :
+                SailM (BitVec esize) )
+              let w__6 ← (( do (Elem_set result e esize (Sail.BitVec.castWidth w__5)) ) : SailM
+                (BitVec VL) )
+              let result := (w__6 : (BitVec VL))
+              (pure ((data, result))))
+          else
+            (do
+              let w__7 ← (( do
+                (Elem_set result e esize (Sail.BitVec.castWidth (Zeros (n := esize)))) ) : SailM
+                (BitVec VL) )
+              let result := (w__7 : (BitVec VL))
+              (pure ((data, result))))
+      (pure loop_vars)) ) : SailM ((BitVec msize) × (BitVec VL)) )
+  (Z_set t VL (Sail.BitVec.castWidth result))
 
 
-def decode_aarch32_instrs_LDM_T1enc_A_txt (Rn : (BitVec 3)) (register_list : (BitVec 8)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
+/-- Type quantifiers: VL : Nat, esize : Nat, g : Nat, k_is_unsigned : Bool, msize : Nat, n : Nat, offset
+  : Nat, t : Nat, 0 ≤ t ∧
+  t ≤ 31 ∧
+  0 ≤ offset ∧
+  offset ≤ 31 ∧
+  0 ≤ n ∧
+  n ≤ 31 ∧ msize = 32 ∧ List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧ esize = 64 ∧ (is_VL VL) -/
+def execute_LDFF1W_Z_P_AI_D (VL : Nat) (esize : Nat) (g : Nat) (msize : Nat) (n : Nat) (offset : Nat) (t : Nat) (is_unsigned : Bool) : SailM Unit := do
+  (CheckNonStreamingSVEEnabled ())
+  let VL : Nat := VL
+  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let base ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6434)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6435)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let orig ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read t VL)) ) : SailM (BitVec VL) )
+  let data ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6436)
+      (Sail.Int.toNatChecked (msize)))) ) : SailM (BitVec msize) )
+  let mbytes : Nat := (Sail.Int.toNatChecked ((Int.ediv msize 8)))
+  let fault : Bool := false
+  let faulted : Bool := false
+  let unknown : Bool := false
+  let contiguous : Bool := false
+  let tagchecked : Bool := true
+  let accdesc ← (( do (CreateAccDescSVEFF contiguous tagchecked) ) : SailM AccessDescriptor )
+  let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
+  let base ← (( do
+    if (w__0 : Bool)
+    then
+      (do
+        ((Sail.BitVec.castWidth ) <$> (Z_read n VL)))
+    else (pure (base)) ) : SailM (BitVec VL) )
+  let base := base
+  ArmFull.assert accdesc.first "sail-inputs/16-instrs64_sve.sail:78132.24-78132.25"
+  let (accdesc, data, fault, faulted, result, unknown) ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
     (do
-      let n : Int := (BitVec.toNat Rn)
-      let registers : (BitVec 16) := (0b00000000#8 +++ register_list)
-      let wback : Bool :=
-        ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access registers (Sail.Int.toNatChecked (n)))])) == 0#1)
-      if (((BitCount registers) <b 1) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDM_Op_A_txt (Sail.Int.toNatChecked (n)) registers wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDM_T2enc_A_txt (W : (BitVec 1)) (Rn : (BitVec 4)) (P : (BitVec 1)) (M : (BitVec 1)) (register_list : (BitVec 14)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let n : Int := (BitVec.toNat Rn)
-      let registers : (BitVec 16) := ((P +++ M) +++ register_list)
-      let wback : Bool := (W == 1#1)
-      if ((((n == 15) || ((BitCount registers) <b 2)) || ((P == 1#1) && (M == 1#1))) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if ((wback && ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access registers
-                 (Sail.Int.toNatChecked (n)))])) == 1#1)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access registers 13)])) == 1#1) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      let w__4 ← (( do
-        if ((← do
-             if ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access registers 15)])) == 1#1) : Bool) : Bool)
-             then
-               (do
-                 (InITBlock ()))
-             else (pure false)) : Bool)
-        then
-          (do
-            let w__3 ← (( do (LastInITBlock ()) ) : SailM Bool )
-            (pure (((! w__3) : Bool))))
-        else (pure false) ) : SailM Bool )
-      if (w__4 : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDM_Op_A_txt (Sail.Int.toNatChecked (n)) registers wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDMDA_A1enc_A_txt (cond : (BitVec 4)) (W : (BitVec 1)) (Rn : (BitVec 4)) (register_list : (BitVec 16)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:3697.29-3697.30"
-      let n : Int := (BitVec.toNat Rn)
-      let registers : (BitVec 16) := register_list
-      let wback : Bool := (W == 1#1)
-      if (((n == 15) || ((BitCount registers) <b 1)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if ((wback && ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access registers
-                 (Sail.Int.toNatChecked (n)))])) == 1#1)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDMDA_Op_A_txt (Sail.Int.toNatChecked (n)) registers wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDMDB_A1enc_A_txt (cond : (BitVec 4)) (W : (BitVec 1)) (Rn : (BitVec 4)) (register_list : (BitVec 16)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:3749.29-3749.30"
-      let n : Int := (BitVec.toNat Rn)
-      let registers : (BitVec 16) := register_list
-      let wback : Bool := (W == 1#1)
-      if (((n == 15) || ((BitCount registers) <b 1)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if ((wback && ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access registers
-                 (Sail.Int.toNatChecked (n)))])) == 1#1)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDMDB_Op_A_txt (Sail.Int.toNatChecked (n)) registers wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDMDB_T1enc_A_txt (W : (BitVec 1)) (Rn : (BitVec 4)) (P : (BitVec 1)) (M : (BitVec 1)) (register_list : (BitVec 14)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let n : Int := (BitVec.toNat Rn)
-      let registers : (BitVec 16) := ((P +++ M) +++ register_list)
-      let wback : Bool := (W == 1#1)
-      if ((((n == 15) || ((BitCount registers) <b 2)) || ((P == 1#1) && (M == 1#1))) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if ((wback && ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access registers
-                 (Sail.Int.toNatChecked (n)))])) == 1#1)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access registers 13)])) == 1#1) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      let w__4 ← (( do
-        if ((← do
-             if ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access registers 15)])) == 1#1) : Bool) : Bool)
-             then
-               (do
-                 (InITBlock ()))
-             else (pure false)) : Bool)
-        then
-          (do
-            let w__3 ← (( do (LastInITBlock ()) ) : SailM Bool )
-            (pure (((! w__3) : Bool))))
-        else (pure false) ) : SailM Bool )
-      if (w__4 : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDMDB_Op_A_txt (Sail.Int.toNatChecked (n)) registers wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDMIB_A1enc_A_txt (cond : (BitVec 4)) (W : (BitVec 1)) (Rn : (BitVec 4)) (register_list : (BitVec 16)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:3835.29-3835.30"
-      let n : Int := (BitVec.toNat Rn)
-      let registers : (BitVec 16) := register_list
-      let wback : Bool := (W == 1#1)
-      if (((n == 15) || ((BitCount registers) <b 1)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if ((wback && ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access registers
-                 (Sail.Int.toNatChecked (n)))])) == 1#1)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDMIB_Op_A_txt (Sail.Int.toNatChecked (n)) registers wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDRB_i_A1enc_A_txt (cond : (BitVec 4)) (P : (BitVec 1)) (U : (BitVec 1)) (W : (BitVec 1)) (Rn : (BitVec 4)) (Rt : (BitVec 4)) (imm12 : (BitVec 12)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:3881.29-3881.30"
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "LDRB (literal)"))
-      else (pure (()))
-      if (((P == 0#1) && (W == 1#1)) : Bool)
-      then sailThrow ((Error_See "LDRBT"))
-      else (pure (()))
-      let t : Int := (BitVec.toNat Rt)
-      let n : Int := (BitVec.toNat Rn)
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend imm12 32)
-      let index : Bool := (P == 1#1)
-      let add : Bool := (U == 1#1)
-      let wback : Bool := ((P == 0#1) || (W == 1#1))
-      if (((t == 15) || (wback && (n == t))) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDRB_i_OpA_A_txt add imm32 index (Sail.Int.toNatChecked (n))
-        (Sail.Int.toNatChecked (t)) wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDRB_i_T1enc_A_txt (imm5 : (BitVec 5)) (Rn : (BitVec 3)) (Rt : (BitVec 3)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let t : Int := (BitVec.toNat Rt)
-      let n : Int := (BitVec.toNat Rn)
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend imm5 32)
-      let index : Bool := true
-      let add : Bool := true
-      let wback : Bool := false
-      (execute_aarch32_instrs_LDRB_i_OpT_A_txt add imm32 index (Sail.Int.toNatChecked (n))
-        (Sail.Int.toNatChecked (t)) wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDRB_i_T2enc_A_txt (Rn : (BitVec 4)) (Rt : (BitVec 4)) (imm12 : (BitVec 12)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      if ((Rt == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "PLD"))
-      else (pure (()))
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "LDRB (literal)"))
-      else (pure (()))
-      let t : Int := (BitVec.toNat Rt)
-      let n : Int := (BitVec.toNat Rn)
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend imm12 32)
-      let index : Bool := true
-      let add : Bool := true
-      let wback : Bool := false
-      (execute_aarch32_instrs_LDRB_i_OpT_A_txt add imm32 index (Sail.Int.toNatChecked (n))
-        (Sail.Int.toNatChecked (t)) wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDRB_i_T3enc_A_txt (Rn : (BitVec 4)) (Rt : (BitVec 4)) (P : (BitVec 1)) (U : (BitVec 1)) (W : (BitVec 1)) (imm8 : (BitVec 8)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      if (((((Rt == 0b1111#4) && (P == 1#1)) && (U == 0#1)) && (W == 0#1)) : Bool)
-      then sailThrow ((Error_See "PLD, PLDW (immediate)"))
-      else (pure (()))
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "LDRB (literal)"))
-      else (pure (()))
-      if ((((P == 1#1) && (U == 1#1)) && (W == 0#1)) : Bool)
-      then sailThrow ((Error_See "LDRBT"))
-      else (pure (()))
-      if (((P == 0#1) && (W == 0#1)) : Bool)
-      then sailThrow ((Error_Undefined ()))
-      else (pure (()))
-      let t : Int := (BitVec.toNat Rt)
-      let n : Int := (BitVec.toNat Rn)
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend imm8 32)
-      let index : Bool := (P == 1#1)
-      let add : Bool := (U == 1#1)
-      let wback : Bool := (W == 1#1)
-      if ((((t == 15) && (W == 1#1)) || (wback && (n == t))) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDRB_i_OpT_A_txt add imm32 index (Sail.Int.toNatChecked (n))
-        (Sail.Int.toNatChecked (t)) wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDRB_l_A1enc_A_txt (cond : (BitVec 4)) (P : (BitVec 1)) (U : (BitVec 1)) (W : (BitVec 1)) (Rt : (BitVec 4)) (imm12 : (BitVec 12)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:4041.29-4041.30"
-      if (((P == 0#1) && (W == 1#1)) : Bool)
-      then sailThrow ((Error_See "LDRBT"))
-      else (pure (()))
-      let t : Int := (BitVec.toNat Rt)
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend imm12 32)
-      let add : Bool := (U == 1#1)
-      let wback : Bool := ((P == 0#1) || (W == 1#1))
-      if (((t == 15) || wback) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDRB_l_Op_A_txt add imm32 (Sail.Int.toNatChecked (t))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDRB_l_T1enc_A_txt (U : (BitVec 1)) (Rt : (BitVec 4)) (imm12 : (BitVec 12)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      if ((Rt == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "PLD"))
-      else (pure (()))
-      let t : Int := (BitVec.toNat Rt)
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend imm12 32)
-      let add : Bool := (U == 1#1)
-      (execute_aarch32_instrs_LDRB_l_Op_A_txt add imm32 (Sail.Int.toNatChecked (t))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDRB_r_A1enc_A_txt (cond : (BitVec 4)) (P : (BitVec 1)) (U : (BitVec 1)) (W : (BitVec 1)) (Rn : (BitVec 4)) (Rt : (BitVec 4)) (imm5 : (BitVec 5)) (stype : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:4114.29-4114.30"
-      let shift_n ← (( do (undefined_int_at (← occLabel 3028) ()) ) : SailM Int )
-      let shift_t ← (( do (undefined_SRType (← occLabel 3029) ()) ) : SailM SRType )
-      if (((P == 0#1) && (W == 1#1)) : Bool)
-      then sailThrow ((Error_See "LDRBT"))
-      else (pure (()))
-      let t : Int := (BitVec.toNat Rt)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      let index : Bool := (P == 1#1)
-      let add : Bool := (U == 1#1)
-      let wback : Bool := ((P == 0#1) || (W == 1#1))
-      let w__1 ← (( do (DecodeImmShift stype imm5) ) : SailM (SRType × Int) )
-      let (tup__0, tup__1) := (w__1 : (SRType × Int))
-      let shift_t : SRType := tup__0
-      let shift_n : Int := tup__1
-      let shift_n : Int := shift_n
-      if (((t == 15) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if ((wback && ((n == 15) || (n == t))) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDRB_r_Op_A_txt add index (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) shift_n shift_t (Sail.Int.toNatChecked (t)) wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDRB_r_T1enc_A_txt (Rm : (BitVec 3)) (Rn : (BitVec 3)) (Rt : (BitVec 3)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let shift_n ← (( do (undefined_int_at (← occLabel 3030) ()) ) : SailM Int )
-      let shift_t ← (( do (undefined_SRType (← occLabel 3031) ()) ) : SailM SRType )
-      let t : Int := (BitVec.toNat Rt)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      let index : Bool := true
-      let add : Bool := true
-      let wback : Bool := false
-      let (tup__0, tup__1) := ((SRType_LSL, 0) : (SRType × Nat))
-      let shift_t : SRType := tup__0
-      let shift_n : Int := (Sail.Int.toNatChecked (tup__1))
-      let shift_n : Int := shift_n
-      (execute_aarch32_instrs_LDRB_r_Op_A_txt add index (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) shift_n shift_t (Sail.Int.toNatChecked (t)) wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDRB_r_T2enc_A_txt (Rn : (BitVec 4)) (Rt : (BitVec 4)) (imm2 : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let shift_n ← (( do (undefined_int_at (← occLabel 3032) ()) ) : SailM Int )
-      let shift_t ← (( do (undefined_SRType (← occLabel 3033) ()) ) : SailM SRType )
-      if ((Rt == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "PLD"))
-      else (pure (()))
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "LDRB (literal)"))
-      else (pure (()))
-      let t : Int := (BitVec.toNat Rt)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      let index : Bool := true
-      let add : Bool := true
-      let wback : Bool := false
-      let (tup__0, tup__1) := ((SRType_LSL, (BitVec.toNat imm2)) : (SRType × Int))
-      let shift_t : SRType := tup__0
-      let shift_n : Int := tup__1
-      let shift_n : Int := shift_n
-      if ((m == 15) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDRB_r_Op_A_txt add index (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) shift_n shift_t (Sail.Int.toNatChecked (t)) wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDRBT_A1enc_A_txt (cond : (BitVec 4)) (U : (BitVec 1)) (Rn : (BitVec 4)) (Rt : (BitVec 4)) (imm12 : (BitVec 12)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:4246.29-4246.30"
-      let m ← (( do (undefined_int_at (← occLabel 3034) ()) ) : SailM Int )
-      let shift_n ← (( do (undefined_int_at (← occLabel 3035) ()) ) : SailM Int )
-      let shift_t ← (( do (undefined_SRType (← occLabel 3036) ()) ) : SailM SRType )
-      let t : Int := (BitVec.toNat Rt)
-      let n : Int := (BitVec.toNat Rn)
-      let postindex : Bool := true
-      let add : Bool := (U == 1#1)
-      let register_form : Bool := false
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend imm12 32)
-      if ((((t == 15) || (n == 15)) || (n == t)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      let shift_t := shift_t
-      let shift_n : Int := shift_n
-      let m : Int := m
-      (execute_aarch32_instrs_LDRBT_Op_A_txt add imm32 m (Sail.Int.toNatChecked (n)) postindex
-        register_form shift_n shift_t (Sail.Int.toNatChecked (t))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDRBT_A2enc_A_txt (cond : (BitVec 4)) (U : (BitVec 1)) (Rn : (BitVec 4)) (Rt : (BitVec 4)) (imm5 : (BitVec 5)) (stype : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:4281.29-4281.30"
-      let shift_n ← (( do (undefined_int_at (← occLabel 3037) ()) ) : SailM Int )
-      let shift_t ← (( do (undefined_SRType (← occLabel 3038) ()) ) : SailM SRType )
-      let imm32 ← (( do (undefined_bitvector_at (← occLabel 3039) 32) ) : SailM (BitVec 32) )
-      let t : Int := (BitVec.toNat Rt)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      let postindex : Bool := true
-      let add : Bool := (U == 1#1)
-      let register_form : Bool := true
-      let w__1 ← (( do (DecodeImmShift stype imm5) ) : SailM (SRType × Int) )
-      let (tup__0, tup__1) := (w__1 : (SRType × Int))
-      let shift_t : SRType := tup__0
-      let shift_n : Int := tup__1
-      let shift_n : Int := shift_n
-      if (((((t == 15) || (n == 15)) || (n == t)) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      let imm32 := imm32
-      let shift_t := shift_t
-      let shift_n : Int := shift_n
-      (execute_aarch32_instrs_LDRBT_Op_A_txt add imm32 m (Sail.Int.toNatChecked (n)) postindex
-        register_form shift_n shift_t (Sail.Int.toNatChecked (t))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDRBT_T1enc_A_txt (Rn : (BitVec 4)) (Rt : (BitVec 4)) (imm8 : (BitVec 8)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let m ← (( do (undefined_int_at (← occLabel 3040) ()) ) : SailM Int )
-      let shift_n ← (( do (undefined_int_at (← occLabel 3041) ()) ) : SailM Int )
-      let shift_t ← (( do (undefined_SRType (← occLabel 3042) ()) ) : SailM SRType )
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "LDRB (literal)"))
-      else (pure (()))
-      let shift_t := shift_t
-      let shift_n : Int := shift_n
-      let m : Int := m
-      let t : Int := (BitVec.toNat Rt)
-      let n : Int := (BitVec.toNat Rn)
-      let postindex : Bool := false
-      let add : Bool := true
-      let register_form : Bool := false
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend imm8 32)
-      if ((t == 15) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDRBT_Op_A_txt add imm32 m (Sail.Int.toNatChecked (n)) postindex
-        register_form shift_n shift_t (Sail.Int.toNatChecked (t))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDRD_i_A1enc_A_txt (cond : (BitVec 4)) (P : (BitVec 1)) (U : (BitVec 1)) (W : (BitVec 1)) (Rn : (BitVec 4)) (Rt : (BitVec 4)) (imm4H : (BitVec 4)) (imm4L : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:4383.29-4383.30"
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "LDRD (literal)"))
-      else (pure (()))
-      if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Rt 0)])) == 1#1) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      let t : Int := (BitVec.toNat Rt)
-      let t2 : Int := (t +i 1)
-      let n : Int := (BitVec.toNat Rn)
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend (imm4H +++ imm4L) 32)
-      let index : Bool := (P == 1#1)
-      let add : Bool := (U == 1#1)
-      let wback : Bool := ((P == 0#1) || (W == 1#1))
-      if (((P == 0#1) && (W == 1#1)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if ((wback && ((n == t) || (n == t2))) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if ((t2 == 15) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDRD_i_Op_A_txt add imm32 index (Sail.Int.toNatChecked (n))
-        (Sail.Int.toNatChecked (t)) (Sail.Int.toNatChecked (t2)) wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDRD_i_T1enc_A_txt (P : (BitVec 1)) (U : (BitVec 1)) (W : (BitVec 1)) (Rn : (BitVec 4)) (Rt : (BitVec 4)) (Rt2 : (BitVec 4)) (imm8 : (BitVec 8)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      if (((P == 0#1) && (W == 0#1)) : Bool)
-      then sailThrow ((Error_See "Related encodings"))
-      else (pure (()))
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "LDRD (literal)"))
-      else (pure (()))
-      let t : Int := (BitVec.toNat Rt)
-      let t2 : Int := (BitVec.toNat Rt2)
-      let n : Int := (BitVec.toNat Rn)
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend (imm8 +++ 0b00#2) 32)
-      let index : Bool := (P == 1#1)
-      let add : Bool := (U == 1#1)
-      let wback : Bool := (W == 1#1)
-      if ((wback && ((n == t) || (n == t2))) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if ((((t == 15) || (t2 == 15)) || (t == t2)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDRD_i_Op_A_txt add imm32 index (Sail.Int.toNatChecked (n))
-        (Sail.Int.toNatChecked (t)) (Sail.Int.toNatChecked (t2)) wback))
-  else (pure (()))
+      let mut loop_vars := (accdesc, data, fault, faulted, result, unknown)
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let (accdesc, data, fault, faulted, result, unknown) := loop_vars
+        loop_vars ← do
+          let w__2 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
+          let (accdesc, data, fault) ← (( do
+            if (w__2 : Bool)
+            then
+              (do
+                let w__3 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read base e esize)) ) : SailM
+                  (BitVec esize) )
+                let addr : (BitVec 64) :=
+                  (BitVec.addInt (Sail.BitVec.zeroExtend w__3 64) (offset *i mbytes))
+                if (accdesc.first : Bool)
+                then
+                  (do
+                    let w__4 ← (( do ((Sail.BitVec.castWidth ) <$> (Mem_read addr mbytes accdesc))
+                      ) : SailM (BitVec (msize / 8 * 8)) )
+                    let data := ((Sail.BitVec.castWidth w__4) : (BitVec msize))
+                    let accdesc : AccessDescriptor := { accdesc with first := false }
+                    (pure ((accdesc, data, fault))))
+                else
+                  (do
+                    let w__5 ← (( do
+                      ((fun (x0, x1) => ((Sail.BitVec.castWidth x0), x1)) <$> (MemNF_read addr
+                        mbytes accdesc)) ) : SailM
+                      ((BitVec (8 * (Sail.Int.toNatChecked mbytes))) × Bool) )
+                    let (tup__0, tup__1) :=
+                      (w__5 : ((BitVec (8 * (Sail.Int.toNatChecked mbytes))) × Bool))
+                    let data : (BitVec msize) := (Sail.BitVec.castWidth tup__0)
+                    let fault : Bool := tup__1
+                    (pure ((accdesc, data, fault)))))
+            else
+              (let (tup__0, tup__1) :=
+                (((Sail.BitVec.castWidth (Zeros (n := msize))), false) : ((BitVec msize) × Bool))
+              let data : (BitVec msize) := tup__0
+              let fault : Bool := tup__1
+              (pure ((accdesc, data, fault)))) ) : SailM
+            (AccessDescriptor × (BitVec msize) × Bool) )
+          let faulted : Bool := (faulted || fault)
+          if (faulted : Bool)
+          then
+            (do
+              (ElemFFR_set e esize 0#1))
+          else (pure (()))
+          let w__7 ← (( do
+            if ((unknown : Bool) : Bool)
+            then (pure true)
+            else
+              (do
+                let w__6 ← (( do (ElemFFR_read e esize) ) : SailM (BitVec 1) )
+                (pure (((w__6 == 0#1) : Bool)))) ) : SailM Bool )
+          let unknown := (w__7 : Bool)
+          let result ← (( do
+            if (unknown : Bool)
+            then
+              (do
+                let w__9 ← (( do
+                  if (((! fault) : Bool) : Bool)
+                  then
+                    (do
+                      (ConstrainUnpredictableBool Unpredictable_SVELDNFDATA))
+                  else (pure false) ) : SailM Bool )
+                if (w__9 : Bool)
+                then
+                  (do
+                    let w__10 ← (( do
+                      ((Sail.BitVec.castWidth ) <$> (Extend data esize is_unsigned)) ) : SailM
+                      (BitVec esize) )
+                    (Elem_set result e esize (Sail.BitVec.castWidth w__10)))
+                else
+                  (do
+                    let w__12 ← (( do (ConstrainUnpredictableBool Unpredictable_SVELDNFZERO) ) :
+                      SailM Bool )
+                    if (w__12 : Bool)
+                    then
+                      (do
+                        (Elem_set result e esize (Sail.BitVec.castWidth (Zeros (n := esize)))))
+                    else
+                      (do
+                        let w__14 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read orig e esize))
+                          ) : SailM (BitVec esize) )
+                        (Elem_set result e esize (Sail.BitVec.castWidth w__14)))))
+            else
+              (do
+                let w__16 ← (( do ((Sail.BitVec.castWidth ) <$> (Extend data esize is_unsigned)) )
+                  : SailM (BitVec esize) )
+                (Elem_set result e esize (Sail.BitVec.castWidth w__16))) ) : SailM (BitVec VL) )
+          (pure ((accdesc, data, fault, faulted, result, unknown)))
+      (pure loop_vars)) ) : SailM
+    (AccessDescriptor × (BitVec msize) × Bool × Bool × (BitVec VL) × Bool) )
+  (Z_set t VL (Sail.BitVec.castWidth result))
 
 
 end ArmFull.Functions

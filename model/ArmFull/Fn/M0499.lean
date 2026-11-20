@@ -1,27 +1,25 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0022
-import ArmFull.Fn.M0023
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0034
-import ArmFull.Fn.M0036
-import ArmFull.Fn.M0040
-import ArmFull.Fn.M0047
-import ArmFull.Fn.M0061
-import ArmFull.Fn.M0064
-import ArmFull.Fn.M0071
-import ArmFull.Fn.M0073
-import ArmFull.Fn.M0092
-import ArmFull.Fn.M0100
-import ArmFull.Fn.M0146
-import ArmFull.Fn.M0166
-import ArmFull.Fn.M0181
-import ArmFull.Fn.M0254
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0022
+public import ArmFull.Fn.M0023
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0047
+public import ArmFull.Fn.M0064
+public import ArmFull.Fn.M0073
+public import ArmFull.Fn.M0086
+public import ArmFull.Fn.M0092
+public import ArmFull.Fn.M0100
+public import ArmFull.Fn.M0144
+public import ArmFull.Fn.M0146
+public import ArmFull.Fn.M0170
+public import ArmFull.Fn.M0181
+public import ArmFull.Fn.M0182
+public import ArmFull.Fn.M0252 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -124,7 +122,7 @@ open AccessType
 open ATAccess
 
 /-- Type quantifiers: t : Int -/
-def PMOVSSET_EL0_SysRegWrite_669267b3fe0a189b (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+def PMEVCNTR_EL0_SysRegWrite_ae5d8b12796ab9e6 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
   let __PSTATE_EL : (BitVec 2) := w__0.EL
   let w__1 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
@@ -138,51 +136,55 @@ def PMOVSSET_EL0_SysRegWrite_669267b3fe0a189b (el : (BitVec 2)) (op0 : (BitVec 2
   let w__5 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
   let __SCR_EL3_FGTEn : (BitVec 1) := (_get_SCR_EL3_Type_FGTEn w__5)
   let w__6 ← (( do readReg HDFGWTR_EL2 ) : SailM (BitVec 64) )
-  let __HDFGWTR_EL2_PMOVS : (BitVec 1) := (_get_HDFGWTR_EL2_Type_PMOVS w__6)
+  let __HDFGWTR_EL2_PMEVCNTRn_EL0 : (BitVec 1) := (_get_HDFGWTR_EL2_Type_PMEVCNTRn_EL0 w__6)
   let w__7 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
   let __MDCR_EL2_TPM : (BitVec 1) := (_get_MDCR_EL2_Type_TPM w__7)
   if ((__PSTATE_EL == EL0) : Bool)
   then
     (do
-      let w__13 ← (( do
+      let w__14 ← (( do
         (pure ((← do
               if ((← do
                    (pure ((← do
-                         (pure ((← do
-                               (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
+                         if ((← do
+                              (Halted ())) : Bool)
+                         then
+                           (do
+                             (HaveEL EL3))
+                         else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
               then
                 (do
                   (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
               else (pure false)) && ((__MDCR_EL3_TPM == 1#1) : Bool))) ) : SailM Bool )
-      if (w__13 : Bool)
+      if (w__14 : Bool)
       then sailThrow ((Error_Undefined ()))
       else
         (do
-          let w__20 ← (( do
+          let w__21 ← (( do
             if ((← do
                  if ((← do
                       (IsFeatureImplemented FEAT_PMUv3p9)) : Bool)
                  then
                    (do
-                     let w__15 ← (( do readReg PMUSERENR_EL0 ) : SailM (BitVec 64) )
                      let w__16 ← (( do readReg PMUSERENR_EL0 ) : SailM (BitVec 64) )
-                     (pure (((((_get_PMUSERENR_EL0_Type_UEN w__15) +++ (_get_PMUSERENR_EL0_Type_EN
-                             w__16)) == 0b00#2) : Bool))))
+                     let w__17 ← (( do readReg PMUSERENR_EL0 ) : SailM (BitVec 64) )
+                     (pure (((((_get_PMUSERENR_EL0_Type_UEN w__16) +++ (_get_PMUSERENR_EL0_Type_EN
+                             w__17)) == 0b00#2) : Bool))))
                  else (pure false)) : Bool)
             then (pure true)
             else
               (do
                 (pure ((← do
-                      let w__18 ← (( do (IsFeatureImplemented FEAT_PMUv3p9) ) : SailM Bool )
-                      (pure (((! w__18) : Bool)))) && ((__PMUSERENR_EL0_EN == 0#1) : Bool)))) ) :
+                      let w__19 ← (( do (IsFeatureImplemented FEAT_PMUv3p9) ) : SailM Bool )
+                      (pure (((! w__19) : Bool)))) && ((__PMUSERENR_EL0_EN == 0#1) : Bool)))) ) :
             SailM Bool )
-          if (w__20 : Bool)
+          if (w__21 : Bool)
           then
             (do
-              let w__22 ← (( do
+              let w__23 ← (( do
                 (pure ((← do
                       (EL2Enabled ())) && ((__HCR_EL2_TGE == 1#1) : Bool))) ) : SailM Bool )
-              if (w__22 : Bool)
+              if (w__23 : Bool)
               then
                 (do
                   (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
@@ -191,345 +193,302 @@ def PMOVSSET_EL0_SysRegWrite_669267b3fe0a189b (el : (BitVec 2)) (op0 : (BitVec 2
                   (AArch64_SystemAccessTrap EL1 (BitVec.toNat 0x18#8))))
           else
             (do
-              let w__30 ← (( do
+              let w__33 ← (( do
                 (pure ((← do
-                      (pure ((← do
-                            if ((← do
-                                 if ((← do
-                                      (EL2Enabled ())) : Bool)
-                                 then
-                                   (do
-                                     let w__24 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                                     let w__25 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                                     (pure (((((_get_HCR_EL2_Type_E2H w__24) +++ (_get_HCR_EL2_Type_TGE
-                                             w__25)) != 0b11#2) : Bool))))
-                                 else (pure false)) : Bool)
-                            then
-                              (do
-                                (IsFeatureImplemented FEAT_FGT))
-                            else (pure false)) && (((! (HaveEL EL3)) || (__SCR_EL3_FGTEn == 1#1)) : Bool)))) && ((__HDFGWTR_EL2_PMOVS == 1#1) : Bool)))
-                ) : SailM Bool )
-              if (w__30 : Bool)
+                      if ((← do
+                           if ((← do
+                                if ((← do
+                                     (EL2Enabled ())) : Bool)
+                                then
+                                  (do
+                                    let w__25 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                                    let w__26 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                                    (pure (((((_get_HCR_EL2_Type_E2H w__25) +++ (_get_HCR_EL2_Type_TGE
+                                            w__26)) != 0b11#2) : Bool))))
+                                else (pure false)) : Bool)
+                           then
+                             (do
+                               (IsFeatureImplemented FEAT_FGT))
+                           else (pure false)) : Bool)
+                      then
+                        (do
+                          (pure ((← do
+                                let w__30 ← (( do (HaveEL EL3) ) : SailM Bool )
+                                (pure (((! w__30) : Bool)))) || ((__SCR_EL3_FGTEn == 1#1) : Bool))))
+                      else (pure false)) && ((__HDFGWTR_EL2_PMEVCNTRn_EL0 == 1#1) : Bool))) ) :
+                SailM Bool )
+              if (w__33 : Bool)
               then
                 (do
                   (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
               else
                 (do
-                  let w__32 ← (( do
+                  let w__35 ← (( do
                     (pure ((← do
                           (EL2Enabled ())) && ((__MDCR_EL2_TPM == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__32 : Bool)
+                  if (w__35 : Bool)
                   then
                     (do
                       (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
                   else
                     (do
-                      if (((HaveEL EL3) && (__MDCR_EL3_TPM == 1#1)) : Bool)
+                      let w__38 ← (( do
+                        if ((← do
+                             (EL2Enabled ())) : Bool)
+                        then
+                          (do
+                            let w__37 ← (( do (AArch64_GetNumEventCountersAccessible ()) ) : SailM
+                              Int )
+                            (pure (((26 ≥b w__37) : Bool))))
+                        else (pure false) ) : SailM Bool )
+                      if (w__38 : Bool)
                       then
                         (do
-                          let w__34 ← (( do
-                            (pure ((← do
-                                  (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
-                          if (w__34 : Bool)
-                          then sailThrow ((Error_Undefined ()))
+                          let w__39 ← (( do (IsFeatureImplemented FEAT_FGT) ) : SailM Bool )
+                          if ((! w__39) : Bool)
+                          then
+                            (pure ((ConstrainUnpredictableProcedure Unpredictable_PMUEVENTCOUNTER)))
                           else
                             (do
-                              (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                              (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8))))
                       else
                         (do
-                          let w__35 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-                          writeReg PMOVSSET_EL0 (Mk_PMOVSSET_EL0_Type w__35)))))))
+                          let w__41 ← (( do
+                            (pure ((← do
+                                  (HaveEL EL3)) && ((__MDCR_EL3_TPM == 1#1) : Bool))) ) : SailM Bool
+                            )
+                          if (w__41 : Bool)
+                          then
+                            (do
+                              let w__43 ← (( do
+                                (pure ((← do
+                                      (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool
+                                )
+                              if (w__43 : Bool)
+                              then sailThrow ((Error_Undefined ()))
+                              else
+                                (do
+                                  (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                          else
+                            (do
+                              let w__44 ← (( do readReg PMEVCNTR_EL0 ) : SailM
+                                (Vector (BitVec 64) 32) )
+                              let w__45 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                              writeReg PMEVCNTR_EL0 (vectorUpdate w__44 26 w__45))))))))
   else
     (do
       if ((__PSTATE_EL == EL1) : Bool)
       then
         (do
-          let w__41 ← (( do
+          let w__52 ← (( do
             (pure ((← do
                   if ((← do
                        (pure ((← do
-                             (pure ((← do
-                                   (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
+                             if ((← do
+                                  (Halted ())) : Bool)
+                             then
+                               (do
+                                 (HaveEL EL3))
+                             else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
                   then
                     (do
                       (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
                   else (pure false)) && ((__MDCR_EL3_TPM == 1#1) : Bool))) ) : SailM Bool )
-          if (w__41 : Bool)
+          if (w__52 : Bool)
           then sailThrow ((Error_Undefined ()))
           else
             (do
-              let w__46 ← (( do
+              let w__59 ← (( do
                 (pure ((← do
-                      (pure ((← do
-                            if ((← do
-                                 (EL2Enabled ())) : Bool)
-                            then
-                              (do
-                                (IsFeatureImplemented FEAT_FGT))
-                            else (pure false)) && (((! (HaveEL EL3)) || (__SCR_EL3_FGTEn == 1#1)) : Bool)))) && ((__HDFGWTR_EL2_PMOVS == 1#1) : Bool)))
-                ) : SailM Bool )
-              if (w__46 : Bool)
+                      if ((← do
+                           if ((← do
+                                (EL2Enabled ())) : Bool)
+                           then
+                             (do
+                               (IsFeatureImplemented FEAT_FGT))
+                           else (pure false)) : Bool)
+                      then
+                        (do
+                          (pure ((← do
+                                let w__56 ← (( do (HaveEL EL3) ) : SailM Bool )
+                                (pure (((! w__56) : Bool)))) || ((__SCR_EL3_FGTEn == 1#1) : Bool))))
+                      else (pure false)) && ((__HDFGWTR_EL2_PMEVCNTRn_EL0 == 1#1) : Bool))) ) :
+                SailM Bool )
+              if (w__59 : Bool)
               then
                 (do
                   (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
               else
                 (do
-                  let w__48 ← (( do
+                  let w__61 ← (( do
                     (pure ((← do
                           (EL2Enabled ())) && ((__MDCR_EL2_TPM == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__48 : Bool)
+                  if (w__61 : Bool)
                   then
                     (do
                       (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
                   else
                     (do
-                      if (((HaveEL EL3) && (__MDCR_EL3_TPM == 1#1)) : Bool)
+                      let w__64 ← (( do
+                        if ((← do
+                             (EL2Enabled ())) : Bool)
+                        then
+                          (do
+                            let w__63 ← (( do (AArch64_GetNumEventCountersAccessible ()) ) : SailM
+                              Int )
+                            (pure (((26 ≥b w__63) : Bool))))
+                        else (pure false) ) : SailM Bool )
+                      if (w__64 : Bool)
                       then
                         (do
-                          let w__50 ← (( do
-                            (pure ((← do
-                                  (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
-                          if (w__50 : Bool)
-                          then sailThrow ((Error_Undefined ()))
+                          let w__65 ← (( do (IsFeatureImplemented FEAT_FGT) ) : SailM Bool )
+                          if ((! w__65) : Bool)
+                          then
+                            (pure ((ConstrainUnpredictableProcedure Unpredictable_PMUEVENTCOUNTER)))
                           else
                             (do
-                              (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                              (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8))))
                       else
                         (do
-                          let w__51 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-                          writeReg PMOVSSET_EL0 (Mk_PMOVSSET_EL0_Type w__51))))))
+                          let w__67 ← (( do
+                            (pure ((← do
+                                  (HaveEL EL3)) && ((__MDCR_EL3_TPM == 1#1) : Bool))) ) : SailM Bool
+                            )
+                          if (w__67 : Bool)
+                          then
+                            (do
+                              let w__69 ← (( do
+                                (pure ((← do
+                                      (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool
+                                )
+                              if (w__69 : Bool)
+                              then sailThrow ((Error_Undefined ()))
+                              else
+                                (do
+                                  (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                          else
+                            (do
+                              let w__70 ← (( do readReg PMEVCNTR_EL0 ) : SailM
+                                (Vector (BitVec 64) 32) )
+                              let w__71 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                              writeReg PMEVCNTR_EL0 (vectorUpdate w__70 26 w__71)))))))
       else
         (do
           if ((__PSTATE_EL == EL2) : Bool)
           then
             (do
-              let w__57 ← (( do
+              let w__78 ← (( do
                 (pure ((← do
                       if ((← do
                            (pure ((← do
-                                 (pure ((← do
-                                       (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
+                                 if ((← do
+                                      (Halted ())) : Bool)
+                                 then
+                                   (do
+                                     (HaveEL EL3))
+                                 else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
                       then
                         (do
                           (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
                       else (pure false)) && ((__MDCR_EL3_TPM == 1#1) : Bool))) ) : SailM Bool )
-              if (w__57 : Bool)
+              if (w__78 : Bool)
               then sailThrow ((Error_Undefined ()))
               else
                 (do
-                  if (((HaveEL EL3) && (__MDCR_EL3_TPM == 1#1)) : Bool)
+                  let w__80 ← (( do
+                    (pure ((← do
+                          (HaveEL EL3)) && ((__MDCR_EL3_TPM == 1#1) : Bool))) ) : SailM Bool )
+                  if (w__80 : Bool)
                   then
                     (do
-                      let w__59 ← (( do
+                      let w__82 ← (( do
                         (pure ((← do
                               (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
-                      if (w__59 : Bool)
+                      if (w__82 : Bool)
                       then sailThrow ((Error_Undefined ()))
                       else
                         (do
                           (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
                   else
                     (do
-                      let w__60 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-                      writeReg PMOVSSET_EL0 (Mk_PMOVSSET_EL0_Type w__60))))
+                      let w__83 ← (( do readReg PMEVCNTR_EL0 ) : SailM (Vector (BitVec 64) 32) )
+                      let w__84 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      writeReg PMEVCNTR_EL0 (vectorUpdate w__83 26 w__84))))
           else
             (do
               if ((__PSTATE_EL == EL3) : Bool)
               then
                 (do
-                  let w__61 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-                  writeReg PMOVSSET_EL0 (Mk_PMOVSSET_EL0_Type w__61))
+                  let w__85 ← (( do readReg PMEVCNTR_EL0 ) : SailM (Vector (BitVec 64) 32) )
+                  let w__86 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  writeReg PMEVCNTR_EL0 (vectorUpdate w__85 26 w__86))
               else (pure (())))))
 
 
 /-- Type quantifiers: t : Int -/
-def PMSCR_EL2_SysRegWrite_7385521905c06717 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
-  let w__2 ← (( do readReg MDCR_EL3 ) : SailM (BitVec 64) )
-  let __MDCR_EL3_NSPBE : (BitVec 1) := (_get_MDCR_EL3_Type_NSPBE w__2)
-  let w__3 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_NSE : (BitVec 1) := (_get_SCR_EL3_Type_NSE w__3)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else
-    (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__5 ← (( do
-            (pure ((← do
-                  (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
-          if (w__5 : Bool)
-          then
-            (do
-              (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
-          else sailThrow ((Error_Undefined ())))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              let w__19 ← (( do
-                if ((← do
-                     if ((← do
-                          if ((← do
-                               (pure ((← do
-                                     (Halted ())) && ((HaveEL EL3) : Bool)))) : Bool)
-                          then
-                            (do
-                              let w__8 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-                              (pure ((((_get_EDSCR_Type_SDD w__8) == 1#1) : Bool))))
-                          else (pure false)) : Bool)
-                     then
-                       (do
-                         (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                     else (pure false)) : Bool)
-                then
-                  (do
-                    if ((← do
-                         if ((← do
-                              let w__12 ← (( do readReg MDCR_EL3 ) : SailM (BitVec 64) )
-                              (pure ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                      (_get_MDCR_EL3_Type_NSPB w__12) 0)])) == 0#1) : Bool)))) : Bool)
-                         then (pure true)
-                         else
-                           (do
-                             let w__13 ← (( do readReg MDCR_EL3 ) : SailM (BitVec 64) )
-                             let w__14 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-                             (pure ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                     (_get_MDCR_EL3_Type_NSPB w__13) 1)])) != (_get_SCR_EL3_Type_NS
-                                   w__14)) : Bool))))) : Bool)
-                    then (pure true)
-                    else
-                      (do
-                        (pure ((← do
-                              (IsFeatureImplemented FEAT_RME)) && ((__MDCR_EL3_NSPBE != __SCR_EL3_NSE) : Bool)))))
-                else (pure false) ) : SailM Bool )
-              if (w__19 : Bool)
-              then sailThrow ((Error_Undefined ()))
-              else
-                (do
-                  let w__27 ← (( do
-                    if (((HaveEL EL3) : Bool) : Bool)
-                    then
-                      (do
-                        if ((← do
-                             if ((← do
-                                  let w__20 ← (( do readReg MDCR_EL3 ) : SailM (BitVec 64) )
-                                  (pure ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                          (_get_MDCR_EL3_Type_NSPB w__20) 0)])) == 0#1) : Bool)))) : Bool)
-                             then (pure true)
-                             else
-                               (do
-                                 let w__21 ← (( do readReg MDCR_EL3 ) : SailM (BitVec 64) )
-                                 let w__22 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-                                 (pure ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                         (_get_MDCR_EL3_Type_NSPB w__21) 1)])) != (_get_SCR_EL3_Type_NS
-                                       w__22)) : Bool))))) : Bool)
-                        then (pure true)
-                        else
-                          (do
-                            (pure ((← do
-                                  (IsFeatureImplemented FEAT_RME)) && ((__MDCR_EL3_NSPBE != __SCR_EL3_NSE) : Bool)))))
-                    else (pure false) ) : SailM Bool )
-                  if (w__27 : Bool)
-                  then
-                    (do
-                      let w__30 ← (( do
-                        if ((← do
-                             (Halted ())) : Bool)
-                        then
-                          (do
-                            let w__29 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-                            (pure ((((_get_EDSCR_Type_SDD w__29) == 1#1) : Bool))))
-                        else (pure false) ) : SailM Bool )
-                      if (w__30 : Bool)
-                      then sailThrow ((Error_Undefined ()))
-                      else
-                        (do
-                          (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                  else
-                    (do
-                      let w__31 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-                      writeReg PMSCR_EL2 (Mk_PMSCR_EL2_Type w__31))))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  let w__32 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-                  writeReg PMSCR_EL2 (Mk_PMSCR_EL2_Type w__32))
-              else (pure (())))))
-
-
-/-- Type quantifiers: t : Int -/
-def PMSELR_EL0_SysRegWrite_e127f02e29e8e39d (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+def PMEVCNTR_EL0_SysRegWrite_d19f1d744e0cb4cf (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
   let __PSTATE_EL : (BitVec 2) := w__0.EL
   let w__1 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
   let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__1)
   let w__2 ← (( do readReg MDCR_EL3 ) : SailM (BitVec 64) )
   let __MDCR_EL3_TPM : (BitVec 1) := (_get_MDCR_EL3_Type_TPM w__2)
-  let w__3 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_TGE : (BitVec 1) := (_get_HCR_EL2_Type_TGE w__3)
-  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_FGTEn : (BitVec 1) := (_get_SCR_EL3_Type_FGTEn w__4)
-  let w__5 ← (( do readReg HDFGWTR_EL2 ) : SailM (BitVec 64) )
-  let __HDFGWTR_EL2_PMSELR_EL0 : (BitVec 1) := (_get_HDFGWTR_EL2_Type_PMSELR_EL0 w__5)
-  let w__6 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
-  let __MDCR_EL2_TPM : (BitVec 1) := (_get_MDCR_EL2_Type_TPM w__6)
+  let w__3 ← (( do readReg PMUSERENR_EL0 ) : SailM (BitVec 64) )
+  let __PMUSERENR_EL0_EN : (BitVec 1) := (_get_PMUSERENR_EL0_Type_EN w__3)
+  let w__4 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_TGE : (BitVec 1) := (_get_HCR_EL2_Type_TGE w__4)
+  let w__5 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+  let __SCR_EL3_FGTEn : (BitVec 1) := (_get_SCR_EL3_Type_FGTEn w__5)
+  let w__6 ← (( do readReg HDFGWTR_EL2 ) : SailM (BitVec 64) )
+  let __HDFGWTR_EL2_PMEVCNTRn_EL0 : (BitVec 1) := (_get_HDFGWTR_EL2_Type_PMEVCNTRn_EL0 w__6)
+  let w__7 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
+  let __MDCR_EL2_TPM : (BitVec 1) := (_get_MDCR_EL2_Type_TPM w__7)
   if ((__PSTATE_EL == EL0) : Bool)
   then
     (do
-      let w__12 ← (( do
+      let w__14 ← (( do
         (pure ((← do
               if ((← do
                    (pure ((← do
-                         (pure ((← do
-                               (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
+                         if ((← do
+                              (Halted ())) : Bool)
+                         then
+                           (do
+                             (HaveEL EL3))
+                         else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
               then
                 (do
                   (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
               else (pure false)) && ((__MDCR_EL3_TPM == 1#1) : Bool))) ) : SailM Bool )
-      if (w__12 : Bool)
+      if (w__14 : Bool)
       then sailThrow ((Error_Undefined ()))
       else
         (do
-          let w__22 ← (( do
+          let w__21 ← (( do
             if ((← do
                  if ((← do
                       (IsFeatureImplemented FEAT_PMUv3p9)) : Bool)
                  then
                    (do
-                     let w__14 ← (( do readReg PMUSERENR_EL0 ) : SailM (BitVec 64) )
-                     let w__15 ← (( do readReg PMUSERENR_EL0 ) : SailM (BitVec 64) )
                      let w__16 ← (( do readReg PMUSERENR_EL0 ) : SailM (BitVec 64) )
-                     (pure (((((_get_PMUSERENR_EL0_Type_UEN w__14) +++ ((_get_PMUSERENR_EL0_Type_ER
-                               w__15) +++ (_get_PMUSERENR_EL0_Type_EN w__16))) == 0b000#3) : Bool))))
+                     let w__17 ← (( do readReg PMUSERENR_EL0 ) : SailM (BitVec 64) )
+                     (pure (((((_get_PMUSERENR_EL0_Type_UEN w__16) +++ (_get_PMUSERENR_EL0_Type_EN
+                             w__17)) == 0b00#2) : Bool))))
                  else (pure false)) : Bool)
             then (pure true)
             else
               (do
-                if ((← do
-                     let w__18 ← (( do (IsFeatureImplemented FEAT_PMUv3p9) ) : SailM Bool )
-                     (pure (((! w__18) : Bool)))) : Bool)
-                then
-                  (do
-                    let w__19 ← (( do readReg PMUSERENR_EL0 ) : SailM (BitVec 64) )
-                    let w__20 ← (( do readReg PMUSERENR_EL0 ) : SailM (BitVec 64) )
-                    (pure (((((_get_PMUSERENR_EL0_Type_ER w__19) +++ (_get_PMUSERENR_EL0_Type_EN
-                            w__20)) == 0b00#2) : Bool))))
-                else (pure false)) ) : SailM Bool )
-          if (w__22 : Bool)
+                (pure ((← do
+                      let w__19 ← (( do (IsFeatureImplemented FEAT_PMUv3p9) ) : SailM Bool )
+                      (pure (((! w__19) : Bool)))) && ((__PMUSERENR_EL0_EN == 0#1) : Bool)))) ) :
+            SailM Bool )
+          if (w__21 : Bool)
           then
             (do
-              let w__24 ← (( do
+              let w__23 ← (( do
                 (pure ((← do
                       (EL2Enabled ())) && ((__HCR_EL2_TGE == 1#1) : Bool))) ) : SailM Bool )
-              if (w__24 : Bool)
+              if (w__23 : Bool)
               then
                 (do
                   (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
@@ -538,381 +497,235 @@ def PMSELR_EL0_SysRegWrite_e127f02e29e8e39d (el : (BitVec 2)) (op0 : (BitVec 2))
                   (AArch64_SystemAccessTrap EL1 (BitVec.toNat 0x18#8))))
           else
             (do
-              let w__32 ← (( do
+              let w__33 ← (( do
                 (pure ((← do
-                      (pure ((← do
-                            if ((← do
-                                 if ((← do
-                                      (EL2Enabled ())) : Bool)
-                                 then
-                                   (do
-                                     let w__26 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                                     let w__27 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                                     (pure (((((_get_HCR_EL2_Type_E2H w__26) +++ (_get_HCR_EL2_Type_TGE
-                                             w__27)) != 0b11#2) : Bool))))
-                                 else (pure false)) : Bool)
-                            then
-                              (do
-                                (IsFeatureImplemented FEAT_FGT))
-                            else (pure false)) && (((! (HaveEL EL3)) || (__SCR_EL3_FGTEn == 1#1)) : Bool)))) && ((__HDFGWTR_EL2_PMSELR_EL0 == 1#1) : Bool)))
-                ) : SailM Bool )
-              if (w__32 : Bool)
+                      if ((← do
+                           if ((← do
+                                if ((← do
+                                     (EL2Enabled ())) : Bool)
+                                then
+                                  (do
+                                    let w__25 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                                    let w__26 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                                    (pure (((((_get_HCR_EL2_Type_E2H w__25) +++ (_get_HCR_EL2_Type_TGE
+                                            w__26)) != 0b11#2) : Bool))))
+                                else (pure false)) : Bool)
+                           then
+                             (do
+                               (IsFeatureImplemented FEAT_FGT))
+                           else (pure false)) : Bool)
+                      then
+                        (do
+                          (pure ((← do
+                                let w__30 ← (( do (HaveEL EL3) ) : SailM Bool )
+                                (pure (((! w__30) : Bool)))) || ((__SCR_EL3_FGTEn == 1#1) : Bool))))
+                      else (pure false)) && ((__HDFGWTR_EL2_PMEVCNTRn_EL0 == 1#1) : Bool))) ) :
+                SailM Bool )
+              if (w__33 : Bool)
               then
                 (do
                   (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
               else
                 (do
-                  let w__34 ← (( do
+                  let w__35 ← (( do
                     (pure ((← do
                           (EL2Enabled ())) && ((__MDCR_EL2_TPM == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__34 : Bool)
+                  if (w__35 : Bool)
                   then
                     (do
                       (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
                   else
                     (do
-                      if (((HaveEL EL3) && (__MDCR_EL3_TPM == 1#1)) : Bool)
+                      let w__38 ← (( do
+                        if ((← do
+                             (EL2Enabled ())) : Bool)
+                        then
+                          (do
+                            let w__37 ← (( do (AArch64_GetNumEventCountersAccessible ()) ) : SailM
+                              Int )
+                            (pure (((2 ≥b w__37) : Bool))))
+                        else (pure false) ) : SailM Bool )
+                      if (w__38 : Bool)
                       then
                         (do
-                          let w__36 ← (( do
-                            (pure ((← do
-                                  (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
-                          if (w__36 : Bool)
-                          then sailThrow ((Error_Undefined ()))
+                          let w__39 ← (( do (IsFeatureImplemented FEAT_FGT) ) : SailM Bool )
+                          if ((! w__39) : Bool)
+                          then
+                            (pure ((ConstrainUnpredictableProcedure Unpredictable_PMUEVENTCOUNTER)))
                           else
                             (do
-                              (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                              (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8))))
                       else
                         (do
-                          let w__37 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-                          writeReg PMSELR_EL0 (Mk_PMSELR_EL0_Type w__37)))))))
+                          let w__41 ← (( do
+                            (pure ((← do
+                                  (HaveEL EL3)) && ((__MDCR_EL3_TPM == 1#1) : Bool))) ) : SailM Bool
+                            )
+                          if (w__41 : Bool)
+                          then
+                            (do
+                              let w__43 ← (( do
+                                (pure ((← do
+                                      (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool
+                                )
+                              if (w__43 : Bool)
+                              then sailThrow ((Error_Undefined ()))
+                              else
+                                (do
+                                  (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                          else
+                            (do
+                              let w__44 ← (( do readReg PMEVCNTR_EL0 ) : SailM
+                                (Vector (BitVec 64) 32) )
+                              let w__45 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                              writeReg PMEVCNTR_EL0 (vectorUpdate w__44 2 w__45))))))))
   else
     (do
       if ((__PSTATE_EL == EL1) : Bool)
       then
         (do
-          let w__43 ← (( do
+          let w__52 ← (( do
             (pure ((← do
                   if ((← do
                        (pure ((← do
-                             (pure ((← do
-                                   (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
+                             if ((← do
+                                  (Halted ())) : Bool)
+                             then
+                               (do
+                                 (HaveEL EL3))
+                             else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
                   then
                     (do
                       (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
                   else (pure false)) && ((__MDCR_EL3_TPM == 1#1) : Bool))) ) : SailM Bool )
-          if (w__43 : Bool)
+          if (w__52 : Bool)
           then sailThrow ((Error_Undefined ()))
           else
-            (do
-              let w__48 ← (( do
-                (pure ((← do
-                      (pure ((← do
-                            if ((← do
-                                 (EL2Enabled ())) : Bool)
-                            then
-                              (do
-                                (IsFeatureImplemented FEAT_FGT))
-                            else (pure false)) && (((! (HaveEL EL3)) || (__SCR_EL3_FGTEn == 1#1)) : Bool)))) && ((__HDFGWTR_EL2_PMSELR_EL0 == 1#1) : Bool)))
-                ) : SailM Bool )
-              if (w__48 : Bool)
-              then
-                (do
-                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
-              else
-                (do
-                  let w__50 ← (( do
-                    (pure ((← do
-                          (EL2Enabled ())) && ((__MDCR_EL2_TPM == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__50 : Bool)
-                  then
-                    (do
-                      (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
-                  else
-                    (do
-                      if (((HaveEL EL3) && (__MDCR_EL3_TPM == 1#1)) : Bool)
-                      then
-                        (do
-                          let w__52 ← (( do
-                            (pure ((← do
-                                  (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
-                          if (w__52 : Bool)
-                          then sailThrow ((Error_Undefined ()))
-                          else
-                            (do
-                              (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                      else
-                        (do
-                          let w__53 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-                          writeReg PMSELR_EL0 (Mk_PMSELR_EL0_Type w__53))))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
             (do
               let w__59 ← (( do
                 (pure ((← do
                       if ((← do
-                           (pure ((← do
-                                 (pure ((← do
-                                       (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
+                           if ((← do
+                                (EL2Enabled ())) : Bool)
+                           then
+                             (do
+                               (IsFeatureImplemented FEAT_FGT))
+                           else (pure false)) : Bool)
                       then
                         (do
-                          (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                      else (pure false)) && ((__MDCR_EL3_TPM == 1#1) : Bool))) ) : SailM Bool )
+                          (pure ((← do
+                                let w__56 ← (( do (HaveEL EL3) ) : SailM Bool )
+                                (pure (((! w__56) : Bool)))) || ((__SCR_EL3_FGTEn == 1#1) : Bool))))
+                      else (pure false)) && ((__HDFGWTR_EL2_PMEVCNTRn_EL0 == 1#1) : Bool))) ) :
+                SailM Bool )
               if (w__59 : Bool)
-              then sailThrow ((Error_Undefined ()))
-              else
-                (do
-                  if (((HaveEL EL3) && (__MDCR_EL3_TPM == 1#1)) : Bool)
-                  then
-                    (do
-                      let w__61 ← (( do
-                        (pure ((← do
-                              (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
-                      if (w__61 : Bool)
-                      then sailThrow ((Error_Undefined ()))
-                      else
-                        (do
-                          (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                  else
-                    (do
-                      let w__62 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-                      writeReg PMSELR_EL0 (Mk_PMSELR_EL0_Type w__62))))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  let w__63 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-                  writeReg PMSELR_EL0 (Mk_PMSELR_EL0_Type w__63))
-              else (pure (())))))
-
-
-/-- Type quantifiers: t : Int -/
-def PMSFCR_EL1_SysRegWrite_a5237420ae2ed681 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg MDCR_EL3 ) : SailM (BitVec 64) )
-  let __MDCR_EL3_NSPBE : (BitVec 1) := (_get_MDCR_EL3_Type_NSPBE w__1)
-  let w__2 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_NSE : (BitVec 1) := (_get_SCR_EL3_Type_NSE w__2)
-  let w__3 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_FGTEn : (BitVec 1) := (_get_SCR_EL3_Type_FGTEn w__3)
-  let w__4 ← (( do readReg HDFGWTR_EL2 ) : SailM (BitVec 64) )
-  let __HDFGWTR_EL2_PMSFCR_EL1 : (BitVec 1) := (_get_HDFGWTR_EL2_Type_PMSFCR_EL1 w__4)
-  let w__5 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
-  let __MDCR_EL2_TPMS : (BitVec 1) := (_get_MDCR_EL2_Type_TPMS w__5)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else
-    (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__19 ← (( do
-            if ((← do
-                 if ((← do
-                      if ((← do
-                           (pure ((← do
-                                 (Halted ())) && ((HaveEL EL3) : Bool)))) : Bool)
-                      then
-                        (do
-                          let w__8 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-                          (pure ((((_get_EDSCR_Type_SDD w__8) == 1#1) : Bool))))
-                      else (pure false)) : Bool)
-                 then
-                   (do
-                     (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                 else (pure false)) : Bool)
-            then
-              (do
-                if ((← do
-                     if ((← do
-                          let w__12 ← (( do readReg MDCR_EL3 ) : SailM (BitVec 64) )
-                          (pure ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                  (_get_MDCR_EL3_Type_NSPB w__12) 0)])) == 0#1) : Bool)))) : Bool)
-                     then (pure true)
-                     else
-                       (do
-                         let w__13 ← (( do readReg MDCR_EL3 ) : SailM (BitVec 64) )
-                         let w__14 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-                         (pure ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                 (_get_MDCR_EL3_Type_NSPB w__13) 1)])) != (_get_SCR_EL3_Type_NS
-                               w__14)) : Bool))))) : Bool)
-                then (pure true)
-                else
-                  (do
-                    (pure ((← do
-                          (IsFeatureImplemented FEAT_RME)) && ((__MDCR_EL3_NSPBE != __SCR_EL3_NSE) : Bool)))))
-            else (pure false) ) : SailM Bool )
-          if (w__19 : Bool)
-          then sailThrow ((Error_Undefined ()))
-          else
-            (do
-              let w__24 ← (( do
-                (pure ((← do
-                      (pure ((← do
-                            if ((← do
-                                 (EL2Enabled ())) : Bool)
-                            then
-                              (do
-                                (IsFeatureImplemented FEAT_FGT))
-                            else (pure false)) && (((! (HaveEL EL3)) || (__SCR_EL3_FGTEn == 1#1)) : Bool)))) && ((__HDFGWTR_EL2_PMSFCR_EL1 == 1#1) : Bool)))
-                ) : SailM Bool )
-              if (w__24 : Bool)
               then
                 (do
                   (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
               else
                 (do
-                  let w__26 ← (( do
+                  let w__61 ← (( do
                     (pure ((← do
-                          (EL2Enabled ())) && ((__MDCR_EL2_TPMS == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__26 : Bool)
+                          (EL2Enabled ())) && ((__MDCR_EL2_TPM == 1#1) : Bool))) ) : SailM Bool )
+                  if (w__61 : Bool)
                   then
                     (do
                       (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
                   else
                     (do
-                      let w__34 ← (( do
-                        if (((HaveEL EL3) : Bool) : Bool)
+                      let w__64 ← (( do
+                        if ((← do
+                             (EL2Enabled ())) : Bool)
                         then
                           (do
-                            if ((← do
-                                 if ((← do
-                                      let w__27 ← (( do readReg MDCR_EL3 ) : SailM (BitVec 64) )
-                                      (pure ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                              (_get_MDCR_EL3_Type_NSPB w__27) 0)])) == 0#1) : Bool)))) : Bool)
-                                 then (pure true)
-                                 else
-                                   (do
-                                     let w__28 ← (( do readReg MDCR_EL3 ) : SailM (BitVec 64) )
-                                     let w__29 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-                                     (pure ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                             (_get_MDCR_EL3_Type_NSPB w__28) 1)])) != (_get_SCR_EL3_Type_NS
-                                           w__29)) : Bool))))) : Bool)
-                            then (pure true)
-                            else
-                              (do
-                                (pure ((← do
-                                      (IsFeatureImplemented FEAT_RME)) && ((__MDCR_EL3_NSPBE != __SCR_EL3_NSE) : Bool)))))
+                            let w__63 ← (( do (AArch64_GetNumEventCountersAccessible ()) ) : SailM
+                              Int )
+                            (pure (((2 ≥b w__63) : Bool))))
                         else (pure false) ) : SailM Bool )
-                      if (w__34 : Bool)
+                      if (w__64 : Bool)
                       then
                         (do
-                          let w__37 ← (( do
-                            if ((← do
-                                 (Halted ())) : Bool)
-                            then
-                              (do
-                                let w__36 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-                                (pure ((((_get_EDSCR_Type_SDD w__36) == 1#1) : Bool))))
-                            else (pure false) ) : SailM Bool )
-                          if (w__37 : Bool)
-                          then sailThrow ((Error_Undefined ()))
+                          let w__65 ← (( do (IsFeatureImplemented FEAT_FGT) ) : SailM Bool )
+                          if ((! w__65) : Bool)
+                          then
+                            (pure ((ConstrainUnpredictableProcedure Unpredictable_PMUEVENTCOUNTER)))
                           else
                             (do
-                              (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                              (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8))))
                       else
                         (do
-                          let w__38 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-                          writeReg PMSFCR_EL1 (Mk_PMSFCR_EL1_Type w__38))))))
+                          let w__67 ← (( do
+                            (pure ((← do
+                                  (HaveEL EL3)) && ((__MDCR_EL3_TPM == 1#1) : Bool))) ) : SailM Bool
+                            )
+                          if (w__67 : Bool)
+                          then
+                            (do
+                              let w__69 ← (( do
+                                (pure ((← do
+                                      (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool
+                                )
+                              if (w__69 : Bool)
+                              then sailThrow ((Error_Undefined ()))
+                              else
+                                (do
+                                  (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                          else
+                            (do
+                              let w__70 ← (( do readReg PMEVCNTR_EL0 ) : SailM
+                                (Vector (BitVec 64) 32) )
+                              let w__71 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                              writeReg PMEVCNTR_EL0 (vectorUpdate w__70 2 w__71)))))))
       else
         (do
           if ((__PSTATE_EL == EL2) : Bool)
           then
             (do
-              let w__52 ← (( do
-                if ((← do
-                     if ((← do
-                          if ((← do
-                               (pure ((← do
-                                     (Halted ())) && ((HaveEL EL3) : Bool)))) : Bool)
-                          then
-                            (do
-                              let w__41 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-                              (pure ((((_get_EDSCR_Type_SDD w__41) == 1#1) : Bool))))
-                          else (pure false)) : Bool)
-                     then
-                       (do
-                         (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                     else (pure false)) : Bool)
-                then
-                  (do
-                    if ((← do
-                         if ((← do
-                              let w__45 ← (( do readReg MDCR_EL3 ) : SailM (BitVec 64) )
-                              (pure ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                      (_get_MDCR_EL3_Type_NSPB w__45) 0)])) == 0#1) : Bool)))) : Bool)
-                         then (pure true)
-                         else
-                           (do
-                             let w__46 ← (( do readReg MDCR_EL3 ) : SailM (BitVec 64) )
-                             let w__47 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-                             (pure ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                     (_get_MDCR_EL3_Type_NSPB w__46) 1)])) != (_get_SCR_EL3_Type_NS
-                                   w__47)) : Bool))))) : Bool)
-                    then (pure true)
-                    else
-                      (do
-                        (pure ((← do
-                              (IsFeatureImplemented FEAT_RME)) && ((__MDCR_EL3_NSPBE != __SCR_EL3_NSE) : Bool)))))
-                else (pure false) ) : SailM Bool )
-              if (w__52 : Bool)
+              let w__78 ← (( do
+                (pure ((← do
+                      if ((← do
+                           (pure ((← do
+                                 if ((← do
+                                      (Halted ())) : Bool)
+                                 then
+                                   (do
+                                     (HaveEL EL3))
+                                 else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
+                      then
+                        (do
+                          (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
+                      else (pure false)) && ((__MDCR_EL3_TPM == 1#1) : Bool))) ) : SailM Bool )
+              if (w__78 : Bool)
               then sailThrow ((Error_Undefined ()))
               else
                 (do
-                  let w__60 ← (( do
-                    if (((HaveEL EL3) : Bool) : Bool)
-                    then
-                      (do
-                        if ((← do
-                             if ((← do
-                                  let w__53 ← (( do readReg MDCR_EL3 ) : SailM (BitVec 64) )
-                                  (pure ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                          (_get_MDCR_EL3_Type_NSPB w__53) 0)])) == 0#1) : Bool)))) : Bool)
-                             then (pure true)
-                             else
-                               (do
-                                 let w__54 ← (( do readReg MDCR_EL3 ) : SailM (BitVec 64) )
-                                 let w__55 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-                                 (pure ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                         (_get_MDCR_EL3_Type_NSPB w__54) 1)])) != (_get_SCR_EL3_Type_NS
-                                       w__55)) : Bool))))) : Bool)
-                        then (pure true)
-                        else
-                          (do
-                            (pure ((← do
-                                  (IsFeatureImplemented FEAT_RME)) && ((__MDCR_EL3_NSPBE != __SCR_EL3_NSE) : Bool)))))
-                    else (pure false) ) : SailM Bool )
-                  if (w__60 : Bool)
+                  let w__80 ← (( do
+                    (pure ((← do
+                          (HaveEL EL3)) && ((__MDCR_EL3_TPM == 1#1) : Bool))) ) : SailM Bool )
+                  if (w__80 : Bool)
                   then
                     (do
-                      let w__63 ← (( do
-                        if ((← do
-                             (Halted ())) : Bool)
-                        then
-                          (do
-                            let w__62 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-                            (pure ((((_get_EDSCR_Type_SDD w__62) == 1#1) : Bool))))
-                        else (pure false) ) : SailM Bool )
-                      if (w__63 : Bool)
+                      let w__82 ← (( do
+                        (pure ((← do
+                              (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
+                      if (w__82 : Bool)
                       then sailThrow ((Error_Undefined ()))
                       else
                         (do
                           (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
                   else
                     (do
-                      let w__64 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-                      writeReg PMSFCR_EL1 (Mk_PMSFCR_EL1_Type w__64))))
+                      let w__83 ← (( do readReg PMEVCNTR_EL0 ) : SailM (Vector (BitVec 64) 32) )
+                      let w__84 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      writeReg PMEVCNTR_EL0 (vectorUpdate w__83 2 w__84))))
           else
             (do
               if ((__PSTATE_EL == EL3) : Bool)
               then
                 (do
-                  let w__65 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-                  writeReg PMSFCR_EL1 (Mk_PMSFCR_EL1_Type w__65))
+                  let w__85 ← (( do readReg PMEVCNTR_EL0 ) : SailM (Vector (BitVec 64) 32) )
+                  let w__86 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  writeReg PMEVCNTR_EL0 (vectorUpdate w__85 2 w__86))
               else (pure (())))))
 
 

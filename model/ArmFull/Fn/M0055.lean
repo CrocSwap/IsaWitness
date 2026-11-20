@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,79 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def ICC_SRE_S_write (value_name : (BitVec 32)) : SailM Unit := do
+  let r : ICC_SRE_Type := value_name
+  let w__0 ← (( do readReg ICC_SRE_EL1_S ) : SailM (BitVec 64) )
+  writeReg ICC_SRE_EL1_S (Sail.BitVec.updateSubrange w__0 31 0 (BitVec.slice r 0 32))
+  writeReg _ICC_SRE_S r
+
+
+def undefined_ICH_EISR_EL2_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
+  (undefined_bitvector_at (ℓ.child 0) 64)
+
+
+def undefined_ICH_EISR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
+  (undefined_bitvector_at (ℓ.child 0) 32)
+
+
+def ICH_EISR_read (_ : Unit) : SailM (BitVec 32) := do
+  let r ← (( do readReg _ICH_EISR ) : SailM ICH_EISR_Type )
+  let w__0 ← (( do readReg ICH_EISR_EL2 ) : SailM (BitVec 64) )
+  let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__0 0 32)) : (BitVec 32))
+  (pure (r))
+
+
+def ICH_EISR_write (value_name : (BitVec 32)) : SailM Unit := do
+  let r : ICH_EISR_Type := value_name
+  let w__0 ← (( do readReg ICH_EISR_EL2 ) : SailM (BitVec 64) )
+  writeReg ICH_EISR_EL2 (Sail.BitVec.updateSubrange w__0 31 0 (BitVec.slice r 0 32))
+  writeReg _ICH_EISR r
+
+
+def undefined_ICH_ELRSR_EL2_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
+  (undefined_bitvector_at (ℓ.child 0) 64)
+
+
+def undefined_ICH_ELRSR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
+  (undefined_bitvector_at (ℓ.child 0) 32)
+
+
+def ICH_ELRSR_read (_ : Unit) : SailM (BitVec 32) := do
+  let r ← (( do readReg _ICH_ELRSR ) : SailM ICH_ELRSR_Type )
+  let w__0 ← (( do readReg ICH_ELRSR_EL2 ) : SailM (BitVec 64) )
+  let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__0 0 32)) : (BitVec 32))
+  (pure (r))
+
+
+def ICH_ELRSR_write (value_name : (BitVec 32)) : SailM Unit := do
+  let r : ICH_ELRSR_Type := value_name
+  let w__0 ← (( do readReg ICH_ELRSR_EL2 ) : SailM (BitVec 64) )
+  writeReg ICH_ELRSR_EL2 (Sail.BitVec.updateSubrange w__0 31 0 (BitVec.slice r 0 32))
+  writeReg _ICH_ELRSR r
+
+
+def undefined_ICH_HCR_EL2_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
+  (undefined_bitvector_at (ℓ.child 0) 64)
+
+
+def undefined_ICH_HCR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
+  (undefined_bitvector_at (ℓ.child 0) 32)
+
+
+def ICH_HCR_read (_ : Unit) : SailM (BitVec 32) := do
+  let r ← (( do readReg _ICH_HCR ) : SailM ICH_HCR_Type )
+  let w__0 ← (( do readReg ICH_HCR_EL2 ) : SailM (BitVec 64) )
+  let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__0 0 32)) : (BitVec 32))
+  (pure (r))
+
+
+def ICH_HCR_write (value_name : (BitVec 32)) : SailM Unit := do
+  let r : ICH_HCR_Type := value_name
+  let w__0 ← (( do readReg ICH_HCR_EL2 ) : SailM (BitVec 64) )
+  writeReg ICH_HCR_EL2 (Sail.BitVec.updateSubrange w__0 31 0 (BitVec.slice r 0 32))
+  writeReg _ICH_HCR r
+
 
 def undefined_ICH_MISR_EL2_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
   (undefined_bitvector_at (ℓ.child 0) 64)
@@ -768,86 +841,6 @@ def Mk_DBGVCR_Type (v : (BitVec 32)) : (BitVec 32) :=
 
 
 def Mk_ERRIDR_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_ERRSELR_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_HRMR_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_HSTR_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_HTCR_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_HTRFCR_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_ICC_ASGI1R_Type (v : (BitVec 64)) : (BitVec 64) :=
-  v
-
-
-def Mk_ICC_BPR0_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_ICC_BPR1_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_ICC_CTLR_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_ICC_DIR_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_ICC_EOIR0_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_ICC_EOIR1_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_ICC_HPPIR0_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_ICC_HPPIR1_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_ICC_HSRE_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_ICC_IAR0_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_ICC_IAR1_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_ICC_IGRPEN0_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_ICC_IGRPEN1_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_ICC_PMR_Type (v : (BitVec 32)) : (BitVec 32) :=
   v
 
 

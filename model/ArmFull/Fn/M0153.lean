@@ -1,19 +1,27 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0008
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0022
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0041
-import ArmFull.Fn.M0087
-import ArmFull.Fn.M0092
-import ArmFull.Fn.M0111
-import ArmFull.Fn.M0144
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0017
+public import ArmFull.Fn.M0020
+public import ArmFull.Fn.M0022
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0037
+public import ArmFull.Fn.M0043
+public import ArmFull.Fn.M0046
+public import ArmFull.Fn.M0047
+public import ArmFull.Fn.M0049
+public import ArmFull.Fn.M0087
+public import ArmFull.Fn.M0097
+public import ArmFull.Fn.M0117
+public import ArmFull.Fn.M0118
+public import ArmFull.Fn.M0144
+public import ArmFull.Fn.M0145
+public import ArmFull.Fn.M0146 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -115,633 +123,625 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-def UsingAArch32 (_ : Unit) : SailM Bool := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let aarch32 : Bool := (w__0.nRW == 1#1)
-  if ((! (HaveAArch32 ())) : Bool)
+def IFAR_S_write (value_name : (BitVec 32)) : SailM Unit := do
+  let r : IFAR_Type := value_name
+  let w__0 ← (( do (HaveEL EL2) ) : SailM Bool )
+  if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (! aarch32) "sail-arm/v8_base.sail:4029.32-4029.33")
-  else (pure (()))
-  let w__1 ← (( do (HaveAArch64 ()) ) : SailM Bool )
-  if ((! w__1) : Bool)
-  then
-    (do
-      ArmFull.assert aarch32 "sail-arm/v8_base.sail:4032.22-4032.23")
-  else (pure (()))
-  (pure (aarch32))
-
-
-def ExternalNoninvasiveDebugEnabled (_ : Unit) : SailM Bool := do
-  if ((← do
-       if ((← do
-            let w__0 ← (( do (HaveNoninvasiveDebugAuth ()) ) : SailM Bool )
-            (pure (((! w__0) : Bool)))) : Bool)
-       then (pure true)
-       else
-         (do
-           (ExternalInvasiveDebugEnabled ()))) : Bool)
-  then (pure true)
+      let w__1 ← (( do readReg FAR_EL2 ) : SailM (BitVec 64) )
+      writeReg FAR_EL2 (Sail.BitVec.updateSubrange w__1 63 32 (BitVec.slice r 0 32)))
   else
     (do
-      let w__3 ← (( do readReg NIDEN ) : SailM Signal )
-      (pure (((BEq.beq w__3 Signal_High) : Bool))))
+      let w__2 ← (( do (HIFAR_read ()) ) : SailM (BitVec 32) )
+      (HIFAR_write (set_slice 32 w__2 0 (BitVec.slice r 0 32))))
+  writeReg _IFAR_S r
 
 
-def SPEEvent (pmuevent : (BitVec 16)) : SailM Unit := SailME.run do
-  let questionMark := pmuevent
-  if ((questionMark == PMU_EVENT_DSNP_HIT_RD) : Bool)
-  then
+def ReportAsGPCException (fault : FaultRecord) : SailM Bool := do
+  let w__0 ← (( do (HaveRME ()) ) : SailM Bool )
+  ArmFull.assert w__0 "sail-inputs/03-v8_base.sail:15091.20-15091.21"
+  ArmFull.assert ((BEq.beq fault.statuscode Fault_GPCFOnWalk) || (BEq.beq fault.statuscode
+      Fault_GPCFOnOutput)) "sail-inputs/03-v8_base.sail:15092.88-15092.89"
+  ArmFull.assert (bne fault.gpcf.gpf GPCF_None) "sail-inputs/03-v8_base.sail:15093.38-15093.39"
+  match fault.gpcf.gpf with
+  | .GPCF_Walk => (pure (true))
+  | .GPCF_AddressSize => (pure (true))
+  | .GPCF_EABT => (pure (true))
+  | .GPCF_Fail =>
     (do
-      let w__0 ← (( do (HaveStatisticalProfilingv1p4 ()) ) : SailME Unit Bool )
-      if (w__0 : Bool)
+      if ((← do
+           let w__1 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+           (pure ((((_get_SCR_EL3_Type_GPF w__1) == 1#1) : Bool)))) : Bool)
       then
         (do
-          let w__1 ← (( do readReg SPESampleEvents ) : SailME Unit (BitVec 64) )
-          writeReg SPESampleEvents (BitVec.update w__1 23 (Bit 1#1)))
-      else (pure (())))
-  else
+          let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
+          (pure (((w__2.EL != EL3) : Bool))))
+      else (pure false))
+  | _ =>
     (do
-      if ((questionMark == PMU_EVENT_L1D_LFB_HIT_RD) : Bool)
-      then
-        (do
-          let w__2 ← (( do (HaveStatisticalProfilingv1p4 ()) ) : SailME Unit Bool )
-          if (w__2 : Bool)
-          then
-            (do
-              let w__3 ← (( do readReg SPESampleEvents ) : SailME Unit (BitVec 64) )
-              writeReg SPESampleEvents (BitVec.update w__3 22 (Bit 1#1)))
-          else (pure (())))
-      else
-        (do
-          if ((questionMark == PMU_EVENT_L2D_LFB_HIT_RD) : Bool)
-          then
-            (do
-              let w__4 ← (( do (HaveStatisticalProfilingv1p4 ()) ) : SailME Unit Bool )
-              if (w__4 : Bool)
-              then
-                (do
-                  let w__5 ← (( do readReg SPESampleEvents ) : SailME Unit (BitVec 64) )
-                  writeReg SPESampleEvents (BitVec.update w__5 22 (Bit 1#1)))
-              else (pure (())))
-          else
-            (do
-              if ((questionMark == PMU_EVENT_L3D_LFB_HIT_RD) : Bool)
-              then
-                (do
-                  let w__6 ← (( do (HaveStatisticalProfilingv1p4 ()) ) : SailME Unit Bool )
-                  if (w__6 : Bool)
-                  then
-                    (do
-                      let w__7 ← (( do readReg SPESampleEvents ) : SailME Unit (BitVec 64) )
-                      writeReg SPESampleEvents (BitVec.update w__7 22 (Bit 1#1)))
-                  else (pure (())))
-              else
-                (do
-                  if ((questionMark == PMU_EVENT_LL_LFB_HIT_RD) : Bool)
-                  then
-                    (do
-                      let w__8 ← (( do (HaveStatisticalProfilingv1p4 ()) ) : SailME Unit Bool )
-                      if (w__8 : Bool)
-                      then
-                        (do
-                          let w__9 ← (( do readReg SPESampleEvents ) : SailME Unit (BitVec 64) )
-                          writeReg SPESampleEvents (BitVec.update w__9 22 (Bit 1#1)))
-                      else (pure (())))
-                  else
-                    (do
-                      if ((questionMark == PMU_EVENT_L1D_CACHE_HITM_RD) : Bool)
-                      then
-                        (do
-                          let w__10 ← (( do (HaveStatisticalProfilingv1p4 ()) ) : SailME Unit Bool
-                            )
-                          if (w__10 : Bool)
-                          then
-                            (do
-                              let w__11 ← (( do readReg SPESampleEvents ) : SailME Unit
-                                (BitVec 64) )
-                              writeReg SPESampleEvents (BitVec.update w__11 21 (Bit 1#1)))
-                          else (pure (())))
-                      else
-                        (do
-                          if ((questionMark == PMU_EVENT_L2D_CACHE_HITM_RD) : Bool)
-                          then
-                            (do
-                              let w__12 ← (( do (HaveStatisticalProfilingv1p4 ()) ) : SailME Unit
-                                Bool )
-                              if (w__12 : Bool)
-                              then
-                                (do
-                                  let w__13 ← (( do readReg SPESampleEvents ) : SailME Unit
-                                    (BitVec 64) )
-                                  writeReg SPESampleEvents (BitVec.update w__13 21 (Bit 1#1)))
-                              else (pure (())))
-                          else
-                            (do
-                              if ((questionMark == PMU_EVENT_L3D_CACHE_HITM_RD) : Bool)
-                              then
-                                (do
-                                  let w__14 ← (( do (HaveStatisticalProfilingv1p4 ()) ) : SailME
-                                    Unit Bool )
-                                  if (w__14 : Bool)
-                                  then
-                                    (do
-                                      let w__15 ← (( do readReg SPESampleEvents ) : SailME Unit
-                                        (BitVec 64) )
-                                      writeReg SPESampleEvents (BitVec.update w__15 21 (Bit 1#1)))
-                                  else (pure (())))
-                              else
-                                (do
-                                  if ((questionMark == PMU_EVENT_LL_CACHE_HITM_RD) : Bool)
-                                  then
-                                    (do
-                                      let w__16 ← (( do (HaveStatisticalProfilingv1p4 ()) ) :
-                                        SailME Unit Bool )
-                                      if (w__16 : Bool)
-                                      then
-                                        (do
-                                          let w__17 ← (( do readReg SPESampleEvents ) : SailME
-                                            Unit (BitVec 64) )
-                                          writeReg SPESampleEvents (BitVec.update w__17 21 (Bit 1#1)))
-                                      else (pure (())))
-                                  else
-                                    (do
-                                      if ((questionMark == PMU_EVENT_L2D_CACHE_LMISS_RD) : Bool)
-                                      then
-                                        (do
-                                          let w__18 ← (( do (HaveStatisticalProfilingv1p4 ()) ) :
-                                            SailME Unit Bool )
-                                          if (w__18 : Bool)
-                                          then
-                                            (do
-                                              let w__19 ← (( do readReg SPESampleEvents ) : SailME
-                                                Unit (BitVec 64) )
-                                              writeReg SPESampleEvents (BitVec.update w__19 20
-                                                (Bit 1#1)))
-                                          else (pure (())))
-                                      else
-                                        (do
-                                          if ((questionMark == PMU_EVENT_L2D_CACHE_RD) : Bool)
-                                          then
-                                            (do
-                                              let w__20 ← (( do (HaveStatisticalProfilingv1p4 ())
-                                                ) : SailME Unit Bool )
-                                              if (w__20 : Bool)
-                                              then
-                                                (do
-                                                  let w__21 ← (( do readReg SPESampleEvents ) :
-                                                    SailME Unit (BitVec 64) )
-                                                  writeReg SPESampleEvents (BitVec.update w__21 19
-                                                    (Bit 1#1)))
-                                              else (pure (())))
-                                          else
-                                            (do
-                                              if ((questionMark == PMU_EVENT_SVE_PRED_EMPTY_SPEC) : Bool)
-                                              then
-                                                (do
-                                                  let w__22 ← (( do
-                                                    (HaveStatisticalProfilingv1p1 ()) ) : SailME
-                                                    Unit Bool )
-                                                  if (w__22 : Bool)
-                                                  then
-                                                    (do
-                                                      let w__23 ← (( do readReg SPESampleEvents )
-                                                        : SailME Unit (BitVec 64) )
-                                                      writeReg SPESampleEvents (BitVec.update w__23
-                                                        18 (Bit 1#1)))
-                                                  else (pure (())))
-                                              else
-                                                (do
-                                                  if ((questionMark == PMU_EVENT_SVE_PRED_PARTIAL_SPEC) : Bool)
-                                                  then
-                                                    (do
-                                                      let w__24 ← (( do
-                                                        (HaveStatisticalProfilingv1p1 ()) ) : SailME
-                                                        Unit Bool )
-                                                      if (w__24 : Bool)
-                                                      then
-                                                        (do
-                                                          let w__25 ← (( do
-                                                            readReg SPESampleEvents ) : SailME Unit
-                                                            (BitVec 64) )
-                                                          writeReg SPESampleEvents (BitVec.update
-                                                            w__25 17 (Bit 1#1)))
-                                                      else (pure (())))
-                                                  else
-                                                    (do
-                                                      if ((questionMark == PMU_EVENT_LDST_ALIGN_LAT) : Bool)
-                                                      then
-                                                        (do
-                                                          let w__26 ← (( do
-                                                            (HaveStatisticalProfilingv1p1 ()) ) :
-                                                            SailME Unit Bool )
-                                                          if (w__26 : Bool)
-                                                          then
-                                                            (do
-                                                              let w__27 ← (( do
-                                                                readReg SPESampleEvents ) : SailME
-                                                                Unit (BitVec 64) )
-                                                              writeReg SPESampleEvents (BitVec.update
-                                                                w__27 11 (Bit 1#1)))
-                                                          else (pure (())))
-                                                      else
-                                                        (do
-                                                          if ((questionMark == PMU_EVENT_REMOTE_ACCESS) : Bool)
-                                                          then
-                                                            (do
-                                                              let w__28 ← (( do
-                                                                readReg SPESampleEvents ) : SailME
-                                                                Unit (BitVec 64) )
-                                                              writeReg SPESampleEvents (BitVec.update
-                                                                w__28 10 (Bit 1#1)))
-                                                          else
-                                                            (do
-                                                              if ((questionMark == PMU_EVENT_LL_CACHE_MISS) : Bool)
-                                                              then
-                                                                (do
-                                                                  let w__29 ← (( do
-                                                                    readReg SPESampleEvents ) :
-                                                                    SailME Unit (BitVec 64) )
-                                                                  writeReg SPESampleEvents (BitVec.update
-                                                                    w__29 9 (Bit 1#1)))
-                                                              else
-                                                                (do
-                                                                  if ((questionMark == PMU_EVENT_LL_CACHE) : Bool)
-                                                                  then
-                                                                    (do
-                                                                      let w__30 ← (( do
-                                                                        readReg SPESampleEvents ) :
-                                                                        SailME Unit (BitVec 64) )
-                                                                      writeReg SPESampleEvents (BitVec.update
-                                                                        w__30 8 (Bit 1#1)))
-                                                                  else
-                                                                    (do
-                                                                      if ((questionMark == PMU_EVENT_BR_MIS_PRED) : Bool)
-                                                                      then
-                                                                        (do
-                                                                          let w__31 ← (( do
-                                                                            readReg SPESampleEvents
-                                                                            ) : SailME Unit
-                                                                            (BitVec 64) )
-                                                                          writeReg SPESampleEvents (BitVec.update
-                                                                            w__31 7 (Bit 1#1)))
-                                                                      else
-                                                                        (do
-                                                                          if ((questionMark == PMU_EVENT_BR_MIS_PRED_RETIRED) : Bool)
-                                                                          then
-                                                                            (do
-                                                                              let w__32 ← (( do
-                                                                                readReg SPESampleEvents
-                                                                                ) : SailME Unit
-                                                                                (BitVec 64) )
-                                                                              writeReg SPESampleEvents (BitVec.update
-                                                                                w__32 7 (Bit 1#1)))
-                                                                          else
-                                                                            (do
-                                                                              if ((questionMark == PMU_EVENT_DTLB_WALK) : Bool)
-                                                                              then
-                                                                                (do
-                                                                                  let w__33 ← (( do
-                                                                                    readReg SPESampleEvents
-                                                                                    ) : SailME Unit
-                                                                                    (BitVec 64) )
-                                                                                  writeReg SPESampleEvents (BitVec.update
-                                                                                    w__33 5
-                                                                                    (Bit 1#1)))
-                                                                              else
-                                                                                (do
-                                                                                  if ((questionMark == PMU_EVENT_L1D_TLB) : Bool)
-                                                                                  then
-                                                                                    (do
-                                                                                      let w__34 ← (( do
-                                                                                        readReg SPESampleEvents
-                                                                                        ) : SailME
-                                                                                        Unit
-                                                                                        (BitVec 64)
-                                                                                        )
-                                                                                      writeReg SPESampleEvents (BitVec.update
-                                                                                        w__34 4
-                                                                                        (Bit 1#1)))
-                                                                                  else
-                                                                                    (do
-                                                                                      if ((questionMark == PMU_EVENT_L1D_CACHE_REFILL) : Bool)
-                                                                                      then
-                                                                                        (do
-                                                                                          let w__35 ← (( do
-                                                                                            (HaveStatisticalProfilingv1p4
-                                                                                              ()) )
-                                                                                            : SailME
-                                                                                            Unit
-                                                                                            Bool )
-                                                                                          if ((! w__35) : Bool)
-                                                                                          then
-                                                                                            (do
-                                                                                              let w__36 ← (( do
-                                                                                                readReg SPESampleEvents
-                                                                                                ) :
-                                                                                                SailME
-                                                                                                Unit
-                                                                                                (BitVec 64)
-                                                                                                )
-                                                                                              writeReg SPESampleEvents (BitVec.update
-                                                                                                w__36
-                                                                                                3
-                                                                                                (Bit
-                                                                                                  1#1)))
-                                                                                          else
-                                                                                            (pure (())))
-                                                                                      else
-                                                                                        (do
-                                                                                          if ((questionMark == PMU_EVENT_L1D_CACHE_LMISS_RD) : Bool)
-                                                                                          then
-                                                                                            (do
-                                                                                              let w__37 ← (( do
-                                                                                                (HaveStatisticalProfilingv1p4
-                                                                                                  ())
-                                                                                                ) :
-                                                                                                SailME
-                                                                                                Unit
-                                                                                                Bool
-                                                                                                )
-                                                                                              if (w__37 : Bool)
-                                                                                              then
-                                                                                                (do
-                                                                                                  let w__38 ← (( do
-                                                                                                    readReg SPESampleEvents
-                                                                                                    )
-                                                                                                    :
-                                                                                                    SailME
-                                                                                                    Unit
-                                                                                                    (BitVec 64)
-                                                                                                    )
-                                                                                                  writeReg SPESampleEvents (BitVec.update
-                                                                                                    w__38
-                                                                                                    3
-                                                                                                    (Bit
-                                                                                                      1#1)))
-                                                                                              else
-                                                                                                (pure (())))
-                                                                                          else
-                                                                                            (do
-                                                                                              if ((questionMark == PMU_EVENT_L1D_CACHE) : Bool)
-                                                                                              then
-                                                                                                (do
-                                                                                                  let w__39 ← (( do
-                                                                                                    readReg SPESampleEvents
-                                                                                                    )
-                                                                                                    :
-                                                                                                    SailME
-                                                                                                    Unit
-                                                                                                    (BitVec 64)
-                                                                                                    )
-                                                                                                  writeReg SPESampleEvents (BitVec.update
-                                                                                                    w__39
-                                                                                                    2
-                                                                                                    (Bit
-                                                                                                      1#1)))
-                                                                                              else
-                                                                                                (do
-                                                                                                  if ((questionMark == PMU_EVENT_INST_RETIRED) : Bool)
-                                                                                                  then
-                                                                                                    (do
-                                                                                                      let w__40 ← (( do
-                                                                                                        readReg SPESampleEvents
-                                                                                                        )
-                                                                                                        :
-                                                                                                        SailME
-                                                                                                        Unit
-                                                                                                        (BitVec 64)
-                                                                                                        )
-                                                                                                      writeReg SPESampleEvents (BitVec.update
-                                                                                                        w__40
-                                                                                                        1
-                                                                                                        (Bit
-                                                                                                          1#1)))
-                                                                                                  else
-                                                                                                    (do
-                                                                                                      if ((questionMark == PMU_EVENT_EXC_TAKEN) : Bool)
-                                                                                                      then
-                                                                                                        (do
-                                                                                                          let w__41 ← (( do
-                                                                                                            readReg SPESampleEvents
-                                                                                                            )
-                                                                                                            :
-                                                                                                            SailME
-                                                                                                            Unit
-                                                                                                            (BitVec 64)
-                                                                                                            )
-                                                                                                          writeReg SPESampleEvents (BitVec.update
-                                                                                                            w__41
-                                                                                                            0
-                                                                                                            (Bit
-                                                                                                              1#1)))
-                                                                                                      else
-                                                                                                        (do
-                                                                                                          SailME.throw (() : Unit)))))))))))))))))))))))))))
+      (undefined_bool_at (← occLabel 879) ()))
 
 
-/-- Type quantifiers: i : Int -/
-def C27bSimpleAllowed (which : Unpredictable) (i : Int) : SailM Bool := do
-  if ((BEq.beq which Unpredictable_EL2TIMESTAMP) : Bool)
+def EncodePARAttrs (memattrs : MemoryAttributes) : SailM (BitVec 8) := SailME.run do
+  let result ← (( do (undefined_bitvector_at (← occLabel 1188) 8) ) : SailME (BitVec 8)
+    (BitVec 8) )
+  let w__1 ← (( do
+    (pure ((← do
+          (HaveMTEExt ())) && ((BEq.beq memattrs.tags MemTag_AllocationTagged) : Bool))) ) : SailME
+    (BitVec 8) Bool )
+  if (w__1 : Bool)
   then
-    if ((i != 2) : Bool)
-    then (pure true)
-    else
-      (do
-        (HaveECVExt ()))
+    (do
+      let w__3 ← (( do
+        (pure ((← do
+              (HaveMTEPermExt ())) && (memattrs.notagaccess : Bool))) ) : SailME (BitVec 8) Bool )
+      let result : (BitVec 8) :=
+        if (w__3 : Bool)
+        then (Sail.BitVec.updateSubrange result 7 0 0b11100000#8)
+        else (Sail.BitVec.updateSubrange result 7 0 0b11110000#8)
+      (pure (result)))
   else
     (do
-      if ((BEq.beq which Unpredictable_EL1TIMESTAMP) : Bool)
+      if ((BEq.beq memattrs.memtype MemType_Device) : Bool)
       then
-        if ((i != 0) : Bool)
-        then
-          if ((i != 2) : Bool)
-          then (pure true)
-          else
-            (do
-              (HaveECVExt ()))
-        else (pure false)
+        (let result : (BitVec 8) := (Sail.BitVec.updateSubrange result 7 4 0b0000#4)
+        let result : (BitVec 8) :=
+          match memattrs.device with
+          | .DeviceType_nGnRnE => (Sail.BitVec.updateSubrange result 3 0 0b0000#4)
+          | .DeviceType_nGnRE => (Sail.BitVec.updateSubrange result 3 0 0b0100#4)
+          | .DeviceType_nGRE => (Sail.BitVec.updateSubrange result 3 0 0b1000#4)
+          | .DeviceType_GRE => (Sail.BitVec.updateSubrange result 3 0 0b1100#4)
+        let result : (BitVec 8) :=
+          (BitVec.update result 0 (Bit (Complement.complement memattrs.xs)))
+        (pure (result)))
       else
         (do
-          if ((BEq.beq which Unpredictable_RESERVEDNSxB) : Bool)
-          then
-            if ((i != 4) : Bool)
-            then
-              if ((i != 5) : Bool)
-              then
-                (pure ((← do
-                      (HaveSecureEL2Ext ())) || (i ≥b 2)))
-              else (pure false)
-            else (pure false)
-          else
-            (do
-              if ((BEq.beq which Unpredictable_RESTCF) : Bool)
-              then
-                if ((i != 3) : Bool)
-                then (pure true)
-                else
-                  (do
-                    (HaveMTEAsymFaultExt ()))
-              else
-                (do
-                  if ((BEq.beq which Unpredictable_PMSCR_PCT) : Bool)
-                  then
-                    if ((i != 2) : Bool)
-                    then
-                      if ((i != 3) : Bool)
-                      then (pure true)
-                      else
-                        (do
-                          (HaveECVExt ()))
-                    else (pure false)
-                  else
-                    (pure (if ((BEq.beq which Unpredictable_RESDACR) : Bool)
-                      then (i != 2)
-                      else
-                        (if ((BEq.beq which Unpredictable_RESTEXCB) : Bool)
-                        then ((i != 5) && ((i <b 9) || (i ≥b 16)))
-                        else
-                          (if ((BEq.beq which Unpredictable_RESPRRR) : Bool)
-                          then (i != 3)
-                          else true))))))))
-
-
-def EffectiveSCR_EL3_RW (_ : Unit) : SailM (BitVec 1) := SailME.run do
-  let w__0 ← (( do (HaveAArch64 ()) ) : SailME (BitVec 1) Bool )
-  if ((! w__0) : Bool)
-  then (pure (0#1))
-  else
-    (do
-      if (((! (HaveAArch32EL EL2)) && (! (HaveAArch32EL EL1))) : Bool)
-      then (pure (1#1))
-      else
-        (do
-          if ((HaveAArch32EL EL1) : Bool)
+          if ((memattrs.xs == 0#1) : Bool)
           then
             (do
-              let w__2 ← (( do
-                if (((! (HaveAArch32EL EL2)) : Bool) : Bool)
-                then
-                  (do
-                    let w__1 ← (( do readReg SCR_EL3 ) : SailME (BitVec 1) (BitVec 64) )
-                    (pure ((((_get_SCR_EL3_Type_NS w__1) == 1#1) : Bool))))
-                else (pure false) ) : SailME (BitVec 1) Bool )
-              if (w__2 : Bool)
+              if (((((memattrs.outer.attrs == MemAttr_WT) && (memattrs.inner.attrs == MemAttr_WT)) && (! memattrs.outer.transient)) && (memattrs.outer.hints == MemHint_RA)) : Bool)
               then
                 (do
-                  SailME.throw (1#1 : (BitVec 1)))
+                  SailME.throw (0b10100000#8 : (BitVec 8)))
               else
                 (do
-                  let w__7 ← (( do
-                    if ((← do
-                         if ((← do
-                              (HaveSecureEL2Ext ())) : Bool)
-                         then
-                           (do
-                             let w__4 ← (( do readReg SCR_EL3 ) : SailME (BitVec 1) (BitVec 64) )
-                             (pure ((((_get_SCR_EL3_Type_EEL2 w__4) == 1#1) : Bool))))
-                         else (pure false)) : Bool)
-                    then
-                      (do
-                        let w__6 ← (( do readReg SCR_EL3 ) : SailME (BitVec 1) (BitVec 64) )
-                        (pure ((((_get_SCR_EL3_Type_NS w__6) == 0#1) : Bool))))
-                    else (pure false) ) : SailME (BitVec 1) Bool )
-                  if (w__7 : Bool)
+                  if (((memattrs.outer.attrs == MemAttr_NC) && (memattrs.inner.attrs == MemAttr_NC)) : Bool)
                   then
                     (do
-                      SailME.throw (1#1 : (BitVec 1)))
+                      SailME.throw (0b01000000#8 : (BitVec 8)))
                   else (pure (()))))
           else (pure (()))
-          let w__8 ← (( do readReg SCR_EL3 ) : SailME (BitVec 1) (BitVec 64) )
-          (pure ((_get_SCR_EL3_Type_RW w__8)))))
+          let result : (BitVec 8) :=
+            if ((memattrs.outer.attrs == MemAttr_WT) : Bool)
+            then
+              (let result : (BitVec 8) :=
+                (Sail.BitVec.updateSubrange result 7 6
+                  (if (memattrs.outer.transient : Bool)
+                  then 0b00#2
+                  else 0b10#2))
+              (Sail.BitVec.updateSubrange result 5 4 memattrs.outer.hints))
+            else
+              (if ((memattrs.outer.attrs == MemAttr_WB) : Bool)
+              then
+                (let result : (BitVec 8) :=
+                  (Sail.BitVec.updateSubrange result 7 6
+                    (if (memattrs.outer.transient : Bool)
+                    then 0b01#2
+                    else 0b11#2))
+                (Sail.BitVec.updateSubrange result 5 4 memattrs.outer.hints))
+              else (Sail.BitVec.updateSubrange result 7 4 0b0100#4))
+          let result : (BitVec 8) :=
+            if ((memattrs.inner.attrs == MemAttr_WT) : Bool)
+            then
+              (let result : (BitVec 8) :=
+                (Sail.BitVec.updateSubrange result 3 2
+                  (if (memattrs.inner.transient : Bool)
+                  then 0b00#2
+                  else 0b10#2))
+              (Sail.BitVec.updateSubrange result 1 0 memattrs.inner.hints))
+            else
+              (if ((memattrs.inner.attrs == MemAttr_WB) : Bool)
+              then
+                (let result : (BitVec 8) :=
+                  (Sail.BitVec.updateSubrange result 3 2
+                    (if (memattrs.inner.transient : Bool)
+                    then 0b01#2
+                    else 0b11#2))
+                (Sail.BitVec.updateSubrange result 1 0 memattrs.inner.hints))
+              else (Sail.BitVec.updateSubrange result 3 0 0b0100#4))
+          (pure (result))))
 
 
-def ExternalRealmInvasiveDebugEnabled (_ : Unit) : SailM Bool := do
-  let w__0 ← (( do (HaveRME ()) ) : SailM Bool )
-  if ((! w__0) : Bool)
+def WalkMemAttrs (sh : (BitVec 2)) (irgn : (BitVec 2)) (orgn : (BitVec 2)) : SailM MemoryAttributes := do
+  let walkmemattrs ← (( do (undefined_MemoryAttributes (← occLabel 1216) ()) ) : SailM
+    MemoryAttributes )
+  let walkmemattrs : MemoryAttributes := { walkmemattrs with memtype := MemType_Normal }
+  let w__0 ← (( do (DecodeShareability sh) ) : SailM Shareability )
+  let walkmemattrs := ({ walkmemattrs with shareability := w__0 } : MemoryAttributes)
+  let w__1 ← (( do (DecodeSDFAttr irgn) ) : SailM MemAttrHints )
+  let walkmemattrs := ({ walkmemattrs with inner := w__1 } : MemoryAttributes)
+  let w__2 ← (( do (DecodeSDFAttr orgn) ) : SailM MemAttrHints )
+  let walkmemattrs := ({ walkmemattrs with outer := w__2 } : MemoryAttributes)
+  let walkmemattrs : MemoryAttributes := { walkmemattrs with tags := MemTag_Untagged }
+  let walkmemattrs : MemoryAttributes :=
+    if (((walkmemattrs.inner.attrs == MemAttr_WB) && (walkmemattrs.outer.attrs == MemAttr_WB)) : Bool)
+    then { walkmemattrs with xs := 0#1 }
+    else { walkmemattrs with xs := 1#1 }
+  let walkmemattrs : MemoryAttributes := { walkmemattrs with notagaccess := false }
+  (pure (walkmemattrs))
+
+
+/-- Type quantifiers: k_s1aarch64 : Bool -/
+def S1ConstrainUnpredictableRESMAIR (attr : (BitVec 8)) (s1aarch64 : Bool) : SailM Bool := do
+  let b__0 := attr
+  if ((((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb b__0 7 4)) == (0x0#4 : (BitVec 4))) && ((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
+           b__0 1 0)) == (0b01#2 : (BitVec 2)))) : Bool)
+  then
+    (do
+      let w__1 ← (( do
+        if ((s1aarch64 : Bool) : Bool)
+        then
+          (do
+            (HaveFeatXS ()))
+        else (pure false) ) : SailM Bool )
+      (pure ((! w__1))))
+  else
+    (do
+      if (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb b__0 7 4)) == (0x0#4 : (BitVec 4))) : Bool)
+      then (pure (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb attr 1 0)) != 0b00#2)))
+      else
+        (do
+          match b__0 with
+          | 0b01000000 =>
+            (do
+              let w__3 ← (( do
+                if ((s1aarch64 : Bool) : Bool)
+                then
+                  (do
+                    (HaveFeatXS ()))
+                else (pure false) ) : SailM Bool )
+              (pure ((! w__3))))
+          | 0b10100000 =>
+            (do
+              let w__5 ← (( do
+                if ((s1aarch64 : Bool) : Bool)
+                then
+                  (do
+                    (HaveFeatXS ()))
+                else (pure false) ) : SailM Bool )
+              (pure ((! w__5))))
+          | 0b11110000 =>
+            (do
+              let w__7 ← (( do
+                if ((s1aarch64 : Bool) : Bool)
+                then
+                  (do
+                    (HaveMTE2Ext ()))
+                else (pure false) ) : SailM Bool )
+              (pure ((! w__7))))
+          | b__0 =>
+            (pure (if (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb b__0 3 0)) == (0x0#4 : (BitVec 4))) : Bool)
+              then true
+              else false))))
+
+
+def S2MemTagType (s2_memattrs : MemoryAttributes) (s1_tagtype : MemTagType) : SailM MemTagType := do
+  let w__0 ← (( do (HaveMTE2Ext ()) ) : SailM Bool )
+  let w__1 : MemTagType :=
+    if ((! w__0) : Bool)
+    then MemTag_Untagged
+    else
+      (if (((((((((BEq.beq s1_tagtype MemTag_AllocationTagged) && (BEq.beq s2_memattrs.memtype
+                         MemType_Normal)) && (s2_memattrs.inner.attrs == MemAttr_WB)) && (s2_memattrs.inner.hints == MemHint_RWA)) && (! s2_memattrs.inner.transient)) && (s2_memattrs.outer.attrs == MemAttr_WB)) && (s2_memattrs.outer.hints == MemHint_RWA)) && (! s2_memattrs.outer.transient)) : Bool)
+      then MemTag_AllocationTagged
+      else
+        (if ((bne s1_tagtype MemTag_AllocationTagged) : Bool)
+        then s1_tagtype
+        else MemTag_Untagged))
+  (pure (w__1))
+
+
+/-- Type quantifiers: k_s2aarch64 : Bool -/
+def S2DecodeMemAttrs (attr : (BitVec 4)) (sh : (BitVec 2)) (s2aarch64 : Bool) : SailM MemoryAttributes := do
+  let memattrs ← (( do (undefined_MemoryAttributes (← occLabel 1220) ()) ) : SailM
+    MemoryAttributes )
+  let b__0 := attr
+  let memattrs ← (( do
+    if (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb b__0 3 2)) == (0b00#2 : (BitVec 2))) : Bool)
+    then
+      (do
+        let memattrs : MemoryAttributes := { memattrs with memtype := MemType_Device }
+        let w__0 ← (( do (DecodeDevice (Sail.BitVec.extractLsb attr 1 0)) ) : SailM DeviceType )
+        let memattrs := ({ memattrs with device := w__0 } : MemoryAttributes)
+        (pure (memattrs)))
+    else
+      (do
+        match b__0 with
+        | 0b0100 =>
+          (do
+            let w__2 ← (( do
+              if ((s2aarch64 : Bool) : Bool)
+              then
+                (do
+                  (HaveMTEPermExt ()))
+              else (pure false) ) : SailM Bool )
+            if (w__2 : Bool)
+            then
+              (do
+                let memattrs : MemoryAttributes := { memattrs with memtype := MemType_Normal }
+                let w__3 ← (( do (S2DecodeCacheability 0b11#2) ) : SailM MemAttrHints )
+                let memattrs := ({ memattrs with outer := w__3 } : MemoryAttributes)
+                let w__4 ← (( do (S2DecodeCacheability 0b11#2) ) : SailM MemAttrHints )
+                let memattrs := ({ memattrs with inner := w__4 } : MemoryAttributes)
+                (pure (memattrs)))
+            else
+              (do
+                let memattrs : MemoryAttributes := { memattrs with memtype := MemType_Normal }
+                let w__5 ← (( do (S2DecodeCacheability (Sail.BitVec.extractLsb attr 3 2)) ) :
+                  SailM MemAttrHints )
+                let memattrs := ({ memattrs with outer := w__5 } : MemoryAttributes)
+                let w__6 ← (( do (S2DecodeCacheability (Sail.BitVec.extractLsb attr 1 0)) ) :
+                  SailM MemAttrHints )
+                let memattrs := ({ memattrs with inner := w__6 } : MemoryAttributes)
+                (pure (memattrs))))
+        | _ =>
+          (do
+            let memattrs : MemoryAttributes := { memattrs with memtype := MemType_Normal }
+            let w__7 ← (( do (S2DecodeCacheability (Sail.BitVec.extractLsb attr 3 2)) ) : SailM
+              MemAttrHints )
+            let memattrs := ({ memattrs with outer := w__7 } : MemoryAttributes)
+            let w__8 ← (( do (S2DecodeCacheability (Sail.BitVec.extractLsb attr 1 0)) ) : SailM
+              MemAttrHints )
+            let memattrs := ({ memattrs with inner := w__8 } : MemoryAttributes)
+            (pure (memattrs)))) ) : SailM MemoryAttributes )
+  let w__9 ← (( do (DecodeShareability sh) ) : SailM Shareability )
+  let memattrs := ({ memattrs with shareability := w__9 } : MemoryAttributes)
+  let w__11 ← (( do
+    if ((s2aarch64 : Bool) : Bool)
+    then
+      (do
+        (HaveMTEPermExt ()))
+    else (pure false) ) : SailM Bool )
+  let memattrs : MemoryAttributes :=
+    if (w__11 : Bool)
+    then { memattrs with notagaccess := (attr == 0b0100#4) }
+    else { memattrs with notagaccess := false }
+  (pure (memattrs))
+
+
+def AbovePPS (address : (BitVec 56)) : SailM Bool := do
+  let pps ← (( do (DecodePPS ()) ) : SailM Int )
+  (pure (if ((pps ≥b 56) : Bool)
+    then false
+    else (! (is_zero_subrange address 55 pps))))
+
+
+def GPICheck (paspace : PASpace) (gpi : (BitVec 4)) : SailM Bool := do
+  let questionMark := gpi
+  if ((questionMark == GPT_NoAccess) : Bool)
   then (pure (false))
   else
     (do
-      if ((← do
-           (ExternalInvasiveDebugEnabled ())) : Bool)
+      if ((questionMark == GPT_Secure) : Bool)
       then
         (do
-          let w__2 ← (( do readReg RLPIDEN ) : SailM Signal )
-          (pure (((BEq.beq w__2 Signal_High) : Bool))))
-      else (pure false))
+          let w__0 ← (( do (HaveSecureEL2Ext ()) ) : SailM Bool )
+          ArmFull.assert w__0 "sail-inputs/03-v8_base.sail:19511.35-19511.36"
+          (pure ((BEq.beq paspace PAS_Secure))))
+      else
+        (do
+          if ((questionMark == GPT_NonSecure) : Bool)
+          then (pure ((BEq.beq paspace PAS_NonSecure)))
+          else
+            (do
+              if ((questionMark == GPT_Root) : Bool)
+              then (pure ((BEq.beq paspace PAS_Root)))
+              else
+                (do
+                  if ((questionMark == GPT_Realm) : Bool)
+                  then (pure ((BEq.beq paspace PAS_Realm)))
+                  else
+                    (do
+                      if ((questionMark == GPT_Any) : Bool)
+                      then (pure (true))
+                      else
+                        (do
+                          (Unreachable ())
+                          (undefined_bool_at (← occLabel 1225) ())))))))
 
 
-/-- Type quantifiers: nbits_in : Int -/
-def ImplementedSVEVectorLength (nbits_in : Int) : SailM Int := SailME.run do
-  let maxbits : Int := (MaxImplementedVL ())
+def GPIValid (gpi : (BitVec 4)) : SailM Bool := do
+  if ((gpi == GPT_Secure) : Bool)
+  then
+    (do
+      (HaveSecureEL2Ext ()))
+  else
+    (pure (((gpi == GPT_NoAccess) || ((gpi == GPT_NonSecure) || ((gpi == GPT_Root) || ((gpi == GPT_Realm) || (gpi == GPT_Any)))))))
+
+
+def GPTTLBLookup (pa : (BitVec 56)) (pgs : PGSe) : SailM GPTTLBLine := do
+  (__UNKNOWN_GPTTLBLine ())
+
+
+def AArch64_MaxTxSZ (tgx : TGx) : SailM Int := do
+  let w__0 ← (( do (HaveSmallTranslationTableExt ()) ) : SailM Bool )
+  let w__1 : Int :=
+    if (w__0 : Bool)
+    then
+      (match tgx with
+      | .TGx_4KB => 48
+      | .TGx_16KB => 48
+      | .TGx_64KB => 47)
+    else 39
+  (pure (w__1))
+
+
+def AArch64_S1MinTxSZ (regime : Regime) (d128 : (BitVec 1)) (ds : (BitVec 1)) (tgx : TGx) : SailM Int := do
   let w__1 ← (( do
-    if ((((128 ≤b maxbits) && (maxbits ≤b 2048)) : Bool) : Bool)
+    (pure ((← do
+          (Have56BitVAExt ())) && ((d128 == 1#1) : Bool))) ) : SailM Bool )
+  if (w__1 : Bool)
+  then
+    (pure (if ((HasUnprivileged regime) : Bool)
+      then 9
+      else 8))
+  else
+    (do
+      let w__4 ← (( do
+        (pure ((← do
+              (pure ((← do
+                    (Have52BitVAExt ())) && ((BEq.beq tgx TGx_64KB) : Bool)))) || ((ds == 1#1) : Bool)))
+        ) : SailM Bool )
+      let w__5 : Int :=
+        if (w__4 : Bool)
+        then 12
+        else 16
+      (pure (w__5)))
+
+
+/-- Type quantifiers: k_isqarma3 : Bool -/
+def ComputePACQARMA (data : (BitVec 64)) (modifier : (BitVec 64)) (key0 : (BitVec 64)) (key1 : (BitVec 64)) (isqarma3 : Bool) : SailM (BitVec 64) := do
+  let roundkey ← (( do (undefined_bitvector_at (← occLabel 1290) 64) ) : SailM (BitVec 64) )
+  let Alpha : (BitVec 64) := 0xC0AC29B7C97C50DD#64
+  let iterations : Int := 2
+  let w__0 ← (( do readReg RC ) : SailM (Vector (BitVec 64) 5) )
+  writeReg RC (vectorUpdate w__0 0 0x0000000000000000#64)
+  let w__1 ← (( do readReg RC ) : SailM (Vector (BitVec 64) 5) )
+  writeReg RC (vectorUpdate w__1 1 0x13198A2E03707344#64)
+  let w__2 ← (( do readReg RC ) : SailM (Vector (BitVec 64) 5) )
+  writeReg RC (vectorUpdate w__2 2 0xA4093822299F31D0#64)
+  let iterations ← (( do
+    if (isqarma3 : Bool)
+    then (pure (2))
+    else
+      (do
+        let iterations : Int := 4
+        let w__3 ← (( do readReg RC ) : SailM (Vector (BitVec 64) 5) )
+        writeReg RC (vectorUpdate w__3 3 0x082EFA98EC4E6C89#64)
+        let w__4 ← (( do readReg RC ) : SailM (Vector (BitVec 64) 5) )
+        writeReg RC (vectorUpdate w__4 4 0x452821E638D01377#64)
+        (pure (iterations))) ) : SailM Int )
+  let iterations : Int := iterations
+  let modk0 : (BitVec 64) :=
+    (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access key0 0)])) +++ (Sail.BitVec.extractLsb key0
+          63 2)) +++ ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access key0 63)])) ^^^ (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
+            key0 1)]))))
+  let runningmod : (BitVec 64) := modifier
+  let workingval : (BitVec 64) := (data ^^^ key0)
+  let (roundkey, runningmod, workingval) ← (( do
+    let loop_i_lower : Nat := 0
+    let loop_i_upper : Int := iterations
+    (do
+      let mut loop_vars := (roundkey, runningmod, workingval)
+      for i in [loop_i_lower:loop_i_upper:1]i do
+        let (roundkey, runningmod, workingval) := loop_vars
+        loop_vars ← do
+          let roundkey : (BitVec 64) := (key1 ^^^ runningmod)
+          let workingval : (BitVec 64) := (workingval ^^^ roundkey)
+          let w__5 ← (( do readReg RC ) : SailM (Vector (BitVec 64) 5) )
+          let workingval :=
+            ((workingval ^^^ (GetElem?.getElem! w__5 (Sail.Int.toNatChecked (i)))) : (BitVec 64))
+          let workingval ← (( do
+            if ((i >b 0) : Bool)
+            then
+              (do
+                let w__6 ← (( do (PACCellShuffle workingval) ) : SailM (BitVec 64) )
+                let workingval := (w__6 : (BitVec 64))
+                (PACMult workingval))
+            else (pure (workingval)) ) : SailM (BitVec 64) )
+          let workingval ← (( do
+            if (isqarma3 : Bool)
+            then
+              (do
+                (PACSub1 workingval))
+            else
+              (do
+                (PACSub workingval)) ) : SailM (BitVec 64) )
+          let w__10 ← (( do (TweakShuffle (Sail.BitVec.extractLsb runningmod 63 0)) ) : SailM
+            (BitVec 64) )
+          let runningmod := (w__10 : (BitVec 64))
+          (pure ((roundkey, runningmod, workingval)))
+      (pure loop_vars)) ) : SailM ((BitVec 64) × (BitVec 64) × (BitVec 64)) )
+  let roundkey : (BitVec 64) := (modk0 ^^^ runningmod)
+  let workingval : (BitVec 64) := (workingval ^^^ roundkey)
+  let w__11 ← (( do (PACCellShuffle workingval) ) : SailM (BitVec 64) )
+  let workingval : (BitVec 64) := (w__11 : (BitVec 64))
+  let w__12 ← (( do (PACMult workingval) ) : SailM (BitVec 64) )
+  let workingval : (BitVec 64) := (w__12 : (BitVec 64))
+  let workingval ← (( do
+    if (isqarma3 : Bool)
     then
       (do
-        (IsPow2 maxbits))
-    else (pure false) ) : SailME Int Bool )
-  ArmFull.assert w__1 "sail-arm/v8_base.sail:6873.63-6873.64"
-  let nbits : Int := (Min.min nbits_in maxbits)
-  ArmFull.assert (((128 ≤b nbits) && (nbits ≤b 2048)) && ((Align_int nbits 128) == nbits)) "sail-arm/v8_base.sail:6875.70-6875.71"
-  let nbits ← (( do
-    let loop_vars ← sailWhileFuelM (α := Int) (fuel := 1048576) (fun nbits => (pure (nbits >b 128))) nbits
-      fun nbits => do
-        let w__2 ← (( do (IsPow2 nbits) ) : SailME Int Bool )
-        if (w__2 : Bool)
-        then
-          (do
-            let nbits : Int := nbits
-            ArmFull.assert (((((nbits == 128) || (nbits == 256)) || (nbits == 512)) || (nbits == 1024)) || (nbits == 2048)) "sail-arm/v8_base.sail:6879.44-6879.45"
-            SailME.throw (nbits : Int)
-            (pure (nbits)))
-        else
-          (let nbits : Int := (nbits -i 128)
-          (pure (nbits)))
-    (pure loop_vars) ) : SailME Int Int )
-  let nbits : Int := nbits
-  ArmFull.assert (((((nbits == 128) || (nbits == 256)) || (nbits == 512)) || (nbits == 1024)) || (nbits == 2048)) "sail-arm/v8_base.sail:6885.36-6885.37"
-  (pure (nbits))
+        (PACSub1 workingval))
+    else
+      (do
+        (PACSub workingval)) ) : SailM (BitVec 64) )
+  let w__15 ← (( do (PACCellShuffle workingval) ) : SailM (BitVec 64) )
+  let workingval : (BitVec 64) := (w__15 : (BitVec 64))
+  let w__16 ← (( do (PACMult workingval) ) : SailM (BitVec 64) )
+  let workingval : (BitVec 64) := (w__16 : (BitVec 64))
+  let workingval : (BitVec 64) := (key1 ^^^ workingval)
+  let w__17 ← (( do (PACCellInvShuffle workingval) ) : SailM (BitVec 64) )
+  let workingval : (BitVec 64) := (w__17 : (BitVec 64))
+  let workingval ← (( do
+    if (isqarma3 : Bool)
+    then
+      (do
+        (PACSub1 workingval))
+    else
+      (do
+        (PACInvSub workingval)) ) : SailM (BitVec 64) )
+  let w__20 ← (( do (PACMult workingval) ) : SailM (BitVec 64) )
+  let workingval : (BitVec 64) := (w__20 : (BitVec 64))
+  let w__21 ← (( do (PACCellInvShuffle workingval) ) : SailM (BitVec 64) )
+  let workingval : (BitVec 64) := (w__21 : (BitVec 64))
+  let workingval : (BitVec 64) := (workingval ^^^ key0)
+  let workingval : (BitVec 64) := (workingval ^^^ runningmod)
+  let (roundkey, runningmod, workingval) ← (( do
+    let loop_i_lower : Nat := 0
+    let loop_i_upper : Int := iterations
+    (do
+      let mut loop_vars := (roundkey, runningmod, workingval)
+      for i in [loop_i_lower:loop_i_upper:1]i do
+        let (roundkey, runningmod, workingval) := loop_vars
+        loop_vars ← do
+          let workingval ← (( do
+            if (isqarma3 : Bool)
+            then
+              (do
+                (PACSub1 workingval))
+            else
+              (do
+                (PACInvSub workingval)) ) : SailM (BitVec 64) )
+          let workingval ← (( do
+            if ((i <b iterations) : Bool)
+            then
+              (do
+                let w__24 ← (( do (PACMult workingval) ) : SailM (BitVec 64) )
+                let workingval := (w__24 : (BitVec 64))
+                (PACCellInvShuffle workingval))
+            else (pure (workingval)) ) : SailM (BitVec 64) )
+          let w__26 ← (( do (TweakInvShuffle (Sail.BitVec.extractLsb runningmod 63 0)) ) : SailM
+            (BitVec 64) )
+          let runningmod := (w__26 : (BitVec 64))
+          let roundkey : (BitVec 64) := (key1 ^^^ runningmod)
+          let w__27 ← (( do readReg RC ) : SailM (Vector (BitVec 64) 5) )
+          let workingval :=
+            ((workingval ^^^ (GetElem?.getElem! w__27 (Sail.Int.toNatChecked ((iterations -i i))))) : (BitVec 64))
+          let workingval : (BitVec 64) := (workingval ^^^ roundkey)
+          let workingval : (BitVec 64) := (workingval ^^^ Alpha)
+          (pure ((roundkey, runningmod, workingval)))
+      (pure loop_vars)) ) : SailM ((BitVec 64) × (BitVec 64) × (BitVec 64)) )
+  let workingval : (BitVec 64) := (workingval ^^^ modk0)
+  (pure (workingval))
 
 
-/-- Type quantifiers: nbits_in : Int -/
-def ImplementedSMEVectorLength (nbits_in : Int) : SailM Int := SailME.run do
-  let maxbits ← (( do (MaxImplementedSVL ()) ) : SailME Int Int )
-  ArmFull.assert (((((maxbits == 128) || (maxbits == 256)) || (maxbits == 512)) || (maxbits == 1024)) || (maxbits == 2048)) "sail-arm/v8_base.sail:6932.38-6932.39"
-  let nbits : Int := (Min.min nbits_in maxbits)
-  ArmFull.assert (((128 ≤b nbits) && (nbits ≤b 2048)) && ((Align_int nbits 128) == nbits)) "sail-arm/v8_base.sail:6934.70-6934.71"
-  let nbits ← (( do
-    let loop_vars ← sailWhileFuelM (α := Int) (fuel := 1048576) (fun nbits => (pure (nbits >b 128))) nbits
-      fun nbits => do
-        let w__1 ← (( do
-          (pure ((← do
-                (IsPow2 nbits)) && ((SupportedPowerTwoSVL nbits) : Bool))) ) : SailME Int Bool )
-        if (w__1 : Bool)
-        then
-          (do
-            let nbits : Int := nbits
-            ArmFull.assert (((((nbits == 128) || (nbits == 256)) || (nbits == 512)) || (nbits == 1024)) || (nbits == 2048)) "sail-arm/v8_base.sail:6938.44-6938.45"
-            SailME.throw (nbits : Int)
-            (pure (nbits)))
-        else
-          (let nbits : Int := (nbits -i 128)
-          (pure (nbits)))
-    (pure loop_vars) ) : SailME Int Int )
-  let nbits : Int := 128
-  let nbits ← (( do
-    let loop_vars_1 ← sailWhileFuelM (α := Int) (fuel := 1048576) (fun nbits => (pure (nbits <b maxbits))) nbits
-      fun nbits => do
-        if ((SupportedPowerTwoSVL nbits) : Bool)
-        then
-          (do
-            let nbits : Int := nbits
-            ArmFull.assert (((((nbits == 128) || (nbits == 256)) || (nbits == 512)) || (nbits == 1024)) || (nbits == 2048)) "sail-arm/v8_base.sail:6947.44-6947.45"
-            SailME.throw (nbits : Int)
-            (pure (nbits)))
-        else
-          (let nbits : Int := (nbits *i 2)
-          (pure (nbits)))
-    (pure loop_vars_1) ) : SailME Int Int )
-  (pure (maxbits))
+/-- Type quantifiers: k_isgeneric : Bool -/
+def UsePACIMP (isgeneric : Bool) : SailM Bool := do
+  if (isgeneric : Bool)
+  then
+    (do
+      (HavePACIMPGeneric ()))
+  else
+    (do
+      (HavePACIMPAuth ()))
+
+
+/-- Type quantifiers: k_isgeneric : Bool -/
+def UsePACQARMA3 (isgeneric : Bool) : SailM Bool := do
+  if (isgeneric : Bool)
+  then
+    (do
+      (HavePACQARMA3Generic ()))
+  else
+    (do
+      (HavePACQARMA3Auth ()))
+
+
+/-- Type quantifiers: k_isgeneric : Bool -/
+def UsePACQARMA5 (isgeneric : Bool) : SailM Bool := do
+  if (isgeneric : Bool)
+  then
+    (do
+      (HavePACQARMA5Generic ()))
+  else
+    (do
+      (HavePACQARMA5Auth ()))
+
+
+def AArch64_ResetGeneralRegisters (_ : Unit) : SailM Unit := do
+  let loop_i_lower : Nat := 0
+  let loop_i_upper : Nat := 30
+  (do
+    let mut loop_vars := ()
+    for i in [loop_i_lower:loop_i_upper:1]i do
+      let () := loop_vars
+      loop_vars ← do
+        let w__0 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
+        (X_set i 64 w__0)
+    (pure loop_vars))
+
+
+def AArch64_ResetSpecialRegisters (_ : Unit) : SailM Unit := do
+  let w__0 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
+  writeReg SP_EL0 w__0
+  let w__1 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
+  writeReg SP_EL1 w__1
+  let w__2 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
+  writeReg SPSR_EL1 (Mk_SPSR_EL1_Type w__2)
+  let w__3 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
+  writeReg ELR_EL1 w__3
+  let w__4 ← (( do (HaveEL EL2) ) : SailM Bool )
+  if (w__4 : Bool)
+  then
+    (do
+      let w__5 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
+      writeReg SP_EL2 w__5
+      let w__6 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
+      writeReg SPSR_EL2 (Mk_SPSR_EL2_Type w__6)
+      let w__7 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
+      writeReg ELR_EL2 w__7)
+  else (pure (()))
+  let w__8 ← (( do (HaveEL EL3) ) : SailM Bool )
+  if (w__8 : Bool)
+  then
+    (do
+      let w__9 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
+      writeReg SP_EL3 w__9
+      let w__10 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
+      writeReg SPSR_EL3 (Mk_SPSR_EL3_Type w__10)
+      let w__11 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
+      writeReg ELR_EL3 w__11)
+  else (pure (()))
+  let w__12 ← (( do (HaveAArch32EL EL1) ) : SailM Bool )
+  if (w__12 : Bool)
+  then
+    (do
+      let w__13 ← (( do readReg SPSR_fiq ) : SailM (BitVec 64) )
+      let w__14 ← (( do (__UNKNOWN_bits 32) ) : SailM (BitVec 32) )
+      writeReg SPSR_fiq (Sail.BitVec.updateSubrange w__13 31 0 w__14)
+      let w__15 ← (( do readReg SPSR_irq ) : SailM (BitVec 64) )
+      let w__16 ← (( do (__UNKNOWN_bits 32) ) : SailM (BitVec 32) )
+      writeReg SPSR_irq (Sail.BitVec.updateSubrange w__15 31 0 w__16)
+      let w__17 ← (( do readReg SPSR_abt ) : SailM (BitVec 64) )
+      let w__18 ← (( do (__UNKNOWN_bits 32) ) : SailM (BitVec 32) )
+      writeReg SPSR_abt (Sail.BitVec.updateSubrange w__17 31 0 w__18)
+      let w__19 ← (( do readReg SPSR_und ) : SailM (BitVec 64) )
+      let w__20 ← (( do (__UNKNOWN_bits 32) ) : SailM (BitVec 32) )
+      writeReg SPSR_und (Sail.BitVec.updateSubrange w__19 31 0 w__20))
+  else (pure (()))
+  let w__21 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
+  writeReg DLR_EL0 w__21
+  let w__22 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
+  writeReg DSPSR_EL0 (Mk_DSPSR_EL0_Type w__22)
+
+
+/-- Type quantifiers: alignment : Int, size : Int -/
+def AllInAlignedQuantity (address : (BitVec 64)) (size : Int) (alignment : Int) : SailM Bool := do
+  ArmFull.assert (size ≤b alignment) "sail-inputs/03-v8_base.sail:22745.28-22745.29"
+  (pure (((Align_bits (BitVec.subInt (BitVec.addInt address size) 1) alignment) == (Align_bits
+        address alignment))))
 
 
 end ArmFull.Functions

@@ -1,28 +1,39 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0011
-import ArmFull.Fn.M0019
-import ArmFull.Fn.M0021
-import ArmFull.Fn.M0022
-import ArmFull.Fn.M0038
-import ArmFull.Fn.M0039
-import ArmFull.Fn.M0041
-import ArmFull.Fn.M0042
-import ArmFull.Fn.M0046
-import ArmFull.Fn.M0047
-import ArmFull.Fn.M0053
-import ArmFull.Fn.M0054
-import ArmFull.Fn.M0055
-import ArmFull.Fn.M0056
-import ArmFull.Fn.M0087
-import ArmFull.Fn.M0166
-import ArmFull.Fn.M0197
-import ArmFull.Fn.M0200
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0010
+public import ArmFull.Fn.M0020
+public import ArmFull.Fn.M0021
+public import ArmFull.Fn.M0023
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0034
+public import ArmFull.Fn.M0035
+public import ArmFull.Fn.M0036
+public import ArmFull.Fn.M0042
+public import ArmFull.Fn.M0043
+public import ArmFull.Fn.M0046
+public import ArmFull.Fn.M0047
+public import ArmFull.Fn.M0048
+public import ArmFull.Fn.M0049
+public import ArmFull.Fn.M0050
+public import ArmFull.Fn.M0053
+public import ArmFull.Fn.M0054
+public import ArmFull.Fn.M0055
+public import ArmFull.Fn.M0056
+public import ArmFull.Fn.M0057
+public import ArmFull.Fn.M0087
+public import ArmFull.Fn.M0144
+public import ArmFull.Fn.M0151
+public import ArmFull.Fn.M0155
+public import ArmFull.Fn.M0156
+public import ArmFull.Fn.M0170
+public import ArmFull.Fn.M0195
+public import ArmFull.Fn.M0196
+public import ArmFull.Fn.M0199 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -125,1045 +136,880 @@ open AccessType
 open ATAccess
 
 /-- Type quantifiers: k_cold : Bool -/
-def AArch32_AutoGen_ArchitectureReset__seg0 (cold : Bool) : SailM Bool := do
-  let w__0 ← (( do (ICC_SGI1R_read ()) ) : SailM (BitVec 64) )
-  (ICC_SGI1R_write (Mk_ICC_SGI1R_Type (set_slice 8 w__0 56 0b00000000#8)))
-  let w__1 ← (( do (ICC_SGI1R_read ()) ) : SailM (BitVec 64) )
-  (ICC_SGI1R_write (Mk_ICC_SGI1R_Type (set_slice 3 w__1 41 0b000#3)))
-  let w__2 ← (( do (ICC_SGI1R_read ()) ) : SailM (BitVec 64) )
-  (ICC_SGI1R_write (Mk_ICC_SGI1R_Type (set_slice 4 w__2 28 0b0000#4)))
-  let w__3 ← (( do readReg DBGDSAR ) : SailM (BitVec 64) )
-  writeReg DBGDSAR (Sail.BitVec.updateSubrange w__3 63 2
-    0b00000000000000000000000000000000000000000000000000000000000000#62)
-  let w__4 ← (( do readReg DBGDSAR ) : SailM (BitVec 64) )
-  writeReg DBGDSAR (Sail.BitVec.updateSubrange w__4 1 0 0b00#2)
-  let w__5 ← (( do (ICC_SGI0R_read ()) ) : SailM (BitVec 64) )
-  (ICC_SGI0R_write (Mk_ICC_SGI0R_Type (set_slice 8 w__5 56 0b00000000#8)))
-  let w__6 ← (( do (ICC_SGI0R_read ()) ) : SailM (BitVec 64) )
-  (ICC_SGI0R_write (Mk_ICC_SGI0R_Type (set_slice 3 w__6 41 0b000#3)))
-  let w__7 ← (( do (ICC_SGI0R_read ()) ) : SailM (BitVec 64) )
-  (ICC_SGI0R_write (Mk_ICC_SGI0R_Type (set_slice 4 w__7 28 0b0000#4)))
-  let w__8 ← (( do (ICC_ASGI1R_read ()) ) : SailM (BitVec 64) )
-  (ICC_ASGI1R_write (Mk_ICC_ASGI1R_Type (set_slice 8 w__8 56 0b00000000#8)))
-  let w__9 ← (( do (ICC_ASGI1R_read ()) ) : SailM (BitVec 64) )
-  (ICC_ASGI1R_write (Mk_ICC_ASGI1R_Type (set_slice 3 w__9 41 0b000#3)))
-  let w__10 ← (( do (ICC_ASGI1R_read ()) ) : SailM (BitVec 64) )
-  (ICC_ASGI1R_write (Mk_ICC_ASGI1R_Type (set_slice 4 w__10 28 0b0000#4)))
-  let w__11 ← (( do (PAR_read ()) ) : SailM (BitVec 64) )
-  (PAR_write (Mk_PAR_Type (set_slice 32 w__11 32 0b00000000000000000000000000000000#32)))
-  let w__12 ← (( do (PAR_read ()) ) : SailM (BitVec 64) )
-  (PAR_write (Mk_PAR_Type (set_slice 32 w__12 32 0b00000000000000000000000000000000#32)))
-  let w__13 ← (( do (PAR_read ()) ) : SailM (BitVec 64) )
-  (PAR_write (Mk_PAR_Type (set_slice 4 w__13 12 0b0000#4)))
-  let w__14 ← (( do (PAR_read ()) ) : SailM (BitVec 64) )
-  (PAR_write (Mk_PAR_Type (set_slice 4 w__14 7 0b0000#4)))
-  let w__15 ← (( do (PAR_read ()) ) : SailM (BitVec 64) )
-  (PAR_write (Mk_PAR_Type (set_slice 16 w__15 40 0b0000000000000000#16)))
-  let w__16 ← (( do (PAR_read ()) ) : SailM (BitVec 64) )
-  (PAR_write (Mk_PAR_Type (set_slice 6 w__16 1 0b000000#6)))
-  let w__17 ← (( do (PAR_read ()) ) : SailM (BitVec 64) )
-  (PAR_write (Mk_PAR_Type (set_slice 36 w__17 12 0b000000000000000000000000000000000000#36)))
-  let w__18 ← (( do (PAR_read ()) ) : SailM (BitVec 64) )
-  (PAR_write (Mk_PAR_Type (set_slice 1 w__18 10 0#1)))
-  let w__19 ← (( do (PAR_read ()) ) : SailM (BitVec 64) )
-  (PAR_write (Mk_PAR_Type (set_slice 1 w__19 7 0#1)))
-  let w__20 ← (( do (TTBR1_read ()) ) : SailM (BitVec 64) )
-  (TTBR1_write (Mk_TTBR1_Type (set_slice 32 w__20 32 0b00000000000000000000000000000000#32)))
-  let w__21 ← (( do (TTBR1_read ()) ) : SailM (BitVec 64) )
-  (TTBR1_write (Mk_TTBR1_Type (set_slice 8 w__21 56 0b00000000#8)))
-  let w__22 ← (( do readReg HTTBR ) : SailM (BitVec 64) )
-  writeReg HTTBR (Sail.BitVec.updateSubrange w__22 63 48 0b0000000000000000#16)
-  let w__23 ← (( do (TTBR0_read ()) ) : SailM (BitVec 64) )
-  (TTBR0_write (Mk_TTBR0_Type (set_slice 32 w__23 32 0b00000000000000000000000000000000#32)))
-  let w__24 ← (( do (TTBR0_read ()) ) : SailM (BitVec 64) )
-  (TTBR0_write (Mk_TTBR0_Type (set_slice 8 w__24 56 0b00000000#8)))
-  let w__25 ← (( do (DBGDRAR_read ()) ) : SailM (BitVec 64) )
-  (DBGDRAR_write (Mk_DBGDRAR_Type (set_slice 16 w__25 48 0b0000000000000000#16)))
-  let w__26 ← (( do (DBGDRAR_read ()) ) : SailM (BitVec 64) )
-  (DBGDRAR_write (Mk_DBGDRAR_Type (set_slice 10 w__26 2 0b0000000000#10)))
-  let w__27 ← (( do readReg VTTBR ) : SailM (BitVec 64) )
-  writeReg VTTBR (Sail.BitVec.updateSubrange w__27 63 56 0b00000000#8)
-  let w__29 ← (( do
+def AArch32_AutoGen_ArchitectureReset__seg1 (cold : Bool) : SailM Bool := do
+  let w__384 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__29 : Bool)
+  if (w__384 : Bool)
   then
     (do
-      let w__30 ← (( do readReg VTTBR ) : SailM (BitVec 64) )
-      writeReg VTTBR (Sail.BitVec.updateSubrange w__30 55 48 0b00000000#8))
+      let w__385 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
+      (HCR2_write (_update_HCR2_Type_CD w__385 0#1)))
   else
     (do
-      let w__31 ← (( do readReg VTTBR ) : SailM (BitVec 64) )
-      let w__32 ← (( do (__UNKNOWN_bits 8) ) : SailM (BitVec 8) )
-      writeReg VTTBR (Sail.BitVec.updateSubrange w__31 55 48 w__32))
-  let w__33 ← (( do readReg GITS_CREADR ) : SailM (BitVec 64) )
-  writeReg GITS_CREADR (Sail.BitVec.updateSubrange w__33 63 20
-    0b00000000000000000000000000000000000000000000#44)
-  let w__34 ← (( do readReg GITS_CREADR ) : SailM (BitVec 64) )
-  writeReg GITS_CREADR (Sail.BitVec.updateSubrange w__34 4 1 0b0000#4)
-  let w__35 ← (( do readReg GICR_PENDBASER ) : SailM (BitVec 64) )
-  writeReg GICR_PENDBASER (BitVec.update w__35 63 (Bit 0#1))
-  let w__36 ← (( do readReg GICR_PENDBASER ) : SailM (BitVec 64) )
-  writeReg GICR_PENDBASER (Sail.BitVec.updateSubrange w__36 61 59 0b000#3)
-  let w__37 ← (( do readReg GICR_PENDBASER ) : SailM (BitVec 64) )
-  writeReg GICR_PENDBASER (Sail.BitVec.updateSubrange w__37 55 52 0b0000#4)
-  let w__38 ← (( do readReg GICR_PENDBASER ) : SailM (BitVec 64) )
-  writeReg GICR_PENDBASER (Sail.BitVec.updateSubrange w__38 15 12 0b0000#4)
-  let w__39 ← (( do readReg GICR_PENDBASER ) : SailM (BitVec 64) )
-  writeReg GICR_PENDBASER (Sail.BitVec.updateSubrange w__39 6 0 0b0000000#7)
-  let w__40 ← (( do readReg GICR_PROPBASER ) : SailM (BitVec 64) )
-  writeReg GICR_PROPBASER (Sail.BitVec.updateSubrange w__40 63 59 0b00000#5)
-  let w__41 ← (( do readReg GICR_PROPBASER ) : SailM (BitVec 64) )
-  writeReg GICR_PROPBASER (Sail.BitVec.updateSubrange w__41 55 52 0b0000#4)
-  let w__42 ← (( do readReg GICR_PROPBASER ) : SailM (BitVec 64) )
-  writeReg GICR_PROPBASER (Sail.BitVec.updateSubrange w__42 6 5 0b00#2)
-  let w__43 ← (( do readReg GICR_VPROPBASER ) : SailM (BitVec 64) )
-  writeReg GICR_VPROPBASER (Sail.BitVec.updateSubrange w__43 63 63 0#1)
-  let w__44 ← (( do readReg GICR_VPROPBASER ) : SailM (BitVec 64) )
-  writeReg GICR_VPROPBASER (BitVec.update w__44 62 (Bit 0#1))
-  let w__45 ← (( do readReg GICR_VPROPBASER ) : SailM (BitVec 64) )
-  writeReg GICR_VPROPBASER (Sail.BitVec.updateSubrange w__45 63 59 0b00000#5)
-  let w__46 ← (( do readReg GICR_VPROPBASER ) : SailM (BitVec 64) )
-  writeReg GICR_VPROPBASER (Sail.BitVec.updateSubrange w__46 55 52 0b0000#4)
-  let w__47 ← (( do readReg GICR_VPROPBASER ) : SailM (BitVec 64) )
-  writeReg GICR_VPROPBASER (Sail.BitVec.updateSubrange w__47 6 5 0b00#2)
-  let w__48 ← (( do readReg EDPFR ) : SailM (BitVec 64) )
-  writeReg EDPFR (Sail.BitVec.updateSubrange w__48 63 60 0b0000#4)
-  let w__49 ← (( do readReg EDPFR ) : SailM (BitVec 64) )
-  writeReg EDPFR (Sail.BitVec.updateSubrange w__49 59 56 0b0000#4)
-  let w__50 ← (( do readReg EDPFR ) : SailM (BitVec 64) )
-  writeReg EDPFR (Sail.BitVec.updateSubrange w__50 55 52 0b0000#4)
-  let w__51 ← (( do readReg EDPFR ) : SailM (BitVec 64) )
-  writeReg EDPFR (Sail.BitVec.updateSubrange w__51 51 48 0b0000#4)
-  let w__52 ← (( do readReg EDPFR ) : SailM (BitVec 64) )
-  writeReg EDPFR (Sail.BitVec.updateSubrange w__52 43 40 0b0000#4)
-  let w__53 ← (( do readReg EDPFR ) : SailM (BitVec 64) )
-  writeReg EDPFR (Sail.BitVec.updateSubrange w__53 31 28 0b0000#4)
-  let w__54 ← (( do readReg GICR_CLRLPIR ) : SailM (BitVec 64) )
-  writeReg GICR_CLRLPIR (Sail.BitVec.updateSubrange w__54 63 32
-    0b00000000000000000000000000000000#32)
-  let w__55 ← (( do readReg GICR_INVALLR ) : SailM (BitVec 64) )
-  writeReg GICR_INVALLR (Sail.BitVec.updateSubrange w__55 62 48 0b000000000000000#15)
-  let w__56 ← (( do readReg GICR_INVALLR ) : SailM (BitVec 64) )
-  writeReg GICR_INVALLR (Sail.BitVec.updateSubrange w__56 31 0 0b00000000000000000000000000000000#32)
-  let w__57 ← (( do readReg EDHSR ) : SailM (BitVec 64) )
-  writeReg EDHSR (Sail.BitVec.updateSubrange w__57 63 41 0b00000000000000000000000#23)
-  let w__58 ← (( do readReg EDHSR ) : SailM (BitVec 64) )
-  writeReg EDHSR (Sail.BitVec.updateSubrange w__58 39 24 0b0000000000000000#16)
-  let w__59 ← (( do readReg EDHSR ) : SailM (BitVec 64) )
-  writeReg EDHSR (BitVec.update w__59 14 (Bit 0#1))
-  let w__60 ← (( do readReg EDHSR ) : SailM (BitVec 64) )
-  writeReg EDHSR (Sail.BitVec.updateSubrange w__60 12 11 0b00#2)
-  let w__61 ← (( do readReg EDHSR ) : SailM (BitVec 64) )
-  writeReg EDHSR (BitVec.update w__61 9 (Bit 0#1))
-  let w__62 ← (( do readReg EDHSR ) : SailM (BitVec 64) )
-  writeReg EDHSR (BitVec.update w__62 7 (Bit 0#1))
-  let w__63 ← (( do readReg EDHSR ) : SailM (BitVec 64) )
-  writeReg EDHSR (Sail.BitVec.updateSubrange w__63 5 0 0b000000#6)
-  let w__64 ← (( do readReg EDPCSR ) : SailM (BitVec 64) )
-  writeReg EDPCSR (Sail.BitVec.updateSubrange w__64 60 56 0b00000#5)
-  let w__65 ← (( do readReg GICR_VPENDBASER ) : SailM (BitVec 64) )
-  writeReg GICR_VPENDBASER (Sail.BitVec.updateSubrange w__65 63 63 0#1)
-  let w__66 ← (( do readReg GICR_VPENDBASER ) : SailM (BitVec 64) )
-  writeReg GICR_VPENDBASER (Sail.BitVec.updateSubrange w__66 60 60 0#1)
-  let w__67 ← (( do readReg GICR_VPENDBASER ) : SailM (BitVec 64) )
-  writeReg GICR_VPENDBASER (Sail.BitVec.updateSubrange w__67 57 16
-    0b000000000000000000000000000000000000000000#42)
-  let w__68 ← (( do readReg GICR_VPENDBASER ) : SailM (BitVec 64) )
-  writeReg GICR_VPENDBASER (Sail.BitVec.updateSubrange w__68 63 63 0#1)
-  let w__69 ← (( do readReg GICR_VPENDBASER ) : SailM (BitVec 64) )
-  writeReg GICR_VPENDBASER (Sail.BitVec.updateSubrange w__69 61 61 0#1)
-  let w__70 ← (( do readReg GICR_VPENDBASER ) : SailM (BitVec 64) )
-  writeReg GICR_VPENDBASER (Sail.BitVec.updateSubrange w__70 60 60 0#1)
-  let w__71 ← (( do readReg GICR_VPENDBASER ) : SailM (BitVec 64) )
-  writeReg GICR_VPENDBASER (BitVec.update w__71 59 (Bit 0#1))
-  let w__72 ← (( do readReg GICR_VPENDBASER ) : SailM (BitVec 64) )
-  writeReg GICR_VPENDBASER (Sail.BitVec.updateSubrange w__72 55 52 0b0000#4)
-  let w__73 ← (( do readReg GICR_VPENDBASER ) : SailM (BitVec 64) )
-  writeReg GICR_VPENDBASER (Sail.BitVec.updateSubrange w__73 15 12 0b0000#4)
-  let w__74 ← (( do readReg GICR_VPENDBASER ) : SailM (BitVec 64) )
-  writeReg GICR_VPENDBASER (Sail.BitVec.updateSubrange w__74 6 0 0b0000000#7)
-  let w__75 ← (( do readReg GITS_TYPER ) : SailM (BitVec 64) )
-  writeReg GITS_TYPER (Sail.BitVec.updateSubrange w__75 63 47 0b00000000000000000#17)
-  let w__76 ← (( do readReg GITS_TYPER ) : SailM (BitVec 64) )
-  writeReg GITS_TYPER (Sail.BitVec.updateSubrange w__76 23 20 0b0000#4)
-  let w__77 ← (( do readReg GITS_SGIR ) : SailM (BitVec 64) )
-  writeReg GITS_SGIR (Sail.BitVec.updateSubrange w__77 63 48 0b0000000000000000#16)
-  let w__78 ← (( do readReg GITS_SGIR ) : SailM (BitVec 64) )
-  writeReg GITS_SGIR (Sail.BitVec.updateSubrange w__78 31 4 0b0000000000000000000000000000#28)
-  let w__79 ← (( do readReg EDDFR1 ) : SailM (BitVec 64) )
-  writeReg EDDFR1 (Sail.BitVec.updateSubrange w__79 55 52 0b0000#4)
-  let w__80 ← (( do readReg GITS_CWRITER ) : SailM (BitVec 64) )
-  writeReg GITS_CWRITER (Sail.BitVec.updateSubrange w__80 63 20
-    0b00000000000000000000000000000000000000000000#44)
-  let w__81 ← (( do readReg GITS_CWRITER ) : SailM (BitVec 64) )
-  writeReg GITS_CWRITER (Sail.BitVec.updateSubrange w__81 4 1 0b0000#4)
-  let w__82 ← (( do readReg EDDFR ) : SailM (BitVec 64) )
-  writeReg EDDFR (Sail.BitVec.updateSubrange w__82 63 60 0b0000#4)
-  let w__83 ← (( do readReg EDDFR ) : SailM (BitVec 64) )
-  writeReg EDDFR (Sail.BitVec.updateSubrange w__83 55 44 0b000000000000#12)
-  let w__84 ← (( do readReg EDDFR ) : SailM (BitVec 64) )
-  writeReg EDDFR (Sail.BitVec.updateSubrange w__84 39 32 0b00000000#8)
-  let w__85 ← (( do readReg EDDFR ) : SailM (BitVec 64) )
-  writeReg EDDFR (Sail.BitVec.updateSubrange w__85 3 0 0b0000#4)
-  let w__86 ← (( do readReg GICR_INVLPIR ) : SailM (BitVec 64) )
-  writeReg GICR_INVLPIR (Sail.BitVec.updateSubrange w__86 62 48 0b000000000000000#15)
-  let w__87 ← (( do readReg EDAA32PFR ) : SailM (BitVec 64) )
-  writeReg EDAA32PFR (Sail.BitVec.updateSubrange w__87 63 20
-    0b00000000000000000000000000000000000000000000#44)
-  let w__88 ← (( do readReg GITS_CBASER ) : SailM (BitVec 64) )
-  writeReg GITS_CBASER (Sail.BitVec.updateSubrange w__88 63 63 0#1)
-  let w__89 ← (( do readReg GITS_CBASER ) : SailM (BitVec 64) )
-  writeReg GITS_CBASER (BitVec.update w__89 62 (Bit 0#1))
-  let w__90 ← (( do readReg GITS_CBASER ) : SailM (BitVec 64) )
-  writeReg GITS_CBASER (Sail.BitVec.updateSubrange w__90 58 56 0b000#3)
-  let w__91 ← (( do readReg GITS_CBASER ) : SailM (BitVec 64) )
-  writeReg GITS_CBASER (BitVec.update w__91 52 (Bit 0#1))
-  let w__92 ← (( do readReg GITS_CBASER ) : SailM (BitVec 64) )
-  writeReg GITS_CBASER (Sail.BitVec.updateSubrange w__92 9 8 0b00#2)
-  let w__93 ← (( do readReg GICR_SETLPIR ) : SailM (BitVec 64) )
-  writeReg GICR_SETLPIR (Sail.BitVec.updateSubrange w__93 63 32
-    0b00000000000000000000000000000000#32)
-  let w__94 ← (( do readReg PMCFGR ) : SailM (BitVec 64) )
-  writeReg PMCFGR (Sail.BitVec.updateSubrange w__94 63 32 0b00000000000000000000000000000000#32)
-  let w__95 ← (( do readReg PMCFGR ) : SailM (BitVec 64) )
-  writeReg PMCFGR (Sail.BitVec.updateSubrange w__95 27 23 0b00000#5)
-  let w__96 ← (( do readReg PMCFGR ) : SailM (BitVec 64) )
-  writeReg PMCFGR (BitVec.update w__96 20 (Bit 0#1))
-  let w__97 ← (( do readReg PMCFGR ) : SailM (BitVec 64) )
-  writeReg PMCFGR (Sail.BitVec.updateSubrange w__97 27 23 0b00000#5)
-  let w__98 ← (( do readReg PMCFGR ) : SailM (BitVec 64) )
-  writeReg PMCFGR (BitVec.update w__98 20 (Bit 0#1))
-  let w__99 ← (( do (PMCNTEN_read ()) ) : SailM (BitVec 64) )
-  (PMCNTEN_write (Mk_PMCNTEN_Type (set_slice 31 w__99 33 0b0000000000000000000000000000000#31)))
-  let w__100 ← (( do readReg PMIIDR ) : SailM (BitVec 64) )
-  writeReg PMIIDR (Sail.BitVec.updateSubrange w__100 63 32 0b00000000000000000000000000000000#32)
-  let w__101 ← (( do readReg PMIIDR ) : SailM (BitVec 64) )
-  writeReg PMIIDR (BitVec.update w__101 7 (Bit 0#1))
-  let w__102 ← (( do readReg PMIIDR ) : SailM (BitVec 64) )
-  writeReg PMIIDR (BitVec.update w__102 7 (Bit 0#1))
-  let w__103 ← (( do (PMINTEN_read ()) ) : SailM (BitVec 64) )
-  (PMINTEN_write (Mk_PMINTEN_Type (set_slice 31 w__103 33 0b0000000000000000000000000000000#31)))
-  let w__104 ← (( do (PMOVS_read ()) ) : SailM (BitVec 64) )
-  (PMOVS_write (Mk_PMOVS_Type (set_slice 31 w__104 33 0b0000000000000000000000000000000#31)))
-  let w__105 ← (( do readReg PMPCSCTL ) : SailM (BitVec 64) )
-  writeReg PMPCSCTL (Sail.BitVec.updateSubrange w__105 63 5
-    0b00000000000000000000000000000000000000000000000000000000000#59)
-  let w__106 ← (( do readReg PMPCSCTL ) : SailM (BitVec 64) )
-  writeReg PMPCSCTL (Sail.BitVec.updateSubrange w__106 4 4 0#1)
-  let w__107 ← (( do readReg PMPCSCTL ) : SailM (BitVec 64) )
-  writeReg PMPCSCTL (Sail.BitVec.updateSubrange w__107 3 2 0b00#2)
-  let w__108 ← (( do readReg PMPCSCTL ) : SailM (BitVec 64) )
-  writeReg PMPCSCTL (Sail.BitVec.updateSubrange w__108 0 0 0#1)
-  let w__109 ← (( do readReg PMPCSR ) : SailM (BitVec 64) )
-  writeReg PMPCSR (Sail.BitVec.updateSubrange w__109 58 56 0b000#3)
-  let w__110 ← (( do readReg PMVCIDSR ) : SailM (BitVec 64) )
-  writeReg PMVCIDSR (Sail.BitVec.updateSubrange w__110 63 48 0b0000000000000000#16)
-  let w__111 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (_update_TTBCR_Type_EAE w__111 0#1))
-  let w__112 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (Mk_TTBCR_Type (set_slice 25 w__112 6 0b0000000000000000000000000#25)))
-  let w__113 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (_update_TTBCR_Type_PD1 w__113 0#1))
-  let w__114 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (_update_TTBCR_Type_PD0 w__114 0#1))
-  let w__115 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (Mk_TTBCR_Type (set_slice 1 w__115 3 0#1)))
-  let w__116 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (_update_TTBCR_Type_N w__116 0b000#3))
-  let w__117 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (_update_TTBCR_Type_EAE w__117 0#1))
-  let w__118 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (Mk_TTBCR_Type (set_slice 1 w__118 30 0#1)))
-  let w__119 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (_update_TTBCR_Type_SH1 w__119 0b00#2))
-  let w__120 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (_update_TTBCR_Type_ORGN1 w__120 0b00#2))
-  let w__121 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (_update_TTBCR_Type_IRGN1 w__121 0b00#2))
-  let w__122 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (_update_TTBCR_Type_EPD1 w__122 0#1))
-  let w__123 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (_update_TTBCR_Type_A1 w__123 0#1))
-  let w__124 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (Mk_TTBCR_Type (set_slice 3 w__124 19 0b000#3)))
-  let w__125 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (_update_TTBCR_Type_T1SZ w__125 0b000#3))
-  let w__126 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (Mk_TTBCR_Type (set_slice 2 w__126 14 0b00#2)))
-  let w__127 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (_update_TTBCR_Type_SH0 w__127 0b00#2))
-  let w__128 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (_update_TTBCR_Type_ORGN0 w__128 0b00#2))
-  let w__129 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (_update_TTBCR_Type_IRGN0 w__129 0b00#2))
-  let w__130 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (_update_TTBCR_Type_EPD0 w__130 0#1))
-  let w__131 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (Mk_TTBCR_Type (set_slice 3 w__131 3 0b000#3)))
-  let w__132 ← (( do (TTBCR_read ()) ) : SailM (BitVec 32) )
-  (TTBCR_write (_update_TTBCR_Type_T0SZ w__132 0b000#3))
-  let w__133 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-  (HCR_write (Mk_HCR_Type (set_slice 1 w__133 31 0#1)))
-  let w__135 ← (( do
+      let w__386 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
+      let w__387 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HCR2_write (_update_HCR2_Type_CD w__386 w__387)))
+  let w__388 ← (( do (ID_PFR2_read ()) ) : SailM (BitVec 32) )
+  (ID_PFR2_write (Mk_ID_PFR2_Type (set_slice 20 w__388 12 0b00000000000000000000#20)))
+  let w__389 ← (( do (ICV_EOIR0_read ()) ) : SailM (BitVec 32) )
+  (ICV_EOIR0_write (Mk_ICV_EOIR0_Type (set_slice 8 w__389 24 0b00000000#8)))
+  let w__390 ← (( do (ICH_VTR_read ()) ) : SailM (BitVec 32) )
+  (ICH_VTR_write (Mk_ICH_VTR_Type (set_slice 14 w__390 5 0b00000000000000#14)))
+  let w__391 ← (( do (CSSELR_read ()) ) : SailM (BitVec 32) )
+  (CSSELR_write (Mk_CSSELR_Type (set_slice 28 w__391 4 0b0000000000000000000000000000#28)))
+  let w__392 ← (( do readReg JIDR ) : SailM (BitVec 32) )
+  writeReg JIDR (Sail.BitVec.updateSubrange w__392 31 0 0b00000000000000000000000000000000#32)
+  let w__393 ← (( do (PMCR_read ()) ) : SailM (BitVec 32) )
+  (PMCR_write (Mk_PMCR_Type (set_slice 1 w__393 10 0#1)))
+  let w__394 ← (( do (PMCR_read ()) ) : SailM (BitVec 32) )
+  (PMCR_write (Mk_PMCR_Type (set_slice 1 w__394 8 0#1)))
+  let w__395 ← (( do (PMCR_read ()) ) : SailM (BitVec 32) )
+  (PMCR_write (_update_PMCR_Type_LP w__395 0#1))
+  let w__396 ← (( do (PMCR_read ()) ) : SailM (BitVec 32) )
+  (PMCR_write (_update_PMCR_Type_DP w__396 0#1))
+  let w__397 ← (( do (PMCR_read ()) ) : SailM (BitVec 32) )
+  (PMCR_write (_update_PMCR_Type_X w__397 0#1))
+  let w__398 ← (( do (PMCR_read ()) ) : SailM (BitVec 32) )
+  (PMCR_write (_update_PMCR_Type_D w__398 0#1))
+  let w__399 ← (( do (PMCR_read ()) ) : SailM (BitVec 32) )
+  (PMCR_write (_update_PMCR_Type_E w__399 0#1))
+  let w__400 ← (( do (ICH_VMCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_VMCR_write (Mk_ICH_VMCR_Type (set_slice 8 w__400 10 0b00000000#8)))
+  let w__401 ← (( do (ICH_VMCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_VMCR_write (Mk_ICH_VMCR_Type (set_slice 4 w__401 5 0b0000#4)))
+  let w__402 ← (( do readReg DBGDEVID1 ) : SailM (BitVec 32) )
+  writeReg DBGDEVID1 (Sail.BitVec.updateSubrange w__402 31 4 0b0000000000000000000000000000#28)
+  let w__403 ← (( do (ICC_BPR1_read ()) ) : SailM (BitVec 32) )
+  (ICC_BPR1_write (Mk_ICC_BPR1_Type (set_slice 29 w__403 3 0b00000000000000000000000000000#29)))
+  let w__404 ← (( do (ICV_RPR_read ()) ) : SailM (BitVec 32) )
+  (ICV_RPR_write (Mk_ICV_RPR_Type (set_slice 24 w__404 8 0b000000000000000000000000#24)))
+  let w__405 ← (( do (VBAR_read__2 ()) ) : SailM (BitVec 32) )
+  (VBAR_write (set_slice 5 w__405 0 0b00000#5))
+  let w__406 ← (( do (ID_ISAR0_read ()) ) : SailM (BitVec 32) )
+  (ID_ISAR0_write (Mk_ID_ISAR0_Type (set_slice 4 w__406 28 0b0000#4)))
+  let w__407 ← (( do (ICV_IAR1_read ()) ) : SailM (BitVec 32) )
+  (ICV_IAR1_write (Mk_ICV_IAR1_Type (set_slice 8 w__407 24 0b00000000#8)))
+  let w__408 ← (( do (DBGPRCR_read ()) ) : SailM (BitVec 32) )
+  (DBGPRCR_write (Mk_DBGPRCR_Type (set_slice 31 w__408 1 0b0000000000000000000000000000000#31)))
+  let w__409 ← (( do (SDER_read ()) ) : SailM (BitVec 32) )
+  (SDER_write (Mk_SDER_Type (set_slice 30 w__409 2 0b000000000000000000000000000000#30)))
+  let w__410 ← (( do (SDER_read ()) ) : SailM (BitVec 32) )
+  (SDER_write (_update_SDER_Type_SUNIDEN w__410 0#1))
+  let w__411 ← (( do (SDER_read ()) ) : SailM (BitVec 32) )
+  (SDER_write (_update_SDER_Type_SUIDEN w__411 0#1))
+  let w__412 ← (( do (ICC_EOIR1_read ()) ) : SailM (BitVec 32) )
+  (ICC_EOIR1_write (Mk_ICC_EOIR1_Type (set_slice 8 w__412 24 0b00000000#8)))
+  let w__413 ← (( do (ICC_BPR0_read ()) ) : SailM (BitVec 32) )
+  (ICC_BPR0_write (Mk_ICC_BPR0_Type (set_slice 29 w__413 3 0b00000000000000000000000000000#29)))
+  let w__414 ← (( do (CNTHCTL_read ()) ) : SailM (BitVec 32) )
+  (CNTHCTL_write (Mk_CNTHCTL_Type (set_slice 14 w__414 18 0b00000000000000#14)))
+  let w__415 ← (( do (CNTHCTL_read ()) ) : SailM (BitVec 32) )
+  (CNTHCTL_write (Mk_CNTHCTL_Type (set_slice 9 w__415 8 0b000000000#9)))
+  let w__416 ← (( do (DBGVCR_read ()) ) : SailM (BitVec 32) )
+  (DBGVCR_write (Mk_DBGVCR_Type (set_slice 1 w__416 29 0#1)))
+  let w__417 ← (( do (DBGVCR_read ()) ) : SailM (BitVec 32) )
+  (DBGVCR_write (Mk_DBGVCR_Type (set_slice 9 w__417 16 0b000000000#9)))
+  let w__418 ← (( do (DBGVCR_read ()) ) : SailM (BitVec 32) )
+  (DBGVCR_write (Mk_DBGVCR_Type (set_slice 1 w__418 13 0#1)))
+  let w__419 ← (( do (DBGVCR_read ()) ) : SailM (BitVec 32) )
+  (DBGVCR_write (Mk_DBGVCR_Type (set_slice 2 w__419 8 0b00#2)))
+  let w__420 ← (( do (DBGVCR_read ()) ) : SailM (BitVec 32) )
+  (DBGVCR_write (Mk_DBGVCR_Type (set_slice 1 w__420 5 0#1)))
+  let w__421 ← (( do (DBGVCR_read ()) ) : SailM (BitVec 32) )
+  (DBGVCR_write (Mk_DBGVCR_Type (set_slice 1 w__421 0 0#1)))
+  let w__422 ← (( do (DBGVCR_read ()) ) : SailM (BitVec 32) )
+  (DBGVCR_write (Mk_DBGVCR_Type (set_slice 1 w__422 29 0#1)))
+  let w__423 ← (( do (DBGVCR_read ()) ) : SailM (BitVec 32) )
+  (DBGVCR_write (Mk_DBGVCR_Type (set_slice 17 w__423 8 0b00000000000000000#17)))
+  let w__424 ← (( do (DBGVCR_read ()) ) : SailM (BitVec 32) )
+  (DBGVCR_write (Mk_DBGVCR_Type (set_slice 1 w__424 5 0#1)))
+  let w__425 ← (( do (DBGVCR_read ()) ) : SailM (BitVec 32) )
+  (DBGVCR_write (Mk_DBGVCR_Type (set_slice 1 w__425 0 0#1)))
+  let w__426 ← (( do (DBGVCR_read ()) ) : SailM (BitVec 32) )
+  (DBGVCR_write (Mk_DBGVCR_Type (set_slice 24 w__426 8 0b000000000000000000000000#24)))
+  let w__427 ← (( do (DBGVCR_read ()) ) : SailM (BitVec 32) )
+  (DBGVCR_write (Mk_DBGVCR_Type (set_slice 1 w__427 5 0#1)))
+  let w__428 ← (( do (DBGVCR_read ()) ) : SailM (BitVec 32) )
+  (DBGVCR_write (Mk_DBGVCR_Type (set_slice 1 w__428 0 0#1)))
+  let w__429 ← (( do (ICC_EOIR0_read ()) ) : SailM (BitVec 32) )
+  (ICC_EOIR0_write (Mk_ICC_EOIR0_Type (set_slice 8 w__429 24 0b00000000#8)))
+  let w__430 ← (( do (ICV_BPR1_read ()) ) : SailM (BitVec 32) )
+  (ICV_BPR1_write (Mk_ICV_BPR1_Type (set_slice 29 w__430 3 0b00000000000000000000000000000#29)))
+  let w__431 ← (( do (ICC_RPR_read ()) ) : SailM (BitVec 32) )
+  (ICC_RPR_write (Mk_ICC_RPR_Type (set_slice 24 w__431 8 0b000000000000000000000000#24)))
+  let w__432 ← (( do (MVFR2_read ()) ) : SailM (BitVec 32) )
+  (MVFR2_write (Mk_MVFR2_Type (set_slice 24 w__432 8 0b000000000000000000000000#24)))
+  let w__433 ← (( do readReg ICC_MSRE ) : SailM (BitVec 32) )
+  writeReg ICC_MSRE (Sail.BitVec.updateSubrange w__433 31 4 0b0000000000000000000000000000#28)
+  let w__434 ← (( do readReg ICC_MSRE ) : SailM (BitVec 32) )
+  writeReg ICC_MSRE (Sail.BitVec.updateSubrange w__434 2 2 0#1)
+  let w__435 ← (( do readReg ICC_MSRE ) : SailM (BitVec 32) )
+  writeReg ICC_MSRE (Sail.BitVec.updateSubrange w__435 1 1 0#1)
+  let w__436 ← (( do readReg ICC_MSRE ) : SailM (BitVec 32) )
+  writeReg ICC_MSRE (Sail.BitVec.updateSubrange w__436 0 0 0#1)
+  let w__437 ← (( do readReg PMMIR ) : SailM (BitVec 32) )
+  writeReg PMMIR (Sail.BitVec.updateSubrange w__437 31 28 0b0000#4)
+  let w__438 ← (( do (VMPIDR_read ()) ) : SailM (BitVec 32) )
+  let w__439 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+  (VMPIDR_write (_update_VMPIDR_Type_U w__438 w__439))
+  let w__440 ← (( do (VMPIDR_read ()) ) : SailM (BitVec 32) )
+  (VMPIDR_write (Mk_VMPIDR_Type (set_slice 5 w__440 25 0b00000#5)))
+  let w__441 ← (( do (VMPIDR_read ()) ) : SailM (BitVec 32) )
+  let w__442 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+  (VMPIDR_write (_update_VMPIDR_Type_MT w__441 w__442))
+  let w__443 ← (( do (VMPIDR_read ()) ) : SailM (BitVec 32) )
+  let w__444 ← (( do (__UNKNOWN_bits 8) ) : SailM (BitVec 8) )
+  (VMPIDR_write (_update_VMPIDR_Type_Aff2 w__443 w__444))
+  let w__445 ← (( do (VMPIDR_read ()) ) : SailM (BitVec 32) )
+  let w__446 ← (( do (__UNKNOWN_bits 8) ) : SailM (BitVec 8) )
+  (VMPIDR_write (_update_VMPIDR_Type_Aff1 w__445 w__446))
+  let w__447 ← (( do (VMPIDR_read ()) ) : SailM (BitVec 32) )
+  let w__448 ← (( do (__UNKNOWN_bits 8) ) : SailM (BitVec 8) )
+  (VMPIDR_write (_update_VMPIDR_Type_Aff0 w__447 w__448))
+  let w__449 ← (( do (ICC_IGRPEN1_read ()) ) : SailM (BitVec 32) )
+  (ICC_IGRPEN1_write
+    (Mk_ICC_IGRPEN1_Type (set_slice 31 w__449 1 0b0000000000000000000000000000000#31)))
+  let w__450 ← (( do (ICC_IGRPEN1_read ()) ) : SailM (BitVec 32) )
+  (ICC_IGRPEN1_write (_update_ICC_IGRPEN1_Type_Enable w__450 0#1))
+  let w__451 ← (( do (HVBAR_read ()) ) : SailM (BitVec 32) )
+  (HVBAR_write (set_slice 5 w__451 0 0b00000#5))
+  let w__452 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+  (HSTR_write (Mk_HSTR_Type (set_slice 16 w__452 16 (BitVec.slice 0b000000000000000000#18 2 16))))
+  let w__453 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+  (HSTR_write (Mk_HSTR_Type (set_slice 1 w__453 14 (BitVec.slice 0b000000000000000000#18 1 1))))
+  let w__454 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+  (HSTR_write (Mk_HSTR_Type (set_slice 1 w__454 4 (BitVec.slice 0b000000000000000000#18 0 1))))
+  let w__456 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__135 : Bool)
+  if (w__456 : Bool)
   then
     (do
-      let w__136 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_TRVM w__136 0#1)))
+      let w__457 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      (HSTR_write (_update_HSTR_Type_T15 w__457 0#1)))
   else
     (do
-      let w__137 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__138 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_TRVM w__137 w__138)))
-  let w__140 ← (( do
+      let w__458 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      let w__459 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HSTR_write (_update_HSTR_Type_T15 w__458 w__459)))
+  let w__461 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__140 : Bool)
+  if (w__461 : Bool)
   then
     (do
-      let w__141 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_HCD w__141 0#1)))
+      let w__462 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      (HSTR_write (_update_HSTR_Type_T13 w__462 0#1)))
   else
     (do
-      let w__142 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__143 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_HCD w__142 w__143)))
-  let w__144 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-  (HCR_write (Mk_HCR_Type (set_slice 1 w__144 28 0#1)))
-  let w__146 ← (( do
+      let w__463 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      let w__464 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HSTR_write (_update_HSTR_Type_T13 w__463 w__464)))
+  let w__466 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__146 : Bool)
+  if (w__466 : Bool)
   then
     (do
-      let w__147 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_TGE w__147 0#1)))
+      let w__467 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      (HSTR_write (_update_HSTR_Type_T12 w__467 0#1)))
   else
     (do
-      let w__148 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__149 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_TGE w__148 w__149)))
-  let w__151 ← (( do
+      let w__468 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      let w__469 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HSTR_write (_update_HSTR_Type_T12 w__468 w__469)))
+  let w__471 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__151 : Bool)
+  if (w__471 : Bool)
   then
     (do
-      let w__152 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_TVM w__152 0#1)))
+      let w__472 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      (HSTR_write (_update_HSTR_Type_T11 w__472 0#1)))
   else
     (do
-      let w__153 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__154 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_TVM w__153 w__154)))
-  let w__156 ← (( do
+      let w__473 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      let w__474 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HSTR_write (_update_HSTR_Type_T11 w__473 w__474)))
+  let w__476 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__156 : Bool)
+  if (w__476 : Bool)
   then
     (do
-      let w__157 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_TTLB w__157 0#1)))
+      let w__477 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      (HSTR_write (_update_HSTR_Type_T10 w__477 0#1)))
   else
     (do
-      let w__158 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__159 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_TTLB w__158 w__159)))
-  let w__161 ← (( do
+      let w__478 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      let w__479 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HSTR_write (_update_HSTR_Type_T10 w__478 w__479)))
+  let w__481 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__161 : Bool)
+  if (w__481 : Bool)
   then
     (do
-      let w__162 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_TPU w__162 0#1)))
+      let w__482 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      (HSTR_write (_update_HSTR_Type_T9 w__482 0#1)))
   else
     (do
-      let w__163 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__164 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_TPU w__163 w__164)))
-  let w__166 ← (( do
+      let w__483 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      let w__484 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HSTR_write (_update_HSTR_Type_T9 w__483 w__484)))
+  let w__486 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__166 : Bool)
+  if (w__486 : Bool)
   then
     (do
-      let w__167 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_TPC w__167 0#1)))
+      let w__487 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      (HSTR_write (_update_HSTR_Type_T8 w__487 0#1)))
   else
     (do
-      let w__168 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__169 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_TPC w__168 w__169)))
-  let w__171 ← (( do
+      let w__488 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      let w__489 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HSTR_write (_update_HSTR_Type_T8 w__488 w__489)))
+  let w__491 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__171 : Bool)
+  if (w__491 : Bool)
   then
     (do
-      let w__172 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_TSW w__172 0#1)))
+      let w__492 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      (HSTR_write (_update_HSTR_Type_T7 w__492 0#1)))
   else
     (do
-      let w__173 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__174 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_TSW w__173 w__174)))
-  let w__176 ← (( do
+      let w__493 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      let w__494 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HSTR_write (_update_HSTR_Type_T7 w__493 w__494)))
+  let w__496 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__176 : Bool)
+  if (w__496 : Bool)
   then
     (do
-      let w__177 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_TAC w__177 0#1)))
+      let w__497 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      (HSTR_write (_update_HSTR_Type_T6 w__497 0#1)))
   else
     (do
-      let w__178 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__179 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_TAC w__178 w__179)))
-  let w__181 ← (( do
+      let w__498 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      let w__499 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HSTR_write (_update_HSTR_Type_T6 w__498 w__499)))
+  let w__501 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__181 : Bool)
+  if (w__501 : Bool)
   then
     (do
-      let w__182 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_TIDCP w__182 0#1)))
+      let w__502 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      (HSTR_write (_update_HSTR_Type_T5 w__502 0#1)))
   else
     (do
-      let w__183 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__184 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_TIDCP w__183 w__184)))
-  let w__186 ← (( do
+      let w__503 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      let w__504 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HSTR_write (_update_HSTR_Type_T5 w__503 w__504)))
+  let w__506 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__186 : Bool)
+  if (w__506 : Bool)
   then
     (do
-      let w__187 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_TSC w__187 0#1)))
+      let w__507 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      (HSTR_write (_update_HSTR_Type_T3 w__507 0#1)))
   else
     (do
-      let w__188 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__189 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_TSC w__188 w__189)))
-  let w__191 ← (( do
+      let w__508 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      let w__509 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HSTR_write (_update_HSTR_Type_T3 w__508 w__509)))
+  let w__511 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__191 : Bool)
+  if (w__511 : Bool)
   then
     (do
-      let w__192 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_TID3 w__192 0#1)))
+      let w__512 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      (HSTR_write (_update_HSTR_Type_T2 w__512 0#1)))
   else
     (do
-      let w__193 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__194 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_TID3 w__193 w__194)))
-  let w__196 ← (( do
+      let w__513 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      let w__514 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HSTR_write (_update_HSTR_Type_T2 w__513 w__514)))
+  let w__516 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__196 : Bool)
+  if (w__516 : Bool)
   then
     (do
-      let w__197 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_TID2 w__197 0#1)))
+      let w__517 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      (HSTR_write (_update_HSTR_Type_T1 w__517 0#1)))
   else
     (do
-      let w__198 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__199 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_TID2 w__198 w__199)))
-  let w__201 ← (( do
+      let w__518 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      let w__519 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HSTR_write (_update_HSTR_Type_T1 w__518 w__519)))
+  let w__521 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__201 : Bool)
+  if (w__521 : Bool)
   then
     (do
-      let w__202 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_TID1 w__202 0#1)))
+      let w__522 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      (HSTR_write (_update_HSTR_Type_T0 w__522 0#1)))
   else
     (do
-      let w__203 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__204 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_TID1 w__203 w__204)))
-  let w__206 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__206 : Bool)
-  then
-    (do
-      let w__207 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_TID0 w__207 0#1)))
-  else
-    (do
-      let w__208 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__209 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_TID0 w__208 w__209)))
-  let w__211 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__211 : Bool)
-  then
-    (do
-      let w__212 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_TWE w__212 0#1)))
-  else
-    (do
-      let w__213 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__214 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_TWE w__213 w__214)))
-  let w__216 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__216 : Bool)
-  then
-    (do
-      let w__217 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_TWI w__217 0#1)))
-  else
-    (do
-      let w__218 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__219 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_TWI w__218 w__219)))
-  let w__221 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__221 : Bool)
-  then
-    (do
-      let w__222 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_DC w__222 0#1)))
-  else
-    (do
-      let w__223 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__224 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_DC w__223 w__224)))
-  let w__226 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__226 : Bool)
-  then
-    (do
-      let w__227 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_BSU w__227 0b00#2)))
-  else
-    (do
-      let w__228 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__229 ← (( do (__UNKNOWN_bits 2) ) : SailM (BitVec 2) )
-      (HCR_write (_update_HCR_Type_BSU w__228 w__229)))
-  let w__231 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__231 : Bool)
-  then
-    (do
-      let w__232 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_FB w__232 0#1)))
-  else
-    (do
-      let w__233 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__234 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_FB w__233 w__234)))
-  let w__236 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__236 : Bool)
-  then
-    (do
-      let w__237 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_VA w__237 0#1)))
-  else
-    (do
-      let w__238 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__239 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_VA w__238 w__239)))
-  let w__241 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__241 : Bool)
-  then
-    (do
-      let w__242 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_VI w__242 0#1)))
-  else
-    (do
-      let w__243 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__244 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_VI w__243 w__244)))
-  let w__246 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__246 : Bool)
-  then
-    (do
-      let w__247 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_VF w__247 0#1)))
-  else
-    (do
-      let w__248 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__249 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_VF w__248 w__249)))
-  let w__251 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__251 : Bool)
-  then
-    (do
-      let w__252 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_AMO w__252 0#1)))
-  else
-    (do
-      let w__253 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__254 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_AMO w__253 w__254)))
-  let w__256 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__256 : Bool)
-  then
-    (do
-      let w__257 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_IMO w__257 0#1)))
-  else
-    (do
-      let w__258 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__259 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_IMO w__258 w__259)))
-  let w__261 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__261 : Bool)
-  then
-    (do
-      let w__262 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_FMO w__262 0#1)))
-  else
-    (do
-      let w__263 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__264 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_FMO w__263 w__264)))
-  let w__266 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__266 : Bool)
-  then
-    (do
-      let w__267 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_PTW w__267 0#1)))
-  else
-    (do
-      let w__268 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__269 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_PTW w__268 w__269)))
-  let w__271 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__271 : Bool)
-  then
-    (do
-      let w__272 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_SWIO w__272 0#1)))
-  else
-    (do
-      let w__273 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__274 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_SWIO w__273 w__274)))
-  let w__276 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__276 : Bool)
-  then
-    (do
-      let w__277 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      (HCR_write (_update_HCR_Type_VM w__277 0#1)))
-  else
-    (do
-      let w__278 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-      let w__279 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR_write (_update_HCR_Type_VM w__278 w__279)))
-  let w__280 ← (( do (DBGOSDLR_read ()) ) : SailM (BitVec 32) )
-  (DBGOSDLR_write (Mk_DBGOSDLR_Type (set_slice 31 w__280 1 0b0000000000000000000000000000000#31)))
-  let w__281 ← (( do (DBGOSDLR_read ()) ) : SailM (BitVec 32) )
-  (DBGOSDLR_write (_update_DBGOSDLR_Type_DLK w__281 0#1))
-  let w__282 ← (( do (ICH_ELRSR_read ()) ) : SailM (BitVec 32) )
-  (ICH_ELRSR_write (Mk_ICH_ELRSR_Type (set_slice 16 w__282 16 0b0000000000000000#16)))
-  let w__283 ← (( do (ICC_IAR1_read ()) ) : SailM (BitVec 32) )
-  (ICC_IAR1_write (Mk_ICC_IAR1_Type (set_slice 8 w__283 24 0b00000000#8)))
-  let w__284 ← (( do readReg JOSCR ) : SailM (BitVec 32) )
-  writeReg JOSCR (Sail.BitVec.updateSubrange w__284 31 0 0b00000000000000000000000000000000#32)
-  let w__286 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__286 : Bool)
-  then
-    (do
-      let w__287 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-      (HCPTR_write (_update_HCPTR_Type_TCPAC w__287 0#1)))
-  else
-    (do
-      let w__288 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-      let w__289 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCPTR_write (_update_HCPTR_Type_TCPAC w__288 w__289)))
-  let w__291 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__291 : Bool)
-  then
-    (do
-      let w__292 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-      (HCPTR_write (_update_HCPTR_Type_TAM w__292 0#1)))
-  else
-    (do
-      let w__293 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-      let w__294 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCPTR_write (_update_HCPTR_Type_TAM w__293 w__294)))
-  let w__295 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-  (HCPTR_write (Mk_HCPTR_Type (set_slice 9 w__295 21 0b000000000#9)))
-  let w__297 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__297 : Bool)
-  then
-    (do
-      let w__298 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-      (HCPTR_write (_update_HCPTR_Type_TTA w__298 0#1)))
-  else
-    (do
-      let w__299 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-      let w__300 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCPTR_write (_update_HCPTR_Type_TTA w__299 w__300)))
-  let w__301 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-  (HCPTR_write (Mk_HCPTR_Type (set_slice 4 w__301 16 0b0000#4)))
-  let w__303 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__303 : Bool)
-  then
-    (do
-      let w__304 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-      (HCPTR_write (_update_HCPTR_Type_TASE w__304 0#1)))
-  else
-    (do
-      let w__305 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-      let w__306 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCPTR_write (_update_HCPTR_Type_TASE w__305 w__306)))
-  let w__307 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-  (HCPTR_write (Mk_HCPTR_Type (set_slice 1 w__307 14 0#1)))
-  let w__308 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-  (HCPTR_write (Mk_HCPTR_Type (set_slice 2 w__308 12 0b11#2)))
-  let w__310 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__310 : Bool)
-  then
-    (do
-      let w__311 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-      (HCPTR_write (_update_HCPTR_Type_TCP11 w__311 0#1)))
-  else
-    (do
-      let w__312 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-      let w__313 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCPTR_write (_update_HCPTR_Type_TCP11 w__312 w__313)))
-  let w__315 ← (( do
-    if (((! cold) : Bool) : Bool)
-    then
-      (do
-        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
-    else (pure false) ) : SailM Bool )
-  if (w__315 : Bool)
-  then
-    (do
-      let w__316 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-      (HCPTR_write (_update_HCPTR_Type_TCP10 w__316 0#1)))
-  else
-    (do
-      let w__317 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-      let w__318 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCPTR_write (_update_HCPTR_Type_TCP10 w__317 w__318)))
-  let w__319 ← (( do (HCPTR_read ()) ) : SailM (BitVec 32) )
-  (HCPTR_write (Mk_HCPTR_Type (set_slice 10 w__319 0 0b1111111111#10)))
-  let w__320 ← (( do (ICV_IGRPEN1_read ()) ) : SailM (BitVec 32) )
-  (ICV_IGRPEN1_write
-    (Mk_ICV_IGRPEN1_Type (set_slice 31 w__320 1 0b0000000000000000000000000000000#31)))
-  let w__321 ← (( do (ICV_IGRPEN1_read ()) ) : SailM (BitVec 32) )
-  (ICV_IGRPEN1_write (_update_ICV_IGRPEN1_Type_Enable w__321 0#1))
-  let w__322 ← (( do (CTR_read ()) ) : SailM (BitVec 32) )
-  (CTR_write (Mk_CTR_Type (set_slice 1 w__322 31 1#1)))
-  let w__323 ← (( do (CTR_read ()) ) : SailM (BitVec 32) )
-  (CTR_write (Mk_CTR_Type (set_slice 1 w__323 30 0#1)))
-  let w__324 ← (( do (CTR_read ()) ) : SailM (BitVec 32) )
-  (CTR_write (Mk_CTR_Type (set_slice 10 w__324 4 0b0000000000#10)))
-  let w__325 ← (( do (PMUSERENR_read ()) ) : SailM (BitVec 32) )
-  (PMUSERENR_write (Mk_PMUSERENR_Type (set_slice 25 w__325 7 0b0000000000000000000000000#25)))
-  let w__326 ← (( do (PMUSERENR_read ()) ) : SailM (BitVec 32) )
-  (PMUSERENR_write (Mk_PMUSERENR_Type (set_slice 2 w__326 4 0b00#2)))
-  let w__327 ← (( do (CNTHPS_CTL_read ()) ) : SailM (BitVec 32) )
-  (CNTHPS_CTL_write (Mk_CNTHPS_CTL_Type (set_slice 29 w__327 3 0b00000000000000000000000000000#29)))
-  let w__328 ← (( do (DBGAUTHSTATUS_read ()) ) : SailM (BitVec 32) )
-  (DBGAUTHSTATUS_write (Mk_DBGAUTHSTATUS_Type (set_slice 24 w__328 8 0b000000000000000000000000#24)))
-  let w__329 ← (( do (ICC_IAR0_read ()) ) : SailM (BitVec 32) )
-  (ICC_IAR0_write (Mk_ICC_IAR0_Type (set_slice 8 w__329 24 0b00000000#8)))
-  let w__330 ← (( do (ICV_IGRPEN0_read ()) ) : SailM (BitVec 32) )
-  (ICV_IGRPEN0_write
-    (Mk_ICV_IGRPEN0_Type (set_slice 31 w__330 1 0b0000000000000000000000000000000#31)))
-  let w__331 ← (( do (ICV_IGRPEN0_read ()) ) : SailM (BitVec 32) )
-  (ICV_IGRPEN0_write (_update_ICV_IGRPEN0_Type_Enable w__331 0#1))
-  let w__332 ← (( do (PRRR_read ()) ) : SailM (BitVec 32) )
-  (PRRR_write (Mk_PRRR_Type (set_slice 4 w__332 20 0b0000#4)))
-  let w__333 ← (( do (ICV_CTLR_read ()) ) : SailM (BitVec 32) )
-  (ICV_CTLR_write (Mk_ICV_CTLR_Type (set_slice 12 w__333 20 0b000000000000#12)))
-  let w__334 ← (( do (ICV_CTLR_read ()) ) : SailM (BitVec 32) )
-  (ICV_CTLR_write (Mk_ICV_CTLR_Type (set_slice 2 w__334 16 0b00#2)))
-  let w__335 ← (( do (ICV_CTLR_read ()) ) : SailM (BitVec 32) )
-  (ICV_CTLR_write (Mk_ICV_CTLR_Type (set_slice 6 w__335 2 0b000000#6)))
-  let w__336 ← (( do (HPFAR_read ()) ) : SailM (BitVec 32) )
-  (HPFAR_write (Mk_HPFAR_Type (set_slice 4 w__336 0 0b0000#4)))
-  let w__337 ← (( do (DBGCLAIMCLR_read ()) ) : SailM (BitVec 32) )
-  (DBGCLAIMCLR_write (Mk_DBGCLAIMCLR_Type (set_slice 24 w__337 8 0b000000000000000000000000#24)))
+      let w__523 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+      let w__524 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HSTR_write (_update_HSTR_Type_T0 w__523 w__524)))
+  let w__525 ← (( do readReg ICC_MCTLR ) : SailM (BitVec 32) )
+  writeReg ICC_MCTLR (Sail.BitVec.updateSubrange w__525 31 20 0b000000000000#12)
+  let w__526 ← (( do readReg ICC_MCTLR ) : SailM (BitVec 32) )
+  writeReg ICC_MCTLR (BitVec.update w__526 16 (Bit 0#1))
+  let w__527 ← (( do readReg ICC_MCTLR ) : SailM (BitVec 32) )
+  writeReg ICC_MCTLR (BitVec.update w__527 7 (Bit 0#1))
+  let w__528 ← (( do readReg ICC_MCTLR ) : SailM (BitVec 32) )
+  writeReg ICC_MCTLR (Sail.BitVec.updateSubrange w__528 6 6 0#1)
+  let w__529 ← (( do (ICC_DIR_read ()) ) : SailM (BitVec 32) )
+  (ICC_DIR_write (Mk_ICC_DIR_Type (set_slice 8 w__529 24 0b00000000#8)))
+  let w__530 ← (( do (PMSELR_read ()) ) : SailM (BitVec 32) )
+  (PMSELR_write (Mk_PMSELR_Type (set_slice 27 w__530 5 0b000000000000000000000000000#27)))
+  let w__531 ← (( do (ID_AFR0_read ()) ) : SailM (BitVec 32) )
+  (ID_AFR0_write (set_slice 16 w__531 16 0b0000000000000000#16))
+  let w__532 ← (( do (DBGCLAIMSET_read ()) ) : SailM (BitVec 32) )
+  (DBGCLAIMSET_write (Mk_DBGCLAIMSET_Type (set_slice 24 w__532 8 0b000000000000000000000000#24)))
   if (cold : Bool)
   then
     (do
-      let w__338 ← (( do (DBGCLAIMCLR_read ()) ) : SailM (BitVec 32) )
-      (DBGCLAIMCLR_write (_update_DBGCLAIMCLR_Type_CLAIM w__338 0b00000000#8)))
+      let w__533 ← (( do (DBGCLAIMSET_read ()) ) : SailM (BitVec 32) )
+      (DBGCLAIMSET_write (_update_DBGCLAIMSET_Type_CLAIM w__533 0b00000000#8)))
   else (pure (()))
-  let w__339 ← (( do (ICV_HPPIR1_read ()) ) : SailM (BitVec 32) )
-  (ICV_HPPIR1_write (Mk_ICV_HPPIR1_Type (set_slice 8 w__339 24 0b00000000#8)))
-  let w__340 ← (( do (ID_MMFR5_read ()) ) : SailM (BitVec 32) )
-  (ID_MMFR5_write (Mk_ID_MMFR5_Type (set_slice 24 w__340 8 0b000000000000000000000000#24)))
-  let w__341 ← (( do (HRMR_read ()) ) : SailM (BitVec 32) )
-  (HRMR_write (Mk_HRMR_Type (set_slice 30 w__341 2 0b000000000000000000000000000000#30)))
-  let w__342 ← (( do (HRMR_read ()) ) : SailM (BitVec 32) )
-  (HRMR_write (_update_HRMR_Type_RR w__342 0#1))
-  let w__343 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-  (HCR2_write (Mk_HCR2_Type (set_slice 9 w__343 23 0b000000000#9)))
-  let w__345 ← (( do
+  let w__534 ← (( do (ICC_IGRPEN0_read ()) ) : SailM (BitVec 32) )
+  (ICC_IGRPEN0_write
+    (Mk_ICC_IGRPEN0_Type (set_slice 31 w__534 1 0b0000000000000000000000000000000#31)))
+  let w__535 ← (( do (ICC_IGRPEN0_read ()) ) : SailM (BitVec 32) )
+  (ICC_IGRPEN0_write (_update_ICC_IGRPEN0_Type_Enable w__535 0#1))
+  let w__536 ← (( do (ICC_CTLR_read ()) ) : SailM (BitVec 32) )
+  (ICC_CTLR_write (Mk_ICC_CTLR_Type (set_slice 12 w__536 20 0b000000000000#12)))
+  let w__537 ← (( do (ICC_CTLR_read ()) ) : SailM (BitVec 32) )
+  (ICC_CTLR_write (Mk_ICC_CTLR_Type (set_slice 2 w__537 16 0b00#2)))
+  let w__538 ← (( do (ICC_CTLR_read ()) ) : SailM (BitVec 32) )
+  (ICC_CTLR_write (Mk_ICC_CTLR_Type (set_slice 1 w__538 7 0#1)))
+  let w__539 ← (( do (ICC_CTLR_read ()) ) : SailM (BitVec 32) )
+  (ICC_CTLR_write (Mk_ICC_CTLR_Type (set_slice 4 w__539 2 0b0000#4)))
+  let w__540 ← (( do (CNTHVS_CTL_read ()) ) : SailM (BitVec 32) )
+  (CNTHVS_CTL_write (Mk_CNTHVS_CTL_Type (set_slice 29 w__540 3 0b00000000000000000000000000000#29)))
+  let w__541 ← (( do readReg SCR ) : SailM (BitVec 32) )
+  writeReg SCR (Sail.BitVec.updateSubrange w__541 31 16 0b0000000000000000#16)
+  let w__542 ← (( do readReg SCR ) : SailM (BitVec 32) )
+  writeReg SCR (Sail.BitVec.updateSubrange w__542 15 15 0#1)
+  let w__543 ← (( do readReg SCR ) : SailM (BitVec 32) )
+  writeReg SCR (BitVec.update w__543 14 (Bit 0#1))
+  let w__544 ← (( do readReg SCR ) : SailM (BitVec 32) )
+  writeReg SCR (Sail.BitVec.updateSubrange w__544 13 13 0#1)
+  let w__545 ← (( do readReg SCR ) : SailM (BitVec 32) )
+  writeReg SCR (Sail.BitVec.updateSubrange w__545 12 12 0#1)
+  let w__546 ← (( do readReg SCR ) : SailM (BitVec 32) )
+  writeReg SCR (Sail.BitVec.updateSubrange w__546 11 10 0b00#2)
+  let w__547 ← (( do readReg SCR ) : SailM (BitVec 32) )
+  writeReg SCR (Sail.BitVec.updateSubrange w__547 9 9 0#1)
+  let w__548 ← (( do readReg SCR ) : SailM (BitVec 32) )
+  writeReg SCR (Sail.BitVec.updateSubrange w__548 8 8 0#1)
+  let w__549 ← (( do readReg SCR ) : SailM (BitVec 32) )
+  writeReg SCR (Sail.BitVec.updateSubrange w__549 7 7 0#1)
+  let w__550 ← (( do readReg SCR ) : SailM (BitVec 32) )
+  writeReg SCR (Sail.BitVec.updateSubrange w__550 6 6 0#1)
+  let w__551 ← (( do readReg SCR ) : SailM (BitVec 32) )
+  writeReg SCR (Sail.BitVec.updateSubrange w__551 5 5 0#1)
+  let w__552 ← (( do readReg SCR ) : SailM (BitVec 32) )
+  writeReg SCR (Sail.BitVec.updateSubrange w__552 4 4 0#1)
+  let w__553 ← (( do readReg SCR ) : SailM (BitVec 32) )
+  writeReg SCR (Sail.BitVec.updateSubrange w__553 3 3 0#1)
+  let w__554 ← (( do readReg SCR ) : SailM (BitVec 32) )
+  writeReg SCR (Sail.BitVec.updateSubrange w__554 2 2 0#1)
+  let w__555 ← (( do readReg SCR ) : SailM (BitVec 32) )
+  writeReg SCR (Sail.BitVec.updateSubrange w__555 1 1 0#1)
+  let w__556 ← (( do readReg SCR ) : SailM (BitVec 32) )
+  writeReg SCR (Sail.BitVec.updateSubrange w__556 0 0 0#1)
+  let w__557 ← (( do readReg NSACR ) : SailM (BitVec 32) )
+  writeReg NSACR (Sail.BitVec.updateSubrange w__557 31 21 0b00000000000#11)
+  let w__558 ← (( do readReg NSACR ) : SailM (BitVec 32) )
+  writeReg NSACR (Sail.BitVec.updateSubrange w__558 20 20 0#1)
+  let w__559 ← (( do readReg NSACR ) : SailM (BitVec 32) )
+  writeReg NSACR (BitVec.update w__559 19 (Bit 0#1))
+  let w__560 ← (( do readReg NSACR ) : SailM (BitVec 32) )
+  writeReg NSACR (Sail.BitVec.updateSubrange w__560 15 15 0#1)
+  let w__561 ← (( do readReg NSACR ) : SailM (BitVec 32) )
+  writeReg NSACR (Sail.BitVec.updateSubrange w__561 14 12 0b000#3)
+  let w__562 ← (( do readReg NSACR ) : SailM (BitVec 32) )
+  writeReg NSACR (Sail.BitVec.updateSubrange w__562 9 0 0b0000000000#10)
+  let w__563 ← (( do (ICV_BPR0_read ()) ) : SailM (BitVec 32) )
+  (ICV_BPR0_write (Mk_ICV_BPR0_Type (set_slice 29 w__563 3 0b00000000000000000000000000000#29)))
+  let w__564 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (Mk_ICH_EISR_Type (set_slice 16 w__564 16 0b0000000000000000#16)))
+  let w__565 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (_update_ICH_EISR_Type_Status15 w__565 0#1))
+  let w__566 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (_update_ICH_EISR_Type_Status14 w__566 0#1))
+  let w__567 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (_update_ICH_EISR_Type_Status13 w__567 0#1))
+  let w__568 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (_update_ICH_EISR_Type_Status12 w__568 0#1))
+  let w__569 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (_update_ICH_EISR_Type_Status11 w__569 0#1))
+  let w__570 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (_update_ICH_EISR_Type_Status10 w__570 0#1))
+  let w__571 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (_update_ICH_EISR_Type_Status9 w__571 0#1))
+  let w__572 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (_update_ICH_EISR_Type_Status8 w__572 0#1))
+  let w__573 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (_update_ICH_EISR_Type_Status7 w__573 0#1))
+  let w__574 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (_update_ICH_EISR_Type_Status6 w__574 0#1))
+  let w__575 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (_update_ICH_EISR_Type_Status5 w__575 0#1))
+  let w__576 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (_update_ICH_EISR_Type_Status4 w__576 0#1))
+  let w__577 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (_update_ICH_EISR_Type_Status3 w__577 0#1))
+  let w__578 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (_update_ICH_EISR_Type_Status2 w__578 0#1))
+  let w__579 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (_update_ICH_EISR_Type_Status1 w__579 0#1))
+  let w__580 ← (( do (ICH_EISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_EISR_write (_update_ICH_EISR_Type_Status0 w__580 0#1))
+  let w__581 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+  (HDCR_write (Mk_HDCR_Type (set_slice 2 w__581 30 0b00#2)))
+  if ((cold && true) : Bool)
+  then
+    (do
+      let w__582 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      let w__583 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HDCR_write (_update_HDCR_Type_MTPME w__582 w__583)))
+  else
+    (do
+      let w__585 ← (( do
+        if ((cold : Bool) : Bool)
+        then
+          (do
+            (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
+        else (pure false) ) : SailM Bool )
+      if (w__585 : Bool)
+      then
+        (do
+          let w__586 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+          (HDCR_write (_update_HDCR_Type_MTPME w__586 1#1)))
+      else (pure (())))
+  let w__588 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__345 : Bool)
+  if (w__588 : Bool)
   then
     (do
-      let w__346 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-      (HCR2_write (_update_HCR2_Type_TTLBIS w__346 0#1)))
+      let w__589 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      (HDCR_write (_update_HDCR_Type_TDCC w__589 0#1)))
   else
     (do
-      let w__347 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-      let w__348 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR2_write (_update_HCR2_Type_TTLBIS w__347 w__348)))
-  let w__349 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-  (HCR2_write (Mk_HCR2_Type (set_slice 1 w__349 21 0#1)))
-  let w__351 ← (( do
+      let w__590 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      let w__591 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HDCR_write (_update_HDCR_Type_TDCC w__590 w__591)))
+  let w__592 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+  (HDCR_write (Mk_HDCR_Type (set_slice 2 w__592 24 0b00#2)))
+  let w__594 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__351 : Bool)
+  if (w__594 : Bool)
   then
     (do
-      let w__352 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-      (HCR2_write (_update_HCR2_Type_TOCU w__352 0#1)))
+      let w__595 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      (HDCR_write (_update_HDCR_Type_HCCD w__595 0#1)))
   else
     (do
-      let w__353 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-      let w__354 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR2_write (_update_HCR2_Type_TOCU w__353 w__354)))
-  let w__355 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-  (HCR2_write (Mk_HCR2_Type (set_slice 1 w__355 19 0#1)))
-  let w__357 ← (( do
+      let w__596 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      let w__597 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HDCR_write (_update_HDCR_Type_HCCD w__596 w__597)))
+  let w__598 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+  (HDCR_write (Mk_HDCR_Type (set_slice 3 w__598 20 0b000#3)))
+  let w__600 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__357 : Bool)
+  if (w__600 : Bool)
   then
     (do
-      let w__358 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-      (HCR2_write (_update_HCR2_Type_TICAB w__358 0#1)))
+      let w__601 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      (HDCR_write (_update_HDCR_Type_TTRF w__601 0#1)))
   else
     (do
-      let w__359 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-      let w__360 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR2_write (_update_HCR2_Type_TICAB w__359 w__360)))
-  let w__362 ← (( do
+      let w__602 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      let w__603 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HDCR_write (_update_HDCR_Type_TTRF w__602 w__603)))
+  let w__604 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+  (HDCR_write (Mk_HDCR_Type (set_slice 1 w__604 18 0#1)))
+  let w__606 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__605 ← (( do (HaveAArch64 ()) ) : SailM Bool )
+        (pure (((! w__605) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__606 : Bool)
+  then
+    (do
+      let w__607 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      (HDCR_write (_update_HDCR_Type_HPMD w__607 0#1)))
+  else
+    (do
+      let w__608 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      let w__609 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HDCR_write (_update_HDCR_Type_HPMD w__608 w__609)))
+  let w__610 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+  (HDCR_write (Mk_HDCR_Type (set_slice 5 w__610 12 0b00000#5)))
+  let w__612 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__362 : Bool)
+  if (w__612 : Bool)
   then
     (do
-      let w__363 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-      (HCR2_write (_update_HCR2_Type_TID4 w__363 0#1)))
+      let w__613 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      (HDCR_write (_update_HDCR_Type_TDRA w__613 0#1)))
   else
     (do
-      let w__364 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-      let w__365 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR2_write (_update_HCR2_Type_TID4 w__364 w__365)))
-  let w__366 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-  (HCR2_write (Mk_HCR2_Type (set_slice 10 w__366 7 0b0000000000#10)))
-  let w__368 ← (( do
+      let w__614 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      let w__615 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HDCR_write (_update_HDCR_Type_TDRA w__614 w__615)))
+  let w__617 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__368 : Bool)
+  if (w__617 : Bool)
   then
     (do
-      let w__369 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-      (HCR2_write (_update_HCR2_Type_TEA w__369 0#1)))
+      let w__618 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      (HDCR_write (_update_HDCR_Type_TDOSA w__618 0#1)))
   else
     (do
-      let w__370 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-      let w__371 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR2_write (_update_HCR2_Type_TEA w__370 w__371)))
-  let w__373 ← (( do
+      let w__619 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      let w__620 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HDCR_write (_update_HDCR_Type_TDOSA w__619 w__620)))
+  let w__622 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__373 : Bool)
+  if (w__622 : Bool)
   then
     (do
-      let w__374 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-      (HCR2_write (_update_HCR2_Type_TERR w__374 0#1)))
+      let w__623 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      (HDCR_write (_update_HDCR_Type_TDA w__623 0#1)))
   else
     (do
-      let w__375 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-      let w__376 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR2_write (_update_HCR2_Type_TERR w__375 w__376)))
-  let w__377 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-  (HCR2_write (Mk_HCR2_Type (set_slice 2 w__377 2 0b00#2)))
-  let w__379 ← (( do
+      let w__624 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      let w__625 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HDCR_write (_update_HDCR_Type_TDA w__624 w__625)))
+  let w__627 ← (( do
     if (((! cold) : Bool) : Bool)
     then
       (do
         (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
     else (pure false) ) : SailM Bool )
-  if (w__379 : Bool)
+  if (w__627 : Bool)
   then
     (do
-      let w__380 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-      (HCR2_write (_update_HCR2_Type_ID w__380 0#1)))
+      let w__628 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      (HDCR_write (_update_HDCR_Type_TDE w__628 0#1)))
   else
     (do
-      let w__381 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-      let w__382 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
-      (HCR2_write (_update_HCR2_Type_ID w__381 w__382)))
+      let w__629 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      let w__630 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HDCR_write (_update_HDCR_Type_TDE w__629 w__630)))
+  let w__632 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__631 ← (( do (HaveAArch64 ()) ) : SailM Bool )
+        (pure (((! w__631) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__632 : Bool)
+  then
+    (do
+      let w__633 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      (HDCR_write (_update_HDCR_Type_HPME w__633 0#1)))
+  else
+    (do
+      let w__634 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      let w__635 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HDCR_write (_update_HDCR_Type_HPME w__634 w__635)))
+  let w__637 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        let w__636 ← (( do (HaveAArch64 ()) ) : SailM Bool )
+        (pure (((! w__636) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__637 : Bool)
+  then
+    (do
+      let w__638 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      (HDCR_write (_update_HDCR_Type_TPM w__638 0#1)))
+  else
+    (do
+      let w__639 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      let w__640 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HDCR_write (_update_HDCR_Type_TPM w__639 w__640)))
+  let w__642 ← (( do
+    if (((! cold) : Bool) : Bool)
+    then
+      (do
+        (__IMPDEF_boolean "the PE resets into EL2 or EL3"))
+    else (pure false) ) : SailM Bool )
+  if (w__642 : Bool)
+  then
+    (do
+      let w__643 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      (HDCR_write (_update_HDCR_Type_TPMCR w__643 0#1)))
+  else
+    (do
+      let w__644 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+      let w__645 ← (( do (__UNKNOWN_bits 1) ) : SailM (BitVec 1) )
+      (HDCR_write (_update_HDCR_Type_TPMCR w__644 w__645)))
+  let w__646 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
+  let w__647 ← (( do (__UNKNOWN_bits 5) ) : SailM (BitVec 5) )
+  (HDCR_write (_update_HDCR_Type_HPMN w__646 w__647))
+  let w__648 ← (( do (ICC_HSRE_read ()) ) : SailM (BitVec 32) )
+  (ICC_HSRE_write (Mk_ICC_HSRE_Type (set_slice 28 w__648 4 0b0000000000000000000000000000#28)))
+  let w__649 ← (( do (ICC_HSRE_read ()) ) : SailM (BitVec 32) )
+  (ICC_HSRE_write (_update_ICC_HSRE_Type_DIB w__649 0#1))
+  let w__650 ← (( do (ICC_HSRE_read ()) ) : SailM (BitVec 32) )
+  (ICC_HSRE_write (_update_ICC_HSRE_Type_DFB w__650 0#1))
+  let w__651 ← (( do (ICC_HSRE_read ()) ) : SailM (BitVec 32) )
+  (ICC_HSRE_write (_update_ICC_HSRE_Type_SRE w__651 0#1))
+  let w__652 ← (( do (PMCCFILTR_read ()) ) : SailM (BitVec 32) )
+  (PMCCFILTR_write (_update_PMCCFILTR_Type_P w__652 0#1))
+  let w__653 ← (( do (PMCCFILTR_read ()) ) : SailM (BitVec 32) )
+  (PMCCFILTR_write (_update_PMCCFILTR_Type_U w__653 0#1))
+  let w__654 ← (( do (PMCCFILTR_read ()) ) : SailM (BitVec 32) )
+  (PMCCFILTR_write (_update_PMCCFILTR_Type_NSK w__654 0#1))
+  let w__655 ← (( do (PMCCFILTR_read ()) ) : SailM (BitVec 32) )
+  (PMCCFILTR_write (_update_PMCCFILTR_Type_NSU w__655 0#1))
+  let w__656 ← (( do (PMCCFILTR_read ()) ) : SailM (BitVec 32) )
+  (PMCCFILTR_write (_update_PMCCFILTR_Type_NSH w__656 0#1))
+  let w__657 ← (( do (PMCCFILTR_read ()) ) : SailM (BitVec 32) )
+  (PMCCFILTR_write (Mk_PMCCFILTR_Type (set_slice 5 w__657 22 0b00000#5)))
+  let w__658 ← (( do (PMCCFILTR_read ()) ) : SailM (BitVec 32) )
+  (PMCCFILTR_write (Mk_PMCCFILTR_Type (set_slice 21 w__658 0 0b000000000000000000000#21)))
+  let w__659 ← (( do (ID_ISAR5_read ()) ) : SailM (BitVec 32) )
+  (ID_ISAR5_write (Mk_ID_ISAR5_Type (set_slice 4 w__659 20 0b0000#4)))
+  let w__660 ← (( do (HTCR_read ()) ) : SailM (BitVec 32) )
+  (HTCR_write (Mk_HTCR_Type (set_slice 1 w__660 31 1#1)))
+  let w__661 ← (( do (HTCR_read ()) ) : SailM (BitVec 32) )
+  (HTCR_write (Mk_HTCR_Type (set_slice 1 w__661 29 0#1)))
+  let w__662 ← (( do (HTCR_read ()) ) : SailM (BitVec 32) )
+  (HTCR_write (Mk_HTCR_Type (set_slice 1 w__662 23 1#1)))
+  let w__663 ← (( do (HTCR_read ()) ) : SailM (BitVec 32) )
+  (HTCR_write (Mk_HTCR_Type (set_slice 9 w__663 14 0b000000000#9)))
+  let w__664 ← (( do (HTCR_read ()) ) : SailM (BitVec 32) )
+  (HTCR_write (Mk_HTCR_Type (set_slice 5 w__664 3 0b00000#5)))
+  let w__665 ← (( do (ICC_PMR_read ()) ) : SailM (BitVec 32) )
+  (ICC_PMR_write (Mk_ICC_PMR_Type (set_slice 24 w__665 8 0b000000000000000000000000#24)))
+  let w__666 ← (( do (ICC_PMR_read ()) ) : SailM (BitVec 32) )
+  (ICC_PMR_write (_update_ICC_PMR_Type_Priority w__666 0b00000000#8))
+  let w__667 ← (( do (ICV_EOIR1_read ()) ) : SailM (BitVec 32) )
+  (ICV_EOIR1_write (Mk_ICV_EOIR1_Type (set_slice 8 w__667 24 0b00000000#8)))
+  let w__668 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (_update_ICH_HCR_Type_EOIcount w__668 0b00000#5))
+  let w__669 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (Mk_ICH_HCR_Type (set_slice 12 w__669 15 0b000000000000#12)))
+  let w__670 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (_update_ICH_HCR_Type_TDIR w__670 0#1))
+  let w__671 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (_update_ICH_HCR_Type_TSEI w__671 0#1))
+  let w__672 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (_update_ICH_HCR_Type_TALL1 w__672 0#1))
+  let w__673 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (_update_ICH_HCR_Type_TALL0 w__673 0#1))
+  let w__674 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (_update_ICH_HCR_Type_TC w__674 0#1))
+  let w__675 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (Mk_ICH_HCR_Type (set_slice 1 w__675 9 0#1)))
+  let w__676 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (_update_ICH_HCR_Type_vSGIEOICount w__676 0#1))
+  let w__677 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (_update_ICH_HCR_Type_VGrp1DIE w__677 0#1))
+  let w__678 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (_update_ICH_HCR_Type_VGrp1EIE w__678 0#1))
+  let w__679 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (_update_ICH_HCR_Type_VGrp0DIE w__679 0#1))
+  let w__680 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (_update_ICH_HCR_Type_VGrp0EIE w__680 0#1))
+  let w__681 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (_update_ICH_HCR_Type_NPIE w__681 0#1))
+  let w__682 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (_update_ICH_HCR_Type_LRENPIE w__682 0#1))
+  let w__683 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (_update_ICH_HCR_Type_UIE w__683 0#1))
+  let w__684 ← (( do (ICH_HCR_read ()) ) : SailM (BitVec 32) )
+  (ICH_HCR_write (_update_ICH_HCR_Type_En w__684 0#1))
+  let w__685 ← (( do (RMR_read ()) ) : SailM (BitVec 32) )
+  (RMR_write (Mk_RMR_Type (set_slice 30 w__685 2 0b000000000000000000000000000000#30)))
+  let w__686 ← (( do (RMR_read ()) ) : SailM (BitVec 32) )
+  (RMR_write (_update_RMR_Type_RR w__686 0#1))
+  let w__687 ← (( do (FPEXC_read ()) ) : SailM (BitVec 32) )
+  (FPEXC_write (_update_FPEXC_Type_EN w__687 0#1))
+  let w__688 ← (( do (FPEXC_read ()) ) : SailM (BitVec 32) )
+  (FPEXC_write (Mk_FPEXC_Type (set_slice 15 w__688 11 0b000000000000000#15)))
+  let w__689 ← (( do (FPEXC_read ()) ) : SailM (BitVec 32) )
+  (FPEXC_write (Mk_FPEXC_Type (set_slice 2 w__689 5 0b00#2)))
+  let w__690 ← (( do (ICC_HPPIR0_read ()) ) : SailM (BitVec 32) )
+  (ICC_HPPIR0_write (Mk_ICC_HPPIR0_Type (set_slice 8 w__690 24 0b00000000#8)))
+  let w__691 ← (( do (TTBCR2_read ()) ) : SailM (BitVec 32) )
+  (TTBCR2_write (Mk_TTBCR2_Type (set_slice 13 w__691 19 0b0000000000000#13)))
+  let w__692 ← (( do (TTBCR2_read ()) ) : SailM (BitVec 32) )
+  (TTBCR2_write (Mk_TTBCR2_Type (set_slice 9 w__692 0 0b000000000#9)))
+  let w__693 ← (( do readReg FCSEIDR ) : SailM (BitVec 32) )
+  writeReg FCSEIDR (Sail.BitVec.updateSubrange w__693 31 0 0b00000000000000000000000000000000#32)
+  let w__694 ← (( do (ID_DFR1_read ()) ) : SailM (BitVec 32) )
+  (ID_DFR1_write (Mk_ID_DFR1_Type (set_slice 24 w__694 8 0b000000000000000000000000#24)))
+  let w__695 ← (( do readReg JMCR ) : SailM (BitVec 32) )
+  writeReg JMCR (Sail.BitVec.updateSubrange w__695 31 0 0b00000000000000000000000000000000#32)
+  let w__696 ← (( do (CNTKCTL_read__1 ()) ) : SailM (BitVec 32) )
+  (CNTKCTL_write (Mk_CNTKCTL_Type (set_slice 14 w__696 18 0b00000000000000#14)))
+  let w__697 ← (( do (CNTKCTL_read__1 ()) ) : SailM (BitVec 32) )
+  (CNTKCTL_write (Mk_CNTKCTL_Type (set_slice 7 w__697 10 0b0000000#7)))
+  let w__698 ← (( do (ICV_PMR_read ()) ) : SailM (BitVec 32) )
+  (ICV_PMR_write (Mk_ICV_PMR_Type (set_slice 24 w__698 8 0b000000000000000000000000#24)))
+  let w__699 ← (( do (ICV_PMR_read ()) ) : SailM (BitVec 32) )
+  (ICV_PMR_write (_update_ICV_PMR_Type_Priority w__699 0b00000000#8))
+  let w__700 ← (( do (ICV_HPPIR0_read ()) ) : SailM (BitVec 32) )
+  (ICV_HPPIR0_write (Mk_ICV_HPPIR0_Type (set_slice 8 w__700 24 0b00000000#8)))
+  let w__701 ← (( do readReg DBGWFAR ) : SailM (BitVec 32) )
+  writeReg DBGWFAR (Sail.BitVec.updateSubrange w__701 31 0 0b00000000000000000000000000000000#32)
+  let w__702 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 2 w__702 28 0b11#2)))
+  let w__703 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 2 w__703 26 0b00#2)))
+  let w__704 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 1 w__704 24 0#1)))
+  let w__705 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 2 w__705 22 0b11#2)))
+  let w__706 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 2 w__706 20 0b00#2)))
+  let w__707 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 1 w__707 18 1#1)))
+  let w__708 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 1 w__708 17 0#1)))
+  let w__709 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 1 w__709 16 1#1)))
+  let w__710 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 3 w__710 13 0b000#3)))
+  let w__711 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (_update_HSCTLR_Type_I w__711 0#1))
+  let w__712 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 1 w__712 11 1#1)))
+  let w__713 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 2 w__713 9 0b00#2)))
+  let w__714 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 1 w__714 6 0#1)))
+  let w__715 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (_update_HSCTLR_Type_LSMAOE w__715 1#1))
+  let w__716 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (_update_HSCTLR_Type_nTLSMD w__716 1#1))
+  let w__717 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (_update_HSCTLR_Type_C w__717 0#1))
+  let w__718 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (_update_HSCTLR_Type_M w__718 0#1))
+  let w__719 ← (( do (VTCR_read ()) ) : SailM (BitVec 32) )
+  (VTCR_write (Mk_VTCR_Type (set_slice 1 w__719 31 1#1)))
+  let w__720 ← (( do (VTCR_read ()) ) : SailM (BitVec 32) )
+  (VTCR_write (Mk_VTCR_Type (set_slice 2 w__720 29 0b00#2)))
+  let w__721 ← (( do (VTCR_read ()) ) : SailM (BitVec 32) )
+  (VTCR_write (Mk_VTCR_Type (set_slice 11 w__721 14 0b00000000000#11)))
+  let w__722 ← (( do (VTCR_read ()) ) : SailM (BitVec 32) )
+  (VTCR_write (Mk_VTCR_Type (set_slice 1 w__722 5 0#1)))
+  let w__723 ← (( do readReg ICC_MGRPEN1 ) : SailM (BitVec 32) )
+  writeReg ICC_MGRPEN1 (Sail.BitVec.updateSubrange w__723 31 2 0b000000000000000000000000000000#30)
+  let w__724 ← (( do readReg ICC_MGRPEN1 ) : SailM (BitVec 32) )
+  writeReg ICC_MGRPEN1 (Sail.BitVec.updateSubrange w__724 1 1 0#1)
+  let w__725 ← (( do readReg ICC_MGRPEN1 ) : SailM (BitVec 32) )
+  writeReg ICC_MGRPEN1 (Sail.BitVec.updateSubrange w__725 0 0 0#1)
+  let w__726 ← (( do (DFSR_read ()) ) : SailM (BitVec 32) )
+  (DFSR_write (Mk_DFSR_Type (set_slice 15 w__726 17 0b000000000000000#15)))
+  let w__727 ← (( do (DFSR_read ()) ) : SailM (BitVec 32) )
+  (DFSR_write (Mk_DFSR_Type (set_slice 1 w__727 8 0#1)))
+  let w__728 ← (( do (DFSR_read ()) ) : SailM (BitVec 32) )
+  (DFSR_write (Mk_DFSR_Type (set_slice 15 w__728 17 0b000000000000000#15)))
+  let w__729 ← (( do (DFSR_read ()) ) : SailM (BitVec 32) )
+  (DFSR_write (Mk_DFSR_Type (set_slice 1 w__729 10 0#1)))
+  let w__730 ← (( do (DFSR_read ()) ) : SailM (BitVec 32) )
+  (DFSR_write (Mk_DFSR_Type (set_slice 3 w__730 6 0b000#3)))
+  let w__731 ← (( do (CCSIDR2_read ()) ) : SailM (BitVec 32) )
+  (CCSIDR2_write (Mk_CCSIDR2_Type (set_slice 8 w__731 24 0b00000000#8)))
+  let w__732 ← (( do (CNTHV_CTL_read ()) ) : SailM (BitVec 32) )
+  (CNTHV_CTL_write (Mk_CNTHV_CTL_Type (set_slice 29 w__732 3 0b00000000000000000000000000000#29)))
+  let w__733 ← (( do (ICH_MISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_MISR_write (Mk_ICH_MISR_Type (set_slice 24 w__733 8 0b000000000000000000000000#24)))
+  let w__734 ← (( do (ICH_MISR_read ()) ) : SailM (BitVec 32) )
+  (ICH_MISR_write (_update_ICH_MISR_Type_VGrp1D w__734 0#1))
   (pure true)
 
 

@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,78 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def undefined_MDRAR_EL1_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
+  (undefined_bitvector_at (ℓ.child 0) 64)
+
+
+def undefined_DBGDRAR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
+  (undefined_bitvector_at (ℓ.child 0) 64)
+
+
+def DBGDRAR_read (_ : Unit) : SailM (BitVec 64) := do
+  let r ← (( do readReg _DBGDRAR ) : SailM DBGDRAR_Type )
+  let w__0 ← (( do readReg MDRAR_EL1 ) : SailM (BitVec 64) )
+  let r := ((Sail.BitVec.updateSubrange r 63 0 (BitVec.slice w__0 0 64)) : (BitVec 64))
+  (pure (r))
+
+
+def DBGDRAR_write (value_name : (BitVec 64)) : SailM Unit := do
+  let r : DBGDRAR_Type := value_name
+  let w__0 ← (( do readReg MDRAR_EL1 ) : SailM (BitVec 64) )
+  writeReg MDRAR_EL1 (Sail.BitVec.updateSubrange w__0 63 0 (BitVec.slice r 0 64))
+  writeReg _DBGDRAR r
+
+
+def DBGOSDLR_write (value_name : (BitVec 32)) : SailM Unit := do
+  let r : DBGOSDLR_Type := value_name
+  let w__0 ← (( do readReg OSDLR_EL1 ) : SailM (BitVec 64) )
+  writeReg OSDLR_EL1 (Sail.BitVec.updateSubrange w__0 31 0 (BitVec.slice r 0 32))
+  writeReg _DBGOSDLR r
+
+
+def DBGOSLSR_write (value_name : (BitVec 32)) : SailM Unit := do
+  let r : DBGOSLSR_Type := value_name
+  let w__0 ← (( do readReg OSLSR_EL1 ) : SailM (BitVec 64) )
+  writeReg OSLSR_EL1 (Sail.BitVec.updateSubrange w__0 31 0 (BitVec.slice r 0 32))
+  writeReg _DBGOSLSR r
+
+
+def DBGPRCR_write (value_name : (BitVec 32)) : SailM Unit := do
+  let r : DBGPRCR_Type := value_name
+  let w__0 ← (( do readReg DBGPRCR_EL1 ) : SailM (BitVec 64) )
+  writeReg DBGPRCR_EL1 (Sail.BitVec.updateSubrange w__0 31 0 (BitVec.slice r 0 32))
+  writeReg _DBGPRCR r
+
+
+def undefined_DBGVCR32_EL2_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
+  (undefined_bitvector_at (ℓ.child 0) 64)
+
+
+def undefined_DBGVCR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
+  (undefined_bitvector_at (ℓ.child 0) 32)
+
+
+def DBGVCR_read (_ : Unit) : SailM (BitVec 32) := do
+  let r ← (( do readReg _DBGVCR ) : SailM DBGVCR_Type )
+  let w__0 ← (( do readReg DBGVCR32_EL2 ) : SailM (BitVec 64) )
+  let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__0 0 32)) : (BitVec 32))
+  (pure (r))
+
+
+def DBGVCR_write (value_name : (BitVec 32)) : SailM Unit := do
+  let r : DBGVCR_Type := value_name
+  let w__0 ← (( do readReg DBGVCR32_EL2 ) : SailM (BitVec 64) )
+  writeReg DBGVCR32_EL2 (Sail.BitVec.updateSubrange w__0 31 0 (BitVec.slice r 0 32))
+  writeReg _DBGVCR r
+
+
+def DFSR_NS_read (_ : Unit) : SailM (BitVec 32) := do
+  let r ← (( do readReg _DFSR_NS ) : SailM DFSR_Type )
+  let w__0 ← (( do readReg ESR_EL1 ) : SailM (BitVec 64) )
+  let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__0 0 32)) : (BitVec 32))
+  (pure (r))
+
 
 def DISR_read (_ : Unit) : SailM (BitVec 32) := do
   let r ← (( do readReg _DISR ) : SailM DISR_Type )
@@ -756,79 +828,6 @@ def ICC_SRE_NS_write (value_name : (BitVec 32)) : SailM Unit := do
   let w__0 ← (( do readReg ICC_SRE_EL1_NS ) : SailM (BitVec 64) )
   writeReg ICC_SRE_EL1_NS (Sail.BitVec.updateSubrange w__0 31 0 (BitVec.slice r 0 32))
   writeReg _ICC_SRE_NS r
-
-
-def ICC_SRE_S_write (value_name : (BitVec 32)) : SailM Unit := do
-  let r : ICC_SRE_Type := value_name
-  let w__0 ← (( do readReg ICC_SRE_EL1_S ) : SailM (BitVec 64) )
-  writeReg ICC_SRE_EL1_S (Sail.BitVec.updateSubrange w__0 31 0 (BitVec.slice r 0 32))
-  writeReg _ICC_SRE_S r
-
-
-def undefined_ICH_EISR_EL2_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
-  (undefined_bitvector_at (ℓ.child 0) 64)
-
-
-def undefined_ICH_EISR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def ICH_EISR_read (_ : Unit) : SailM (BitVec 32) := do
-  let r ← (( do readReg _ICH_EISR ) : SailM ICH_EISR_Type )
-  let w__0 ← (( do readReg ICH_EISR_EL2 ) : SailM (BitVec 64) )
-  let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__0 0 32)) : (BitVec 32))
-  (pure (r))
-
-
-def ICH_EISR_write (value_name : (BitVec 32)) : SailM Unit := do
-  let r : ICH_EISR_Type := value_name
-  let w__0 ← (( do readReg ICH_EISR_EL2 ) : SailM (BitVec 64) )
-  writeReg ICH_EISR_EL2 (Sail.BitVec.updateSubrange w__0 31 0 (BitVec.slice r 0 32))
-  writeReg _ICH_EISR r
-
-
-def undefined_ICH_ELRSR_EL2_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
-  (undefined_bitvector_at (ℓ.child 0) 64)
-
-
-def undefined_ICH_ELRSR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def ICH_ELRSR_read (_ : Unit) : SailM (BitVec 32) := do
-  let r ← (( do readReg _ICH_ELRSR ) : SailM ICH_ELRSR_Type )
-  let w__0 ← (( do readReg ICH_ELRSR_EL2 ) : SailM (BitVec 64) )
-  let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__0 0 32)) : (BitVec 32))
-  (pure (r))
-
-
-def ICH_ELRSR_write (value_name : (BitVec 32)) : SailM Unit := do
-  let r : ICH_ELRSR_Type := value_name
-  let w__0 ← (( do readReg ICH_ELRSR_EL2 ) : SailM (BitVec 64) )
-  writeReg ICH_ELRSR_EL2 (Sail.BitVec.updateSubrange w__0 31 0 (BitVec.slice r 0 32))
-  writeReg _ICH_ELRSR r
-
-
-def undefined_ICH_HCR_EL2_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
-  (undefined_bitvector_at (ℓ.child 0) 64)
-
-
-def undefined_ICH_HCR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def ICH_HCR_read (_ : Unit) : SailM (BitVec 32) := do
-  let r ← (( do readReg _ICH_HCR ) : SailM ICH_HCR_Type )
-  let w__0 ← (( do readReg ICH_HCR_EL2 ) : SailM (BitVec 64) )
-  let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__0 0 32)) : (BitVec 32))
-  (pure (r))
-
-
-def ICH_HCR_write (value_name : (BitVec 32)) : SailM Unit := do
-  let r : ICH_HCR_Type := value_name
-  let w__0 ← (( do readReg ICH_HCR_EL2 ) : SailM (BitVec 64) )
-  writeReg ICH_HCR_EL2 (Sail.BitVec.updateSubrange w__0 31 0 (BitVec.slice r 0 32))
-  writeReg _ICH_HCR r
 
 
 end ArmFull.Functions

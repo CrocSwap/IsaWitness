@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,86 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def Mk_ERRSELR_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_HRMR_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_HSTR_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_HTCR_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_HTRFCR_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_ICC_ASGI1R_Type (v : (BitVec 64)) : (BitVec 64) :=
+  v
+
+
+def Mk_ICC_BPR0_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_ICC_BPR1_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_ICC_CTLR_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_ICC_DIR_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_ICC_EOIR0_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_ICC_EOIR1_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_ICC_HPPIR0_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_ICC_HPPIR1_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_ICC_HSRE_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_ICC_IAR0_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_ICC_IAR1_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_ICC_IGRPEN0_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_ICC_IGRPEN1_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_ICC_PMR_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
 
 def Mk_ICC_RPR_Type (v : (BitVec 32)) : (BitVec 32) :=
   v
@@ -790,86 +870,6 @@ def _update_ICH_HCR_Type_En (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
 
 def _update_ICH_HCR_Type_LRENPIE (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
   (Sail.BitVec.updateSubrange v 2 2 x)
-
-
-def _update_ICH_HCR_Type_NPIE (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 3 3 x)
-
-
-def _update_ICH_HCR_Type_TALL0 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 11 11 x)
-
-
-def _update_ICH_HCR_Type_TALL1 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 12 12 x)
-
-
-def _update_ICH_HCR_Type_TDIR (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 14 14 x)
-
-
-def _update_ICH_HCR_Type_TSEI (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 13 13 x)
-
-
-def _update_ICH_HCR_Type_UIE (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 1 1 x)
-
-
-def _update_ICH_HCR_Type_VGrp0DIE (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 5 5 x)
-
-
-def _update_ICH_HCR_Type_VGrp0EIE (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 4 4 x)
-
-
-def _update_ICH_HCR_Type_VGrp1DIE (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 7 7 x)
-
-
-def _update_ICH_HCR_Type_VGrp1EIE (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 6 6 x)
-
-
-def _update_ICH_HCR_Type_vSGIEOICount (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 8 8 x)
-
-
-def _update_ICH_MISR_Type_EOI (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 0 0 x)
-
-
-def _update_ICH_MISR_Type_LRENP (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 2 2 x)
-
-
-def _update_ICH_MISR_Type_NP (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 3 3 x)
-
-
-def _update_ICH_MISR_Type_VGrp0D (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 5 5 x)
-
-
-def _update_ICH_MISR_Type_VGrp0E (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 4 4 x)
-
-
-def _update_ICH_MISR_Type_VGrp1D (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 7 7 x)
-
-
-def _update_ICH_MISR_Type_VGrp1E (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 6 6 x)
-
-
-def _update_ICV_IGRPEN0_Type_Enable (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 0 0 x)
-
-
-def _update_ICV_IGRPEN1_Type_Enable (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 0 0 x)
 
 
 end ArmFull.Functions

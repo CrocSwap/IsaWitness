@@ -1,31 +1,24 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0040
-import ArmFull.Fn.M0049
-import ArmFull.Fn.M0050
-import ArmFull.Fn.M0051
-import ArmFull.Fn.M0087
-import ArmFull.Fn.M0111
-import ArmFull.Fn.M0112
-import ArmFull.Fn.M0115
-import ArmFull.Fn.M0118
-import ArmFull.Fn.M0124
-import ArmFull.Fn.M0144
-import ArmFull.Fn.M0145
-import ArmFull.Fn.M0146
-import ArmFull.Fn.M0151
-import ArmFull.Fn.M0175
-import ArmFull.Fn.M0181
-import ArmFull.Fn.M0194
-import ArmFull.Fn.M0202
-import ArmFull.Fn.M0204
-import ArmFull.Fn.M0218
-import ArmFull.Fn.M0226
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0034
+public import ArmFull.Fn.M0036
+public import ArmFull.Fn.M0144
+public import ArmFull.Fn.M0151
+public import ArmFull.Fn.M0152
+public import ArmFull.Fn.M0167
+public import ArmFull.Fn.M0170
+public import ArmFull.Fn.M0179
+public import ArmFull.Fn.M0194
+public import ArmFull.Fn.M0214
+public import ArmFull.Fn.M0225
+public import ArmFull.Fn.M0226 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -127,648 +120,632 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-def decode_aarch32_instrs_USUB8_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
+/-- Type quantifiers: k_trappedsyscallinst : Bool -/
+def BRBEException (erec : ExceptionRecord) (preferred_exception_return : (BitVec 64)) (target_address_in : (BitVec 64)) (target_el : (BitVec 2)) (trappedsyscallinst : Bool) : SailM Unit := SailME.run do
+  let target_address : (BitVec 64) := target_address_in
+  let except : Exception := erec.exceptype
+  let iss : (BitVec 25) := erec.syndrome
+  let questionMark := target_el
+  if ((questionMark == EL3) : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:18825.29-18825.30"
-      let d : Int := (BitVec.toNat Rd)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_USUB8_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_USUB8_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let d : Int := (BitVec.toNat Rd)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_USUB8_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_UXTAB16_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (rotate : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:18887.29-18887.30"
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "UXTB16"))
-      else (pure (()))
-      let d : Int := (BitVec.toNat Rd)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      let rotation : Int := (BitVec.toNat (rotate +++ 0b000#3))
-      if (((d == 15) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_UXTAB16_Op_A_txt (Sail.Int.toNatChecked (d))
-        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (rotation))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_UXTAB16_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (rotate : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "UXTB16"))
-      else (pure (()))
-      let d : Int := (BitVec.toNat Rd)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      let rotation : Int := (BitVec.toNat (rotate +++ 0b000#3))
-      if (((d == 15) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_UXTAB16_Op_A_txt (Sail.Int.toNatChecked (d))
-        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (rotation))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_UXTAB_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (rotate : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:18962.29-18962.30"
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "UXTB"))
-      else (pure (()))
-      let d : Int := (BitVec.toNat Rd)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      let rotation : Int := (BitVec.toNat (rotate +++ 0b000#3))
-      if (((d == 15) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_UXTAB_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (rotation))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_UXTAB_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (rotate : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "UXTB"))
-      else (pure (()))
-      let d : Int := (BitVec.toNat Rd)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      let rotation : Int := (BitVec.toNat (rotate +++ 0b000#3))
-      if (((d == 15) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_UXTAB_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (rotation))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_UXTAH_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (rotate : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:19037.29-19037.30"
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "UXTH"))
-      else (pure (()))
-      let d : Int := (BitVec.toNat Rd)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      let rotation : Int := (BitVec.toNat (rotate +++ 0b000#3))
-      if (((d == 15) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_UXTAH_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (rotation))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_UXTAH_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (rotate : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "UXTH"))
-      else (pure (()))
-      let d : Int := (BitVec.toNat Rd)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      let rotation : Int := (BitVec.toNat (rotate +++ 0b000#3))
-      if (((d == 15) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_UXTAH_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (rotation))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_UXTB16_A1enc_A_txt (cond : (BitVec 4)) (Rd : (BitVec 4)) (rotate : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:19113.29-19113.30"
-      let d : Int := (BitVec.toNat Rd)
-      let m : Int := (BitVec.toNat Rm)
-      let rotation : Int := (BitVec.toNat (rotate +++ 0b000#3))
-      if (((d == 15) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_UXTB16_Op_A_txt (Sail.Int.toNatChecked (d))
-        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (rotation))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_UXTB16_T1enc_A_txt (Rd : (BitVec 4)) (rotate : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let d : Int := (BitVec.toNat Rd)
-      let m : Int := (BitVec.toNat Rm)
-      let rotation : Int := (BitVec.toNat (rotate +++ 0b000#3))
-      if (((d == 15) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_UXTB16_Op_A_txt (Sail.Int.toNatChecked (d))
-        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (rotation))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_UXTB_A1enc_A_txt (cond : (BitVec 4)) (Rd : (BitVec 4)) (rotate : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:19178.29-19178.30"
-      let d : Int := (BitVec.toNat Rd)
-      let m : Int := (BitVec.toNat Rm)
-      let rotation : Int := (BitVec.toNat (rotate +++ 0b000#3))
-      if (((d == 15) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_UXTB_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (rotation))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_UXTB_T1enc_A_txt (Rm : (BitVec 3)) (Rd : (BitVec 3)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let d : Int := (BitVec.toNat Rd)
-      let m : Int := (BitVec.toNat Rm)
-      let rotation : Nat := 0
-      (execute_aarch32_instrs_UXTB_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        rotation))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_UXTB_T2enc_A_txt (Rd : (BitVec 4)) (rotate : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let d : Int := (BitVec.toNat Rd)
-      let m : Int := (BitVec.toNat Rm)
-      let rotation : Int := (BitVec.toNat (rotate +++ 0b000#3))
-      if (((d == 15) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_UXTB_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (rotation))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_UXTH_A1enc_A_txt (cond : (BitVec 4)) (Rd : (BitVec 4)) (rotate : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:19262.29-19262.30"
-      let d : Int := (BitVec.toNat Rd)
-      let m : Int := (BitVec.toNat Rm)
-      let rotation : Int := (BitVec.toNat (rotate +++ 0b000#3))
-      if (((d == 15) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_UXTH_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (rotation))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_UXTH_T1enc_A_txt (Rm : (BitVec 3)) (Rd : (BitVec 3)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let d : Int := (BitVec.toNat Rd)
-      let m : Int := (BitVec.toNat Rm)
-      let rotation : Nat := 0
-      (execute_aarch32_instrs_UXTH_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        rotation))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_UXTH_T2enc_A_txt (Rd : (BitVec 4)) (rotate : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let d : Int := (BitVec.toNat Rd)
-      let m : Int := (BitVec.toNat Rm)
-      let rotation : Int := (BitVec.toNat (rotate +++ 0b000#3))
-      if (((d == 15) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_UXTH_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (rotation))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_MRS_A1enc_AS_txt (cond : (BitVec 4)) (R : (BitVec 1)) (Rd : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:41109.29-41109.30"
-      let d : Int := (BitVec.toNat Rd)
-      let read_spsr : Bool := (R == 1#1)
-      if ((d == 15) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_MRS_Op_AS_txt (Sail.Int.toNatChecked (d)) read_spsr))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_MRS_T1enc_AS_txt (R : (BitVec 1)) (Rd : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let d : Int := (BitVec.toNat Rd)
-      let read_spsr : Bool := (R == 1#1)
-      if ((d == 15) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_MRS_Op_AS_txt (Sail.Int.toNatChecked (d)) read_spsr))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_MSR_r_A1enc_AS_txt (cond : (BitVec 4)) (R : (BitVec 1)) (mask : (BitVec 4)) (Rn : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:41510.29-41510.30"
-      let n : Int := (BitVec.toNat Rn)
-      let write_spsr : Bool := (R == 1#1)
-      if ((mask == 0b0000#4) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if ((n == 15) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_MSR_r_Op_AS_txt mask (Sail.Int.toNatChecked (n)) write_spsr))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_MSR_r_T1enc_AS_txt (R : (BitVec 1)) (Rn : (BitVec 4)) (mask : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let n : Int := (BitVec.toNat Rn)
-      let write_spsr : Bool := (R == 1#1)
-      if ((mask == 0b0000#4) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if ((n == 15) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_MSR_r_Op_AS_txt mask (Sail.Int.toNatChecked (n)) write_spsr))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_CRC32_A1enc_A_txt (cond : (BitVec 4)) (sz : (BitVec 2)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (C : (BitVec 1)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:42477.29-42477.30"
-      let w__1 ← (( do (HaveCRCExt ()) ) : SailM Bool )
-      if ((! w__1) : Bool)
-      then sailThrow ((Error_Undefined ()))
-      else (pure (()))
-      let d : Int := (BitVec.toNat Rd)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      let size : Int := (Int.shiftl 8 (BitVec.toNat sz))
-      let crc32c : Bool := (C == 1#1)
-      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if ((size == 64) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if ((cond != 0b1110#4) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_CRC32_Op_A_txt crc32c (Sail.Int.toNatChecked (d))
-        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (size))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_CRC32_T1enc_A_txt (C : (BitVec 1)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (sz : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let w__1 ← (( do (InITBlock ()) ) : SailM Bool )
-      if (w__1 : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      let w__2 ← (( do (HaveCRCExt ()) ) : SailM Bool )
-      if ((! w__2) : Bool)
-      then sailThrow ((Error_Undefined ()))
-      else (pure (()))
-      let d : Int := (BitVec.toNat Rd)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      let size : Int := (Int.shiftl 8 (BitVec.toNat sz))
-      let crc32c : Bool := (C == 1#1)
-      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      if ((size == 64) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_CRC32_Op_A_txt crc32c (Sail.Int.toNatChecked (d))
-        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (size))))
-  else (pure (()))
-
-
-/-- Type quantifiers: k_ADD : Bool, d : Nat, n : Nat, 0 ≤ n ∧ n ≤ 31 ∧ 0 ≤ d ∧ d ≤ 31 -/
-def execute_aarch64_instrs_integer_tags_mcaddtag (ADD : Bool) (d : Nat) (n : Nat) (offset : (BitVec 64)) (tag_offset : (BitVec 4)) : SailM Unit := do
-  let operand1 ← (( do
-    if ((n == 31) : Bool)
-    then
-      (do
-        (SP_read ()))
-    else
-      (do
-        (X_read n 64)) ) : SailM (BitVec 64) )
-  let start_tag : (BitVec 4) := (AArch64_AllocationTagFromAddress operand1)
-  let w__2 ← (( do readReg GCR_EL1 ) : SailM (BitVec 64) )
-  let exclude : (BitVec 16) := (_get_GCR_EL1_Type_Exclude w__2)
-  let result ← (( do (undefined_bitvector_at (← occLabel 3931) 64) ) : SailM (BitVec 64) )
-  let rtag ← (( do (undefined_bitvector_at (← occLabel 3932) 4) ) : SailM (BitVec 4) )
-  let w__3 ← (( do readReg PSTATE ) : SailM ProcState )
-  let w__4 ← (( do (AArch64_AllocationTagAccessIsEnabled w__3.EL) ) : SailM Bool )
-  let rtag ← (( do
-    if (w__4 : Bool)
-    then
-      (do
-        (AArch64_ChooseNonExcludedTag start_tag tag_offset exclude))
-    else (pure (0b0000#4)) ) : SailM (BitVec 4) )
-  let result : (BitVec 64) :=
-    if (ADD : Bool)
-    then
-      (let (__tup_0, _) := (AddWithCarry operand1 offset 0#1)
-      __tup_0)
-    else
-      (let (__tup_0, _) := (AddWithCarry operand1 (Complement.complement offset) 1#1)
-      __tup_0)
-  let result ← (( do (AArch64_AddressWithAllocationTag result rtag) ) : SailM (BitVec 64) )
-  if ((d == 31) : Bool)
-  then
-    (do
-      (SP_set result))
-  else
-    (do
-      (X_set d 64 result))
-
-
-/-- Type quantifiers: d : Nat, m : Nat, n : Nat, 0 ≤ n ∧
-  n ≤ 31 ∧ 0 ≤ m ∧ m ≤ 31 ∧ 0 ≤ d ∧ d ≤ 31 -/
-def execute_aarch64_instrs_integer_tags_mcinsertrandomtag (d : Nat) (m : Nat) (n : Nat) : SailM Unit := do
-  let operand ← (( do
-    if ((n == 31) : Bool)
-    then
-      (do
-        (SP_read ()))
-    else
-      (do
-        (X_read n 64)) ) : SailM (BitVec 64) )
-  let exclude_reg ← (( do (X_read m 64) ) : SailM (BitVec 64) )
-  let w__2 ← (( do readReg GCR_EL1 ) : SailM (BitVec 64) )
-  let exclude : (BitVec 16) :=
-    ((Sail.BitVec.castWidth (m := 16) (Sail.BitVec.extractLsb exclude_reg 15 0)) ||| (_get_GCR_EL1_Type_Exclude
-        w__2))
-  let rtag ← (( do (undefined_bitvector_at (← occLabel 4334) 4) ) : SailM (BitVec 4) )
-  let w__3 ← (( do readReg PSTATE ) : SailM ProcState )
-  let w__4 ← (( do (AArch64_AllocationTagAccessIsEnabled w__3.EL) ) : SailM Bool )
-  let rtag ← (( do
-    if (w__4 : Bool)
-    then
-      (do
-        let w__5 ← (( do readReg GCR_EL1 ) : SailM (BitVec 64) )
-        if (((_get_GCR_EL1_Type_RRND w__5) == 1#1) : Bool)
-        then
-          (do
-            if ((IsOnes exclude) : Bool)
-            then (pure (0b0000#4))
-            else
-              (do
-                (ChooseRandomNonExcludedTag exclude)))
+      let w__3 ← (( do
+        if ((← do
+             let w__0 ← (( do (HaveBRBEv1p1 ()) ) : SailME Unit Bool )
+             (pure (((! w__0) : Bool)))) : Bool)
+        then (pure true)
         else
           (do
-            let w__7 ← (( do readReg RGSR_EL1 ) : SailM (BitVec 64) )
-            let start_tag : (BitVec 4) := (_get_RGSR_EL1_Type_TAG w__7)
-            let offset ← (( do (AArch64_RandomTag ()) ) : SailM (BitVec 4) )
-            let w__8 ← (( do (AArch64_ChooseNonExcludedTag start_tag offset exclude) ) : SailM
-              (BitVec 4) )
-            let rtag := (w__8 : (BitVec 4))
-            let w__9 ← (( do readReg RGSR_EL1 ) : SailM (BitVec 64) )
-            writeReg RGSR_EL1 (Sail.BitVec.updateSubrange w__9 3 0 rtag)
-            (pure (rtag))))
-    else (pure (0b0000#4)) ) : SailM (BitVec 4) )
-  let result ← (( do (AArch64_AddressWithAllocationTag operand rtag) ) : SailM (BitVec 64) )
-  if ((d == 31) : Bool)
-  then
-    (do
-      (SP_set result))
+            let w__1 ← (( do readReg MDCR_EL3 ) : SailME Unit (BitVec 64) )
+            let w__2 ← (( do readReg MDCR_EL3 ) : SailME Unit (BitVec 64) )
+            (pure ((((_get_MDCR_EL3_Type_E3BREC w__1) == (_get_MDCR_EL3_Type_E3BREW w__2)) : Bool))))
+        ) : SailME Unit Bool )
+      if (w__3 : Bool)
+      then
+        (do
+          SailME.throw (() : Unit))
+      else (pure (())))
   else
     (do
-      (X_set d 64 result))
-
-
-/-- Type quantifiers: k_ADD : Bool, d : Nat, n : Nat, 0 ≤ n ∧ n ≤ 31 ∧ 0 ≤ d ∧ d ≤ 31 -/
-def execute_aarch64_instrs_integer_tags_mcsubtag (ADD : Bool) (d : Nat) (n : Nat) (offset : (BitVec 64)) (tag_offset : (BitVec 4)) : SailM Unit := do
-  let operand1 ← (( do
-    if ((n == 31) : Bool)
-    then
-      (do
-        (SP_read ()))
-    else
-      (do
-        (X_read n 64)) ) : SailM (BitVec 64) )
-  let start_tag : (BitVec 4) := (AArch64_AllocationTagFromAddress operand1)
-  let w__2 ← (( do readReg GCR_EL1 ) : SailM (BitVec 64) )
-  let exclude : (BitVec 16) := (_get_GCR_EL1_Type_Exclude w__2)
-  let result ← (( do (undefined_bitvector_at (← occLabel 5006) 64) ) : SailM (BitVec 64) )
-  let rtag ← (( do (undefined_bitvector_at (← occLabel 5007) 4) ) : SailM (BitVec 4) )
-  let w__3 ← (( do readReg PSTATE ) : SailM ProcState )
-  let w__4 ← (( do (AArch64_AllocationTagAccessIsEnabled w__3.EL) ) : SailM Bool )
-  let rtag ← (( do
-    if (w__4 : Bool)
-    then
-      (do
-        (AArch64_ChooseNonExcludedTag start_tag tag_offset exclude))
-    else (pure (0b0000#4)) ) : SailM (BitVec 4) )
-  let result : (BitVec 64) :=
-    if (ADD : Bool)
-    then
-      (let (__tup_0, _) := (AddWithCarry operand1 offset 0#1)
-      __tup_0)
-    else
-      (let (__tup_0, _) := (AddWithCarry operand1 (Complement.complement offset) 1#1)
-      __tup_0)
-  let result ← (( do (AArch64_AddressWithAllocationTag result rtag) ) : SailM (BitVec 64) )
-  if ((d == 31) : Bool)
+      if ((questionMark == EL2) : Bool)
+      then
+        (do
+          let w__4 ← (( do readReg BRBCR_EL2 ) : SailME Unit (BitVec 64) )
+          if (((_get_BRBCR_EL2_Type_EXCEPTION w__4) == 0#1) : Bool)
+          then
+            (do
+              SailME.throw (() : Unit))
+          else (pure (())))
+      else
+        (do
+          if ((questionMark == EL1) : Bool)
+          then
+            (do
+              let w__5 ← (( do readReg BRBCR_EL1 ) : SailME Unit (BitVec 64) )
+              if (((_get_BRBCR_EL1_Type_EXCEPTION w__5) == 0#1) : Bool)
+              then
+                (do
+                  SailME.throw (() : Unit))
+              else (pure (())))
+          else (pure (()))))
+  let w__6 ← (( do readReg PSTATE ) : SailME Unit ProcState )
+  let source_valid ← (( do (BranchRecordAllowed w__6.EL) ) : SailME Unit Bool )
+  let target_valid ← (( do (BranchRecordAllowed target_el) ) : SailME Unit Bool )
+  let branch_valid : Bool := (source_valid || target_valid)
+  if (branch_valid : Bool)
   then
     (do
-      (SP_set result))
-  else
-    (do
-      (X_set d 64 result))
-
-
-/-- Type quantifiers: k_cond : Bool -/
-def BRBEBranch (br_type : BranchType) (cond : Bool) (target_address : (BitVec 64)) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let branch_valid ← (( do (BranchRecordAllowed w__0.EL) ) : SailM Bool )
-  let w__2 ← (( do
-    if (branch_valid : Bool)
-    then
-      (do
-        (FilterBranchRecord br_type cond))
-    else (pure false) ) : SailM Bool )
-  if (w__2 : Bool)
-  then
-    (do
-      let branch_type ← (( do (undefined_bitvector_at (← occLabel 575) 6) ) : SailM (BitVec 6) )
+      let branch_type ← (( do (undefined_bitvector_at (← occLabel 695) 6) ) : SailME Unit
+        (BitVec 6) )
       let branch_type ← (( do
-        match br_type with
-        | .BranchType_DIR =>
+        match except with
+        | .Exception_Uncategorized => (pure (0b100011#6))
+        | .Exception_WFxTrap => (pure (0b100011#6))
+        | .Exception_CP15RTTrap => (pure (0b100011#6))
+        | .Exception_CP15RRTTrap => (pure (0b100011#6))
+        | .Exception_CP14RTTrap => (pure (0b100011#6))
+        | .Exception_CP14DTTrap => (pure (0b100011#6))
+        | .Exception_AdvSIMDFPAccessTrap => (pure (0b100011#6))
+        | .Exception_FPIDTrap => (pure (0b100011#6))
+        | .Exception_PACTrap => (pure (0b100011#6))
+        | .Exception_TSTARTAccessTrap => (pure (0b100011#6))
+        | .Exception_CP14RRTTrap => (pure (0b100011#6))
+        | .Exception_BranchTarget => (pure (0b101011#6))
+        | .Exception_IllegalState => (pure (0b100011#6))
+        | .Exception_SupervisorCall =>
           (let branch_type : (BitVec 6) :=
-            if (cond : Bool)
-            then 0b001000#6
-            else 0b000000#6
+            if ((! trappedsyscallinst) : Bool)
+            then 0b100010#6
+            else 0b100011#6
           (pure (branch_type)))
-        | .BranchType_INDIR => (pure (0b000001#6))
-        | .BranchType_DIRCALL => (pure (0b000010#6))
-        | .BranchType_INDCALL => (pure (0b000011#6))
-        | .BranchType_RET => (pure (0b000101#6))
+        | .Exception_HypervisorCall => (pure (0b100010#6))
+        | .Exception_MonitorCall =>
+          (let branch_type : (BitVec 6) :=
+            if ((! trappedsyscallinst) : Bool)
+            then 0b100010#6
+            else 0b100011#6
+          (pure (branch_type)))
+        | .Exception_SystemRegisterTrap => (pure (0b100011#6))
+        | .Exception_SystemRegister128Trap => (pure (0b100011#6))
+        | .Exception_SVEAccessTrap => (pure (0b100011#6))
+        | .Exception_SMEAccessTrap => (pure (0b100011#6))
+        | .Exception_ERetTrap => (pure (0b100011#6))
+        | .Exception_PACFail => (pure (0b101100#6))
+        | .Exception_InstructionAbort => (pure (0b101011#6))
+        | .Exception_PCAlignment => (pure (0b101010#6))
+        | .Exception_DataAbort => (pure (0b101100#6))
+        | .Exception_NV2DataAbort => (pure (0b101100#6))
+        | .Exception_SPAlignment => (pure (0b101010#6))
+        | .Exception_FPTrappedException => (pure (0b100011#6))
+        | .Exception_SError => (pure (0b100100#6))
+        | .Exception_Breakpoint => (pure (0b100110#6))
+        | .Exception_SoftwareStep => (pure (0b100110#6))
+        | .Exception_Watchpoint => (pure (0b100111#6))
+        | .Exception_NV2Watchpoint => (pure (0b100111#6))
+        | .Exception_SoftwareBreakpoint => (pure (0b100110#6))
+        | .Exception_IRQ => (pure (0b101110#6))
+        | .Exception_FIQ => (pure (0b101111#6))
+        | .Exception_MemCpyMemSet => (pure (0b100011#6))
+        | .Exception_GCSFail =>
+          (do
+            if (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb iss 23 20)) == 0b0000#4) : Bool)
+            then (pure (0b101100#6))
+            else
+              (do
+                if (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb iss 23 20)) == 0b0001#4) : Bool)
+                then (pure (0b101011#6))
+                else
+                  (do
+                    if (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb iss 23 20)) == 0b0010#4) : Bool)
+                    then (pure (0b100011#6))
+                    else
+                      (do
+                        (Unreachable ())
+                        (pure (branch_type))))))
         | _ =>
           (do
             (Unreachable ())
-            (pure (branch_type))) ) : SailM (BitVec 6) )
-      let ccu ← (( do (undefined_bitvector_at (← occLabel 576) 1) ) : SailM (BitVec 1) )
-      let cc ← (( do (undefined_bitvector_at (← occLabel 577) 14) ) : SailM (BitVec 14) )
-      let w__3 ← (( do (BranchEncCycleCount ()) ) : SailM ((BitVec 1) × (BitVec 14)) )
-      let (tup__0, tup__1) := (w__3 : ((BitVec 1) × (BitVec 14)))
+            (pure (branch_type))) ) : SailME Unit (BitVec 6) )
+      let ccu ← (( do (undefined_bitvector_at (← occLabel 696) 1) ) : SailME Unit (BitVec 1) )
+      let cc ← (( do (undefined_bitvector_at (← occLabel 697) 14) ) : SailME Unit (BitVec 14) )
+      let w__7 ← (( do (BranchEncCycleCount ()) ) : SailME Unit ((BitVec 1) × (BitVec 14)) )
+      let (tup__0, tup__1) := (w__7 : ((BitVec 1) × (BitVec 14)))
       let ccu : (BitVec 1) := tup__0
       let cc : (BitVec 14) := tup__1
-      let w__4 ← (( do (HaveTME ()) ) : SailM Bool )
+      let w__8 ← (( do (HaveTME ()) ) : SailME Unit Bool )
       let lastfailed ← (( do
-        if (w__4 : Bool)
-        then
-          (do
-            let w__5 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-            (pure ((_get_BRBFCR_EL1_Type_LASTFAILED w__5))))
-        else (pure (0#1)) ) : SailM (BitVec 1) )
-      let w__8 ← (( do
-        if ((← do
-             (HaveTME ())) : Bool)
-        then
-          (do
-            let w__7 ← (( do readReg TSTATE ) : SailM TMState )
-            (pure (((w__7.depth >b 0) : Bool))))
-        else (pure false) ) : SailM Bool )
-      let transactional : (BitVec 1) :=
         if (w__8 : Bool)
+        then
+          (do
+            let w__9 ← (( do readReg BRBFCR_EL1 ) : SailME Unit (BitVec 64) )
+            (pure ((_get_BRBFCR_EL1_Type_LASTFAILED w__9))))
+        else (pure (0#1)) ) : SailME Unit (BitVec 1) )
+      let w__13 ← (( do
+        if ((← if (source_valid : Bool)
+             then
+               (do
+                 (HaveTME ()))
+             else (pure false)) : Bool)
+        then
+          (do
+            let w__12 ← (( do readReg TSTATE ) : SailME Unit TMState )
+            (pure (((w__12.depth >b 0) : Bool))))
+        else (pure false) ) : SailME Unit Bool )
+      let transactional : (BitVec 1) :=
+        if (w__13 : Bool)
         then 1#1
         else 0#1
-      let w__9 ← (( do readReg PSTATE ) : SailM ProcState )
-      let el : (BitVec 2) := w__9.EL
-      let w__11 ← (( do
-        (pure ((← do
-              (BRBEMispredictAllowed ())) && ((BranchMispredict ()) : Bool))) ) : SailM Bool )
-      let mispredict : (BitVec 1) :=
-        if (w__11 : Bool)
+      let el : (BitVec 2) :=
+        if (target_valid : Bool)
+        then target_el
+        else 0b00#2
+      let mispredict : (BitVec 1) := 0#1
+      let sv : (BitVec 1) :=
+        if (source_valid : Bool)
         then 1#1
         else 0#1
-      let w__12 ← (( do (PC_read ()) ) : SailM (BitVec 64) )
-      (UpdateBranchRecordBuffer ccu cc lastfailed transactional branch_type el mispredict 0b11#2
-        w__12 target_address)
-      let w__13 ← (( do readReg BRBFCR_EL1 ) : SailM (BitVec 64) )
-      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__13 6 6 0#1)
+      let tv : (BitVec 1) :=
+        if (target_valid : Bool)
+        then 1#1
+        else 0#1
+      let source_address : (BitVec 64) :=
+        if (source_valid : Bool)
+        then preferred_exception_return
+        else (Zeros (n := 64))
+      let target_address ← (( do
+        if ((! target_valid) : Bool)
+        then
+          (let target_address : (BitVec 64) := (Zeros (n := 64))
+          (pure (target_address)))
+        else
+          (do
+            (AArch64_BranchAddr target_address target_el)) ) : SailME Unit (BitVec 64) )
+      (UpdateBranchRecordBuffer ccu cc lastfailed transactional branch_type el mispredict
+        (sv +++ tv) source_address target_address)
+      let w__15 ← (( do readReg BRBFCR_EL1 ) : SailME Unit (BitVec 64) )
+      writeReg BRBFCR_EL1 (Sail.BitVec.updateSubrange w__15 6 6 0#1)
       (PMUEvent PMU_EVENT_BRB_FILTRATE))
   else (pure (()))
   writeReg __last_branch_valid branch_valid
 
 
-def RestoreTransactionCheckpoint (_ : Unit) : SailM Unit := do
-  let VL ← (( do (CurrentVL_read ()) ) : SailM Int )
-  let VL : Int := VL
-  match VL with
-  | 128 =>
+/-- Type quantifiers: k_iesb_req : Bool -/
+def TakeUnmaskedPhysicalSErrorInterrupts (iesb_req : Bool) : SailM Unit := do
+  let w__0 ← (( do (UsingAArch32 ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
     (do
-      (RestoreTransactionCheckpointParameterised (Sail.Int.toNatChecked (VL))
-        (Sail.Int.toNatChecked ((Int.ediv (Sail.Int.toNatChecked (VL)) 8)))))
-  | 256 =>
+      let (AA, IRQ, FIQ) ← (( do (AArch32_PendingUnmaskedPhysicalInterrupts ()) ) : SailM
+        (Bool × Bool × Bool) )
+      if (AA : Bool)
+      then
+        (do
+          (ThrowSError iesb_req))
+      else (pure (())))
+  else
     (do
-      (RestoreTransactionCheckpointParameterised (Sail.Int.toNatChecked (VL))
-        (Sail.Int.toNatChecked ((Int.ediv (Sail.Int.toNatChecked (VL)) 8)))))
-  | 512 =>
-    (do
-      (RestoreTransactionCheckpointParameterised (Sail.Int.toNatChecked (VL))
-        (Sail.Int.toNatChecked ((Int.ediv (Sail.Int.toNatChecked (VL)) 8)))))
-  | 1024 =>
-    (do
-      (RestoreTransactionCheckpointParameterised (Sail.Int.toNatChecked (VL))
-        (Sail.Int.toNatChecked ((Int.ediv (Sail.Int.toNatChecked (VL)) 8)))))
-  | 2048 =>
-    (do
-      (RestoreTransactionCheckpointParameterised (Sail.Int.toNatChecked (VL))
-        (Sail.Int.toNatChecked ((Int.ediv (Sail.Int.toNatChecked (VL)) 8)))))
-  | _ =>
-    (do
-      ArmFull.assert false "sail-arm/v8_base.sail:7561.22-7561.23"
-      throw Error.Exit)
+      let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
+      let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
+      let w__3 ← (( do readReg PSTATE ) : SailM ProcState )
+      let (SE, IRQ, FIQ) ← (( do
+        (AArch64_PendingUnmaskedPhysicalInterrupts (w__1.A +++ (w__2.I +++ w__3.F))) ) : SailM
+        (Bool × Bool × Bool) )
+      if (SE : Bool)
+      then
+        (do
+          (ThrowSError iesb_req))
+      else (pure (())))
+
+
+def CreateAccDescIFetch (_ : Unit) : SailM AccessDescriptor := do
+  (NewAccDesc AccessType_IFETCH)
+
+
+/-- Type quantifiers: k_nontemporal : Bool, k_privileged : Bool, k_tagchecked : Bool -/
+def CreateAccDescGPR (memop : MemOp) (nontemporal : Bool) (privileged : Bool) (tagchecked : Bool) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_GPR) ) : SailM AccessDescriptor )
+  let w__1 ← (( do
+    if ((! privileged) : Bool)
+    then (pure (EL0))
+    else
+      (do
+        let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+        (pure (w__0.EL))) ) : SailM (BitVec 2) )
+  let accdesc := ({ accdesc with el := w__1 } : AccessDescriptor)
+  let accdesc : AccessDescriptor := { accdesc with nontemporal := nontemporal }
+  let accdesc : AccessDescriptor := { accdesc with read := (BEq.beq memop MemOp_LOAD) }
+  let accdesc : AccessDescriptor := { accdesc with write := (BEq.beq memop MemOp_STORE) }
+  let accdesc : AccessDescriptor := { accdesc with pan := true }
+  let accdesc : AccessDescriptor := { accdesc with tagchecked := tagchecked }
+  let w__4 ← (( do
+    if ((← do
+         (HaveTME ())) : Bool)
+    then
+      (do
+        let w__3 ← (( do readReg TSTATE ) : SailM TMState )
+        (pure (((w__3.depth >b 0) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let accdesc := ({ accdesc with transactional := w__4 } : AccessDescriptor)
+  (pure (accdesc))
+
+
+/-- Type quantifiers: k_acqrel : Bool, k_tagchecked : Bool -/
+def CreateAccDescExLDST (memop : MemOp) (acqrel : Bool) (tagchecked : Bool) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_GPR) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with acqsc := (acqrel && (BEq.beq memop MemOp_LOAD)) }
+  let accdesc : AccessDescriptor :=
+    { accdesc with relsc := (acqrel && (BEq.beq memop MemOp_STORE)) }
+  let accdesc : AccessDescriptor := { accdesc with exclusive := true }
+  let accdesc : AccessDescriptor := { accdesc with read := (BEq.beq memop MemOp_LOAD) }
+  let accdesc : AccessDescriptor := { accdesc with write := (BEq.beq memop MemOp_STORE) }
+  let accdesc : AccessDescriptor := { accdesc with pan := true }
+  let accdesc : AccessDescriptor := { accdesc with tagchecked := tagchecked }
+  let w__2 ← (( do
+    if ((← do
+         (HaveTME ())) : Bool)
+    then
+      (do
+        let w__1 ← (( do readReg TSTATE ) : SailM TMState )
+        (pure (((w__1.depth >b 0) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let accdesc := ({ accdesc with transactional := w__2 } : AccessDescriptor)
+  (pure (accdesc))
+
+
+def CreateAccDescLDGSTG (memop : MemOp) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_GPR) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with read := (BEq.beq memop MemOp_LOAD) }
+  let accdesc : AccessDescriptor := { accdesc with write := (BEq.beq memop MemOp_STORE) }
+  let accdesc : AccessDescriptor := { accdesc with pan := true }
+  let accdesc : AccessDescriptor := { accdesc with tagaccess := true }
+  let w__2 ← (( do
+    if ((← do
+         (HaveTME ())) : Bool)
+    then
+      (do
+        let w__1 ← (( do readReg TSTATE ) : SailM TMState )
+        (pure (((w__1.depth >b 0) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let accdesc := ({ accdesc with transactional := w__2 } : AccessDescriptor)
+  (pure (accdesc))
+
+
+/-- Type quantifiers: k_nontemporal : Bool, k_privileged : Bool -/
+def CreateAccDescMOPS (memop : MemOp) (privileged : Bool) (nontemporal : Bool) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_GPR) ) : SailM AccessDescriptor )
+  let w__1 ← (( do
+    if ((! privileged) : Bool)
+    then (pure (EL0))
+    else
+      (do
+        let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+        (pure (w__0.EL))) ) : SailM (BitVec 2) )
+  let accdesc := ({ accdesc with el := w__1 } : AccessDescriptor)
+  let accdesc : AccessDescriptor := { accdesc with nontemporal := nontemporal }
+  let accdesc : AccessDescriptor := { accdesc with read := (BEq.beq memop MemOp_LOAD) }
+  let accdesc : AccessDescriptor := { accdesc with write := (BEq.beq memop MemOp_STORE) }
+  let accdesc : AccessDescriptor := { accdesc with pan := true }
+  let accdesc : AccessDescriptor := { accdesc with mops := true }
+  let accdesc : AccessDescriptor := { accdesc with tagchecked := true }
+  let w__4 ← (( do
+    if ((← do
+         (HaveTME ())) : Bool)
+    then
+      (do
+        let w__3 ← (( do readReg TSTATE ) : SailM TMState )
+        (pure (((w__3.depth >b 0) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let accdesc := ({ accdesc with transactional := w__4 } : AccessDescriptor)
+  (pure (accdesc))
+
+
+/-- Type quantifiers: k_nontemporal : Bool, k_privileged : Bool -/
+def CreateAccDescSTGMOPS (privileged : Bool) (nontemporal : Bool) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_GPR) ) : SailM AccessDescriptor )
+  let w__1 ← (( do
+    if ((! privileged) : Bool)
+    then (pure (EL0))
+    else
+      (do
+        let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+        (pure (w__0.EL))) ) : SailM (BitVec 2) )
+  let accdesc := ({ accdesc with el := w__1 } : AccessDescriptor)
+  let accdesc : AccessDescriptor := { accdesc with nontemporal := nontemporal }
+  let accdesc : AccessDescriptor := { accdesc with write := true }
+  let accdesc : AccessDescriptor := { accdesc with pan := true }
+  let accdesc : AccessDescriptor := { accdesc with mops := true }
+  let accdesc : AccessDescriptor := { accdesc with tagaccess := true }
+  let w__4 ← (( do
+    if ((← do
+         (HaveTME ())) : Bool)
+    then
+      (do
+        let w__3 ← (( do readReg TSTATE ) : SailM TMState )
+        (pure (((w__3.depth >b 0) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let accdesc := ({ accdesc with transactional := w__4 } : AccessDescriptor)
+  (pure (accdesc))
+
+
+/-- Type quantifiers: k_acquire : Bool, k_release : Bool, k_tagchecked : Bool -/
+def CreateAccDescAtomicOp (modop : MemAtomicOp) (acquire : Bool) (release : Bool) (tagchecked : Bool) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_GPR) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with acqsc := acquire }
+  let accdesc : AccessDescriptor := { accdesc with relsc := release }
+  let accdesc : AccessDescriptor := { accdesc with atomicop := true }
+  let accdesc : AccessDescriptor := { accdesc with modop := modop }
+  let accdesc : AccessDescriptor := { accdesc with read := true }
+  let accdesc : AccessDescriptor := { accdesc with write := true }
+  let accdesc : AccessDescriptor := { accdesc with pan := true }
+  let accdesc : AccessDescriptor := { accdesc with tagchecked := tagchecked }
+  let w__2 ← (( do
+    if ((← do
+         (HaveTME ())) : Bool)
+    then
+      (do
+        let w__1 ← (( do readReg TSTATE ) : SailM TMState )
+        (pure (((w__1.depth >b 0) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let accdesc := ({ accdesc with transactional := w__2 } : AccessDescriptor)
+  (pure (accdesc))
+
+
+/-- Type quantifiers: k_acquire : Bool, k_release : Bool, k_soft : Bool, k_tagchecked : Bool -/
+def CreateAccDescRCW (modop : MemAtomicOp) (soft : Bool) (acquire : Bool) (release : Bool) (tagchecked : Bool) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_GPR) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with acqsc := acquire }
+  let accdesc : AccessDescriptor := { accdesc with relsc := release }
+  let accdesc : AccessDescriptor := { accdesc with rcw := true }
+  let accdesc : AccessDescriptor := { accdesc with rcws := soft }
+  let accdesc : AccessDescriptor := { accdesc with atomicop := true }
+  let accdesc : AccessDescriptor := { accdesc with modop := modop }
+  let accdesc : AccessDescriptor := { accdesc with read := true }
+  let accdesc : AccessDescriptor := { accdesc with write := true }
+  let accdesc : AccessDescriptor := { accdesc with pan := true }
+  let accdesc : AccessDescriptor := { accdesc with tagchecked := tagchecked }
+  let w__2 ← (( do
+    if ((← do
+         (HaveTME ())) : Bool)
+    then
+      (do
+        let w__1 ← (( do readReg TSTATE ) : SailM TMState )
+        (pure (((w__1.depth >b 0) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let accdesc := ({ accdesc with transactional := w__2 } : AccessDescriptor)
+  (pure (accdesc))
+
+
+/-- Type quantifiers: k_tagchecked : Bool -/
+def CreateAccDescAcqRel (memop : MemOp) (tagchecked : Bool) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_GPR) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with acqsc := (BEq.beq memop MemOp_LOAD) }
+  let accdesc : AccessDescriptor := { accdesc with relsc := (BEq.beq memop MemOp_STORE) }
+  let accdesc : AccessDescriptor := { accdesc with read := (BEq.beq memop MemOp_LOAD) }
+  let accdesc : AccessDescriptor := { accdesc with write := (BEq.beq memop MemOp_STORE) }
+  let accdesc : AccessDescriptor := { accdesc with pan := true }
+  let accdesc : AccessDescriptor := { accdesc with tagchecked := tagchecked }
+  let w__2 ← (( do
+    if ((← do
+         (HaveTME ())) : Bool)
+    then
+      (do
+        let w__1 ← (( do readReg TSTATE ) : SailM TMState )
+        (pure (((w__1.depth >b 0) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let accdesc := ({ accdesc with transactional := w__2 } : AccessDescriptor)
+  (pure (accdesc))
+
+
+/-- Type quantifiers: k_tagchecked : Bool -/
+def CreateAccDescLOR (memop : MemOp) (tagchecked : Bool) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_GPR) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with acqsc := (BEq.beq memop MemOp_LOAD) }
+  let accdesc : AccessDescriptor := { accdesc with relsc := (BEq.beq memop MemOp_STORE) }
+  let accdesc : AccessDescriptor := { accdesc with limitedordered := true }
+  let accdesc : AccessDescriptor := { accdesc with read := (BEq.beq memop MemOp_LOAD) }
+  let accdesc : AccessDescriptor := { accdesc with write := (BEq.beq memop MemOp_STORE) }
+  let accdesc : AccessDescriptor := { accdesc with pan := true }
+  let accdesc : AccessDescriptor := { accdesc with tagchecked := tagchecked }
+  let w__2 ← (( do
+    if ((← do
+         (HaveTME ())) : Bool)
+    then
+      (do
+        let w__1 ← (( do readReg TSTATE ) : SailM TMState )
+        (pure (((w__1.depth >b 0) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let accdesc := ({ accdesc with transactional := w__2 } : AccessDescriptor)
+  (pure (accdesc))
+
+
+/-- Type quantifiers: k_tagchecked : Bool -/
+def CreateAccDescLDAcqPC (tagchecked : Bool) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_GPR) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with acqpc := true }
+  let accdesc : AccessDescriptor := { accdesc with read := true }
+  let accdesc : AccessDescriptor := { accdesc with pan := true }
+  let accdesc : AccessDescriptor := { accdesc with tagchecked := tagchecked }
+  let w__2 ← (( do
+    if ((← do
+         (HaveTME ())) : Bool)
+    then
+      (do
+        let w__1 ← (( do readReg TSTATE ) : SailM TMState )
+        (pure (((w__1.depth >b 0) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let accdesc := ({ accdesc with transactional := w__2 } : AccessDescriptor)
+  (pure (accdesc))
+
+
+def CreateAccDescA32LSMD (memop : MemOp) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_GPR) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with read := (BEq.beq memop MemOp_LOAD) }
+  let accdesc : AccessDescriptor := { accdesc with write := (BEq.beq memop MemOp_STORE) }
+  let accdesc : AccessDescriptor := { accdesc with pan := true }
+  let accdesc : AccessDescriptor := { accdesc with a32lsmd := true }
+  let w__2 ← (( do
+    if ((← do
+         (HaveTME ())) : Bool)
+    then
+      (do
+        let w__1 ← (( do readReg TSTATE ) : SailM TMState )
+        (pure (((w__1.depth >b 0) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let accdesc := ({ accdesc with transactional := w__2 } : AccessDescriptor)
+  (pure (accdesc))
+
+
+/-- Type quantifiers: k_tagchecked : Bool -/
+def CreateAccDescLS64 (memop : MemOp) (tagchecked : Bool) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_GPR) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with read := (BEq.beq memop MemOp_LOAD) }
+  let accdesc : AccessDescriptor := { accdesc with write := (BEq.beq memop MemOp_STORE) }
+  let accdesc : AccessDescriptor := { accdesc with pan := true }
+  let accdesc : AccessDescriptor := { accdesc with ls64 := true }
+  let accdesc : AccessDescriptor := { accdesc with tagchecked := tagchecked }
+  let w__2 ← (( do
+    if ((← do
+         (HaveTME ())) : Bool)
+    then
+      (do
+        let w__1 ← (( do readReg TSTATE ) : SailM TMState )
+        (pure (((w__1.depth >b 0) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let accdesc := ({ accdesc with transactional := w__2 } : AccessDescriptor)
+  (pure (accdesc))
+
+
+/-- Type quantifiers: k_nontemporal : Bool, k_tagchecked : Bool -/
+def CreateAccDescASIMD (memop : MemOp) (nontemporal : Bool) (tagchecked : Bool) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_ASIMD) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with nontemporal := nontemporal }
+  let accdesc : AccessDescriptor := { accdesc with read := (BEq.beq memop MemOp_LOAD) }
+  let accdesc : AccessDescriptor := { accdesc with write := (BEq.beq memop MemOp_STORE) }
+  let accdesc : AccessDescriptor := { accdesc with pan := true }
+  let w__0 ← (( do (InStreamingMode ()) ) : SailM Bool )
+  let accdesc := ({ accdesc with streamingsve := w__0 } : AccessDescriptor)
+  let w__2 ← (( do
+    if ((accdesc.streamingsve : Bool) : Bool)
+    then
+      (do
+        (__IMPDEF_boolean "No tag checking of SIMD&FP loads and stores in Streaming SVE mode"))
+    else (pure false) ) : SailM Bool )
+  let accdesc : AccessDescriptor :=
+    if (w__2 : Bool)
+    then { accdesc with tagchecked := false }
+    else { accdesc with tagchecked := tagchecked }
+  let w__5 ← (( do
+    if ((← do
+         (HaveTME ())) : Bool)
+    then
+      (do
+        let w__4 ← (( do readReg TSTATE ) : SailM TMState )
+        (pure (((w__4.depth >b 0) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let accdesc := ({ accdesc with transactional := w__5 } : AccessDescriptor)
+  (pure (accdesc))
+
+
+/-- Type quantifiers: k_tagchecked : Bool -/
+def CreateAccDescASIMDAcqRel (memop : MemOp) (tagchecked : Bool) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_ASIMD) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with acqpc := (BEq.beq memop MemOp_LOAD) }
+  let accdesc : AccessDescriptor := { accdesc with relsc := (BEq.beq memop MemOp_STORE) }
+  let accdesc : AccessDescriptor := { accdesc with read := (BEq.beq memop MemOp_LOAD) }
+  let accdesc : AccessDescriptor := { accdesc with write := (BEq.beq memop MemOp_STORE) }
+  let accdesc : AccessDescriptor := { accdesc with pan := true }
+  let w__0 ← (( do (InStreamingMode ()) ) : SailM Bool )
+  let accdesc := ({ accdesc with streamingsve := w__0 } : AccessDescriptor)
+  let w__2 ← (( do
+    if ((accdesc.streamingsve : Bool) : Bool)
+    then
+      (do
+        (__IMPDEF_boolean "No tag checking of SIMD&FP loads and stores in Streaming SVE mode"))
+    else (pure false) ) : SailM Bool )
+  let accdesc : AccessDescriptor :=
+    if (w__2 : Bool)
+    then { accdesc with tagchecked := false }
+    else { accdesc with tagchecked := tagchecked }
+  let w__5 ← (( do
+    if ((← do
+         (HaveTME ())) : Bool)
+    then
+      (do
+        let w__4 ← (( do readReg TSTATE ) : SailM TMState )
+        (pure (((w__4.depth >b 0) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let accdesc := ({ accdesc with transactional := w__5 } : AccessDescriptor)
+  (pure (accdesc))
+
+
+def CreateAccDescIC (cache : CacheRecord) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_IC) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with cacheop := cache.cacheop }
+  let accdesc : AccessDescriptor := { accdesc with cachetype := cache.cachetype }
+  let accdesc : AccessDescriptor := { accdesc with opscope := cache.opscope }
+  (pure (accdesc))
+
+
+def CreateAccDescDC (cache : CacheRecord) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_DC) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with cacheop := cache.cacheop }
+  let accdesc : AccessDescriptor := { accdesc with cachetype := cache.cachetype }
+  let accdesc : AccessDescriptor := { accdesc with opscope := cache.opscope }
+  (pure (accdesc))
+
+
+/-- Type quantifiers: k_tagaccess : Bool, k_tagchecked : Bool -/
+def CreateAccDescDCZero (tagaccess : Bool) (tagchecked : Bool) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_DCZero) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with write := true }
+  let accdesc : AccessDescriptor := { accdesc with pan := true }
+  let accdesc : AccessDescriptor := { accdesc with tagchecked := tagchecked }
+  let accdesc : AccessDescriptor := { accdesc with tagaccess := tagaccess }
+  let w__2 ← (( do
+    if ((← do
+         (HaveTME ())) : Bool)
+    then
+      (do
+        let w__1 ← (( do readReg TSTATE ) : SailM TMState )
+        (pure (((w__1.depth >b 0) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let accdesc := ({ accdesc with transactional := w__2 } : AccessDescriptor)
+  (pure (accdesc))
+
+
+/-- Type quantifiers: k_pan : Bool, k_write : Bool -/
+def CreateAccDescAT (ss : SecurityState) (el : (BitVec 2)) (write : Bool) (pan : Bool) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_AT) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with el := el }
+  let accdesc : AccessDescriptor := { accdesc with ss := ss }
+  let accdesc : AccessDescriptor := { accdesc with read := (! write) }
+  let accdesc : AccessDescriptor := { accdesc with write := write }
+  let accdesc : AccessDescriptor := { accdesc with pan := pan }
+  (pure (accdesc))
+
+
+def CreateAccDescTTEUpdate (accdesc_in : AccessDescriptor) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_TTW) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with el := accdesc_in.el }
+  let accdesc : AccessDescriptor := { accdesc with ss := accdesc_in.ss }
+  let accdesc : AccessDescriptor := { accdesc with atomicop := true }
+  let accdesc : AccessDescriptor := { accdesc with modop := MemAtomicOp_CAS }
+  let accdesc : AccessDescriptor := { accdesc with read := true }
+  let accdesc : AccessDescriptor := { accdesc with write := true }
+  let accdesc : AccessDescriptor := { accdesc with mpam := accdesc_in.mpam }
+  (pure (accdesc))
+
+
+/-- Type quantifiers: k_toplevel : Bool -/
+def CreateAccDescS1TTW (toplevel : Bool) (varange : VARange) (accdesc_in : AccessDescriptor) : SailM AccessDescriptor := do
+  let accdesc ← (( do (NewAccDesc AccessType_TTW) ) : SailM AccessDescriptor )
+  let accdesc : AccessDescriptor := { accdesc with el := accdesc_in.el }
+  let accdesc : AccessDescriptor := { accdesc with ss := accdesc_in.ss }
+  let accdesc : AccessDescriptor := { accdesc with read := true }
+  let accdesc : AccessDescriptor := { accdesc with toplevel := toplevel }
+  let accdesc : AccessDescriptor := { accdesc with varange := varange }
+  let accdesc : AccessDescriptor := { accdesc with mpam := accdesc_in.mpam }
+  (pure (accdesc))
 
 
 end ArmFull.Functions

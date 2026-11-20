@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,98 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _update_ICH_ELRSR_Type_Status11 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 11 11 x)
+
+
+def _get_GICH_EISR_Type_Status11 (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 11 11)
+
+
+def _get_GICH_ELRSR_Type_Status11 (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 11 11)
+
+
+def _get_ICH_EISR_Type_Status11 (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 11 11)
+
+
+def _get_ICH_ELRSR_EL2_Type_Status11 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 11 11)
+
+
+def _get_ICH_ELRSR_Type_Status11 (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 11 11)
+
+
+def _get_ICH_EISR_EL2_Type_Status12 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 12 12)
+
+
+def _update_ICH_EISR_EL2_Type_Status12 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 12 12 x)
+
+
+def _update_GICH_EISR_Type_Status12 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 12 12 x)
+
+
+def _update_GICH_ELRSR_Type_Status12 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 12 12 x)
+
+
+def _update_ICH_ELRSR_EL2_Type_Status12 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 12 12 x)
+
+
+def _update_ICH_ELRSR_Type_Status12 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 12 12 x)
+
+
+def _get_GICH_EISR_Type_Status12 (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 12 12)
+
+
+def _get_GICH_ELRSR_Type_Status12 (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 12 12)
+
+
+def _get_ICH_EISR_Type_Status12 (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 12 12)
+
+
+def _get_ICH_ELRSR_EL2_Type_Status12 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 12 12)
+
+
+def _get_ICH_ELRSR_Type_Status12 (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 12 12)
+
+
+def _get_ICH_EISR_EL2_Type_Status13 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 13 13)
+
+
+def _update_ICH_EISR_EL2_Type_Status13 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 13 13 x)
+
+
+def _update_GICH_EISR_Type_Status13 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 13 13 x)
+
+
+def _update_GICH_ELRSR_Type_Status13 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 13 13 x)
+
+
+def _update_ICH_ELRSR_EL2_Type_Status13 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 13 13 x)
+
+
+def _update_ICH_ELRSR_Type_Status13 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 13 13 x)
+
 
 def _get_GICH_EISR_Type_Status13 (v : (BitVec 32)) : (BitVec 1) :=
   (Sail.BitVec.extractLsb v 13 13)
@@ -810,98 +902,6 @@ def _update_FPSID_Type_Variant (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) 
 
 def _update_GICD_IIDR_Type_Variant (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
   (Sail.BitVec.updateSubrange v 19 16 x)
-
-
-def _update_GICM_IIDR_Type_Variant (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 19 16 x)
-
-
-def _update_GICR_IIDR_Type_Variant (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 19 16 x)
-
-
-def _update_GITS_IIDR_Type_Variant (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 19 16 x)
-
-
-def _update_PMIIDR_Type_Variant (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 19 16 x)
-
-
-def _update_VPIDR_EL2_Type_Variant (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 23 20 x)
-
-
-def _get_AMIIDR_Type_Variant (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 19 16)
-
-
-def _get_FPSID_Type_Variant (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 7 4)
-
-
-def _get_GICD_IIDR_Type_Variant (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 19 16)
-
-
-def _get_GICM_IIDR_Type_Variant (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 19 16)
-
-
-def _get_GICR_IIDR_Type_Variant (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 19 16)
-
-
-def _get_GITS_IIDR_Type_Variant (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 19 16)
-
-
-def _get_MIDR_Type_Variant (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 23 20)
-
-
-def _get_PMIIDR_Type_Variant (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 19 16)
-
-
-def _get_VPIDR_EL2_Type_Variant (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 23 20)
-
-
-def _get_VPIDR_Type_Variant (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 23 20)
-
-
-def Mk_ICC_RPR_EL1_Type (v : (BitVec 64)) : (BitVec 64) :=
-  v
-
-
-def _get_ICC_RPR_EL1_Type_NMI_NS (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 62 62)
-
-
-def _update_ICC_RPR_EL1_Type_NMI_NS (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 62 62 x)
-
-
-def Mk_ICH_ELRSR_EL2_Type (v : (BitVec 64)) : (BitVec 64) :=
-  v
-
-
-def Mk_ICC_SGI0R_EL1_Type (v : (BitVec 64)) : (BitVec 64) :=
-  v
-
-
-def _get_ICC_SGI0R_EL1_Type_Aff1 (v : (BitVec 64)) : (BitVec 8) :=
-  (Sail.BitVec.extractLsb v 23 16)
-
-
-def _update_ICC_SGI0R_EL1_Type_Aff1 (v : (BitVec 64)) (x : (BitVec 8)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 23 16 x)
-
-
-def _update_GITS_MPIDR_Type_Aff1 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 15 8 x)
 
 
 end ArmFull.Functions

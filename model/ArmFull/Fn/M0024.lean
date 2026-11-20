@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,62 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _update_HDCR_Type_HPME (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 7 x)
+
+
+def _update_MDCR_EL2_Type_HPME (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 7 7 x)
+
+
+def _get_MDCR_EL2_Type_HPME (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 7 7)
+
+
+def _get_HDCR_Type_HPMFZO (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 29 29)
+
+
+def _update_HDCR_Type_HPMFZO (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 29 29 x)
+
+
+def _update_MDCR_EL2_Type_HPMFZO (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 29 29 x)
+
+
+def _get_MDCR_EL2_Type_HPMFZO (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 29 29)
+
+
+def _get_HDCR_Type_HPMN (v : (BitVec 32)) : (BitVec 5) :=
+  (Sail.BitVec.extractLsb v 4 0)
+
+
+def _update_HDCR_Type_HPMN (v : (BitVec 32)) (x : (BitVec 5)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 4 0 x)
+
+
+def _update_MDCR_EL2_Type_HPMN (v : (BitVec 64)) (x : (BitVec 5)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 4 0 x)
+
+
+def _get_MDCR_EL2_Type_HPMN (v : (BitVec 64)) : (BitVec 5) :=
+  (Sail.BitVec.extractLsb v 4 0)
+
+
+def _get_HDCR_Type_MTPME (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 28 28)
+
+
+def _update_HDCR_Type_MTPME (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 28 28 x)
+
+
+def _update_MDCR_EL2_Type_MTPME (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 28 28 x)
+
 
 def _update_MDCR_EL3_Type_MTPME (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
   (Sail.BitVec.updateSubrange v 28 28 x)
@@ -451,12 +507,8 @@ def HDCR_read (_ : Unit) : SailM (BitVec 32) := do
   (pure (r))
 
 
-def HaveAArch32 (_ : Unit) : Bool :=
-  true
-
-
 def Unreachable (_ : Unit) : SailM Unit := do
-  ArmFull.assert false "sail-arm/v8_base.sail:4096.16-4096.17"
+  ArmFull.assert false "sail-inputs/03-v8_base.sail:4096.16-4096.17"
   throw Error.Exit
 
 
@@ -854,54 +906,6 @@ def EDSCR_read (_ : Unit) : SailM (BitVec 32) := do
   let w__0 ← (( do readReg MDCCSR_EL0 ) : SailM (BitVec 64) )
   let r := ((Sail.BitVec.updateSubrange r 30 29 (BitVec.slice w__0 29 2)) : (BitVec 32))
   (pure (r))
-
-
-def undefined_PMCNTENCLR_EL0_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
-  (undefined_bitvector_at (ℓ.child 0) 64)
-
-
-def Mk_PMCNTENCLR_EL0_Type (v : (BitVec 64)) : (BitVec 64) :=
-  v
-
-
-def _get_PMCNTENCLR_EL0_Type_F0 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 32 32)
-
-
-def _update_PMCNTENCLR_EL0_Type_F0 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 32 32 x)
-
-
-def _update_PMCNTENSET_EL0_Type_F0 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 32 32 x)
-
-
-def _update_PMCNTEN_Type_F0 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 32 32 x)
-
-
-def _update_PMINTENCLR_EL1_Type_F0 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 32 32 x)
-
-
-def _update_PMINTENSET_EL1_Type_F0 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 32 32 x)
-
-
-def _update_PMINTEN_Type_F0 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 32 32 x)
-
-
-def _update_PMOVSCLR_EL0_Type_F0 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 32 32 x)
-
-
-def _update_PMOVSSET_EL0_Type_F0 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 32 32 x)
-
-
-def _update_PMOVS_Type_F0 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 32 32 x)
 
 
 end ArmFull.Functions

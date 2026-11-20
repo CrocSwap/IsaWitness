@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,92 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def MAIR1_S_write (value_name : (BitVec 32)) : SailM Unit := do
+  let r : MAIR1_Type := value_name
+  let w__0 ← (( do readReg NMRR_S ) : SailM (BitVec 32) )
+  writeReg NMRR_S (Sail.BitVec.updateSubrange w__0 31 0 (BitVec.slice r 0 32))
+  writeReg _MAIR1_S r
+
+
+def Mk_ID_ISAR1_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def undefined_AMEVTYPER0_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
+  (undefined_bitvector_at (ℓ.child 0) 32)
+
+
+def Mk_AMEVTYPER0_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+/-- Type quantifiers: n : Nat, 0 ≤ n ∧ n < 4 -/
+def AMEVTYPER0_read (n : Nat) : SailM (BitVec 32) := do
+  let w__0 ← (( do readReg _AMEVTYPER0 ) : SailM (Vector (BitVec 32) 4) )
+  let r : AMEVTYPER0_Type := (GetElem?.getElem! w__0 n)
+  let w__1 ← (( do readReg AMEVTYPER0_EL0 ) : SailM (Vector (BitVec 64) 4) )
+  let r :=
+    ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice (GetElem?.getElem! w__1 n) 0 32)) : (BitVec 32))
+  (pure (r))
+
+
+def undefined_AMEVTYPER1_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
+  (undefined_bitvector_at (ℓ.child 0) 32)
+
+
+def Mk_AMEVTYPER1_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+/-- Type quantifiers: n : Nat, 0 ≤ n ∧ n < 16 -/
+def AMEVTYPER1_read (n : Nat) : SailM (BitVec 32) := do
+  let w__0 ← (( do readReg _AMEVTYPER1 ) : SailM (Vector (BitVec 32) 16) )
+  let r : AMEVTYPER1_Type := (GetElem?.getElem! w__0 n)
+  let w__1 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+  let r :=
+    ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice (GetElem?.getElem! w__1 n) 0 32)) : (BitVec 32))
+  (pure (r))
+
+
+/-- Type quantifiers: n : Nat, 0 ≤ n ∧ n < 16 -/
+def AMEVTYPER1_set (n : Nat) (value_name : (BitVec 32)) : SailM Unit := do
+  let r : AMEVTYPER1_Type := value_name
+  let w__0 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+  let w__1 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+  writeReg AMEVTYPER1_EL0 (vectorUpdate w__0 n
+    (Sail.BitVec.updateSubrange (GetElem?.getElem! w__1 n) 31 0 (BitVec.slice r 0 32)))
+  let w__2 ← (( do readReg _AMEVTYPER1 ) : SailM (Vector (BitVec 32) 16) )
+  writeReg _AMEVTYPER1 (vectorUpdate w__2 n r)
+
+
+def ERXFR2_read (_ : Unit) : SailM (BitVec 32) := do
+  let r ← (( do readReg _ERXFR2 ) : SailM ERXFR2_Type )
+  let w__0 ← (( do readReg ERXFR_EL1 ) : SailM (BitVec 64) )
+  let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__0 32 32)) : (BitVec 32))
+  (pure (r))
+
+
+def ERXMISC2_read (_ : Unit) : SailM (BitVec 32) := do
+  let r ← (( do readReg _ERXMISC2 ) : SailM ERXMISC2_Type )
+  let w__0 ← (( do readReg ERXMISC1_EL1 ) : SailM (BitVec 64) )
+  let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__0 0 32)) : (BitVec 32))
+  (pure (r))
+
+
+def ERXMISC2_write (value_name : (BitVec 32)) : SailM Unit := do
+  let r : ERXMISC2_Type := value_name
+  let w__0 ← (( do readReg ERXMISC1_EL1 ) : SailM (BitVec 64) )
+  writeReg ERXMISC1_EL1 (Sail.BitVec.updateSubrange w__0 31 0 (BitVec.slice r 0 32))
+  writeReg _ERXMISC2 r
+
+
+def ERXFR_read (_ : Unit) : SailM (BitVec 32) := do
+  let r ← (( do readReg _ERXFR ) : SailM ERXFR_Type )
+  let w__0 ← (( do readReg ERXFR_EL1 ) : SailM (BitVec 64) )
+  let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__0 0 32)) : (BitVec 32))
+  (pure (r))
+
 
 def ERXADDR_read (_ : Unit) : SailM (BitVec 32) := do
   let r ← (( do readReg _ERXADDR ) : SailM ERXADDR_Type )
@@ -782,102 +868,6 @@ def _update_EDPIDR1_Type_DES_0 (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) 
 
 def _update_PMPIDR1_Type_DES_0 (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
   (Sail.BitVec.updateSubrange v 7 4 x)
-
-
-def _get_AMPIDR1_Type_DES_0 (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 7 4)
-
-
-def _get_EDPIDR1_Type_DES_0 (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 7 4)
-
-
-def _get_PMPIDR1_Type_DES_0 (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 7 4)
-
-
-def _get_CTIPIDR1_Type_PART_1 (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 3 0)
-
-
-def _update_CTIPIDR1_Type_PART_1 (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 3 0 x)
-
-
-def _update_AMPIDR1_Type_PART_1 (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 3 0 x)
-
-
-def _update_EDPIDR1_Type_PART_1 (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 3 0 x)
-
-
-def _update_PMPIDR1_Type_PART_1 (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 3 0 x)
-
-
-def _get_AMPIDR1_Type_PART_1 (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 3 0)
-
-
-def _get_EDPIDR1_Type_PART_1 (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 3 0)
-
-
-def _get_PMPIDR1_Type_PART_1 (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 3 0)
-
-
-def Mk_GICV_IAR_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_CNTSR_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def _get_CNTSR_Type_DBGH (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 1 1)
-
-
-def _update_CNTSR_Type_DBGH (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 1 1 x)
-
-
-def _get_CNTSR_Type_FCACK (v : (BitVec 32)) : (BitVec 10) :=
-  (Sail.BitVec.extractLsb v 17 8)
-
-
-def _update_CNTSR_Type_FCACK (v : (BitVec 32)) (x : (BitVec 10)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 17 8 x)
-
-
-def Mk_EDCIDR3_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def _get_EDCIDR3_Type_PRMBL_3 (v : (BitVec 32)) : (BitVec 8) :=
-  (Sail.BitVec.extractLsb v 7 0)
-
-
-def _update_EDCIDR3_Type_PRMBL_3 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 7 0 x)
-
-
-def _update_AMCIDR3_Type_PRMBL_3 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 7 0 x)
-
-
-def _update_CTICIDR3_Type_PRMBL_3 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 7 0 x)
-
-
-def _update_PMCIDR3_Type_PRMBL_3 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 7 0 x)
-
-
-def _get_AMCIDR3_Type_PRMBL_3 (v : (BitVec 32)) : (BitVec 8) :=
-  (Sail.BitVec.extractLsb v 7 0)
 
 
 end ArmFull.Functions

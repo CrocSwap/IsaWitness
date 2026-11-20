@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,86 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _update_ID_ISAR3_Type_SynchPrim (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 15 12 x)
+
+
+def _update_ID_ISAR3_Type_T32Copy (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 23 20 x)
+
+
+def _update_ID_ISAR3_Type_T32EE (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 31 28 x)
+
+
+def _update_ID_ISAR3_Type_TabBranch (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 19 16 x)
+
+
+def _update_ID_ISAR3_Type_TrueNOP (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 27 24 x)
+
+
+def _update_ID_ISAR4_Type_Barrier (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 19 16 x)
+
+
+def _update_ID_ISAR4_Type_PSR_M (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 27 24 x)
+
+
+def _update_ID_ISAR4_Type_SMC (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 15 12 x)
+
+
+def _update_ID_ISAR4_Type_SWP_frac (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 31 28 x)
+
+
+def _update_ID_ISAR4_Type_SynchPrim_frac (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 23 20 x)
+
+
+def _update_ID_ISAR4_Type_Unpriv (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 3 0 x)
+
+
+def _update_ID_ISAR4_Type_WithShifts (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 4 x)
+
+
+def _update_ID_ISAR4_Type_Writeback (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 11 8 x)
+
+
+def _update_ID_ISAR5_Type_AES (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 4 x)
+
+
+def _update_ID_ISAR5_Type_CRC32 (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 19 16 x)
+
+
+def _update_ID_ISAR5_Type_RDM (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 27 24 x)
+
+
+def _update_ID_ISAR5_Type_SEVL (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 3 0 x)
+
+
+def _update_ID_ISAR5_Type_SHA1 (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 11 8 x)
+
+
+def _update_ID_ISAR5_Type_SHA2 (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 15 12 x)
+
+
+def _update_ID_ISAR5_Type_VCMA (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 31 28 x)
+
 
 def _update_ID_ISAR6_Type_BF16 (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
   (Sail.BitVec.updateSubrange v 23 20 x)
@@ -784,14 +864,14 @@ def undefined_ID_AA64PFR0_EL1_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVe
 
 /-- Type quantifiers: i : Int -/
 def IsG1ActivityMonitorImplemented (i : Int) : SailM Bool := do
-  ArmFull.assert ((0 ≤b i) && (i <b 16)) "sail-arm/impdefs.sail:870.26-870.27"
+  ArmFull.assert ((0 ≤b i) && (i <b 16)) "sail-inputs/09-impdefs.sail:912.26-912.27"
   let w__0 ← (( do readReg __g1_activity_monitor_implemented ) : SailM (BitVec 16) )
   (pure (((BitVec.access w__0 (Sail.Int.toNatChecked (i))) == 1#1)))
 
 
 /-- Type quantifiers: i : Int -/
 def IsG1ActivityMonitorOffsetImplemented (i : Int) : SailM Bool := do
-  ArmFull.assert ((0 ≤b i) && (i <b 16)) "sail-arm/impdefs.sail:877.26-877.27"
+  ArmFull.assert ((0 ≤b i) && (i <b 16)) "sail-inputs/09-impdefs.sail:919.26-919.27"
   let w__0 ← (( do readReg __g1_activity_monitor_offset_implemented ) : SailM (BitVec 16) )
   (pure (((BitVec.access w__0 (Sail.Int.toNatChecked (i))) == 1#1)))
 
@@ -818,94 +898,6 @@ def _get_ERRIDR_EL1_Type_NUM (v : (BitVec 64)) : (BitVec 16) :=
 
 def _get_ID_AA64DFR0_EL1_Type_BRPs (v : (BitVec 64)) : (BitVec 4) :=
   (Sail.BitVec.extractLsb v 15 12)
-
-
-def _get_ID_AA64DFR0_EL1_Type_CTX_CMPs (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 31 28)
-
-
-def _get_ID_AA64DFR0_EL1_Type_PMUVer (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 11 8)
-
-
-def _get_ID_AA64DFR0_EL1_Type_TraceFilt (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 43 40)
-
-
-def _get_ID_AA64DFR0_EL1_Type_TraceVer (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 7 4)
-
-
-def _get_ID_AA64DFR0_EL1_Type_WRPs (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 23 20)
-
-
-def _get_ID_AA64PFR0_EL1_Type_AdvSIMD (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 23 20)
-
-
-def _get_ID_AA64PFR0_EL1_Type_EL0 (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 3 0)
-
-
-def _get_ID_AA64PFR0_EL1_Type_EL1 (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 7 4)
-
-
-def _get_ID_AA64PFR0_EL1_Type_EL2 (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 11 8)
-
-
-def _get_ID_AA64PFR0_EL1_Type_EL3 (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 15 12)
-
-
-def _get_ID_AA64PFR0_EL1_Type_GIC (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 27 24)
-
-
-def _get_ID_AA64PFR0_EL1_Type_MPAM (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 43 40)
-
-
-def _get_ID_AA64PFR1_EL1_Type_MPAM_frac (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 19 16)
-
-
-def _update_ICC_CTLR_EL1_Type_A3V (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 15 15 x)
-
-
-def _update_ICC_CTLR_EL1_Type_ExtRange (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 19 19 x)
-
-
-def _update_ICC_CTLR_EL1_Type_IDbits (v : (BitVec 64)) (x : (BitVec 3)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 13 11 x)
-
-
-def _update_ICC_CTLR_EL1_Type_PRIbits (v : (BitVec 64)) (x : (BitVec 3)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 10 8 x)
-
-
-def _TLBInvalidate (_ : Unit) : Unit :=
-  ()
-
-
-def AArch32_ITAdvance (_ : Unit) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  if (((Sail.BitVec.castWidth (m := 3) (Sail.BitVec.extractLsb w__0.IT 2 0)) == 0b000#3) : Bool)
-  then
-    (do
-      let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-      writeReg PSTATE { w__1 with IT := 0b00000000#8 })
-  else
-    (do
-      let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
-      let w__3 ← (( do readReg PSTATE ) : SailM ProcState )
-      let w__4 ← (( do readReg PSTATE ) : SailM ProcState )
-      writeReg PSTATE { w__2 with IT := (Sail.BitVec.updateSubrange w__3.IT 4 0
-          ((Sail.BitVec.extractLsb w__4.IT 4 0) <<< 1)) })
 
 
 end ArmFull.Functions

@@ -1,16 +1,14 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0164
-import ArmFull.Fn.M0179
-import ArmFull.Fn.M0928
-import ArmFull.Fn.M1060
-import ArmFull.Fn.M1095
-import ArmFull.Fn.M1147
-import ArmFull.Fn.M1148
-import ArmFull.Fn.M1182
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0124
+public import ArmFull.Fn.M0149
+public import ArmFull.Fn.M0167
+public import ArmFull.Fn.M0172
+public import ArmFull.Fn.M1241 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -112,1058 +110,627 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-/-- Type quantifiers: pc : Int -/
-def __DecodeT32__seg14 (pc : Int) (__opcode : (BitVec 32)) : SailM Unit := do
-  let w__974 ← (( do
-    if (((((Sail.BitVec.castWidth (m := 9) (Sail.BitVec.extractLsb __opcode 31 23)) == (0b111011101#9 : (BitVec 9))) && (((Sail.BitVec.castWidth (m := 6) (Sail.BitVec.extractLsb
-               __opcode 21 16)) == (0b110110#6 : (BitVec 6))) && (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
-                 __opcode 11 10)) == (0b10#2 : (BitVec 2))) && (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                   __opcode 6 6)) == (1#1 : (BitVec 1))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                   __opcode 4 4)) == (0#1 : (BitVec 1))))))) : Bool) : Bool)
-    then
-      (do
-        let w__973 ← (( do readReg SEE ) : SailM Int )
-        (pure (((w__973 <b 3885) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__974 : Bool)
+def decode_aarch32_instrs_VLD4_a_T1enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) (Vd : (BitVec 4)) (size : (BitVec 2)) (T : (BitVec 1)) (a : (BitVec 1)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
   then
     (do
-      writeReg SEE 3885
-      let D := (BitVec.slice __opcode 22 1)
-      let Vd := (BitVec.slice __opcode 12 4)
-      let size := (BitVec.slice __opcode 8 2)
-      let op := (BitVec.slice __opcode 7 1)
-      let M := (BitVec.slice __opcode 5 1)
-      let Vm := (BitVec.slice __opcode 0 4)
-      (decode_aarch32_instrs_VRINTZ_vfp_T1enc_A_txt D Vd size op M Vm))
-  else
-    (do
-      let w__976 ← (( do
-        if (((((Sail.BitVec.castWidth (m := 9) (Sail.BitVec.extractLsb __opcode 31 23)) == (0b111111100#9 : (BitVec 9))) && (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
-                   __opcode 11 10)) == (0b10#2 : (BitVec 2))) && (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                     __opcode 6 6)) == (0#1 : (BitVec 1))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                     __opcode 4 4)) == (0#1 : (BitVec 1)))))) : Bool) : Bool)
+      if (((size == 0b11#2) && (a == 0#1)) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let ebytes : Int := 1
+      let alignment ← (( do (undefined_int_at (← occLabel 3449) ()) ) : SailM Int )
+      let (alignment, ebytes) : (Int × Int) :=
+        if ((size == 0b11#2) : Bool)
         then
-          (do
-            let w__975 ← (( do readReg SEE ) : SailM Int )
-            (pure (((w__975 <b 3887) : Bool))))
-        else (pure false) ) : SailM Bool )
-      if (w__976 : Bool)
-      then
-        (do
-          writeReg SEE 3887
-          let D := (BitVec.slice __opcode 22 1)
-          let cc := (BitVec.slice __opcode 20 2)
-          let Vn := (BitVec.slice __opcode 16 4)
-          let Vd := (BitVec.slice __opcode 12 4)
-          let size := (BitVec.slice __opcode 8 2)
-          let N := (BitVec.slice __opcode 7 1)
-          let M := (BitVec.slice __opcode 5 1)
-          let Vm := (BitVec.slice __opcode 0 4)
-          (decode_aarch32_instrs_VSEL_T1enc_A_txt D cc Vn Vd size N M Vm))
-      else
-        (do
-          let w__978 ← (( do
-            if (((__opcode == 0b11110011101011111000000000010000#32) : Bool) : Bool)
+          (let ebytes : Int := 4
+          let alignment : Int := 16
+          (alignment, ebytes))
+        else
+          (let ebytes : Int := (Int.shiftl 1 (BitVec.toNat size))
+          let alignment : Int :=
+            if ((size == 0b10#2) : Bool)
             then
-              (do
-                let w__977 ← (( do readReg SEE ) : SailM Int )
-                (pure (((w__977 <b 3891) : Bool))))
-            else (pure false) ) : SailM Bool )
-          if (w__978 : Bool)
-          then
-            (do
-              writeReg SEE 3891
-              if ((((((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access __opcode 28)])) != 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                 __opcode 29)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                               __opcode 30)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                             __opcode 31)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                           __opcode 2)])) != 0#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                         __opcode 4)])) != 0#1)) : Bool)
-              then sailThrow ((Error_ConstrainedUnpredictable ()))
-              else
-                (do
-                  (decode_aarch32_instrs_ESB_T1enc_A_txt ())))
+              (if ((a == 0#1) : Bool)
+              then 1
+              else 8)
+            else
+              (if ((a == 0#1) : Bool)
+              then 1
+              else (4 *i ebytes))
+          (alignment, ebytes))
+      let ebytes : Int := ebytes
+      let alignment : Int := alignment
+      let inc_name : Int :=
+        if ((T == 0#1) : Bool)
+        then 1
+        else 2
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let d2 : Int := (d +i inc_name)
+      let d3 : Int := (d2 +i inc_name)
+      let d4 : Int := (d3 +i inc_name)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      let wback : Bool := (m != 15)
+      let register_index : Bool := ((m != 15) && (m != 13))
+      if (((n == 15) || (d4 >b 31)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      let alignment : Int := alignment
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32))))))))) "sail-inputs/14-instrs32.sail:26639.149-26639.150"
+      (execute_aarch32_instrs_VLD4_a_Op_A_txt (Sail.Int.toNatChecked (alignment))
+        (Sail.Int.toNatChecked (d)) d2 d3 d4 (Sail.Int.toNatChecked (ebytes))
+        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) register_index wback))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_VLD4_m_A1enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) (Vd : (BitVec 4)) (itype : (BitVec 4)) (size : (BitVec 2)) (align : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let inc_name : Int := 1
+      let inc_name ← (( do
+        match itype with
+        | 0b0000 => (pure (1))
+        | 0b0001 => (pure (2))
+        | _ => sailThrow ((Error_See "Related encodings")) ) : SailM Int )
+      let inc_name : Int := inc_name
+      if ((size == 0b11#2) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let alignment : Int :=
+        if ((align == 0b00#2) : Bool)
+        then 1
+        else (Int.shiftl 4 (BitVec.toNat align))
+      let ebytes : Int := (Int.shiftl 1 (BitVec.toNat size))
+      let elements : Int := (Int.ediv 8 (Sail.Int.toNatChecked (ebytes)))
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let d2 : Int := (d +i inc_name)
+      let d3 : Int := (d2 +i inc_name)
+      let d4 : Int := (d3 +i inc_name)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      let wback : Bool := (m != 15)
+      let register_index : Bool := ((m != 15) && (m != 13))
+      if (((n == 15) || (d4 >b 31)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32))))))))) "sail-inputs/14-instrs32.sail:26725.149-26725.150"
+      (execute_aarch32_instrs_VLD4_m_Op_A_txt (Sail.Int.toNatChecked (alignment))
+        (Sail.Int.toNatChecked (d)) d2 d3 d4 (Sail.Int.toNatChecked (ebytes)) elements
+        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) register_index wback))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_VLD4_m_T1enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) (Vd : (BitVec 4)) (itype : (BitVec 4)) (size : (BitVec 2)) (align : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let inc_name : Int := 1
+      let inc_name ← (( do
+        match itype with
+        | 0b0000 => (pure (1))
+        | 0b0001 => (pure (2))
+        | _ => sailThrow ((Error_See "Related encodings")) ) : SailM Int )
+      let inc_name : Int := inc_name
+      if ((size == 0b11#2) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let alignment : Int :=
+        if ((align == 0b00#2) : Bool)
+        then 1
+        else (Int.shiftl 4 (BitVec.toNat align))
+      let ebytes : Int := (Int.shiftl 1 (BitVec.toNat size))
+      let elements : Int := (Int.ediv 8 (Sail.Int.toNatChecked (ebytes)))
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let d2 : Int := (d +i inc_name)
+      let d3 : Int := (d2 +i inc_name)
+      let d4 : Int := (d3 +i inc_name)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      let wback : Bool := (m != 15)
+      let register_index : Bool := ((m != 15) && (m != 13))
+      if (((n == 15) || (d4 >b 31)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      ArmFull.assert ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32))))))))) "sail-inputs/14-instrs32.sail:26777.149-26777.150"
+      (execute_aarch32_instrs_VLD4_m_Op_A_txt (Sail.Int.toNatChecked (alignment))
+        (Sail.Int.toNatChecked (d)) d2 d3 d4 (Sail.Int.toNatChecked (ebytes)) elements
+        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) register_index wback))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_VLDM_A1enc_A_txt (cond : (BitVec 4)) (P : (BitVec 1)) (U : (BitVec 1)) (D : (BitVec 1)) (W : (BitVec 1)) (Rn : (BitVec 4)) (Vd : (BitVec 4)) (imm8 : (BitVec 8)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:26827.29-26827.30"
+      if ((((P == 0#1) && (U == 0#1)) && (W == 0#1)) : Bool)
+      then sailThrow ((Error_See "Related encodings"))
+      else (pure (()))
+      if (((P == 1#1) && (W == 0#1)) : Bool)
+      then sailThrow ((Error_See "VLDR"))
+      else (pure (()))
+      if (((P == U) && (W == 1#1)) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let single_regs : Bool := false
+      let add : Bool := (U == 1#1)
+      let wback : Bool := (W == 1#1)
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let n : Int := (BitVec.toNat Rn)
+      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend (imm8 +++ 0b00#2) 32)
+      let regs : Int := (Int.ediv (BitVec.toNat imm8) 2)
+      let w__3 ← (( do
+        if (((n == 15) : Bool) : Bool)
+        then
+          if (wback : Bool)
+          then (pure true)
           else
             (do
-              let w__980 ← (( do
-                if (((__opcode == 0b11110011101011111000000000010010#32) : Bool) : Bool)
-                then
-                  (do
-                    let w__979 ← (( do readReg SEE ) : SailM Int )
-                    (pure (((w__979 <b 3893) : Bool))))
-                else (pure false) ) : SailM Bool )
-              if (w__980 : Bool)
-              then
-                (do
-                  writeReg SEE 3893
-                  if ((((((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access __opcode 28)])) != 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                     __opcode 29)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                   __opcode 30)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                 __opcode 31)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                               __opcode 2)])) != 0#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                             __opcode 4)])) != 0#1)) : Bool)
-                  then sailThrow ((Error_ConstrainedUnpredictable ()))
-                  else
-                    (do
-                      (decode_aarch32_instrs_TSB_T1enc_A_txt ())))
-              else
-                (do
-                  let w__982 ← (( do
-                    if (((__opcode == 0b11110011101011111000000000010100#32) : Bool) : Bool)
-                    then
-                      (do
-                        let w__981 ← (( do readReg SEE ) : SailM Int )
-                        (pure (((w__981 <b 3895) : Bool))))
-                    else (pure false) ) : SailM Bool )
-                  if (w__982 : Bool)
-                  then
-                    (do
-                      writeReg SEE 3895
-                      if ((((((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access __opcode 28)])) != 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                         __opcode 29)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                       __opcode 30)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                     __opcode 31)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                   __opcode 2)])) != 0#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                 __opcode 4)])) != 0#1)) : Bool)
-                      then sailThrow ((Error_ConstrainedUnpredictable ()))
-                      else
-                        (do
-                          (decode_aarch32_instrs_CSDB_T1enc_A_txt ())))
-                  else
-                    (do
-                      let w__984 ← (( do
-                        if (((__opcode == 0b11110011101111111000111101000000#32) : Bool) : Bool)
-                        then
-                          (do
-                            let w__983 ← (( do readReg SEE ) : SailM Int )
-                            (pure (((w__983 <b 3897) : Bool))))
-                        else (pure false) ) : SailM Bool )
-                      if (w__984 : Bool)
-                      then
-                        (do
-                          writeReg SEE 3897
-                          if (((((((((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access __opcode 16)])) != 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                                   __opcode 17)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                                 __opcode 18)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                               __opcode 19)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                             __opcode 13)])) != 0#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                           __opcode 8)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                         __opcode 9)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                       __opcode 10)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                     __opcode 11)])) != 1#1)) : Bool)
-                          then sailThrow ((Error_ConstrainedUnpredictable ()))
-                          else
-                            (do
-                              (decode_aarch32_instrs_SSBB_T1enc_A_txt ())))
-                      else
-                        (do
-                          let w__986 ← (( do
-                            if (((__opcode == 0b11110011101111111000111101000100#32) : Bool) : Bool)
-                            then
-                              (do
-                                let w__985 ← (( do readReg SEE ) : SailM Int )
-                                (pure (((w__985 <b 3899) : Bool))))
-                            else (pure false) ) : SailM Bool )
-                          if (w__986 : Bool)
-                          then
-                            (do
-                              writeReg SEE 3899
-                              if (((((((((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access __opcode
-                                                       16)])) != 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                                       __opcode 17)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                                     __opcode 18)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                                   __opcode 19)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                                 __opcode 13)])) != 0#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                               __opcode 8)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                             __opcode 9)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                           __opcode 10)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                         __opcode 11)])) != 1#1)) : Bool)
-                              then sailThrow ((Error_ConstrainedUnpredictable ()))
-                              else
-                                (do
-                                  (decode_aarch32_instrs_PSSBB_T1enc_A_txt ())))
-                          else
-                            (do
-                              let w__988 ← (( do
-                                if (((((Sail.BitVec.castWidth (m := 9) (Sail.BitVec.extractLsb
-                                         __opcode 31 23)) == (0b111111000#9 : (BitVec 9))) && (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
-                                           __opcode 21 20)) == (0b10#2 : (BitVec 2))) && ((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
-                                           __opcode 11 8)) == (0xD#4 : (BitVec 4))))) : Bool) : Bool)
-                                then
-                                  (do
-                                    let w__987 ← (( do readReg SEE ) : SailM Int )
-                                    (pure (((w__987 <b 3901) : Bool))))
-                                else (pure false) ) : SailM Bool )
-                              if (w__988 : Bool)
-                              then
-                                (do
-                                  writeReg SEE 3901
-                                  let D := (BitVec.slice __opcode 22 1)
-                                  let Vn := (BitVec.slice __opcode 16 4)
-                                  let Vd := (BitVec.slice __opcode 12 4)
-                                  let N := (BitVec.slice __opcode 7 1)
-                                  let Q := (BitVec.slice __opcode 6 1)
-                                  let M := (BitVec.slice __opcode 5 1)
-                                  let U := (BitVec.slice __opcode 4 1)
-                                  let Vm := (BitVec.slice __opcode 0 4)
-                                  (decode_aarch32_instrs_VDOT_T1enc_A_txt D Vn Vd N Q M U Vm))
-                              else
-                                (do
-                                  let w__990 ← (( do
-                                    if (((((Sail.BitVec.castWidth (m := 9) (Sail.BitVec.extractLsb
-                                             __opcode 31 23)) == (0b111111100#9 : (BitVec 9))) && (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
-                                               __opcode 21 20)) == (0b10#2 : (BitVec 2))) && ((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
-                                               __opcode 11 8)) == (0xD#4 : (BitVec 4))))) : Bool) : Bool)
-                                    then
-                                      (do
-                                        let w__989 ← (( do readReg SEE ) : SailM Int )
-                                        (pure (((w__989 <b 3903) : Bool))))
-                                    else (pure false) ) : SailM Bool )
-                                  if (w__990 : Bool)
-                                  then
-                                    (do
-                                      writeReg SEE 3903
-                                      let op1 := (BitVec.slice __opcode 23 1)
-                                      let D := (BitVec.slice __opcode 22 1)
-                                      let op2 := (BitVec.slice __opcode 20 2)
-                                      let Vn := (BitVec.slice __opcode 16 4)
-                                      let Vd := (BitVec.slice __opcode 12 4)
-                                      let N := (BitVec.slice __opcode 7 1)
-                                      let Q := (BitVec.slice __opcode 6 1)
-                                      let M := (BitVec.slice __opcode 5 1)
-                                      let U := (BitVec.slice __opcode 4 1)
-                                      let Vm := (BitVec.slice __opcode 0 4)
-                                      (decode_aarch32_instrs_VDOT_s_T1enc_A_txt op1 D op2 Vn Vd N Q
-                                        M U Vm))
-                                  else
-                                    (do
-                                      let w__992 ← (( do
-                                        if (((((Sail.BitVec.castWidth (m := 9) (Sail.BitVec.extractLsb
-                                                 __opcode 31 23)) == (0b111011101#9 : (BitVec 9))) && (((Sail.BitVec.castWidth (m := 6) (Sail.BitVec.extractLsb
-                                                   __opcode 21 16)) == (0b111001#6 : (BitVec 6))) && (((Sail.BitVec.castWidth (m := 6) (Sail.BitVec.extractLsb
-                                                     __opcode 11 6)) == (0b101111#6 : (BitVec 6))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                     __opcode 4 4)) == (0#1 : (BitVec 1)))))) : Bool) : Bool)
-                                        then
-                                          (do
-                                            let w__991 ← (( do readReg SEE ) : SailM Int )
-                                            (pure (((w__991 <b 3905) : Bool))))
-                                        else (pure false) ) : SailM Bool )
-                                      if (w__992 : Bool)
-                                      then
-                                        (do
-                                          writeReg SEE 3905
-                                          let D := (BitVec.slice __opcode 22 1)
-                                          let Vd := (BitVec.slice __opcode 12 4)
-                                          let M := (BitVec.slice __opcode 5 1)
-                                          let Vm := (BitVec.slice __opcode 0 4)
-                                          (decode_aarch32_instrs_VJCVT_T1enc_A_txt D Vd M Vm))
-                                      else
-                                        (do
-                                          let w__994 ← (( do
-                                            if (((((Sail.BitVec.castWidth (m := 7) (Sail.BitVec.extractLsb
-                                                     __opcode 31 25)) == (0b1111110#7 : (BitVec 7))) && (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                       __opcode 21 21)) == (1#1 : (BitVec 1))) && (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
-                                                         __opcode 11 8)) == (0x8#4 : (BitVec 4))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                         __opcode 4 4)) == (0#1 : (BitVec 1)))))) : Bool) : Bool)
-                                            then
-                                              (do
-                                                let w__993 ← (( do readReg SEE ) : SailM Int )
-                                                (pure (((w__993 <b 3907) : Bool))))
-                                            else (pure false) ) : SailM Bool )
-                                          if (w__994 : Bool)
-                                          then
-                                            (do
-                                              writeReg SEE 3907
-                                              let rot := (BitVec.slice __opcode 23 2)
-                                              let D := (BitVec.slice __opcode 22 1)
-                                              let S := (BitVec.slice __opcode 20 1)
-                                              let Vn := (BitVec.slice __opcode 16 4)
-                                              let Vd := (BitVec.slice __opcode 12 4)
-                                              let N := (BitVec.slice __opcode 7 1)
-                                              let Q := (BitVec.slice __opcode 6 1)
-                                              let M := (BitVec.slice __opcode 5 1)
-                                              let Vm := (BitVec.slice __opcode 0 4)
-                                              (decode_aarch32_instrs_VCMLA_T1enc_A_txt rot D S Vn Vd
-                                                N Q M Vm))
-                                          else
-                                            (do
-                                              let w__996 ← (( do
-                                                if (((((Sail.BitVec.castWidth (m := 8) (Sail.BitVec.extractLsb
-                                                         __opcode 31 24)) == (0xFE#8 : (BitVec 8))) && (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
-                                                           __opcode 11 8)) == (0x8#4 : (BitVec 4))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                           __opcode 4 4)) == (0#1 : (BitVec 1))))) : Bool) : Bool)
-                                                then
-                                                  (do
-                                                    let w__995 ← (( do readReg SEE ) : SailM Int )
-                                                    (pure (((w__995 <b 3909) : Bool))))
-                                                else (pure false) ) : SailM Bool )
-                                              if (w__996 : Bool)
-                                              then
-                                                (do
-                                                  writeReg SEE 3909
-                                                  let S := (BitVec.slice __opcode 23 1)
-                                                  let D := (BitVec.slice __opcode 22 1)
-                                                  let rot := (BitVec.slice __opcode 20 2)
-                                                  let Vn := (BitVec.slice __opcode 16 4)
-                                                  let Vd := (BitVec.slice __opcode 12 4)
-                                                  let N := (BitVec.slice __opcode 7 1)
-                                                  let Q := (BitVec.slice __opcode 6 1)
-                                                  let M := (BitVec.slice __opcode 5 1)
-                                                  let Vm := (BitVec.slice __opcode 0 4)
-                                                  (decode_aarch32_instrs_VCMLA_idx_T1enc_A_txt S D
-                                                    rot Vn Vd N Q M Vm))
-                                              else
-                                                (do
-                                                  let w__998 ← (( do
-                                                    if (((((Sail.BitVec.castWidth (m := 7) (Sail.BitVec.extractLsb
-                                                             __opcode 31 25)) == (0b1111110#7 : (BitVec 7))) && (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                               __opcode 23 23)) == (1#1 : (BitVec 1))) && (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                                 __opcode 21 21)) == (0#1 : (BitVec 1))) && (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
-                                                                   __opcode 11 8)) == (0x8#4 : (BitVec 4))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                                   __opcode 4 4)) == (0#1 : (BitVec 1))))))) : Bool) : Bool)
-                                                    then
-                                                      (do
-                                                        let w__997 ← (( do readReg SEE ) : SailM
-                                                          Int )
-                                                        (pure (((w__997 <b 3911) : Bool))))
-                                                    else (pure false) ) : SailM Bool )
-                                                  if (w__998 : Bool)
-                                                  then
-                                                    (do
-                                                      writeReg SEE 3911
-                                                      let rot := (BitVec.slice __opcode 24 1)
-                                                      let D := (BitVec.slice __opcode 22 1)
-                                                      let S := (BitVec.slice __opcode 20 1)
-                                                      let Vn := (BitVec.slice __opcode 16 4)
-                                                      let Vd := (BitVec.slice __opcode 12 4)
-                                                      let N := (BitVec.slice __opcode 7 1)
-                                                      let Q := (BitVec.slice __opcode 6 1)
-                                                      let M := (BitVec.slice __opcode 5 1)
-                                                      let Vm := (BitVec.slice __opcode 0 4)
-                                                      (decode_aarch32_instrs_VCADD_T1enc_A_txt rot D
-                                                        S Vn Vd N Q M Vm))
-                                                  else
-                                                    (do
-                                                      let w__1000 ← (( do
-                                                        if (((((Sail.BitVec.castWidth (m := 8) (Sail.BitVec.extractLsb
-                                                                 __opcode 31 24)) == (0xFC#8 : (BitVec 8))) && (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
-                                                                   __opcode 21 20)) == (0b10#2 : (BitVec 2))) && (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
-                                                                     __opcode 11 8)) == (0x8#4 : (BitVec 4))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                                     __opcode 4 4)) == (1#1 : (BitVec 1)))))) : Bool) : Bool)
-                                                        then
-                                                          (do
-                                                            let w__999 ← (( do readReg SEE ) :
-                                                              SailM Int )
-                                                            (pure (((w__999 <b 3913) : Bool))))
-                                                        else (pure false) ) : SailM Bool )
-                                                      if (w__1000 : Bool)
-                                                      then
-                                                        (do
-                                                          writeReg SEE 3913
-                                                          let S := (BitVec.slice __opcode 23 1)
-                                                          let D := (BitVec.slice __opcode 22 1)
-                                                          let Vn := (BitVec.slice __opcode 16 4)
-                                                          let Vd := (BitVec.slice __opcode 12 4)
-                                                          let N := (BitVec.slice __opcode 7 1)
-                                                          let Q := (BitVec.slice __opcode 6 1)
-                                                          let M := (BitVec.slice __opcode 5 1)
-                                                          let Vm := (BitVec.slice __opcode 0 4)
-                                                          (decode_aarch32_instrs_VFMAL_T1enc_A_txt S
-                                                            D Vn Vd N Q M Vm))
-                                                      else
-                                                        (do
-                                                          let w__1002 ← (( do
-                                                            if (((((Sail.BitVec.castWidth (m := 9) (Sail.BitVec.extractLsb
-                                                                     __opcode 31 23)) == (0b111111100#9 : (BitVec 9))) && (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                                       __opcode 21 21)) == (0#1 : (BitVec 1))) && (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
-                                                                         __opcode 11 8)) == (0x8#4 : (BitVec 4))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                                         __opcode 4 4)) == (1#1 : (BitVec 1)))))) : Bool) : Bool)
-                                                            then
-                                                              (do
-                                                                let w__1001 ← (( do readReg SEE )
-                                                                  : SailM Int )
-                                                                (pure (((w__1001 <b 3915) : Bool))))
-                                                            else (pure false) ) : SailM Bool )
-                                                          if (w__1002 : Bool)
-                                                          then
-                                                            (do
-                                                              writeReg SEE 3915
-                                                              let D := (BitVec.slice __opcode 22 1)
-                                                              let S := (BitVec.slice __opcode 20 1)
-                                                              let Vn := (BitVec.slice __opcode 16 4)
-                                                              let Vd := (BitVec.slice __opcode 12 4)
-                                                              let N := (BitVec.slice __opcode 7 1)
-                                                              let Q := (BitVec.slice __opcode 6 1)
-                                                              let M := (BitVec.slice __opcode 5 1)
-                                                              let Vm := (BitVec.slice __opcode 0 4)
-                                                              (decode_aarch32_instrs_VFMAL_i_T1enc_A_txt
-                                                                D S Vn Vd N Q M Vm))
-                                                          else
-                                                            (do
-                                                              let w__1004 ← (( do
-                                                                if (((((Sail.BitVec.castWidth (m := 9) (Sail.BitVec.extractLsb
-                                                                         __opcode 31 23)) == (0b111111000#9 : (BitVec 9))) && (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
-                                                                           __opcode 21 20)) == (0b00#2 : (BitVec 2))) && (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
-                                                                             __opcode 11 8)) == (0xD#4 : (BitVec 4))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                                             __opcode 4 4)) == (0#1 : (BitVec 1)))))) : Bool) : Bool)
-                                                                then
-                                                                  (do
-                                                                    let w__1003 ← (( do
-                                                                      readReg SEE ) : SailM Int )
-                                                                    (pure (((w__1003 <b 3917) : Bool))))
-                                                                else (pure false) ) : SailM Bool )
-                                                              if (w__1004 : Bool)
-                                                              then
-                                                                (do
-                                                                  writeReg SEE 3917
-                                                                  let D :=
-                                                                    (BitVec.slice __opcode 22 1)
-                                                                  let Vn :=
-                                                                    (BitVec.slice __opcode 16 4)
-                                                                  let Vd :=
-                                                                    (BitVec.slice __opcode 12 4)
-                                                                  let N :=
-                                                                    (BitVec.slice __opcode 7 1)
-                                                                  let Q :=
-                                                                    (BitVec.slice __opcode 6 1)
-                                                                  let M :=
-                                                                    (BitVec.slice __opcode 5 1)
-                                                                  let Vm :=
-                                                                    (BitVec.slice __opcode 0 4)
-                                                                  (decode_aarch32_instrs_VDOT_bf16_T1enc_A_txt
-                                                                    D Vn Vd N Q M Vm))
-                                                              else
-                                                                (do
-                                                                  let w__1006 ← (( do
-                                                                    if (((((Sail.BitVec.castWidth (m := 9) (Sail.BitVec.extractLsb
-                                                                             __opcode 31 23)) == (0b111111100#9 : (BitVec 9))) && (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
-                                                                               __opcode 21 20)) == (0b00#2 : (BitVec 2))) && (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
-                                                                                 __opcode 11 8)) == (0xD#4 : (BitVec 4))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                                                 __opcode 4 4)) == (0#1 : (BitVec 1)))))) : Bool) : Bool)
-                                                                    then
-                                                                      (do
-                                                                        let w__1005 ← (( do
-                                                                          readReg SEE ) : SailM Int
-                                                                          )
-                                                                        (pure (((w__1005 <b 3919) : Bool))))
-                                                                    else (pure false) ) : SailM Bool
-                                                                    )
-                                                                  if (w__1006 : Bool)
-                                                                  then
-                                                                    (do
-                                                                      writeReg SEE 3919
-                                                                      let D :=
-                                                                        (BitVec.slice __opcode 22 1)
-                                                                      let Vn :=
-                                                                        (BitVec.slice __opcode 16 4)
-                                                                      let Vd :=
-                                                                        (BitVec.slice __opcode 12 4)
-                                                                      let N :=
-                                                                        (BitVec.slice __opcode 7 1)
-                                                                      let Q :=
-                                                                        (BitVec.slice __opcode 6 1)
-                                                                      let M :=
-                                                                        (BitVec.slice __opcode 5 1)
-                                                                      let Vm :=
-                                                                        (BitVec.slice __opcode 0 4)
-                                                                      (decode_aarch32_instrs_VDOT_bf16_i_T1enc_A_txt
-                                                                        D Vn Vd N Q M Vm))
-                                                                  else
-                                                                    (do
-                                                                      let w__1008 ← (( do
-                                                                        if (((((Sail.BitVec.castWidth (m := 9) (Sail.BitVec.extractLsb
-                                                                                 __opcode 31 23)) == (0b111111000#9 : (BitVec 9))) && (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
-                                                                                   __opcode 21 20)) == (0b00#2 : (BitVec 2))) && (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
-                                                                                     __opcode 11 8)) == (0xC#4 : (BitVec 4))) && (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                                                       __opcode 6 6)) == (1#1 : (BitVec 1))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                                                       __opcode 4 4)) == (0#1 : (BitVec 1))))))) : Bool) : Bool)
-                                                                        then
-                                                                          (do
-                                                                            let w__1007 ← (( do
-                                                                              readReg SEE ) : SailM
-                                                                              Int )
-                                                                            (pure (((w__1007 <b 3921) : Bool))))
-                                                                        else (pure false) ) : SailM
-                                                                        Bool )
-                                                                      if (w__1008 : Bool)
-                                                                      then
-                                                                        (do
-                                                                          writeReg SEE 3921
-                                                                          let D :=
-                                                                            (BitVec.slice __opcode
-                                                                              22 1)
-                                                                          let Vn :=
-                                                                            (BitVec.slice __opcode
-                                                                              16 4)
-                                                                          let Vd :=
-                                                                            (BitVec.slice __opcode
-                                                                              12 4)
-                                                                          let N :=
-                                                                            (BitVec.slice __opcode 7
-                                                                              1)
-                                                                          let M :=
-                                                                            (BitVec.slice __opcode 5
-                                                                              1)
-                                                                          let Vm :=
-                                                                            (BitVec.slice __opcode 0
-                                                                              4)
-                                                                          (decode_aarch32_instrs_VMMLA_T1enc_A_txt
-                                                                            D Vn Vd N M Vm))
-                                                                      else
-                                                                        (do
-                                                                          let w__1010 ← (( do
-                                                                            if (((((Sail.BitVec.castWidth (m := 9) (Sail.BitVec.extractLsb
-                                                                                     __opcode 31 23)) == (0b111111111#9 : (BitVec 9))) && (((Sail.BitVec.castWidth (m := 6) (Sail.BitVec.extractLsb
-                                                                                       __opcode 21
-                                                                                       16)) == (0b110110#6 : (BitVec 6))) && (((Sail.BitVec.castWidth (m := 6) (Sail.BitVec.extractLsb
-                                                                                         __opcode 11
-                                                                                         6)) == (0b011001#6 : (BitVec 6))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                                                         __opcode 4
-                                                                                         4)) == (0#1 : (BitVec 1)))))) : Bool) : Bool)
-                                                                            then
-                                                                              (do
-                                                                                let w__1009 ← (( do
-                                                                                  readReg SEE ) :
-                                                                                  SailM Int )
-                                                                                (pure (((w__1009 <b 3923) : Bool))))
-                                                                            else (pure false) ) :
-                                                                            SailM Bool )
-                                                                          if (w__1010 : Bool)
-                                                                          then
-                                                                            (do
-                                                                              writeReg SEE 3923
-                                                                              let D :=
-                                                                                (BitVec.slice
-                                                                                  __opcode 22 1)
-                                                                              let Vd :=
-                                                                                (BitVec.slice
-                                                                                  __opcode 12 4)
-                                                                              let M :=
-                                                                                (BitVec.slice
-                                                                                  __opcode 5 1)
-                                                                              let Vm :=
-                                                                                (BitVec.slice
-                                                                                  __opcode 0 4)
-                                                                              (decode_aarch32_instrs_VCVT_T1enc_A_txt
-                                                                                D Vd M Vm))
-                                                                          else
-                                                                            (do
-                                                                              let w__1012 ← (( do
-                                                                                if (((((Sail.BitVec.castWidth (m := 9) (Sail.BitVec.extractLsb
-                                                                                         __opcode 31
-                                                                                         23)) == (0b111011101#9 : (BitVec 9))) && (((Sail.BitVec.castWidth (m := 6) (Sail.BitVec.extractLsb
-                                                                                           __opcode
-                                                                                           21 16)) == (0b110011#6 : (BitVec 6))) && (((Sail.BitVec.castWidth (m := 6) (Sail.BitVec.extractLsb
-                                                                                             __opcode
-                                                                                             11 6)) == (0b100101#6 : (BitVec 6))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                                                             __opcode
-                                                                                             4 4)) == (0#1 : (BitVec 1)))))) : Bool) : Bool)
-                                                                                then
-                                                                                  (do
-                                                                                    let w__1011 ← (( do
-                                                                                      readReg SEE )
-                                                                                      : SailM Int )
-                                                                                    (pure (((w__1011 <b 3925) : Bool))))
-                                                                                else (pure false) )
-                                                                                : SailM Bool )
-                                                                              if (w__1012 : Bool)
-                                                                              then
-                                                                                (do
-                                                                                  writeReg SEE 3925
-                                                                                  let D :=
-                                                                                    (BitVec.slice
-                                                                                      __opcode 22 1)
-                                                                                  let Vd :=
-                                                                                    (BitVec.slice
-                                                                                      __opcode 12 4)
-                                                                                  let M :=
-                                                                                    (BitVec.slice
-                                                                                      __opcode 5 1)
-                                                                                  let Vm :=
-                                                                                    (BitVec.slice
-                                                                                      __opcode 0 4)
-                                                                                  (decode_aarch32_instrs_VCVTB_bf16_T1enc_A_txt
-                                                                                    D Vd M Vm))
-                                                                              else
-                                                                                (do
-                                                                                  let w__1014 ← (( do
-                                                                                    if (((((Sail.BitVec.castWidth (m := 9) (Sail.BitVec.extractLsb
-                                                                                             __opcode
-                                                                                             31 23)) == (0b111011101#9 : (BitVec 9))) && (((Sail.BitVec.castWidth (m := 6) (Sail.BitVec.extractLsb
-                                                                                               __opcode
-                                                                                               21 16)) == (0b110011#6 : (BitVec 6))) && (((Sail.BitVec.castWidth (m := 6) (Sail.BitVec.extractLsb
-                                                                                                 __opcode
-                                                                                                 11
-                                                                                                 6)) == (0b100111#6 : (BitVec 6))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                                                                 __opcode
-                                                                                                 4 4)) == (0#1 : (BitVec 1)))))) : Bool) : Bool)
-                                                                                    then
-                                                                                      (do
-                                                                                        let w__1013 ← (( do
-                                                                                          readReg SEE
-                                                                                          ) : SailM
-                                                                                          Int )
-                                                                                        (pure (((w__1013 <b 3927) : Bool))))
-                                                                                    else
-                                                                                      (pure false) )
-                                                                                    : SailM Bool )
-                                                                                  if (w__1014 : Bool)
-                                                                                  then
-                                                                                    (do
-                                                                                      writeReg SEE 3927
-                                                                                      let D :=
-                                                                                        (BitVec.slice
-                                                                                          __opcode
-                                                                                          22 1)
-                                                                                      let Vd :=
-                                                                                        (BitVec.slice
-                                                                                          __opcode
-                                                                                          12 4)
-                                                                                      let M :=
-                                                                                        (BitVec.slice
-                                                                                          __opcode 5
-                                                                                          1)
-                                                                                      let Vm :=
-                                                                                        (BitVec.slice
-                                                                                          __opcode 0
-                                                                                          4)
-                                                                                      (decode_aarch32_instrs_VCVTT_T1enc_A_txt
-                                                                                        D Vd M Vm))
-                                                                                  else
-                                                                                    (do
-                                                                                      let w__1016 ← (( do
-                                                                                        if (((((Sail.BitVec.castWidth (m := 9) (Sail.BitVec.extractLsb
-                                                                                                 __opcode
-                                                                                                 31
-                                                                                                 23)) == (0b111111000#9 : (BitVec 9))) && (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
-                                                                                                   __opcode
-                                                                                                   21
-                                                                                                   20)) == (0b11#2 : (BitVec 2))) && (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
-                                                                                                     __opcode
-                                                                                                     11
-                                                                                                     8)) == (0x8#4 : (BitVec 4))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                                                                     __opcode
-                                                                                                     4
-                                                                                                     4)) == (1#1 : (BitVec 1)))))) : Bool) : Bool)
-                                                                                        then
-                                                                                          (do
-                                                                                            let w__1015 ← (( do
-                                                                                              readReg SEE
-                                                                                              ) :
-                                                                                              SailM
-                                                                                              Int )
-                                                                                            (pure (((w__1015 <b 3929) : Bool))))
-                                                                                        else
-                                                                                          (pure false)
-                                                                                        ) : SailM
-                                                                                        Bool )
-                                                                                      if (w__1016 : Bool)
-                                                                                      then
-                                                                                        (do
-                                                                                          writeReg SEE 3929
-                                                                                          let D :=
-                                                                                            (BitVec.slice
-                                                                                              __opcode
-                                                                                              22 1)
-                                                                                          let Vn :=
-                                                                                            (BitVec.slice
-                                                                                              __opcode
-                                                                                              16 4)
-                                                                                          let Vd :=
-                                                                                            (BitVec.slice
-                                                                                              __opcode
-                                                                                              12 4)
-                                                                                          let N :=
-                                                                                            (BitVec.slice
-                                                                                              __opcode
-                                                                                              7 1)
-                                                                                          let Q :=
-                                                                                            (BitVec.slice
-                                                                                              __opcode
-                                                                                              6 1)
-                                                                                          let M :=
-                                                                                            (BitVec.slice
-                                                                                              __opcode
-                                                                                              5 1)
-                                                                                          let Vm :=
-                                                                                            (BitVec.slice
-                                                                                              __opcode
-                                                                                              0 4)
-                                                                                          (decode_aarch32_instrs_VFMA_bf_T1enc_A_txt
-                                                                                            D Vn Vd
-                                                                                            N Q M Vm))
-                                                                                      else
-                                                                                        (do
-                                                                                          let w__1018 ← (( do
-                                                                                            if (((((Sail.BitVec.castWidth (m := 9) (Sail.BitVec.extractLsb
-                                                                                                     __opcode
-                                                                                                     31
-                                                                                                     23)) == (0b111111100#9 : (BitVec 9))) && (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
-                                                                                                       __opcode
-                                                                                                       21
-                                                                                                       20)) == (0b11#2 : (BitVec 2))) && (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
-                                                                                                         __opcode
-                                                                                                         11
-                                                                                                         8)) == (0x8#4 : (BitVec 4))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                                                                         __opcode
-                                                                                                         4
-                                                                                                         4)) == (1#1 : (BitVec 1)))))) : Bool) : Bool)
-                                                                                            then
-                                                                                              (do
-                                                                                                let w__1017 ← (( do
-                                                                                                  readReg SEE
-                                                                                                  )
-                                                                                                  :
-                                                                                                  SailM
-                                                                                                  Int
-                                                                                                  )
-                                                                                                (pure (((w__1017 <b 3931) : Bool))))
-                                                                                            else
-                                                                                              (pure false)
-                                                                                            ) :
-                                                                                            SailM
-                                                                                            Bool )
-                                                                                          if (w__1018 : Bool)
-                                                                                          then
-                                                                                            (do
-                                                                                              writeReg SEE 3931
-                                                                                              let D :=
-                                                                                                (BitVec.slice
-                                                                                                  __opcode
-                                                                                                  22
-                                                                                                  1)
-                                                                                              let Vn :=
-                                                                                                (BitVec.slice
-                                                                                                  __opcode
-                                                                                                  16
-                                                                                                  4)
-                                                                                              let Vd :=
-                                                                                                (BitVec.slice
-                                                                                                  __opcode
-                                                                                                  12
-                                                                                                  4)
-                                                                                              let N :=
-                                                                                                (BitVec.slice
-                                                                                                  __opcode
-                                                                                                  7
-                                                                                                  1)
-                                                                                              let Q :=
-                                                                                                (BitVec.slice
-                                                                                                  __opcode
-                                                                                                  6
-                                                                                                  1)
-                                                                                              let M :=
-                                                                                                (BitVec.slice
-                                                                                                  __opcode
-                                                                                                  5
-                                                                                                  1)
-                                                                                              let Vm :=
-                                                                                                (BitVec.slice
-                                                                                                  __opcode
-                                                                                                  0
-                                                                                                  4)
-                                                                                              (decode_aarch32_instrs_VFMA_bfs_T1enc_A_txt
-                                                                                                D Vn
-                                                                                                Vd N
-                                                                                                Q M
-                                                                                                Vm))
-                                                                                          else
-                                                                                            (do
-                                                                                              let w__1020 ← (( do
-                                                                                                if (((((Sail.BitVec.castWidth (m := 8) (Sail.BitVec.extractLsb
-                                                                                                         __opcode
-                                                                                                         31
-                                                                                                         24)) == (0xFC#8 : (BitVec 8))) && (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
-                                                                                                           __opcode
-                                                                                                           21
-                                                                                                           20)) == (0b10#2 : (BitVec 2))) && (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
-                                                                                                             __opcode
-                                                                                                             11
-                                                                                                             8)) == (0xC#4 : (BitVec 4))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                                                                             __opcode
-                                                                                                             6
-                                                                                                             6)) == (1#1 : (BitVec 1)))))) : Bool) : Bool)
-                                                                                                then
-                                                                                                  (do
-                                                                                                    let w__1019 ← (( do
-                                                                                                      readReg SEE
-                                                                                                      )
-                                                                                                      :
-                                                                                                      SailM
-                                                                                                      Int
-                                                                                                      )
-                                                                                                    (pure (((w__1019 <b 3933) : Bool))))
-                                                                                                else
-                                                                                                  (pure false)
-                                                                                                ) :
-                                                                                                SailM
-                                                                                                Bool
-                                                                                                )
-                                                                                              if (w__1020 : Bool)
-                                                                                              then
-                                                                                                (do
-                                                                                                  writeReg SEE 3933
-                                                                                                  let B :=
-                                                                                                    (BitVec.slice
-                                                                                                      __opcode
-                                                                                                      23
-                                                                                                      1)
-                                                                                                  let D :=
-                                                                                                    (BitVec.slice
-                                                                                                      __opcode
-                                                                                                      22
-                                                                                                      1)
-                                                                                                  let Vn :=
-                                                                                                    (BitVec.slice
-                                                                                                      __opcode
-                                                                                                      16
-                                                                                                      4)
-                                                                                                  let Vd :=
-                                                                                                    (BitVec.slice
-                                                                                                      __opcode
-                                                                                                      12
-                                                                                                      4)
-                                                                                                  let N :=
-                                                                                                    (BitVec.slice
-                                                                                                      __opcode
-                                                                                                      7
-                                                                                                      1)
-                                                                                                  let M :=
-                                                                                                    (BitVec.slice
-                                                                                                      __opcode
-                                                                                                      5
-                                                                                                      1)
-                                                                                                  let U :=
-                                                                                                    (BitVec.slice
-                                                                                                      __opcode
-                                                                                                      4
-                                                                                                      1)
-                                                                                                  let Vm :=
-                                                                                                    (BitVec.slice
-                                                                                                      __opcode
-                                                                                                      0
-                                                                                                      4)
-                                                                                                  (decode_aarch32_instrs_MMLA_T1enc_A_txt
-                                                                                                    B
-                                                                                                    D
-                                                                                                    Vn
-                                                                                                    Vd
-                                                                                                    N
-                                                                                                    M
-                                                                                                    U
-                                                                                                    Vm))
-                                                                                              else
-                                                                                                (do
-                                                                                                  let w__1022 ← (( do
-                                                                                                    if (((((Sail.BitVec.castWidth (m := 9) (Sail.BitVec.extractLsb
-                                                                                                             __opcode
-                                                                                                             31
-                                                                                                             23)) == (0b111111001#9 : (BitVec 9))) && (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
-                                                                                                               __opcode
-                                                                                                               21
-                                                                                                               20)) == (0b10#2 : (BitVec 2))) && (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
-                                                                                                                 __opcode
-                                                                                                                 11
-                                                                                                                 8)) == (0xD#4 : (BitVec 4))) && ((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb
-                                                                                                                 __opcode
-                                                                                                                 4
-                                                                                                                 4)) == (0#1 : (BitVec 1)))))) : Bool) : Bool)
-                                                                                                    then
-                                                                                                      (do
-                                                                                                        let w__1021 ← (( do
-                                                                                                          readReg SEE
-                                                                                                          )
-                                                                                                          :
-                                                                                                          SailM
-                                                                                                          Int
-                                                                                                          )
-                                                                                                        (pure (((w__1021 <b 3935) : Bool))))
-                                                                                                    else
-                                                                                                      (pure false)
-                                                                                                    )
-                                                                                                    :
-                                                                                                    SailM
-                                                                                                    Bool
-                                                                                                    )
-                                                                                                  if (w__1022 : Bool)
-                                                                                                  then
-                                                                                                    (do
-                                                                                                      writeReg SEE 3935
-                                                                                                      let D :=
-                                                                                                        (BitVec.slice
-                                                                                                          __opcode
-                                                                                                          22
-                                                                                                          1)
-                                                                                                      let Vn :=
-                                                                                                        (BitVec.slice
-                                                                                                          __opcode
-                                                                                                          16
-                                                                                                          4)
-                                                                                                      let Vd :=
-                                                                                                        (BitVec.slice
-                                                                                                          __opcode
-                                                                                                          12
-                                                                                                          4)
-                                                                                                      let N :=
-                                                                                                        (BitVec.slice
-                                                                                                          __opcode
-                                                                                                          7
-                                                                                                          1)
-                                                                                                      let Q :=
-                                                                                                        (BitVec.slice
-                                                                                                          __opcode
-                                                                                                          6
-                                                                                                          1)
-                                                                                                      let M :=
-                                                                                                        (BitVec.slice
-                                                                                                          __opcode
-                                                                                                          5
-                                                                                                          1)
-                                                                                                      let Vm :=
-                                                                                                        (BitVec.slice
-                                                                                                          __opcode
-                                                                                                          0
-                                                                                                          4)
-                                                                                                      (decode_aarch32_instrs_VUSDOT_T1enc_A_txt
-                                                                                                        D
-                                                                                                        Vn
-                                                                                                        Vd
-                                                                                                        N
-                                                                                                        Q
-                                                                                                        M
-                                                                                                        Vm))
-                                                                                                  else
-                                                                                                    (do
-                                                                                                      let w__1024 ← (( do
-                                                                                                        if (((((Sail.BitVec.castWidth (m := 9) (Sail.BitVec.extractLsb
-                                                                                                                 __opcode
-                                                                                                                 31
-                                                                                                                 23)) == (0b111111101#9 : (BitVec 9))) && (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
-                                                                                                                   __opcode
-                                                                                                                   21
-                                                                                                                   20)) == (0b00#2 : (BitVec 2))) && ((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb
-                                                                                                                   __opcode
-                                                                                                                   11
-                                                                                                                   8)) == (0xD#4 : (BitVec 4))))) : Bool) : Bool)
-                                                                                                        then
-                                                                                                          (do
-                                                                                                            let w__1023 ← (( do
-                                                                                                              readReg SEE
-                                                                                                              )
-                                                                                                              :
-                                                                                                              SailM
-                                                                                                              Int
-                                                                                                              )
-                                                                                                            (pure (((w__1023 <b 3937) : Bool))))
-                                                                                                        else
-                                                                                                          (pure false)
-                                                                                                        )
-                                                                                                        :
-                                                                                                        SailM
-                                                                                                        Bool
-                                                                                                        )
-                                                                                                      if (w__1024 : Bool)
-                                                                                                      then
-                                                                                                        (do
-                                                                                                          writeReg SEE 3937
-                                                                                                          let D :=
-                                                                                                            (BitVec.slice
-                                                                                                              __opcode
-                                                                                                              22
-                                                                                                              1)
-                                                                                                          let Vn :=
-                                                                                                            (BitVec.slice
-                                                                                                              __opcode
-                                                                                                              16
-                                                                                                              4)
-                                                                                                          let Vd :=
-                                                                                                            (BitVec.slice
-                                                                                                              __opcode
-                                                                                                              12
-                                                                                                              4)
-                                                                                                          let N :=
-                                                                                                            (BitVec.slice
-                                                                                                              __opcode
-                                                                                                              7
-                                                                                                              1)
-                                                                                                          let Q :=
-                                                                                                            (BitVec.slice
-                                                                                                              __opcode
-                                                                                                              6
-                                                                                                              1)
-                                                                                                          let M :=
-                                                                                                            (BitVec.slice
-                                                                                                              __opcode
-                                                                                                              5
-                                                                                                              1)
-                                                                                                          let U :=
-                                                                                                            (BitVec.slice
-                                                                                                              __opcode
-                                                                                                              4
-                                                                                                              1)
-                                                                                                          let Vm :=
-                                                                                                            (BitVec.slice
-                                                                                                              __opcode
-                                                                                                              0
-                                                                                                              4)
-                                                                                                          (decode_aarch32_instrs_DOT_T1enc_A_txt
-                                                                                                            D
-                                                                                                            Vn
-                                                                                                            Vd
-                                                                                                            N
-                                                                                                            Q
-                                                                                                            M
-                                                                                                            U
-                                                                                                            Vm))
-                                                                                                      else
-                                                                                                        (do
-                                                                                                          let w__1026 ← (( do
-                                                                                                            if (((__opcode == 0b11110011101011111000000000010110#32) : Bool) : Bool)
-                                                                                                            then
-                                                                                                              (do
-                                                                                                                let w__1025 ← (( do
-                                                                                                                  readReg SEE
-                                                                                                                  )
-                                                                                                                  :
-                                                                                                                  SailM
-                                                                                                                  Int
-                                                                                                                  )
-                                                                                                                (pure (((w__1025 <b 3939) : Bool))))
-                                                                                                            else
-                                                                                                              (pure false)
-                                                                                                            )
-                                                                                                            :
-                                                                                                            SailM
-                                                                                                            Bool
-                                                                                                            )
-                                                                                                          if (w__1026 : Bool)
-                                                                                                          then
-                                                                                                            (do
-                                                                                                              writeReg SEE 3939
-                                                                                                              if ((((((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                                                                                                                 __opcode
-                                                                                                                                 16)])) != 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                                                                                                                 __opcode
-                                                                                                                                 17)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                                                                                                               __opcode
-                                                                                                                               18)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                                                                                                             __opcode
-                                                                                                                             19)])) != 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                                                                                                           __opcode
-                                                                                                                           13)])) != 0#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                                                                                                         __opcode
-                                                                                                                         11)])) != 0#1)) : Bool)
-                                                                                                              then
-                                                                                                                sailThrow ((Error_ConstrainedUnpredictable
-                                                                                                                  ()))
-                                                                                                              else
-                                                                                                                (do
-                                                                                                                  (decode_aarch32_instrs_CLRBHB_T1enc_A_txt
-                                                                                                                    ())))
-                                                                                                          else
-                                                                                                            sailThrow ((Error_Undefined
-                                                                                                              ()))))))))))))))))))))))))))))
+              let w__1 ← (( do (CurrentInstrSet ()) ) : SailM InstrSet )
+              (pure (((bne w__1 InstrSet_A32) : Bool))))
+        else (pure false) ) : SailM Bool )
+      if (w__3 : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      if ((((regs == 0) || (regs >b 16)) || ((d +i regs) >b 32)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      if ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access imm8 0)])) == 1#1) && ((d +i regs) >b 16)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_VLDM_Op_A_txt add (Sail.Int.toNatChecked (d)) imm32
+        (Sail.Int.toNatChecked (n)) regs single_regs wback))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_VLDM_A2enc_A_txt (cond : (BitVec 4)) (P : (BitVec 1)) (U : (BitVec 1)) (D : (BitVec 1)) (W : (BitVec 1)) (Rn : (BitVec 4)) (Vd : (BitVec 4)) (imm8 : (BitVec 8)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:26875.29-26875.30"
+      if ((((P == 0#1) && (U == 0#1)) && (W == 0#1)) : Bool)
+      then sailThrow ((Error_See "Related encodings"))
+      else (pure (()))
+      if (((P == 1#1) && (W == 0#1)) : Bool)
+      then sailThrow ((Error_See "VLDR"))
+      else (pure (()))
+      if (((P == U) && (W == 1#1)) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let single_regs : Bool := true
+      let add : Bool := (U == 1#1)
+      let wback : Bool := (W == 1#1)
+      let d : Int := (BitVec.toNat (Vd +++ D))
+      let n : Int := (BitVec.toNat Rn)
+      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend (imm8 +++ 0b00#2) 32)
+      let regs : Int := (BitVec.toNat imm8)
+      let w__3 ← (( do
+        if (((n == 15) : Bool) : Bool)
+        then
+          if (wback : Bool)
+          then (pure true)
+          else
+            (do
+              let w__1 ← (( do (CurrentInstrSet ()) ) : SailM InstrSet )
+              (pure (((bne w__1 InstrSet_A32) : Bool))))
+        else (pure false) ) : SailM Bool )
+      if (w__3 : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      if (((regs == 0) || ((d +i regs) >b 32)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_VLDM_Op_A_txt add (Sail.Int.toNatChecked (d)) imm32
+        (Sail.Int.toNatChecked (n)) regs single_regs wback))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_VLDM_T1enc_A_txt (P : (BitVec 1)) (U : (BitVec 1)) (D : (BitVec 1)) (W : (BitVec 1)) (Rn : (BitVec 4)) (Vd : (BitVec 4)) (imm8 : (BitVec 8)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if ((((P == 0#1) && (U == 0#1)) && (W == 0#1)) : Bool)
+      then sailThrow ((Error_See "Related encodings"))
+      else (pure (()))
+      if (((P == 1#1) && (W == 0#1)) : Bool)
+      then sailThrow ((Error_See "VLDR"))
+      else (pure (()))
+      if (((P == U) && (W == 1#1)) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let single_regs : Bool := false
+      let add : Bool := (U == 1#1)
+      let wback : Bool := (W == 1#1)
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let n : Int := (BitVec.toNat Rn)
+      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend (imm8 +++ 0b00#2) 32)
+      let regs : Int := (Int.ediv (BitVec.toNat imm8) 2)
+      let w__3 ← (( do
+        if (((n == 15) : Bool) : Bool)
+        then
+          if (wback : Bool)
+          then (pure true)
+          else
+            (do
+              let w__1 ← (( do (CurrentInstrSet ()) ) : SailM InstrSet )
+              (pure (((bne w__1 InstrSet_A32) : Bool))))
+        else (pure false) ) : SailM Bool )
+      if (w__3 : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      if ((((regs == 0) || (regs >b 16)) || ((d +i regs) >b 32)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      if ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access imm8 0)])) == 1#1) && ((d +i regs) >b 16)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_VLDM_Op_A_txt add (Sail.Int.toNatChecked (d)) imm32
+        (Sail.Int.toNatChecked (n)) regs single_regs wback))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_VLDM_T2enc_A_txt (P : (BitVec 1)) (U : (BitVec 1)) (D : (BitVec 1)) (W : (BitVec 1)) (Rn : (BitVec 4)) (Vd : (BitVec 4)) (imm8 : (BitVec 8)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if ((((P == 0#1) && (U == 0#1)) && (W == 0#1)) : Bool)
+      then sailThrow ((Error_See "Related encodings"))
+      else (pure (()))
+      if (((P == 1#1) && (W == 0#1)) : Bool)
+      then sailThrow ((Error_See "VLDR"))
+      else (pure (()))
+      if (((P == U) && (W == 1#1)) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let single_regs : Bool := true
+      let add : Bool := (U == 1#1)
+      let wback : Bool := (W == 1#1)
+      let d : Int := (BitVec.toNat (Vd +++ D))
+      let n : Int := (BitVec.toNat Rn)
+      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend (imm8 +++ 0b00#2) 32)
+      let regs : Int := (BitVec.toNat imm8)
+      let w__3 ← (( do
+        if (((n == 15) : Bool) : Bool)
+        then
+          if (wback : Bool)
+          then (pure true)
+          else
+            (do
+              let w__1 ← (( do (CurrentInstrSet ()) ) : SailM InstrSet )
+              (pure (((bne w__1 InstrSet_A32) : Bool))))
+        else (pure false) ) : SailM Bool )
+      if (w__3 : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      if (((regs == 0) || ((d +i regs) >b 32)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_VLDM_Op_A_txt add (Sail.Int.toNatChecked (d)) imm32
+        (Sail.Int.toNatChecked (n)) regs single_regs wback))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_VLDR_A1enc_A_txt (cond : (BitVec 4)) (U : (BitVec 1)) (D : (BitVec 1)) (Rn : (BitVec 4)) (Vd : (BitVec 4)) (size : (BitVec 2)) (imm8 : (BitVec 8)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:27036.29-27036.30"
+      let w__3 ← (( do
+        if (((size == 0b00#2) : Bool) : Bool)
+        then (pure true)
+        else
+          (do
+            if (((size == 0b01#2) : Bool) : Bool)
+            then
+              (do
+                let w__1 ← (( do (HaveFP16Ext ()) ) : SailM Bool )
+                (pure (((! w__1) : Bool))))
+            else (pure false)) ) : SailM Bool )
+      if (w__3 : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      if (((size == 0b01#2) && (cond != 0b1110#4)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      let esize : Int := (Int.shiftl 8 (BitVec.toNat size))
+      let add : Bool := (U == 1#1)
+      let imm32 : (BitVec 32) :=
+        if ((esize == 16) : Bool)
+        then (Sail.BitVec.zeroExtend (imm8 +++ 0#1) 32)
+        else (Sail.BitVec.zeroExtend (imm8 +++ 0b00#2) 32)
+      let d ← (( do
+        ((fun n => Sail.Int.toNatChecked n) <$> ((undefined_range_at (← occLabel 3454) 0 31))) ) :
+        SailM Nat )
+      let d : Nat :=
+        match size with
+        | 0b01 => (BitVec.toNat (Vd +++ D))
+        | 0b10 => (BitVec.toNat (Vd +++ D))
+        | 0b11 => (BitVec.toNat (D +++ Vd))
+        | _ => d
+      let d : Int := d
+      let n : Int := (BitVec.toNat Rn)
+      (execute_aarch32_instrs_VLDR_Op_A_txt add (Sail.Int.toNatChecked (d))
+        (Sail.Int.toNatChecked (esize)) imm32 (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_VLDR_T1enc_A_txt (U : (BitVec 1)) (D : (BitVec 1)) (Rn : (BitVec 4)) (Vd : (BitVec 4)) (size : (BitVec 2)) (imm8 : (BitVec 8)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let w__3 ← (( do
+        if (((size == 0b00#2) : Bool) : Bool)
+        then (pure true)
+        else
+          (do
+            if (((size == 0b01#2) : Bool) : Bool)
+            then
+              (do
+                let w__1 ← (( do (HaveFP16Ext ()) ) : SailM Bool )
+                (pure (((! w__1) : Bool))))
+            else (pure false)) ) : SailM Bool )
+      if (w__3 : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let w__5 ← (( do
+        if (((size == 0b01#2) : Bool) : Bool)
+        then
+          (do
+            (InITBlock ()))
+        else (pure false) ) : SailM Bool )
+      if (w__5 : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      let esize : Int := (Int.shiftl 8 (BitVec.toNat size))
+      let add : Bool := (U == 1#1)
+      let imm32 : (BitVec 32) :=
+        if ((esize == 16) : Bool)
+        then (Sail.BitVec.zeroExtend (imm8 +++ 0#1) 32)
+        else (Sail.BitVec.zeroExtend (imm8 +++ 0b00#2) 32)
+      let d ← (( do
+        ((fun n => Sail.Int.toNatChecked n) <$> ((undefined_range_at (← occLabel 3455) 0 31))) ) :
+        SailM Nat )
+      let d : Nat :=
+        match size with
+        | 0b01 => (BitVec.toNat (Vd +++ D))
+        | 0b10 => (BitVec.toNat (Vd +++ D))
+        | 0b11 => (BitVec.toNat (D +++ Vd))
+        | _ => d
+      let d : Int := d
+      let n : Int := (BitVec.toNat Rn)
+      (execute_aarch32_instrs_VLDR_Op_A_txt add (Sail.Int.toNatChecked (d))
+        (Sail.Int.toNatChecked (esize)) imm32 (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_VST1_1_A1enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) (Vd : (BitVec 4)) (size : (BitVec 2)) (index_align : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if ((size == 0b11#2) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access index_align 0)])) != 0#1) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let ebytes : Nat := 1
+      let index : Int := (BitVec.toNat (Sail.BitVec.extractLsb index_align 3 1))
+      let alignment : Nat := 1
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      let wback : Bool := (m != 15)
+      let register_index : Bool := ((m != 15) && (m != 13))
+      if ((n == 15) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_VST1_1_Op_A_txt alignment (Sail.Int.toNatChecked (d)) ebytes
+        (Sail.Int.toNatChecked (index)) (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))
+        register_index wback))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_VST1_1_A2enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) (Vd : (BitVec 4)) (size : (BitVec 2)) (index_align : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if ((size == 0b11#2) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access index_align 1)])) != 0#1) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let ebytes : Nat := 2
+      let index : Int := (BitVec.toNat (Sail.BitVec.extractLsb index_align 3 2))
+      let alignment : Int :=
+        if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access index_align 0)])) == 0#1) : Bool)
+        then 1
+        else 2
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      let wback : Bool := (m != 15)
+      let register_index : Bool := ((m != 15) && (m != 13))
+      if ((n == 15) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_VST1_1_Op_A_txt (Sail.Int.toNatChecked (alignment))
+        (Sail.Int.toNatChecked (d)) ebytes (Sail.Int.toNatChecked (index))
+        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) register_index wback))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_VST1_1_A3enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) (Vd : (BitVec 4)) (size : (BitVec 2)) (index_align : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if ((size == 0b11#2) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access index_align 2)])) != 0#1) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      if ((((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb index_align 1 0)) != 0b00#2) && ((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
+               index_align 1 0)) != 0b11#2)) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let ebytes : Nat := 4
+      let index : Int :=
+        (BitVec.toNat (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access index_align 3)])))
+      let alignment : Int :=
+        if (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb index_align 1 0)) == 0b00#2) : Bool)
+        then 1
+        else 4
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      let wback : Bool := (m != 15)
+      let register_index : Bool := ((m != 15) && (m != 13))
+      if ((n == 15) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_VST1_1_Op_A_txt (Sail.Int.toNatChecked (alignment))
+        (Sail.Int.toNatChecked (d)) ebytes (Sail.Int.toNatChecked (index))
+        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) register_index wback))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_VST1_1_T1enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) (Vd : (BitVec 4)) (size : (BitVec 2)) (index_align : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if ((size == 0b11#2) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access index_align 0)])) != 0#1) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let ebytes : Nat := 1
+      let index : Int := (BitVec.toNat (Sail.BitVec.extractLsb index_align 3 1))
+      let alignment : Nat := 1
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      let wback : Bool := (m != 15)
+      let register_index : Bool := ((m != 15) && (m != 13))
+      if ((n == 15) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_VST1_1_Op_A_txt alignment (Sail.Int.toNatChecked (d)) ebytes
+        (Sail.Int.toNatChecked (index)) (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))
+        register_index wback))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_VST1_1_T2enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) (Vd : (BitVec 4)) (size : (BitVec 2)) (index_align : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if ((size == 0b11#2) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access index_align 1)])) != 0#1) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let ebytes : Nat := 2
+      let index : Int := (BitVec.toNat (Sail.BitVec.extractLsb index_align 3 2))
+      let alignment : Int :=
+        if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access index_align 0)])) == 0#1) : Bool)
+        then 1
+        else 2
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      let wback : Bool := (m != 15)
+      let register_index : Bool := ((m != 15) && (m != 13))
+      if ((n == 15) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_VST1_1_Op_A_txt (Sail.Int.toNatChecked (alignment))
+        (Sail.Int.toNatChecked (d)) ebytes (Sail.Int.toNatChecked (index))
+        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) register_index wback))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_VST1_1_T3enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) (Vd : (BitVec 4)) (size : (BitVec 2)) (index_align : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if ((size == 0b11#2) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access index_align 2)])) != 0#1) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      if ((((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb index_align 1 0)) != 0b00#2) && ((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb
+               index_align 1 0)) != 0b11#2)) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let ebytes : Nat := 4
+      let index : Int :=
+        (BitVec.toNat (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access index_align 3)])))
+      let alignment : Int :=
+        if (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb index_align 1 0)) == 0b00#2) : Bool)
+        then 1
+        else 4
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      let wback : Bool := (m != 15)
+      let register_index : Bool := ((m != 15) && (m != 13))
+      if ((n == 15) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_VST1_1_Op_A_txt (Sail.Int.toNatChecked (alignment))
+        (Sail.Int.toNatChecked (d)) ebytes (Sail.Int.toNatChecked (index))
+        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) register_index wback))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_VST1_m_A1enc_A_txt (D : (BitVec 1)) (Rn : (BitVec 4)) (Vd : (BitVec 4)) (itype : (BitVec 4)) (size : (BitVec 2)) (align : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let regs : Nat := 1
+      if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access align 1)])) == 1#1) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let alignment : Int :=
+        if ((align == 0b00#2) : Bool)
+        then 1
+        else (Int.shiftl 4 (BitVec.toNat align))
+      let ebytes : Int := (Int.shiftl 1 (BitVec.toNat size))
+      let elements : Int := (Int.ediv 8 (Sail.Int.toNatChecked (ebytes)))
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      let wback : Bool := (m != 15)
+      let register_index : Bool := ((m != 15) && (m != 13))
+      if ((n == 15) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      ArmFull.assert (((((regs == 1) || (regs == 2)) || (regs == 3)) || (regs == 4)) && ((0 ≤b n) && ((n ≤b 15) && ((0 ≤b m) && ((m ≤b 15) && (((((ebytes == 1) || (ebytes == 2)) || (ebytes == 4)) || (ebytes == 8)) && ((0 ≤b d) && ((d ≤b 31) && (((((alignment == 1) || (alignment == 4)) || (alignment == 8)) || (alignment == 16)) || (alignment == 32)))))))))) "sail-inputs/14-instrs32.sail:37615.173-37615.174"
+      (execute_aarch32_instrs_VST1_m_Op_A_txt (Sail.Int.toNatChecked (alignment))
+        (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (ebytes)) elements
+        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) register_index regs wback))
+  else (pure (()))
 
 
 end ArmFull.Functions

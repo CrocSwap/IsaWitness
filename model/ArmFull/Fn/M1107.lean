@@ -1,14 +1,10 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0018
-import ArmFull.Fn.M0086
-import ArmFull.Fn.M0116
-import ArmFull.Fn.M0145
-import ArmFull.Fn.M0178
-import ArmFull.Fn.M1078
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0124
+public import ArmFull.Fn.M1060 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -110,649 +106,660 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-def decode_frintp_advsimd_aarch64_instrs_vector_arithmetic_unary_fp16_round (Rd : (BitVec 5)) (Rn : (BitVec 5)) (o1 : (BitVec 1)) (o2 : (BitVec 1)) (U : (BitVec 1)) (Q : (BitVec 1)) : SailM Unit := do
-  if ((! (HaveFP16Ext ())) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_aarch32_instrs_VREV16_A1enc_A_txt (D : (BitVec 1)) (size : (BitVec 2)) (Vd : (BitVec 4)) (op : (BitVec 2)) (Q : (BitVec 1)) (M : (BitVec 1)) (Vm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if ((((BitVec.toNat op) +i (BitVec.toNat size)) ≥b 3) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      if (((Q == 1#1) && (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vd 0)])) == 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
+                   Vm 0)])) == 1#1))) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let esize : Int := (Int.shiftl 8 (BitVec.toNat size))
+      let container_size : Int := 16
+      let container_size : Int :=
+        match op with
+        | 0b10 => 16
+        | 0b01 => 32
+        | 0b00 => 64
+        | _ => container_size
+      let container_size : Int := container_size
+      let containers : Int := (Int.ediv 64 (Sail.Int.toNatChecked (container_size)))
+      let elements_per_container : Int :=
+        (Int.ediv (Sail.Int.toNatChecked (container_size)) (Sail.Int.toNatChecked (esize)))
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let m : Int := (BitVec.toNat (M +++ Vm))
+      let regs : Int :=
+        if ((Q == 0#1) : Bool)
+        then 1
+        else 2
+      (execute_aarch32_instrs_VREV16_Op_A_txt containers (Sail.Int.toNatChecked (d))
+        elements_per_container (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (regs))))
   else (pure (()))
-  let d : Int := (BitVec.toNat Rd)
-  let n : Int := (BitVec.toNat Rn)
-  let esize : Nat := 16
-  let datasize : Int :=
-    if ((Q == 1#1) : Bool)
-    then 128
-    else 64
-  let elements : Int := (Int.ediv (Sail.Int.toNatChecked (datasize)) esize)
-  let exact : Bool := false
-  let rounding ← (( do (undefined_FPRounding (← occLabel 4311) ()) ) : SailM FPRounding )
-  let b__0 := ((U +++ o1) +++ o2)
-  let (exact, rounding) ← (( do
-    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__0 2 2)) == (0#1 : (BitVec 1))) : Bool)
-    then
-      (do
-        let w__0 ← (( do (FPDecodeRounding (o1 +++ o2)) ) : SailM FPRounding )
-        let rounding := (w__0 : FPRounding)
-        (pure ((exact, rounding))))
-    else
-      (do
-        match b__0 with
-        | 0b100 =>
-          (let rounding : FPRounding := FPRounding_TIEAWAY
-          (pure ((exact, rounding))))
-        | 0b101 => sailThrow ((Error_Undefined ()))
-        | 0b110 =>
-          (do
-            let w__1 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__2 ← (( do (FPRoundingMode w__1) ) : SailM FPRounding )
-            let rounding := (w__2 : FPRounding)
-            let exact : Bool := true
-            (pure ((exact, rounding))))
-        | _ =>
-          (do
-            let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__4 ← (( do (FPRoundingMode w__3) ) : SailM FPRounding )
-            let rounding := (w__4 : FPRounding)
-            (pure ((exact, rounding))))) ) : SailM (Bool × FPRounding) )
-  let rounding := rounding
-  (execute_aarch64_instrs_vector_arithmetic_unary_fp16_round (Sail.Int.toNatChecked (d))
-    (Sail.Int.toNatChecked (datasize)) elements esize exact (Sail.Int.toNatChecked (n)) rounding)
 
 
-def decode_frintp_advsimd_aarch64_instrs_vector_arithmetic_unary_float_round (Rd : (BitVec 5)) (Rn : (BitVec 5)) (o1 : (BitVec 1)) (sz : (BitVec 1)) (o2 : (BitVec 1)) (U : (BitVec 1)) (Q : (BitVec 1)) : SailM Unit := do
-  let d : Int := (BitVec.toNat Rd)
-  let n : Int := (BitVec.toNat Rn)
-  if (((sz +++ Q) == 0b10#2) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_aarch32_instrs_VREV16_T1enc_A_txt (D : (BitVec 1)) (size : (BitVec 2)) (Vd : (BitVec 4)) (op : (BitVec 2)) (Q : (BitVec 1)) (M : (BitVec 1)) (Vm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if ((((BitVec.toNat op) +i (BitVec.toNat size)) ≥b 3) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      if (((Q == 1#1) && (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vd 0)])) == 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
+                   Vm 0)])) == 1#1))) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let esize : Int := (Int.shiftl 8 (BitVec.toNat size))
+      let container_size : Int := 16
+      let container_size : Int :=
+        match op with
+        | 0b10 => 16
+        | 0b01 => 32
+        | 0b00 => 64
+        | _ => container_size
+      let container_size : Int := container_size
+      let containers : Int := (Int.ediv 64 (Sail.Int.toNatChecked (container_size)))
+      let elements_per_container : Int :=
+        (Int.ediv (Sail.Int.toNatChecked (container_size)) (Sail.Int.toNatChecked (esize)))
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let m : Int := (BitVec.toNat (M +++ Vm))
+      let regs : Int :=
+        if ((Q == 0#1) : Bool)
+        then 1
+        else 2
+      (execute_aarch32_instrs_VREV16_Op_A_txt containers (Sail.Int.toNatChecked (d))
+        elements_per_container (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (regs))))
   else (pure (()))
-  let esize : Int := (Int.shiftl 32 (BitVec.toNat sz))
-  let datasize : Int :=
-    if ((Q == 1#1) : Bool)
-    then 128
-    else 64
-  let elements : Int :=
-    (Int.ediv (Sail.Int.toNatChecked (datasize)) (Sail.Int.toNatChecked (esize)))
-  let exact : Bool := false
-  let rounding ← (( do (undefined_FPRounding (← occLabel 4312) ()) ) : SailM FPRounding )
-  let b__0 := ((U +++ o1) +++ o2)
-  let (exact, rounding) ← (( do
-    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__0 2 2)) == (0#1 : (BitVec 1))) : Bool)
-    then
-      (do
-        let w__0 ← (( do (FPDecodeRounding (o1 +++ o2)) ) : SailM FPRounding )
-        let rounding := (w__0 : FPRounding)
-        (pure ((exact, rounding))))
-    else
-      (do
-        match b__0 with
-        | 0b100 =>
-          (let rounding : FPRounding := FPRounding_TIEAWAY
-          (pure ((exact, rounding))))
-        | 0b101 => sailThrow ((Error_Undefined ()))
-        | 0b110 =>
-          (do
-            let w__1 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__2 ← (( do (FPRoundingMode w__1) ) : SailM FPRounding )
-            let rounding := (w__2 : FPRounding)
-            let exact : Bool := true
-            (pure ((exact, rounding))))
-        | _ =>
-          (do
-            let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__4 ← (( do (FPRoundingMode w__3) ) : SailM FPRounding )
-            let rounding := (w__4 : FPRounding)
-            (pure ((exact, rounding))))) ) : SailM (Bool × FPRounding) )
-  let rounding := rounding
-  (execute_aarch64_instrs_vector_arithmetic_unary_fp16_round (Sail.Int.toNatChecked (d))
-    (Sail.Int.toNatChecked (datasize)) elements (Sail.Int.toNatChecked (esize)) exact
-    (Sail.Int.toNatChecked (n)) rounding)
 
 
-def decode_frintx_advsimd_aarch64_instrs_vector_arithmetic_unary_fp16_round (Rd : (BitVec 5)) (Rn : (BitVec 5)) (o1 : (BitVec 1)) (o2 : (BitVec 1)) (U : (BitVec 1)) (Q : (BitVec 1)) : SailM Unit := do
-  if ((! (HaveFP16Ext ())) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_aarch32_instrs_VRHADD_A1enc_A_txt (U : (BitVec 1)) (D : (BitVec 1)) (size : (BitVec 2)) (Vn : (BitVec 4)) (Vd : (BitVec 4)) (N : (BitVec 1)) (Q : (BitVec 1)) (M : (BitVec 1)) (Vm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if (((Q == 1#1) && ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vd 0)])) == 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
+                     Vn 0)])) == 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vm 0)])) == 1#1))) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      if ((size == 0b11#2) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let is_unsigned : Bool := (U == 1#1)
+      let esize : Int := (Int.shiftl 8 (BitVec.toNat size))
+      let elements : Int := (Int.ediv 64 (Sail.Int.toNatChecked (esize)))
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let n : Int := (BitVec.toNat (N +++ Vn))
+      let m : Int := (BitVec.toNat (M +++ Vm))
+      let regs : Int :=
+        if ((Q == 0#1) : Bool)
+        then 1
+        else 2
+      (execute_aarch32_instrs_VRHADD_Op_A_txt (Sail.Int.toNatChecked (d)) elements
+        (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))
+        (Sail.Int.toNatChecked (regs)) is_unsigned))
   else (pure (()))
-  let d : Int := (BitVec.toNat Rd)
-  let n : Int := (BitVec.toNat Rn)
-  let esize : Nat := 16
-  let datasize : Int :=
-    if ((Q == 1#1) : Bool)
-    then 128
-    else 64
-  let elements : Int := (Int.ediv (Sail.Int.toNatChecked (datasize)) esize)
-  let exact : Bool := false
-  let rounding ← (( do (undefined_FPRounding (← occLabel 4313) ()) ) : SailM FPRounding )
-  let b__0 := ((U +++ o1) +++ o2)
-  let (exact, rounding) ← (( do
-    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__0 2 2)) == (0#1 : (BitVec 1))) : Bool)
-    then
-      (do
-        let w__0 ← (( do (FPDecodeRounding (o1 +++ o2)) ) : SailM FPRounding )
-        let rounding := (w__0 : FPRounding)
-        (pure ((exact, rounding))))
-    else
-      (do
-        match b__0 with
-        | 0b100 =>
-          (let rounding : FPRounding := FPRounding_TIEAWAY
-          (pure ((exact, rounding))))
-        | 0b101 => sailThrow ((Error_Undefined ()))
-        | 0b110 =>
-          (do
-            let w__1 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__2 ← (( do (FPRoundingMode w__1) ) : SailM FPRounding )
-            let rounding := (w__2 : FPRounding)
-            let exact : Bool := true
-            (pure ((exact, rounding))))
-        | _ =>
-          (do
-            let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__4 ← (( do (FPRoundingMode w__3) ) : SailM FPRounding )
-            let rounding := (w__4 : FPRounding)
-            (pure ((exact, rounding))))) ) : SailM (Bool × FPRounding) )
-  let rounding := rounding
-  (execute_aarch64_instrs_vector_arithmetic_unary_fp16_round (Sail.Int.toNatChecked (d))
-    (Sail.Int.toNatChecked (datasize)) elements esize exact (Sail.Int.toNatChecked (n)) rounding)
 
 
-def decode_frintx_advsimd_aarch64_instrs_vector_arithmetic_unary_float_round (Rd : (BitVec 5)) (Rn : (BitVec 5)) (o1 : (BitVec 1)) (sz : (BitVec 1)) (o2 : (BitVec 1)) (U : (BitVec 1)) (Q : (BitVec 1)) : SailM Unit := do
-  let d : Int := (BitVec.toNat Rd)
-  let n : Int := (BitVec.toNat Rn)
-  if (((sz +++ Q) == 0b10#2) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_aarch32_instrs_VRHADD_T1enc_A_txt (U : (BitVec 1)) (D : (BitVec 1)) (size : (BitVec 2)) (Vn : (BitVec 4)) (Vd : (BitVec 4)) (N : (BitVec 1)) (Q : (BitVec 1)) (M : (BitVec 1)) (Vm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if (((Q == 1#1) && ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vd 0)])) == 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
+                     Vn 0)])) == 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vm 0)])) == 1#1))) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      if ((size == 0b11#2) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let is_unsigned : Bool := (U == 1#1)
+      let esize : Int := (Int.shiftl 8 (BitVec.toNat size))
+      let elements : Int := (Int.ediv 64 (Sail.Int.toNatChecked (esize)))
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let n : Int := (BitVec.toNat (N +++ Vn))
+      let m : Int := (BitVec.toNat (M +++ Vm))
+      let regs : Int :=
+        if ((Q == 0#1) : Bool)
+        then 1
+        else 2
+      (execute_aarch32_instrs_VRHADD_Op_A_txt (Sail.Int.toNatChecked (d)) elements
+        (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))
+        (Sail.Int.toNatChecked (regs)) is_unsigned))
   else (pure (()))
-  let esize : Int := (Int.shiftl 32 (BitVec.toNat sz))
-  let datasize : Int :=
-    if ((Q == 1#1) : Bool)
-    then 128
-    else 64
-  let elements : Int :=
-    (Int.ediv (Sail.Int.toNatChecked (datasize)) (Sail.Int.toNatChecked (esize)))
-  let exact : Bool := false
-  let rounding ← (( do (undefined_FPRounding (← occLabel 4314) ()) ) : SailM FPRounding )
-  let b__0 := ((U +++ o1) +++ o2)
-  let (exact, rounding) ← (( do
-    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__0 2 2)) == (0#1 : (BitVec 1))) : Bool)
-    then
-      (do
-        let w__0 ← (( do (FPDecodeRounding (o1 +++ o2)) ) : SailM FPRounding )
-        let rounding := (w__0 : FPRounding)
-        (pure ((exact, rounding))))
-    else
-      (do
-        match b__0 with
-        | 0b100 =>
-          (let rounding : FPRounding := FPRounding_TIEAWAY
-          (pure ((exact, rounding))))
-        | 0b101 => sailThrow ((Error_Undefined ()))
-        | 0b110 =>
-          (do
-            let w__1 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__2 ← (( do (FPRoundingMode w__1) ) : SailM FPRounding )
-            let rounding := (w__2 : FPRounding)
-            let exact : Bool := true
-            (pure ((exact, rounding))))
-        | _ =>
-          (do
-            let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__4 ← (( do (FPRoundingMode w__3) ) : SailM FPRounding )
-            let rounding := (w__4 : FPRounding)
-            (pure ((exact, rounding))))) ) : SailM (Bool × FPRounding) )
-  let rounding := rounding
-  (execute_aarch64_instrs_vector_arithmetic_unary_fp16_round (Sail.Int.toNatChecked (d))
-    (Sail.Int.toNatChecked (datasize)) elements (Sail.Int.toNatChecked (esize)) exact
-    (Sail.Int.toNatChecked (n)) rounding)
 
 
-def decode_frintz_advsimd_aarch64_instrs_vector_arithmetic_unary_fp16_round (Rd : (BitVec 5)) (Rn : (BitVec 5)) (o1 : (BitVec 1)) (o2 : (BitVec 1)) (U : (BitVec 1)) (Q : (BitVec 1)) : SailM Unit := do
-  if ((! (HaveFP16Ext ())) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_aarch32_instrs_VRSHL_A1enc_A_txt (U : (BitVec 1)) (D : (BitVec 1)) (size : (BitVec 2)) (Vn : (BitVec 4)) (Vd : (BitVec 4)) (N : (BitVec 1)) (Q : (BitVec 1)) (M : (BitVec 1)) (Vm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if (((Q == 1#1) && ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vd 0)])) == 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
+                     Vm 0)])) == 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vn 0)])) == 1#1))) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let is_unsigned : Bool := (U == 1#1)
+      let esize : Int := (Int.shiftl 8 (BitVec.toNat size))
+      let elements : Int := (Int.ediv 64 (Sail.Int.toNatChecked (esize)))
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let m : Int := (BitVec.toNat (M +++ Vm))
+      let n : Int := (BitVec.toNat (N +++ Vn))
+      let regs : Int :=
+        if ((Q == 0#1) : Bool)
+        then 1
+        else 2
+      (execute_aarch32_instrs_VRSHL_Op_A_txt (Sail.Int.toNatChecked (d)) elements
+        (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))
+        (Sail.Int.toNatChecked (regs)) is_unsigned))
   else (pure (()))
-  let d : Int := (BitVec.toNat Rd)
-  let n : Int := (BitVec.toNat Rn)
-  let esize : Nat := 16
-  let datasize : Int :=
-    if ((Q == 1#1) : Bool)
-    then 128
-    else 64
-  let elements : Int := (Int.ediv (Sail.Int.toNatChecked (datasize)) esize)
-  let exact : Bool := false
-  let rounding ← (( do (undefined_FPRounding (← occLabel 4315) ()) ) : SailM FPRounding )
-  let b__0 := ((U +++ o1) +++ o2)
-  let (exact, rounding) ← (( do
-    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__0 2 2)) == (0#1 : (BitVec 1))) : Bool)
-    then
-      (do
-        let w__0 ← (( do (FPDecodeRounding (o1 +++ o2)) ) : SailM FPRounding )
-        let rounding := (w__0 : FPRounding)
-        (pure ((exact, rounding))))
-    else
-      (do
-        match b__0 with
-        | 0b100 =>
-          (let rounding : FPRounding := FPRounding_TIEAWAY
-          (pure ((exact, rounding))))
-        | 0b101 => sailThrow ((Error_Undefined ()))
-        | 0b110 =>
-          (do
-            let w__1 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__2 ← (( do (FPRoundingMode w__1) ) : SailM FPRounding )
-            let rounding := (w__2 : FPRounding)
-            let exact : Bool := true
-            (pure ((exact, rounding))))
-        | _ =>
-          (do
-            let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__4 ← (( do (FPRoundingMode w__3) ) : SailM FPRounding )
-            let rounding := (w__4 : FPRounding)
-            (pure ((exact, rounding))))) ) : SailM (Bool × FPRounding) )
-  let rounding := rounding
-  (execute_aarch64_instrs_vector_arithmetic_unary_fp16_round (Sail.Int.toNatChecked (d))
-    (Sail.Int.toNatChecked (datasize)) elements esize exact (Sail.Int.toNatChecked (n)) rounding)
 
 
-def decode_frintz_advsimd_aarch64_instrs_vector_arithmetic_unary_float_round (Rd : (BitVec 5)) (Rn : (BitVec 5)) (o1 : (BitVec 1)) (sz : (BitVec 1)) (o2 : (BitVec 1)) (U : (BitVec 1)) (Q : (BitVec 1)) : SailM Unit := do
-  let d : Int := (BitVec.toNat Rd)
-  let n : Int := (BitVec.toNat Rn)
-  if (((sz +++ Q) == 0b10#2) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_aarch32_instrs_VRSHL_T1enc_A_txt (U : (BitVec 1)) (D : (BitVec 1)) (size : (BitVec 2)) (Vn : (BitVec 4)) (Vd : (BitVec 4)) (N : (BitVec 1)) (Q : (BitVec 1)) (M : (BitVec 1)) (Vm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if (((Q == 1#1) && ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vd 0)])) == 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
+                     Vm 0)])) == 1#1)) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vn 0)])) == 1#1))) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let is_unsigned : Bool := (U == 1#1)
+      let esize : Int := (Int.shiftl 8 (BitVec.toNat size))
+      let elements : Int := (Int.ediv 64 (Sail.Int.toNatChecked (esize)))
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let m : Int := (BitVec.toNat (M +++ Vm))
+      let n : Int := (BitVec.toNat (N +++ Vn))
+      let regs : Int :=
+        if ((Q == 0#1) : Bool)
+        then 1
+        else 2
+      (execute_aarch32_instrs_VRSHL_Op_A_txt (Sail.Int.toNatChecked (d)) elements
+        (Sail.Int.toNatChecked (esize)) (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))
+        (Sail.Int.toNatChecked (regs)) is_unsigned))
   else (pure (()))
-  let esize : Int := (Int.shiftl 32 (BitVec.toNat sz))
-  let datasize : Int :=
-    if ((Q == 1#1) : Bool)
-    then 128
-    else 64
-  let elements : Int :=
-    (Int.ediv (Sail.Int.toNatChecked (datasize)) (Sail.Int.toNatChecked (esize)))
-  let exact : Bool := false
-  let rounding ← (( do (undefined_FPRounding (← occLabel 4316) ()) ) : SailM FPRounding )
-  let b__0 := ((U +++ o1) +++ o2)
-  let (exact, rounding) ← (( do
-    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__0 2 2)) == (0#1 : (BitVec 1))) : Bool)
-    then
-      (do
-        let w__0 ← (( do (FPDecodeRounding (o1 +++ o2)) ) : SailM FPRounding )
-        let rounding := (w__0 : FPRounding)
-        (pure ((exact, rounding))))
-    else
-      (do
-        match b__0 with
-        | 0b100 =>
-          (let rounding : FPRounding := FPRounding_TIEAWAY
-          (pure ((exact, rounding))))
-        | 0b101 => sailThrow ((Error_Undefined ()))
-        | 0b110 =>
-          (do
-            let w__1 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__2 ← (( do (FPRoundingMode w__1) ) : SailM FPRounding )
-            let rounding := (w__2 : FPRounding)
-            let exact : Bool := true
-            (pure ((exact, rounding))))
-        | _ =>
-          (do
-            let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__4 ← (( do (FPRoundingMode w__3) ) : SailM FPRounding )
-            let rounding := (w__4 : FPRounding)
-            (pure ((exact, rounding))))) ) : SailM (Bool × FPRounding) )
-  let rounding := rounding
-  (execute_aarch64_instrs_vector_arithmetic_unary_fp16_round (Sail.Int.toNatChecked (d))
-    (Sail.Int.toNatChecked (datasize)) elements (Sail.Int.toNatChecked (esize)) exact
-    (Sail.Int.toNatChecked (n)) rounding)
 
 
-def decode_frinta_float_aarch64_instrs_float_arithmetic_round_frint (Rd : (BitVec 5)) (Rn : (BitVec 5)) (rmode : (BitVec 3)) (ftype : (BitVec 2)) : SailM Unit := do
-  let d : Int := (BitVec.toNat Rd)
-  let n : Int := (BitVec.toNat Rn)
-  let esize : Int := 16
-  let esize ← (( do
-    match ftype with
-    | 0b00 => (pure (32))
-    | 0b01 => (pure (64))
-    | 0b10 => sailThrow ((Error_Undefined ()))
-    | _ =>
-      (do
-        if ((HaveFP16Ext ()) : Bool)
-        then (pure (16))
-        else sailThrow ((Error_Undefined ()))) ) : SailM Int )
-  let esize : Int := esize
-  let exact : Bool := false
-  let rounding ← (( do (undefined_FPRounding (← occLabel 4317) ()) ) : SailM FPRounding )
-  let b__0 := rmode
-  let (exact, rounding) ← (( do
-    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__0 2 2)) == (0#1 : (BitVec 1))) : Bool)
-    then
-      (do
-        let w__0 ← (( do (FPDecodeRounding (Sail.BitVec.extractLsb rmode 1 0)) ) : SailM
-          FPRounding )
-        let rounding := (w__0 : FPRounding)
-        (pure ((exact, rounding))))
-    else
-      (do
-        match b__0 with
-        | 0b100 =>
-          (let rounding : FPRounding := FPRounding_TIEAWAY
-          (pure ((exact, rounding))))
-        | 0b101 => sailThrow ((Error_Undefined ()))
-        | 0b110 =>
-          (do
-            let w__1 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__2 ← (( do (FPRoundingMode w__1) ) : SailM FPRounding )
-            let rounding := (w__2 : FPRounding)
-            let exact : Bool := true
-            (pure ((exact, rounding))))
-        | _ =>
-          (do
-            let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__4 ← (( do (FPRoundingMode w__3) ) : SailM FPRounding )
-            let rounding := (w__4 : FPRounding)
-            (pure ((exact, rounding))))) ) : SailM (Bool × FPRounding) )
-  let rounding := rounding
-  (execute_aarch64_instrs_float_arithmetic_round_frint (Sail.Int.toNatChecked (d))
-    (Sail.Int.toNatChecked (esize)) exact (Sail.Int.toNatChecked (n)) rounding)
+def decode_aarch32_instrs_VRSHR_A1enc_A_txt (U : (BitVec 1)) (D : (BitVec 1)) (imm6 : (BitVec 6)) (Vd : (BitVec 4)) (L : (BitVec 1)) (Q : (BitVec 1)) (M : (BitVec 1)) (Vm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if ((let b__0 := (L +++ imm6)
+         (if (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb b__0 6 3)) == (0x0#4 : (BitVec 4))) : Bool)
+         then true
+         else false : Bool)) : Bool)
+      then sailThrow ((Error_See "Related encodings"))
+      else (pure (()))
+      if (((Q == 1#1) && (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vd 0)])) == 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
+                   Vm 0)])) == 1#1))) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let esize : Int := 8
+      let elements : Int := 1
+      let shift_amount ← (( do (undefined_int_at (← occLabel 3719) ()) ) : SailM Int )
+      let b__1 := (L +++ imm6)
+      let (elements, esize, shift_amount) : (Int × Int × Int) :=
+        if (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb b__1 6 3)) == (0x1#4 : (BitVec 4))) : Bool)
+        then
+          (let esize : Int := 8
+          let elements : Int := 8
+          let shift_amount : Int := (16 -i (BitVec.toNat imm6))
+          (elements, esize, shift_amount))
+        else
+          (let (elements, esize, shift_amount) : (Int × Int × Int) :=
+            if (((Sail.BitVec.castWidth (m := 3) (Sail.BitVec.extractLsb b__1 6 4)) == (0b001#3 : (BitVec 3))) : Bool)
+            then
+              (let esize : Int := 16
+              let elements : Int := 4
+              let shift_amount : Int := (32 -i (BitVec.toNat imm6))
+              (elements, esize, shift_amount))
+            else
+              (let (elements, esize, shift_amount) : (Int × Int × Int) :=
+                if (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb b__1 6 5)) == (0b01#2 : (BitVec 2))) : Bool)
+                then
+                  (let esize : Int := 32
+                  let elements : Int := 2
+                  let shift_amount : Int := (64 -i (BitVec.toNat imm6))
+                  (elements, esize, shift_amount))
+                else
+                  (let (elements, esize, shift_amount) : (Int × Int × Int) :=
+                    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__1 6 6)) == (1#1 : (BitVec 1))) : Bool)
+                    then
+                      (let esize : Int := 64
+                      let elements : Int := 1
+                      let shift_amount : Int := (64 -i (BitVec.toNat imm6))
+                      (elements, esize, shift_amount))
+                    else (elements, esize, shift_amount)
+                  (elements, esize, shift_amount))
+              (elements, esize, shift_amount))
+          (elements, esize, shift_amount))
+      let shift_amount : Int := shift_amount
+      let esize : Int := esize
+      let elements : Int := elements
+      let is_unsigned : Bool := (U == 1#1)
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let m : Int := (BitVec.toNat (M +++ Vm))
+      let regs : Int :=
+        if ((Q == 0#1) : Bool)
+        then 1
+        else 2
+      match esize with
+      | 8 =>
+        (do
+          (execute_aarch32_instrs_VRSHR_Op_A_txt (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (elements)) 8 (Sail.Int.toNatChecked (m))
+            (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
+      | 16 =>
+        (do
+          (execute_aarch32_instrs_VRSHR_Op_A_txt (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (elements)) 16 (Sail.Int.toNatChecked (m))
+            (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
+      | 32 =>
+        (do
+          (execute_aarch32_instrs_VRSHR_Op_A_txt (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (elements)) 32 (Sail.Int.toNatChecked (m))
+            (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
+      | 64 =>
+        (do
+          (execute_aarch32_instrs_VRSHR_Op_A_txt (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (elements)) 64 (Sail.Int.toNatChecked (m))
+            (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
+      | _ =>
+        (do
+          ArmFull.assert false "sail-inputs/14-instrs32.sail:35204.26-35204.27"
+          throw Error.Exit))
+  else (pure (()))
 
 
-def decode_frinti_float_aarch64_instrs_float_arithmetic_round_frint (Rd : (BitVec 5)) (Rn : (BitVec 5)) (rmode : (BitVec 3)) (ftype : (BitVec 2)) : SailM Unit := do
-  let d : Int := (BitVec.toNat Rd)
-  let n : Int := (BitVec.toNat Rn)
-  let esize : Int := 16
-  let esize ← (( do
-    match ftype with
-    | 0b00 => (pure (32))
-    | 0b01 => (pure (64))
-    | 0b10 => sailThrow ((Error_Undefined ()))
-    | _ =>
-      (do
-        if ((HaveFP16Ext ()) : Bool)
-        then (pure (16))
-        else sailThrow ((Error_Undefined ()))) ) : SailM Int )
-  let esize : Int := esize
-  let exact : Bool := false
-  let rounding ← (( do (undefined_FPRounding (← occLabel 4318) ()) ) : SailM FPRounding )
-  let b__0 := rmode
-  let (exact, rounding) ← (( do
-    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__0 2 2)) == (0#1 : (BitVec 1))) : Bool)
-    then
-      (do
-        let w__0 ← (( do (FPDecodeRounding (Sail.BitVec.extractLsb rmode 1 0)) ) : SailM
-          FPRounding )
-        let rounding := (w__0 : FPRounding)
-        (pure ((exact, rounding))))
-    else
-      (do
-        match b__0 with
-        | 0b100 =>
-          (let rounding : FPRounding := FPRounding_TIEAWAY
-          (pure ((exact, rounding))))
-        | 0b101 => sailThrow ((Error_Undefined ()))
-        | 0b110 =>
-          (do
-            let w__1 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__2 ← (( do (FPRoundingMode w__1) ) : SailM FPRounding )
-            let rounding := (w__2 : FPRounding)
-            let exact : Bool := true
-            (pure ((exact, rounding))))
-        | _ =>
-          (do
-            let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__4 ← (( do (FPRoundingMode w__3) ) : SailM FPRounding )
-            let rounding := (w__4 : FPRounding)
-            (pure ((exact, rounding))))) ) : SailM (Bool × FPRounding) )
-  let rounding := rounding
-  (execute_aarch64_instrs_float_arithmetic_round_frint (Sail.Int.toNatChecked (d))
-    (Sail.Int.toNatChecked (esize)) exact (Sail.Int.toNatChecked (n)) rounding)
+def decode_aarch32_instrs_VRSHR_T1enc_A_txt (U : (BitVec 1)) (D : (BitVec 1)) (imm6 : (BitVec 6)) (Vd : (BitVec 4)) (L : (BitVec 1)) (Q : (BitVec 1)) (M : (BitVec 1)) (Vm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if ((let b__0 := (L +++ imm6)
+         (if (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb b__0 6 3)) == (0x0#4 : (BitVec 4))) : Bool)
+         then true
+         else false : Bool)) : Bool)
+      then sailThrow ((Error_See "Related encodings"))
+      else (pure (()))
+      if (((Q == 1#1) && (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vd 0)])) == 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
+                   Vm 0)])) == 1#1))) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let esize : Int := 8
+      let elements : Int := 1
+      let shift_amount ← (( do (undefined_int_at (← occLabel 3720) ()) ) : SailM Int )
+      let b__1 := (L +++ imm6)
+      let (elements, esize, shift_amount) : (Int × Int × Int) :=
+        if (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb b__1 6 3)) == (0x1#4 : (BitVec 4))) : Bool)
+        then
+          (let esize : Int := 8
+          let elements : Int := 8
+          let shift_amount : Int := (16 -i (BitVec.toNat imm6))
+          (elements, esize, shift_amount))
+        else
+          (let (elements, esize, shift_amount) : (Int × Int × Int) :=
+            if (((Sail.BitVec.castWidth (m := 3) (Sail.BitVec.extractLsb b__1 6 4)) == (0b001#3 : (BitVec 3))) : Bool)
+            then
+              (let esize : Int := 16
+              let elements : Int := 4
+              let shift_amount : Int := (32 -i (BitVec.toNat imm6))
+              (elements, esize, shift_amount))
+            else
+              (let (elements, esize, shift_amount) : (Int × Int × Int) :=
+                if (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb b__1 6 5)) == (0b01#2 : (BitVec 2))) : Bool)
+                then
+                  (let esize : Int := 32
+                  let elements : Int := 2
+                  let shift_amount : Int := (64 -i (BitVec.toNat imm6))
+                  (elements, esize, shift_amount))
+                else
+                  (let (elements, esize, shift_amount) : (Int × Int × Int) :=
+                    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__1 6 6)) == (1#1 : (BitVec 1))) : Bool)
+                    then
+                      (let esize : Int := 64
+                      let elements : Int := 1
+                      let shift_amount : Int := (64 -i (BitVec.toNat imm6))
+                      (elements, esize, shift_amount))
+                    else (elements, esize, shift_amount)
+                  (elements, esize, shift_amount))
+              (elements, esize, shift_amount))
+          (elements, esize, shift_amount))
+      let shift_amount : Int := shift_amount
+      let esize : Int := esize
+      let elements : Int := elements
+      let is_unsigned : Bool := (U == 1#1)
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let m : Int := (BitVec.toNat (M +++ Vm))
+      let regs : Int :=
+        if ((Q == 0#1) : Bool)
+        then 1
+        else 2
+      match esize with
+      | 8 =>
+        (do
+          (execute_aarch32_instrs_VRSHR_Op_A_txt (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (elements)) 8 (Sail.Int.toNatChecked (m))
+            (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
+      | 16 =>
+        (do
+          (execute_aarch32_instrs_VRSHR_Op_A_txt (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (elements)) 16 (Sail.Int.toNatChecked (m))
+            (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
+      | 32 =>
+        (do
+          (execute_aarch32_instrs_VRSHR_Op_A_txt (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (elements)) 32 (Sail.Int.toNatChecked (m))
+            (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
+      | 64 =>
+        (do
+          (execute_aarch32_instrs_VRSHR_Op_A_txt (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (elements)) 64 (Sail.Int.toNatChecked (m))
+            (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
+      | _ =>
+        (do
+          ArmFull.assert false "sail-inputs/14-instrs32.sail:35284.26-35284.27"
+          throw Error.Exit))
+  else (pure (()))
 
 
-def decode_frintm_float_aarch64_instrs_float_arithmetic_round_frint (Rd : (BitVec 5)) (Rn : (BitVec 5)) (rmode : (BitVec 3)) (ftype : (BitVec 2)) : SailM Unit := do
-  let d : Int := (BitVec.toNat Rd)
-  let n : Int := (BitVec.toNat Rn)
-  let esize : Int := 16
-  let esize ← (( do
-    match ftype with
-    | 0b00 => (pure (32))
-    | 0b01 => (pure (64))
-    | 0b10 => sailThrow ((Error_Undefined ()))
-    | _ =>
-      (do
-        if ((HaveFP16Ext ()) : Bool)
-        then (pure (16))
-        else sailThrow ((Error_Undefined ()))) ) : SailM Int )
-  let esize : Int := esize
-  let exact : Bool := false
-  let rounding ← (( do (undefined_FPRounding (← occLabel 4319) ()) ) : SailM FPRounding )
-  let b__0 := rmode
-  let (exact, rounding) ← (( do
-    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__0 2 2)) == (0#1 : (BitVec 1))) : Bool)
-    then
-      (do
-        let w__0 ← (( do (FPDecodeRounding (Sail.BitVec.extractLsb rmode 1 0)) ) : SailM
-          FPRounding )
-        let rounding := (w__0 : FPRounding)
-        (pure ((exact, rounding))))
-    else
-      (do
-        match b__0 with
-        | 0b100 =>
-          (let rounding : FPRounding := FPRounding_TIEAWAY
-          (pure ((exact, rounding))))
-        | 0b101 => sailThrow ((Error_Undefined ()))
-        | 0b110 =>
-          (do
-            let w__1 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__2 ← (( do (FPRoundingMode w__1) ) : SailM FPRounding )
-            let rounding := (w__2 : FPRounding)
-            let exact : Bool := true
-            (pure ((exact, rounding))))
-        | _ =>
-          (do
-            let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__4 ← (( do (FPRoundingMode w__3) ) : SailM FPRounding )
-            let rounding := (w__4 : FPRounding)
-            (pure ((exact, rounding))))) ) : SailM (Bool × FPRounding) )
-  let rounding := rounding
-  (execute_aarch64_instrs_float_arithmetic_round_frint (Sail.Int.toNatChecked (d))
-    (Sail.Int.toNatChecked (esize)) exact (Sail.Int.toNatChecked (n)) rounding)
+def decode_aarch32_instrs_VRSHRN_A1enc_A_txt (D : (BitVec 1)) (imm6 : (BitVec 6)) (Vd : (BitVec 4)) (M : (BitVec 1)) (Vm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if ((let b__0 := imm6
+         (if (((Sail.BitVec.castWidth (m := 3) (Sail.BitVec.extractLsb b__0 5 3)) == (0b000#3 : (BitVec 3))) : Bool)
+         then true
+         else false : Bool)) : Bool)
+      then sailThrow ((Error_See "Related encodings"))
+      else (pure (()))
+      if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vm 0)])) == 1#1) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let esize : Int := 8
+      let elements : Int := 2
+      let shift_amount ← (( do (undefined_int_at (← occLabel 3722) ()) ) : SailM Int )
+      let b__1 := imm6
+      let (elements, esize, shift_amount) : (Int × Int × Int) :=
+        if (((Sail.BitVec.castWidth (m := 3) (Sail.BitVec.extractLsb b__1 5 3)) == (0b001#3 : (BitVec 3))) : Bool)
+        then
+          (let esize : Int := 8
+          let elements : Int := 8
+          let shift_amount : Int := (16 -i (BitVec.toNat imm6))
+          (elements, esize, shift_amount))
+        else
+          (let (elements, esize, shift_amount) : (Int × Int × Int) :=
+            if (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb b__1 5 4)) == (0b01#2 : (BitVec 2))) : Bool)
+            then
+              (let esize : Int := 16
+              let elements : Int := 4
+              let shift_amount : Int := (32 -i (BitVec.toNat imm6))
+              (elements, esize, shift_amount))
+            else
+              (let (elements, esize, shift_amount) : (Int × Int × Int) :=
+                if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__1 5 5)) == (1#1 : (BitVec 1))) : Bool)
+                then
+                  (let esize : Int := 32
+                  let elements : Int := 2
+                  let shift_amount : Int := (64 -i (BitVec.toNat imm6))
+                  (elements, esize, shift_amount))
+                else (elements, esize, shift_amount)
+              (elements, esize, shift_amount))
+          (elements, esize, shift_amount))
+      let shift_amount : Int := shift_amount
+      let esize : Int := esize
+      let elements : Int := elements
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let m : Int := (BitVec.toNat (M +++ Vm))
+      (execute_aarch32_instrs_VRSHRN_Op_A_txt (Sail.Int.toNatChecked (d))
+        (Sail.Int.toNatChecked (elements)) (Sail.Int.toNatChecked (esize))
+        (Sail.Int.toNatChecked (m)) shift_amount))
+  else (pure (()))
 
 
-def decode_frintn_float_aarch64_instrs_float_arithmetic_round_frint (Rd : (BitVec 5)) (Rn : (BitVec 5)) (rmode : (BitVec 3)) (ftype : (BitVec 2)) : SailM Unit := do
-  let d : Int := (BitVec.toNat Rd)
-  let n : Int := (BitVec.toNat Rn)
-  let esize : Int := 16
-  let esize ← (( do
-    match ftype with
-    | 0b00 => (pure (32))
-    | 0b01 => (pure (64))
-    | 0b10 => sailThrow ((Error_Undefined ()))
-    | _ =>
-      (do
-        if ((HaveFP16Ext ()) : Bool)
-        then (pure (16))
-        else sailThrow ((Error_Undefined ()))) ) : SailM Int )
-  let esize : Int := esize
-  let exact : Bool := false
-  let rounding ← (( do (undefined_FPRounding (← occLabel 4320) ()) ) : SailM FPRounding )
-  let b__0 := rmode
-  let (exact, rounding) ← (( do
-    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__0 2 2)) == (0#1 : (BitVec 1))) : Bool)
-    then
-      (do
-        let w__0 ← (( do (FPDecodeRounding (Sail.BitVec.extractLsb rmode 1 0)) ) : SailM
-          FPRounding )
-        let rounding := (w__0 : FPRounding)
-        (pure ((exact, rounding))))
-    else
-      (do
-        match b__0 with
-        | 0b100 =>
-          (let rounding : FPRounding := FPRounding_TIEAWAY
-          (pure ((exact, rounding))))
-        | 0b101 => sailThrow ((Error_Undefined ()))
-        | 0b110 =>
-          (do
-            let w__1 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__2 ← (( do (FPRoundingMode w__1) ) : SailM FPRounding )
-            let rounding := (w__2 : FPRounding)
-            let exact : Bool := true
-            (pure ((exact, rounding))))
-        | _ =>
-          (do
-            let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__4 ← (( do (FPRoundingMode w__3) ) : SailM FPRounding )
-            let rounding := (w__4 : FPRounding)
-            (pure ((exact, rounding))))) ) : SailM (Bool × FPRounding) )
-  let rounding := rounding
-  (execute_aarch64_instrs_float_arithmetic_round_frint (Sail.Int.toNatChecked (d))
-    (Sail.Int.toNatChecked (esize)) exact (Sail.Int.toNatChecked (n)) rounding)
+def decode_aarch32_instrs_VRSHRN_T1enc_A_txt (D : (BitVec 1)) (imm6 : (BitVec 6)) (Vd : (BitVec 4)) (M : (BitVec 1)) (Vm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if ((let b__0 := imm6
+         (if (((Sail.BitVec.castWidth (m := 3) (Sail.BitVec.extractLsb b__0 5 3)) == (0b000#3 : (BitVec 3))) : Bool)
+         then true
+         else false : Bool)) : Bool)
+      then sailThrow ((Error_See "Related encodings"))
+      else (pure (()))
+      if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vm 0)])) == 1#1) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let esize : Int := 8
+      let elements : Int := 2
+      let shift_amount ← (( do (undefined_int_at (← occLabel 3723) ()) ) : SailM Int )
+      let b__1 := imm6
+      let (elements, esize, shift_amount) : (Int × Int × Int) :=
+        if (((Sail.BitVec.castWidth (m := 3) (Sail.BitVec.extractLsb b__1 5 3)) == (0b001#3 : (BitVec 3))) : Bool)
+        then
+          (let esize : Int := 8
+          let elements : Int := 8
+          let shift_amount : Int := (16 -i (BitVec.toNat imm6))
+          (elements, esize, shift_amount))
+        else
+          (let (elements, esize, shift_amount) : (Int × Int × Int) :=
+            if (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb b__1 5 4)) == (0b01#2 : (BitVec 2))) : Bool)
+            then
+              (let esize : Int := 16
+              let elements : Int := 4
+              let shift_amount : Int := (32 -i (BitVec.toNat imm6))
+              (elements, esize, shift_amount))
+            else
+              (let (elements, esize, shift_amount) : (Int × Int × Int) :=
+                if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__1 5 5)) == (1#1 : (BitVec 1))) : Bool)
+                then
+                  (let esize : Int := 32
+                  let elements : Int := 2
+                  let shift_amount : Int := (64 -i (BitVec.toNat imm6))
+                  (elements, esize, shift_amount))
+                else (elements, esize, shift_amount)
+              (elements, esize, shift_amount))
+          (elements, esize, shift_amount))
+      let shift_amount : Int := shift_amount
+      let esize : Int := esize
+      let elements : Int := elements
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let m : Int := (BitVec.toNat (M +++ Vm))
+      (execute_aarch32_instrs_VRSHRN_Op_A_txt (Sail.Int.toNatChecked (d))
+        (Sail.Int.toNatChecked (elements)) (Sail.Int.toNatChecked (esize))
+        (Sail.Int.toNatChecked (m)) shift_amount))
+  else (pure (()))
 
 
-def decode_frintp_float_aarch64_instrs_float_arithmetic_round_frint (Rd : (BitVec 5)) (Rn : (BitVec 5)) (rmode : (BitVec 3)) (ftype : (BitVec 2)) : SailM Unit := do
-  let d : Int := (BitVec.toNat Rd)
-  let n : Int := (BitVec.toNat Rn)
-  let esize : Int := 16
-  let esize ← (( do
-    match ftype with
-    | 0b00 => (pure (32))
-    | 0b01 => (pure (64))
-    | 0b10 => sailThrow ((Error_Undefined ()))
-    | _ =>
-      (do
-        if ((HaveFP16Ext ()) : Bool)
-        then (pure (16))
-        else sailThrow ((Error_Undefined ()))) ) : SailM Int )
-  let esize : Int := esize
-  let exact : Bool := false
-  let rounding ← (( do (undefined_FPRounding (← occLabel 4321) ()) ) : SailM FPRounding )
-  let b__0 := rmode
-  let (exact, rounding) ← (( do
-    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__0 2 2)) == (0#1 : (BitVec 1))) : Bool)
-    then
-      (do
-        let w__0 ← (( do (FPDecodeRounding (Sail.BitVec.extractLsb rmode 1 0)) ) : SailM
-          FPRounding )
-        let rounding := (w__0 : FPRounding)
-        (pure ((exact, rounding))))
-    else
-      (do
-        match b__0 with
-        | 0b100 =>
-          (let rounding : FPRounding := FPRounding_TIEAWAY
-          (pure ((exact, rounding))))
-        | 0b101 => sailThrow ((Error_Undefined ()))
-        | 0b110 =>
-          (do
-            let w__1 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__2 ← (( do (FPRoundingMode w__1) ) : SailM FPRounding )
-            let rounding := (w__2 : FPRounding)
-            let exact : Bool := true
-            (pure ((exact, rounding))))
-        | _ =>
-          (do
-            let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__4 ← (( do (FPRoundingMode w__3) ) : SailM FPRounding )
-            let rounding := (w__4 : FPRounding)
-            (pure ((exact, rounding))))) ) : SailM (Bool × FPRounding) )
-  let rounding := rounding
-  (execute_aarch64_instrs_float_arithmetic_round_frint (Sail.Int.toNatChecked (d))
-    (Sail.Int.toNatChecked (esize)) exact (Sail.Int.toNatChecked (n)) rounding)
+def decode_aarch32_instrs_VRSRA_A1enc_A_txt (U : (BitVec 1)) (D : (BitVec 1)) (imm6 : (BitVec 6)) (Vd : (BitVec 4)) (L : (BitVec 1)) (Q : (BitVec 1)) (M : (BitVec 1)) (Vm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if ((let b__0 := (L +++ imm6)
+         (if (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb b__0 6 3)) == (0x0#4 : (BitVec 4))) : Bool)
+         then true
+         else false : Bool)) : Bool)
+      then sailThrow ((Error_See "Related encodings"))
+      else (pure (()))
+      if (((Q == 1#1) && (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vd 0)])) == 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
+                   Vm 0)])) == 1#1))) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let esize : Int := 8
+      let elements : Int := 1
+      let shift_amount ← (( do (undefined_int_at (← occLabel 3725) ()) ) : SailM Int )
+      let b__1 := (L +++ imm6)
+      let (elements, esize, shift_amount) : (Int × Int × Int) :=
+        if (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb b__1 6 3)) == (0x1#4 : (BitVec 4))) : Bool)
+        then
+          (let esize : Int := 8
+          let elements : Int := 8
+          let shift_amount : Int := (16 -i (BitVec.toNat imm6))
+          (elements, esize, shift_amount))
+        else
+          (let (elements, esize, shift_amount) : (Int × Int × Int) :=
+            if (((Sail.BitVec.castWidth (m := 3) (Sail.BitVec.extractLsb b__1 6 4)) == (0b001#3 : (BitVec 3))) : Bool)
+            then
+              (let esize : Int := 16
+              let elements : Int := 4
+              let shift_amount : Int := (32 -i (BitVec.toNat imm6))
+              (elements, esize, shift_amount))
+            else
+              (let (elements, esize, shift_amount) : (Int × Int × Int) :=
+                if (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb b__1 6 5)) == (0b01#2 : (BitVec 2))) : Bool)
+                then
+                  (let esize : Int := 32
+                  let elements : Int := 2
+                  let shift_amount : Int := (64 -i (BitVec.toNat imm6))
+                  (elements, esize, shift_amount))
+                else
+                  (let (elements, esize, shift_amount) : (Int × Int × Int) :=
+                    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__1 6 6)) == (1#1 : (BitVec 1))) : Bool)
+                    then
+                      (let esize : Int := 64
+                      let elements : Int := 1
+                      let shift_amount : Int := (64 -i (BitVec.toNat imm6))
+                      (elements, esize, shift_amount))
+                    else (elements, esize, shift_amount)
+                  (elements, esize, shift_amount))
+              (elements, esize, shift_amount))
+          (elements, esize, shift_amount))
+      let shift_amount : Int := shift_amount
+      let esize : Int := esize
+      let elements : Int := elements
+      let is_unsigned : Bool := (U == 1#1)
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let m : Int := (BitVec.toNat (M +++ Vm))
+      let regs : Int :=
+        if ((Q == 0#1) : Bool)
+        then 1
+        else 2
+      match esize with
+      | 8 =>
+        (do
+          (execute_aarch32_instrs_VRSRA_Op_A_txt (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (elements)) 8 (Sail.Int.toNatChecked (m))
+            (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
+      | 16 =>
+        (do
+          (execute_aarch32_instrs_VRSRA_Op_A_txt (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (elements)) 16 (Sail.Int.toNatChecked (m))
+            (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
+      | 32 =>
+        (do
+          (execute_aarch32_instrs_VRSRA_Op_A_txt (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (elements)) 32 (Sail.Int.toNatChecked (m))
+            (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
+      | 64 =>
+        (do
+          (execute_aarch32_instrs_VRSRA_Op_A_txt (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (elements)) 64 (Sail.Int.toNatChecked (m))
+            (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
+      | _ =>
+        (do
+          ArmFull.assert false "sail-inputs/14-instrs32.sail:35727.26-35727.27"
+          throw Error.Exit))
+  else (pure (()))
 
 
-def decode_frintx_float_aarch64_instrs_float_arithmetic_round_frint (Rd : (BitVec 5)) (Rn : (BitVec 5)) (rmode : (BitVec 3)) (ftype : (BitVec 2)) : SailM Unit := do
-  let d : Int := (BitVec.toNat Rd)
-  let n : Int := (BitVec.toNat Rn)
-  let esize : Int := 16
-  let esize ← (( do
-    match ftype with
-    | 0b00 => (pure (32))
-    | 0b01 => (pure (64))
-    | 0b10 => sailThrow ((Error_Undefined ()))
-    | _ =>
-      (do
-        if ((HaveFP16Ext ()) : Bool)
-        then (pure (16))
-        else sailThrow ((Error_Undefined ()))) ) : SailM Int )
-  let esize : Int := esize
-  let exact : Bool := false
-  let rounding ← (( do (undefined_FPRounding (← occLabel 4322) ()) ) : SailM FPRounding )
-  let b__0 := rmode
-  let (exact, rounding) ← (( do
-    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__0 2 2)) == (0#1 : (BitVec 1))) : Bool)
-    then
-      (do
-        let w__0 ← (( do (FPDecodeRounding (Sail.BitVec.extractLsb rmode 1 0)) ) : SailM
-          FPRounding )
-        let rounding := (w__0 : FPRounding)
-        (pure ((exact, rounding))))
-    else
-      (do
-        match b__0 with
-        | 0b100 =>
-          (let rounding : FPRounding := FPRounding_TIEAWAY
-          (pure ((exact, rounding))))
-        | 0b101 => sailThrow ((Error_Undefined ()))
-        | 0b110 =>
-          (do
-            let w__1 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__2 ← (( do (FPRoundingMode w__1) ) : SailM FPRounding )
-            let rounding := (w__2 : FPRounding)
-            let exact : Bool := true
-            (pure ((exact, rounding))))
-        | _ =>
-          (do
-            let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__4 ← (( do (FPRoundingMode w__3) ) : SailM FPRounding )
-            let rounding := (w__4 : FPRounding)
-            (pure ((exact, rounding))))) ) : SailM (Bool × FPRounding) )
-  let rounding := rounding
-  (execute_aarch64_instrs_float_arithmetic_round_frint (Sail.Int.toNatChecked (d))
-    (Sail.Int.toNatChecked (esize)) exact (Sail.Int.toNatChecked (n)) rounding)
-
-
-def decode_frintz_float_aarch64_instrs_float_arithmetic_round_frint (Rd : (BitVec 5)) (Rn : (BitVec 5)) (rmode : (BitVec 3)) (ftype : (BitVec 2)) : SailM Unit := do
-  let d : Int := (BitVec.toNat Rd)
-  let n : Int := (BitVec.toNat Rn)
-  let esize : Int := 16
-  let esize ← (( do
-    match ftype with
-    | 0b00 => (pure (32))
-    | 0b01 => (pure (64))
-    | 0b10 => sailThrow ((Error_Undefined ()))
-    | _ =>
-      (do
-        if ((HaveFP16Ext ()) : Bool)
-        then (pure (16))
-        else sailThrow ((Error_Undefined ()))) ) : SailM Int )
-  let esize : Int := esize
-  let exact : Bool := false
-  let rounding ← (( do (undefined_FPRounding (← occLabel 4323) ()) ) : SailM FPRounding )
-  let b__0 := rmode
-  let (exact, rounding) ← (( do
-    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__0 2 2)) == (0#1 : (BitVec 1))) : Bool)
-    then
-      (do
-        let w__0 ← (( do (FPDecodeRounding (Sail.BitVec.extractLsb rmode 1 0)) ) : SailM
-          FPRounding )
-        let rounding := (w__0 : FPRounding)
-        (pure ((exact, rounding))))
-    else
-      (do
-        match b__0 with
-        | 0b100 =>
-          (let rounding : FPRounding := FPRounding_TIEAWAY
-          (pure ((exact, rounding))))
-        | 0b101 => sailThrow ((Error_Undefined ()))
-        | 0b110 =>
-          (do
-            let w__1 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__2 ← (( do (FPRoundingMode w__1) ) : SailM FPRounding )
-            let rounding := (w__2 : FPRounding)
-            let exact : Bool := true
-            (pure ((exact, rounding))))
-        | _ =>
-          (do
-            let w__3 ← (( do (FPCR_read ()) ) : SailM (BitVec 64) )
-            let w__4 ← (( do (FPRoundingMode w__3) ) : SailM FPRounding )
-            let rounding := (w__4 : FPRounding)
-            (pure ((exact, rounding))))) ) : SailM (Bool × FPRounding) )
-  let rounding := rounding
-  (execute_aarch64_instrs_float_arithmetic_round_frint (Sail.Int.toNatChecked (d))
-    (Sail.Int.toNatChecked (esize)) exact (Sail.Int.toNatChecked (n)) rounding)
+def decode_aarch32_instrs_VRSRA_T1enc_A_txt (U : (BitVec 1)) (D : (BitVec 1)) (imm6 : (BitVec 6)) (Vd : (BitVec 4)) (L : (BitVec 1)) (Q : (BitVec 1)) (M : (BitVec 1)) (Vm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      if ((let b__0 := (L +++ imm6)
+         (if (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb b__0 6 3)) == (0x0#4 : (BitVec 4))) : Bool)
+         then true
+         else false : Bool)) : Bool)
+      then sailThrow ((Error_See "Related encodings"))
+      else (pure (()))
+      if (((Q == 1#1) && (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access Vd 0)])) == 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
+                   Vm 0)])) == 1#1))) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else (pure (()))
+      let esize : Int := 8
+      let elements : Int := 1
+      let shift_amount ← (( do (undefined_int_at (← occLabel 3726) ()) ) : SailM Int )
+      let b__1 := (L +++ imm6)
+      let (elements, esize, shift_amount) : (Int × Int × Int) :=
+        if (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb b__1 6 3)) == (0x1#4 : (BitVec 4))) : Bool)
+        then
+          (let esize : Int := 8
+          let elements : Int := 8
+          let shift_amount : Int := (16 -i (BitVec.toNat imm6))
+          (elements, esize, shift_amount))
+        else
+          (let (elements, esize, shift_amount) : (Int × Int × Int) :=
+            if (((Sail.BitVec.castWidth (m := 3) (Sail.BitVec.extractLsb b__1 6 4)) == (0b001#3 : (BitVec 3))) : Bool)
+            then
+              (let esize : Int := 16
+              let elements : Int := 4
+              let shift_amount : Int := (32 -i (BitVec.toNat imm6))
+              (elements, esize, shift_amount))
+            else
+              (let (elements, esize, shift_amount) : (Int × Int × Int) :=
+                if (((Sail.BitVec.castWidth (m := 2) (Sail.BitVec.extractLsb b__1 6 5)) == (0b01#2 : (BitVec 2))) : Bool)
+                then
+                  (let esize : Int := 32
+                  let elements : Int := 2
+                  let shift_amount : Int := (64 -i (BitVec.toNat imm6))
+                  (elements, esize, shift_amount))
+                else
+                  (let (elements, esize, shift_amount) : (Int × Int × Int) :=
+                    if (((Sail.BitVec.castWidth (m := 1) (Sail.BitVec.extractLsb b__1 6 6)) == (1#1 : (BitVec 1))) : Bool)
+                    then
+                      (let esize : Int := 64
+                      let elements : Int := 1
+                      let shift_amount : Int := (64 -i (BitVec.toNat imm6))
+                      (elements, esize, shift_amount))
+                    else (elements, esize, shift_amount)
+                  (elements, esize, shift_amount))
+              (elements, esize, shift_amount))
+          (elements, esize, shift_amount))
+      let shift_amount : Int := shift_amount
+      let esize : Int := esize
+      let elements : Int := elements
+      let is_unsigned : Bool := (U == 1#1)
+      let d : Int := (BitVec.toNat (D +++ Vd))
+      let m : Int := (BitVec.toNat (M +++ Vm))
+      let regs : Int :=
+        if ((Q == 0#1) : Bool)
+        then 1
+        else 2
+      match esize with
+      | 8 =>
+        (do
+          (execute_aarch32_instrs_VRSRA_Op_A_txt (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (elements)) 8 (Sail.Int.toNatChecked (m))
+            (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
+      | 16 =>
+        (do
+          (execute_aarch32_instrs_VRSRA_Op_A_txt (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (elements)) 16 (Sail.Int.toNatChecked (m))
+            (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
+      | 32 =>
+        (do
+          (execute_aarch32_instrs_VRSRA_Op_A_txt (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (elements)) 32 (Sail.Int.toNatChecked (m))
+            (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
+      | 64 =>
+        (do
+          (execute_aarch32_instrs_VRSRA_Op_A_txt (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (elements)) 64 (Sail.Int.toNatChecked (m))
+            (Sail.Int.toNatChecked (regs)) shift_amount is_unsigned))
+      | _ =>
+        (do
+          ArmFull.assert false "sail-inputs/14-instrs32.sail:35807.26-35807.27"
+          throw Error.Exit))
+  else (pure (()))
 
 
 end ArmFull.Functions

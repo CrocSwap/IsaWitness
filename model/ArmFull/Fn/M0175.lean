@@ -1,20 +1,26 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0010
-import ArmFull.Fn.M0015
-import ArmFull.Fn.M0036
-import ArmFull.Fn.M0042
-import ArmFull.Fn.M0043
-import ArmFull.Fn.M0047
-import ArmFull.Fn.M0054
-import ArmFull.Fn.M0060
-import ArmFull.Fn.M0061
-import ArmFull.Fn.M0166
-import ArmFull.Fn.M0167
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0010
+public import ArmFull.Fn.M0015
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0022
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0037
+public import ArmFull.Fn.M0046
+public import ArmFull.Fn.M0047
+public import ArmFull.Fn.M0048
+public import ArmFull.Fn.M0060
+public import ArmFull.Fn.M0061
+public import ArmFull.Fn.M0144
+public import ArmFull.Fn.M0145
+public import ArmFull.Fn.M0168
+public import ArmFull.Fn.M0170
+public import ArmFull.Fn.M0172 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -116,35 +122,206 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-def InITBlock (_ : Unit) : SailM Bool := do
-  let w__0 ← (( do (CurrentInstrSet ()) ) : SailM InstrSet )
-  if ((BEq.beq w__0 InstrSet_T32) : Bool)
+def DebugWriteExternalAbort (memstatus : PhysMemRetStatus) (addrdesc : AddressDescriptor) (start_vaddr : (BitVec 64)) : SailM Unit := do
+  let iswrite : Bool := true
+  let handle_as_SError : Bool := false
+  let async_external_abort : Bool := false
+  let syndrome ← (( do (undefined_bitvector_at (← occLabel 2437) 64) ) : SailM (BitVec 64) )
+  let (async_external_abort, handle_as_SError, syndrome) ← (( do
+    match addrdesc.fault.access.acctype with
+    | .AccessType_SPE =>
+      (do
+        let w__0 ← (( do (__IMPDEF_boolean "SPE SyncExternal as SError") ) : SailM Bool )
+        let handle_as_SError := (w__0 : Bool)
+        let w__1 ← (( do (__IMPDEF_boolean "SPE async External abort") ) : SailM Bool )
+        let async_external_abort := (w__1 : Bool)
+        let w__2 ← (( do readReg PMBSR_EL1 ) : SailM (BitVec 64) )
+        let syndrome := ((Sail.BitVec.extractLsb w__2 63 0) : (BitVec 64))
+        (pure ((async_external_abort, handle_as_SError, syndrome))))
+    | _ =>
+      (do
+        (Unreachable ())
+        (pure ((async_external_abort, handle_as_SError, syndrome)))) ) : SailM
+    (Bool × Bool × (BitVec 64)) )
+  let ttw_abort : Bool :=
+    ((BEq.beq addrdesc.fault.statuscode Fault_SyncExternalOnWalk) || (BEq.beq
+        addrdesc.fault.statuscode Fault_SyncParityOnWalk))
+  let statuscode : Fault :=
+    if (ttw_abort : Bool)
+    then addrdesc.fault.statuscode
+    else memstatus.statuscode
+  let extflag : (BitVec 1) :=
+    if (ttw_abort : Bool)
+    then addrdesc.fault.extflag
+    else memstatus.extflag
+  if ((((BEq.beq statuscode Fault_AsyncExternal) || (BEq.beq statuscode Fault_AsyncParity)) || handle_as_SError) : Bool)
   then
     (do
-      let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-      (pure (((Sail.BitVec.castWidth (m := 4) (Sail.BitVec.extractLsb w__1.IT 3 0)) != 0b0000#4))))
-  else (pure (false))
+      let fault ← (( do (NoFault ()) ) : SailM FaultRecord )
+      let parity : Bool :=
+        ((BEq.beq statuscode Fault_SyncParity) || ((BEq.beq statuscode Fault_AsyncParity) || (BEq.beq
+              statuscode Fault_SyncParityOnWalk)))
+      let fault : FaultRecord :=
+        { fault with statuscode := if (parity : Bool)
+          then Fault_AsyncParity
+          else Fault_AsyncExternal }
+      let w__3 ← (( do (HaveRASExt ()) ) : SailM Bool )
+      let fault : FaultRecord :=
+        if (w__3 : Bool)
+        then { fault with merrorstate := memstatus.merrorstate }
+        else fault
+      let fault : FaultRecord := { fault with extflag := extflag }
+      let fault : FaultRecord :=
+        { fault with access := { fault.access with acctype := addrdesc.fault.access.acctype } }
+      (pure ((PendSErrorInterrupt fault))))
+  else
+    (do
+      let syndrome : (BitVec 64) := (BitVec.update syndrome 18 (Bit 1#1))
+      let syndrome : (BitVec 64) :=
+        if (((BEq.beq addrdesc.fault.access.acctype AccessType_SPE) && (async_external_abort || (start_vaddr != addrdesc.vaddress))) : Bool)
+        then (BitVec.update syndrome 19 (Bit 1#1))
+        else syndrome
+      let syndrome ← (( do
+        if ((IsZero (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access syndrome 17)]))) : Bool)
+        then
+          (do
+            let syndrome : (BitVec 64) := (BitVec.update syndrome 17 (Bit 1#1))
+            let ec ← (( do (undefined_bitvector_at (← occLabel 2438) 6) ) : SailM (BitVec 6) )
+            let w__6 ← (( do
+              (pure ((← do
+                    (pure ((← do
+                          (HaveRME ())) && ((bne addrdesc.fault.gpcf.gpf GPCF_None) : Bool)))) && ((bne
+                    addrdesc.fault.gpcf.gpf GPCF_Fail) : Bool))) ) : SailM Bool )
+            let ec : (BitVec 6) :=
+              if (w__6 : Bool)
+              then 0b011110#6
+              else
+                (if (addrdesc.fault.secondstage : Bool)
+                then 0b100101#6
+                else 0b100100#6)
+            let syndrome : (BitVec 64) := (Sail.BitVec.updateSubrange syndrome 31 26 ec)
+            if (async_external_abort : Bool)
+            then
+              (let syndrome : (BitVec 64) :=
+                (Sail.BitVec.updateSubrange syndrome 15 0 ((Zeros (n := 10)) +++ 0b010001#6))
+              (pure (syndrome)))
+            else
+              (do
+                let w__7 ← (( do (EncodeLDFSC statuscode addrdesc.fault.level) ) : SailM
+                  (BitVec 6) )
+                let syndrome :=
+                  ((Sail.BitVec.updateSubrange syndrome 15 0 ((Zeros (n := 10)) +++ w__7)) : (BitVec 64))
+                (pure (syndrome))))
+        else (pure (syndrome)) ) : SailM (BitVec 64) )
+      match addrdesc.fault.access.acctype with
+      | .AccessType_SPE =>
+        (do
+          let w__8 ← (( do readReg PMBSR_EL1 ) : SailM (BitVec 64) )
+          writeReg PMBSR_EL1 (Sail.BitVec.updateSubrange w__8 63 0 syndrome))
+      | _ =>
+        (do
+          (Unreachable ())))
 
 
-def SPSRWriteByInstr (value_name : (BitVec 32)) (bytemask : (BitVec 4)) : SailM Unit := do
-  let new_spsr ← (( do (SPSR_read (N := 32)) ) : SailM (BitVec 32) )
-  let new_spsr : (BitVec 32) :=
-    if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access bytemask 3)])) == 1#1) : Bool)
-    then (Sail.BitVec.updateSubrange new_spsr 31 24 (Sail.BitVec.extractLsb value_name 31 24))
-    else new_spsr
-  let new_spsr : (BitVec 32) :=
-    if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access bytemask 2)])) == 1#1) : Bool)
-    then (Sail.BitVec.updateSubrange new_spsr 23 16 (Sail.BitVec.extractLsb value_name 23 16))
-    else new_spsr
-  let new_spsr : (BitVec 32) :=
-    if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access bytemask 1)])) == 1#1) : Bool)
-    then (Sail.BitVec.updateSubrange new_spsr 15 8 (Sail.BitVec.extractLsb value_name 15 8))
-    else new_spsr
-  let new_spsr : (BitVec 32) :=
-    if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access bytemask 0)])) == 1#1) : Bool)
-    then (Sail.BitVec.updateSubrange new_spsr 7 0 (Sail.BitVec.extractLsb value_name 7 0))
-    else new_spsr
-  (SPSR_set (N := 32) new_spsr)
+def BRBEBranchOnISB (_ : Unit) : SailM Bool := do
+  (__IMPDEF_boolean "ISB generates Branch records")
+
+
+def AArch32_EL2Enabled (ss : SecurityState) : SailM Bool := do
+  if ((BEq.beq ss SS_Secure) : Bool)
+  then
+    (do
+      let w__2 ← (( do
+        if ((← do
+             (HaveEL EL2)) : Bool)
+        then
+          (do
+            (HaveSecureEL2Ext ()))
+        else (pure false) ) : SailM Bool )
+      if ((! w__2) : Bool)
+      then (pure (false))
+      else
+        (do
+          let w__3 ← (( do (HaveEL EL3) ) : SailM Bool )
+          if (w__3 : Bool)
+          then
+            (do
+              let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+              (pure (((_get_SCR_EL3_Type_EEL2 w__4) == 1#1))))
+          else
+            (do
+              (__IMPDEF_boolean "Secure-only implementation"))))
+  else
+    (do
+      (HaveEL EL2))
+
+
+def DBGDTR_EL0_read__1 (_ : Unit) : SailM (BitVec 64) := do
+  let r ← (( do readReg _DBGDTR_EL0 ) : SailM DBGDTR_EL0_Type )
+  let w__0 ← (( do (__IMPDEF_boolean "read") ) : SailM Bool )
+  let r ← (( do
+    if (w__0 : Bool)
+    then
+      (do
+        let w__1 ← (( do readReg DBGDTRTX_EL0 ) : SailM (BitVec 64) )
+        let r := ((Sail.BitVec.updateSubrange r 63 32 (BitVec.slice w__1 0 32)) : (BitVec 64))
+        (pure (r)))
+    else
+      (do
+        let w__2 ← (( do (__IMPDEF_boolean "read") ) : SailM Bool )
+        if (w__2 : Bool)
+        then
+          (do
+            let w__3 ← (( do readReg DBGDTRTX_EL0 ) : SailM (BitVec 64) )
+            let r := ((Sail.BitVec.updateSubrange r 63 32 (BitVec.slice w__3 0 32)) : (BitVec 64))
+            (pure (r)))
+        else
+          (do
+            let w__4 ← (( do readReg DBGDTRRX_EL0 ) : SailM (BitVec 64) )
+            let r := ((Sail.BitVec.updateSubrange r 63 32 (BitVec.slice w__4 0 32)) : (BitVec 64))
+            (pure (r)))) ) : SailM (BitVec 64) )
+  let w__5 ← (( do (__IMPDEF_boolean "read") ) : SailM Bool )
+  if (w__5 : Bool)
+  then
+    (do
+      let w__6 ← (( do readReg DBGDTRRX_EL0 ) : SailM (BitVec 64) )
+      let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__6 0 32)) : (BitVec 64))
+      (pure (r)))
+  else
+    (do
+      let w__7 ← (( do (__IMPDEF_boolean "read") ) : SailM Bool )
+      if (w__7 : Bool)
+      then
+        (do
+          let w__8 ← (( do readReg DBGDTRRX_EL0 ) : SailM (BitVec 64) )
+          let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__8 0 32)) : (BitVec 64))
+          (pure (r)))
+      else
+        (do
+          let w__9 ← (( do readReg DBGDTRTX_EL0 ) : SailM (BitVec 64) )
+          let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__9 0 32)) : (BitVec 64))
+          (pure (r))))
+
+
+/-- Type quantifiers: k_enabled : Bool -/
+def __ConfigureV87 (enabled : Bool) : SailM Unit := do
+  writeReg v8Ap7_IMPLEMENTED enabled
+  if (enabled : Bool)
+  then
+    (do
+      (__ConfigureV86 enabled))
+  else (pure (()))
+
+
+/-- Type quantifiers: k_enabled : Bool -/
+def __ConfigureV91 (enabled : Bool) : SailM Unit := do
+  writeReg v9Ap1_IMPLEMENTED enabled
+  if (enabled : Bool)
+  then
+    (do
+      (__ConfigureV90 enabled)
+      (__ConfigureV86 enabled))
+  else (pure (()))
 
 
 def __set_SCTLR_EL1 (value_name : (BitVec 64)) : SailM Unit := do
@@ -719,30 +896,6 @@ def __set_PMSNEVFR_EL1 (value_name : (BitVec 64)) : SailM Unit := do
         (pure (r)))
     else (pure (r)) ) : SailM (BitVec 64) )
   writeReg PMSNEVFR_EL1 r
-
-
-def __set_HSCTLR (value_name : (BitVec 32)) : SailM Unit := do
-  let r : HSCTLR_Type := value_name
-  let w__0 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
-  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 5 w__0 0 (BitVec.slice r 0 5))))
-  let w__1 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
-  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 1 w__1 6 (BitVec.slice r 6 1))))
-  let w__2 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
-  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 24 w__2 8 (BitVec.slice r 8 24))))
-  let w__3 ← (( do (__IMPDEF_boolean "IMPLEMENTED_ITD") ) : SailM Bool )
-  if ((! (! w__3)) : Bool)
-  then
-    (do
-      let w__4 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
-      (HSCTLR_write (_update_HSCTLR_Type_ITD w__4 (_get_HSCTLR_Type_ITD r))))
-  else (pure (()))
-  let w__5 ← (( do (__IMPDEF_boolean "IMPLEMENTED_CP15BEN") ) : SailM Bool )
-  if ((! (! w__5)) : Bool)
-  then
-    (do
-      let w__6 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
-      (HSCTLR_write (_update_HSCTLR_Type_CP15BEN w__6 (_get_HSCTLR_Type_CP15BEN r))))
-  else (pure (()))
 
 
 end ArmFull.Functions

@@ -1,16 +1,14 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0018
-import ArmFull.Fn.M0023
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0046
-import ArmFull.Fn.M0047
-import ArmFull.Fn.M0048
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0018
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0046
+public import ArmFull.Fn.M0047
+public import ArmFull.Fn.M0048 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -385,20 +383,6 @@ def DBGDSCRint_write (value_name : (BitVec 32)) : SailM Unit := do
   writeReg _DBGDSCRint r
 
 
-def IFAR_S_write (value_name : (BitVec 32)) : SailM Unit := do
-  let r : IFAR_Type := value_name
-  if ((HaveEL EL2) : Bool)
-  then
-    (do
-      let w__0 ← (( do readReg FAR_EL2 ) : SailM (BitVec 64) )
-      writeReg FAR_EL2 (Sail.BitVec.updateSubrange w__0 63 32 (BitVec.slice r 0 32)))
-  else
-    (do
-      let w__1 ← (( do (HIFAR_read ()) ) : SailM (BitVec 32) )
-      (HIFAR_write (set_slice 32 w__1 0 (BitVec.slice r 0 32))))
-  writeReg _IFAR_S r
-
-
 def AArch64_EncodeSyncErrorSyndrome (errorstate : ErrorState) : SailM (BitVec 2) := do
   match errorstate with
   | .ErrorState_UC => (pure (0b10#2))
@@ -652,7 +636,7 @@ def IsASEInstruction (_ : Unit) : SailM Bool := do
 
 /-- Type quantifiers: N : Nat, List.elem N [16, 32, 64] -/
 def FPZero (sign : (BitVec 1)) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-arm/v8_base.sail:15627.38-15627.39"
+  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-inputs/03-v8_base.sail:15640.38-15640.39"
   let E : Nat :=
     if ((N == 16) : Bool)
     then 5
@@ -693,7 +677,7 @@ def FPDecodeRM (rm : (BitVec 2)) : SailM FPRounding := do
 
 /-- Type quantifiers: N : Nat, List.elem N [16, 32, 64] -/
 def FPTwo (sign : (BitVec 1)) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-arm/v8_base.sail:17017.38-17017.39"
+  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-inputs/03-v8_base.sail:17030.38-17030.39"
   let E : Nat :=
     if ((N == 16) : Bool)
     then 5
@@ -713,7 +697,7 @@ def FPTwo (sign : (BitVec 1)) (N : Nat) : SailM (BitVec N) := do
 
 /-- Type quantifiers: N : Nat, List.elem N [16, 32, 64] -/
 def FPThree (sign : (BitVec 1)) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-arm/v8_base.sail:17825.38-17825.39"
+  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-inputs/03-v8_base.sail:17838.38-17838.39"
   let E : Nat :=
     if ((N == 16) : Bool)
     then 5
@@ -733,7 +717,7 @@ def FPThree (sign : (BitVec 1)) (N : Nat) : SailM (BitVec N) := do
 
 /-- Type quantifiers: N : Nat, List.elem N [16, 32, 64] -/
 def VFPExpandImm (imm8 : (BitVec 8)) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-arm/v8_base.sail:17939.38-17939.39"
+  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-inputs/03-v8_base.sail:17952.38-17952.39"
   let E : Nat :=
     if ((N == 16) : Bool)
     then 5
@@ -834,6 +818,21 @@ def _set_CNTHPS_CTL_EL2_Type_IMASK (r_ref : (RegisterRef (BitVec 64))) (v : (Bit
 def _set_CNTHPS_CTL_Type_IMASK (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
   let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
   writeRegRef r_ref (_update_CNTHPS_CTL_Type_IMASK r v)
+
+
+def _set_CNTHP_CTL_Type_IMASK (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
+  writeRegRef r_ref (_update_CNTHP_CTL_Type_IMASK r v)
+
+
+def _set_CNTHVS_CTL_EL2_Type_IMASK (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_CNTHVS_CTL_EL2_Type_IMASK r v)
+
+
+def _set_CNTHVS_CTL_Type_IMASK (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
+  writeRegRef r_ref (_update_CNTHVS_CTL_Type_IMASK r v)
 
 
 end ArmFull.Functions

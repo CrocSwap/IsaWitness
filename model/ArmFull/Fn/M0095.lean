@@ -1,10 +1,10 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0012
-import ArmFull.Fn.M0013
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0012
+public import ArmFull.Fn.M0013 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -105,6 +105,26 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _set_MAIR2_EL1_Type_Attr1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 8)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_MAIR2_EL1_Type_Attr1 r v)
+
+
+def _set_MAIR2_EL2_Type_Attr1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 8)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_MAIR2_EL2_Type_Attr1 r v)
+
+
+def _set_MAIR2_EL3_Type_Attr1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 8)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_MAIR2_EL3_Type_Attr1 r v)
+
+
+def _set_MAIR_EL1_Type_Attr1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 8)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_MAIR_EL1_Type_Attr1 r v)
+
 
 def _set_MAIR_EL2_Type_Attr1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 8)) : SailM Unit := do
   let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
@@ -834,26 +854,6 @@ def _set_PIR_EL2_Type_Perm14 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 4)
 def _set_PIR_EL3_Type_Perm14 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 4)) : SailM Unit := do
   let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
   writeRegRef r_ref (_update_PIR_EL3_Type_Perm14 r v)
-
-
-def _set_POR_EL0_Type_Perm14 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 4)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_POR_EL0_Type_Perm14 r v)
-
-
-def _set_POR_EL1_Type_Perm14 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 4)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_POR_EL1_Type_Perm14 r v)
-
-
-def _set_POR_EL2_Type_Perm14 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 4)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_POR_EL2_Type_Perm14 r v)
-
-
-def _set_POR_EL3_Type_Perm14 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 4)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_POR_EL3_Type_Perm14 r v)
 
 
 end ArmFull.Functions

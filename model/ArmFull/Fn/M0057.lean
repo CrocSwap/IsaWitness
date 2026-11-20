@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,86 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _update_ICH_HCR_Type_NPIE (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 3 3 x)
+
+
+def _update_ICH_HCR_Type_TALL0 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 11 11 x)
+
+
+def _update_ICH_HCR_Type_TALL1 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 12 12 x)
+
+
+def _update_ICH_HCR_Type_TDIR (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 14 14 x)
+
+
+def _update_ICH_HCR_Type_TSEI (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 13 13 x)
+
+
+def _update_ICH_HCR_Type_UIE (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 1 1 x)
+
+
+def _update_ICH_HCR_Type_VGrp0DIE (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 5 5 x)
+
+
+def _update_ICH_HCR_Type_VGrp0EIE (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 4 4 x)
+
+
+def _update_ICH_HCR_Type_VGrp1DIE (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 7 x)
+
+
+def _update_ICH_HCR_Type_VGrp1EIE (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 6 6 x)
+
+
+def _update_ICH_HCR_Type_vSGIEOICount (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 8 8 x)
+
+
+def _update_ICH_MISR_Type_EOI (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 0 0 x)
+
+
+def _update_ICH_MISR_Type_LRENP (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 2 2 x)
+
+
+def _update_ICH_MISR_Type_NP (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 3 3 x)
+
+
+def _update_ICH_MISR_Type_VGrp0D (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 5 5 x)
+
+
+def _update_ICH_MISR_Type_VGrp0E (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 4 4 x)
+
+
+def _update_ICH_MISR_Type_VGrp1D (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 7 x)
+
+
+def _update_ICH_MISR_Type_VGrp1E (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 6 6 x)
+
+
+def _update_ICV_IGRPEN0_Type_Enable (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 0 0 x)
+
+
+def _update_ICV_IGRPEN1_Type_Enable (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 0 0 x)
+
 
 def _update_RMR_Type_RR (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
   (Sail.BitVec.updateSubrange v 1 1 x)
@@ -782,86 +862,6 @@ def _update_ID_ISAR3_Type_SVC (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :
 
 def _update_ID_ISAR3_Type_Saturate (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
   (Sail.BitVec.updateSubrange v 3 0 x)
-
-
-def _update_ID_ISAR3_Type_SynchPrim (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 15 12 x)
-
-
-def _update_ID_ISAR3_Type_T32Copy (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 23 20 x)
-
-
-def _update_ID_ISAR3_Type_T32EE (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 31 28 x)
-
-
-def _update_ID_ISAR3_Type_TabBranch (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 19 16 x)
-
-
-def _update_ID_ISAR3_Type_TrueNOP (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 27 24 x)
-
-
-def _update_ID_ISAR4_Type_Barrier (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 19 16 x)
-
-
-def _update_ID_ISAR4_Type_PSR_M (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 27 24 x)
-
-
-def _update_ID_ISAR4_Type_SMC (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 15 12 x)
-
-
-def _update_ID_ISAR4_Type_SWP_frac (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 31 28 x)
-
-
-def _update_ID_ISAR4_Type_SynchPrim_frac (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 23 20 x)
-
-
-def _update_ID_ISAR4_Type_Unpriv (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 3 0 x)
-
-
-def _update_ID_ISAR4_Type_WithShifts (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 7 4 x)
-
-
-def _update_ID_ISAR4_Type_Writeback (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 11 8 x)
-
-
-def _update_ID_ISAR5_Type_AES (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 7 4 x)
-
-
-def _update_ID_ISAR5_Type_CRC32 (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 19 16 x)
-
-
-def _update_ID_ISAR5_Type_RDM (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 27 24 x)
-
-
-def _update_ID_ISAR5_Type_SEVL (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 3 0 x)
-
-
-def _update_ID_ISAR5_Type_SHA1 (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 11 8 x)
-
-
-def _update_ID_ISAR5_Type_SHA2 (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 15 12 x)
-
-
-def _update_ID_ISAR5_Type_VCMA (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 31 28 x)
 
 
 end ArmFull.Functions

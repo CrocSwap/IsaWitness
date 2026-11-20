@@ -1,23 +1,24 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0022
-import ArmFull.Fn.M0023
-import ArmFull.Fn.M0042
-import ArmFull.Fn.M0054
-import ArmFull.Fn.M0059
-import ArmFull.Fn.M0081
-import ArmFull.Fn.M0082
-import ArmFull.Fn.M0178
-import ArmFull.Fn.M0181
-import ArmFull.Fn.M0201
-import ArmFull.Fn.M0203
-import ArmFull.Fn.M0254
-import ArmFull.Fn.M0260
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0022
+public import ArmFull.Fn.M0023
+public import ArmFull.Fn.M0044
+public import ArmFull.Fn.M0052
+public import ArmFull.Fn.M0092
+public import ArmFull.Fn.M0098
+public import ArmFull.Fn.M0144
+public import ArmFull.Fn.M0146
+public import ArmFull.Fn.M0158
+public import ArmFull.Fn.M0181
+public import ArmFull.Fn.M0182
+public import ArmFull.Fn.M0183
+public import ArmFull.Fn.M0184
+public import ArmFull.Fn.M0252 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -119,20 +120,20 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-/-- Type quantifiers: t : Int -/
-def ADFSR_SysRegRead32_12834f15645083f8 (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+/-- Type quantifiers: t : Int, t2 : Int -/
+def TLBIP_RVAALE1IS_SysOpsWrite128_216de9de0e6c2edd (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) (t2 : Int) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
   let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T5 : (BitVec 1) := (_get_HSTR_EL2_Type_T5 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T5 : (BitVec 1) := (_get_HSTR_Type_T5 w__2)
-  let w__3 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_TRVM : (BitVec 1) := (_get_HCR_EL2_Type_TRVM w__3)
-  let w__4 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-  let __HCR_TRVM : (BitVec 1) := (_get_HCR_Type_TRVM w__4)
-  let w__5 ← (( do readReg SCR ) : SailM (BitVec 32) )
-  let __SCR_NS : (BitVec 1) := (_get_SCR_Type_NS w__5)
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_TTLB : (BitVec 1) := (_get_HCR_EL2_Type_TTLB w__1)
+  let w__2 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_TTLBIS : (BitVec 1) := (_get_HCR_EL2_Type_TTLBIS w__2)
+  let w__3 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+  let __SCR_EL3_FGTEn : (BitVec 1) := (_get_SCR_EL3_Type_FGTEn w__3)
+  let w__4 ← (( do readReg HFGITR_EL2 ) : SailM (BitVec 64) )
+  let __HFGITR_EL2_TLBIRVAALE1IS : (BitVec 1) := (_get_HFGITR_EL2_Type_TLBIRVAALE1IS w__4)
+  let w__5 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+  let __HCRX_EL2_FnXS : (BitVec 1) := (_get_HCRX_EL2_Type_FnXS w__5)
   if ((__PSTATE_EL == EL0) : Bool)
   then sailThrow ((Error_Undefined ()))
   else
@@ -140,226 +141,277 @@ def ADFSR_SysRegRead32_12834f15645083f8 (el : (BitVec 2)) (coproc : (BitVec 4)) 
       if ((__PSTATE_EL == EL1) : Bool)
       then
         (do
-          let w__9 ← (( do
+          let w__7 ← (( do
             (pure ((← do
-                  if ((← do
-                       (EL2Enabled ())) : Bool)
-                  then
-                    (do
-                      let w__7 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                      (pure (((! w__7) : Bool))))
-                  else (pure false)) && ((__HSTR_EL2_T5 == 1#1) : Bool))) ) : SailM Bool )
-          if (w__9 : Bool)
+                  (EL2Enabled ())) && ((__HCR_EL2_TTLB == 1#1) : Bool))) ) : SailM Bool )
+          if (w__7 : Bool)
           then
             (do
-              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
+              (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x14#8)))
           else
             (do
-              let w__13 ← (( do
+              let w__9 ← (( do
                 (pure ((← do
-                      if ((← do
-                           (EL2Enabled ())) : Bool)
-                      then
-                        (do
-                          (ELUsingAArch32 EL2))
-                      else (pure false)) && ((__HSTR_T5 == 1#1) : Bool))) ) : SailM Bool )
-              if (w__13 : Bool)
+                      (EL2Enabled ())) && ((__HCR_EL2_TTLBIS == 1#1) : Bool))) ) : SailM Bool )
+              if (w__9 : Bool)
               then
                 (do
-                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
-              else
-                (do
-                  let w__17 ← (( do
-                    (pure ((← do
-                          if ((← do
-                               (EL2Enabled ())) : Bool)
-                          then
-                            (do
-                              let w__15 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                              (pure (((! w__15) : Bool))))
-                          else (pure false)) && ((__HCR_EL2_TRVM == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__17 : Bool)
-                  then
-                    (do
-                      (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-                  else
-                    (do
-                      let w__21 ← (( do
-                        (pure ((← do
-                              if ((← do
-                                   (EL2Enabled ())) : Bool)
-                              then
-                                (do
-                                  (ELUsingAArch32 EL2))
-                              else (pure false)) && ((__HCR_TRVM == 1#1) : Bool))) ) : SailM Bool )
-                      if (w__21 : Bool)
-                      then
-                        (do
-                          (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
-                      else
-                        (do
-                          let w__23 ← (( do
-                            if (((HaveEL EL3) : Bool) : Bool)
-                            then
-                              (do
-                                (ELUsingAArch32 EL3))
-                            else (pure false) ) : SailM Bool )
-                          if (w__23 : Bool)
-                          then
-                            (do
-                              let w__24 ← (( do (ADFSR_NS_read ()) ) : SailM (BitVec 32) )
-                              (R_set t w__24))
-                          else
-                            (do
-                              let w__25 ← (( do (ADFSR_read ()) ) : SailM (BitVec 32) )
-                              (R_set t w__25)))))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              let w__27 ← (( do
-                if (((HaveEL EL3) : Bool) : Bool)
-                then
-                  (do
-                    (ELUsingAArch32 EL3))
-                else (pure false) ) : SailM Bool )
-              if (w__27 : Bool)
-              then
-                (do
-                  let w__28 ← (( do (ADFSR_NS_read ()) ) : SailM (BitVec 32) )
-                  (R_set t w__28))
-              else
-                (do
-                  let w__29 ← (( do (ADFSR_read ()) ) : SailM (BitVec 32) )
-                  (R_set t w__29)))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  if ((__SCR_NS == 0#1) : Bool)
-                  then
-                    (do
-                      let w__30 ← (( do readReg ADFSR_S ) : SailM (BitVec 32) )
-                      (R_set t w__30))
-                  else
-                    (do
-                      let w__31 ← (( do (ADFSR_NS_read ()) ) : SailM (BitVec 32) )
-                      (R_set t w__31)))
-              else (pure (())))))
-
-
-/-- Type quantifiers: t : Int -/
-def AIDR_SysRegRead32_ce556bd47a2bd19b (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T0 : (BitVec 1) := (_get_HSTR_EL2_Type_T0 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T0 : (BitVec 1) := (_get_HSTR_Type_T0 w__2)
-  let w__3 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_TID1 : (BitVec 1) := (_get_HCR_EL2_Type_TID1 w__3)
-  let w__4 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-  let __HCR_TID1 : (BitVec 1) := (_get_HCR_Type_TID1 w__4)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else
-    (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__8 ← (( do
-            (pure ((← do
-                  if ((← do
-                       (EL2Enabled ())) : Bool)
-                  then
-                    (do
-                      let w__6 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                      (pure (((! w__6) : Bool))))
-                  else (pure false)) && ((__HSTR_EL2_T0 == 1#1) : Bool))) ) : SailM Bool )
-          if (w__8 : Bool)
-          then
-            (do
-              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-          else
-            (do
-              let w__12 ← (( do
-                (pure ((← do
-                      if ((← do
-                           (EL2Enabled ())) : Bool)
-                      then
-                        (do
-                          (ELUsingAArch32 EL2))
-                      else (pure false)) && ((__HSTR_T0 == 1#1) : Bool))) ) : SailM Bool )
-              if (w__12 : Bool)
-              then
-                (do
-                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x14#8)))
               else
                 (do
                   let w__16 ← (( do
                     (pure ((← do
                           if ((← do
-                               (EL2Enabled ())) : Bool)
+                               if ((← do
+                                    (EL2Enabled ())) : Bool)
+                               then
+                                 (do
+                                   (IsFeatureImplemented FEAT_FGT))
+                               else (pure false)) : Bool)
                           then
                             (do
-                              let w__14 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                              (pure (((! w__14) : Bool))))
-                          else (pure false)) && ((__HCR_EL2_TID1 == 1#1) : Bool))) ) : SailM Bool )
+                              (pure ((← do
+                                    let w__13 ← (( do (HaveEL EL3) ) : SailM Bool )
+                                    (pure (((! w__13) : Bool)))) || ((__SCR_EL3_FGTEn == 1#1) : Bool))))
+                          else (pure false)) && ((__HFGITR_EL2_TLBIRVAALE1IS == 1#1) : Bool))) ) :
+                    SailM Bool )
                   if (w__16 : Bool)
                   then
                     (do
-                      (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
+                      (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x14#8)))
                   else
                     (do
-                      let w__20 ← (( do
+                      let w__22 ← (( do
                         (pure ((← do
                               if ((← do
-                                   (EL2Enabled ())) : Bool)
+                                   if ((← do
+                                        (IsFeatureImplemented FEAT_XS)) : Bool)
+                                   then
+                                     (do
+                                       (IsFeatureImplemented FEAT_HCX))
+                                   else (pure false)) : Bool)
                               then
                                 (do
-                                  (ELUsingAArch32 EL2))
-                              else (pure false)) && ((__HCR_TID1 == 1#1) : Bool))) ) : SailM Bool )
-                      if (w__20 : Bool)
+                                  (IsHCRXEL2Enabled ()))
+                              else (pure false)) && ((__HCRX_EL2_FnXS == 1#1) : Bool))) ) : SailM
+                        Bool )
+                      if (w__22 : Bool)
                       then
                         (do
-                          (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
+                          let w__23 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                          let w__24 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                          let w__25 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                          let w__26 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                          (AArch64_TLBIP_RVAA w__23 Regime_EL10 w__24 Shareability_ISH
+                            TLBILevel_Last TLBI_ExcludeXS (w__25 +++ w__26)))
                       else
                         (do
-                          let w__21 ← (( do (AIDR_read ()) ) : SailM (BitVec 32) )
-                          (R_set t w__21))))))
+                          let w__27 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                          let w__28 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                          let w__29 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                          let w__30 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                          (AArch64_TLBIP_RVAA w__27 Regime_EL10 w__28 Shareability_ISH
+                            TLBILevel_Last TLBI_AllAttr (w__29 +++ w__30)))))))
       else
         (do
           if ((__PSTATE_EL == EL2) : Bool)
           then
             (do
-              let w__22 ← (( do (AIDR_read ()) ) : SailM (BitVec 32) )
-              (R_set t w__22))
+              let w__31 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+              let w__32 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+              if ((((_get_HCR_EL2_Type_E2H w__31) +++ (_get_HCR_EL2_Type_TGE w__32)) == 0b11#2) : Bool)
+              then
+                (do
+                  let w__33 ← (( do (SecurityStateAtEL EL2) ) : SailM SecurityState )
+                  let w__34 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                  let w__35 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  (AArch64_TLBIP_RVAA w__33 Regime_EL20 VMID_NONE Shareability_ISH TLBILevel_Last
+                    TLBI_AllAttr (w__34 +++ w__35)))
+              else
+                (do
+                  let w__36 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                  let w__37 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                  let w__38 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                  let w__39 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  (AArch64_TLBIP_RVAA w__36 Regime_EL10 w__37 Shareability_ISH TLBILevel_Last
+                    TLBI_AllAttr (w__38 +++ w__39))))
           else
             (do
               if ((__PSTATE_EL == EL3) : Bool)
               then
                 (do
-                  let w__23 ← (( do (AIDR_read ()) ) : SailM (BitVec 32) )
-                  (R_set t w__23))
+                  let w__40 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                  let w__41 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                  if ((((_get_HCR_EL2_Type_E2H w__40) +++ (_get_HCR_EL2_Type_TGE w__41)) == 0b11#2) : Bool)
+                  then
+                    (do
+                      let w__42 ← (( do (SecurityStateAtEL EL2) ) : SailM SecurityState )
+                      let w__43 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                      let w__44 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      (AArch64_TLBIP_RVAA w__42 Regime_EL20 VMID_NONE Shareability_ISH
+                        TLBILevel_Last TLBI_AllAttr (w__43 +++ w__44)))
+                  else
+                    (do
+                      let w__45 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                      let w__46 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                      let w__47 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                      let w__48 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      (AArch64_TLBIP_RVAA w__45 Regime_EL10 w__46 Shareability_ISH TLBILevel_Last
+                        TLBI_AllAttr (w__47 +++ w__48))))
               else (pure (())))))
 
 
-/-- Type quantifiers: t : Int -/
-def AIFSR_SysRegRead32_dcd7a0d08b788988 (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+/-- Type quantifiers: t : Int, t2 : Int -/
+def TLBIP_RVAALE1IS_SysOpsWrite128_b0040cdc6216868a (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) (t2 : Int) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
   let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T5 : (BitVec 1) := (_get_HSTR_EL2_Type_T5 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T5 : (BitVec 1) := (_get_HSTR_Type_T5 w__2)
-  let w__3 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_TRVM : (BitVec 1) := (_get_HCR_EL2_Type_TRVM w__3)
-  let w__4 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-  let __HCR_TRVM : (BitVec 1) := (_get_HCR_Type_TRVM w__4)
-  let w__5 ← (( do readReg SCR ) : SailM (BitVec 32) )
-  let __SCR_NS : (BitVec 1) := (_get_SCR_Type_NS w__5)
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_TTLB : (BitVec 1) := (_get_HCR_EL2_Type_TTLB w__1)
+  let w__2 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_TTLBIS : (BitVec 1) := (_get_HCR_EL2_Type_TTLBIS w__2)
+  let w__3 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+  let __HCRX_EL2_FGTnXS : (BitVec 1) := (_get_HCRX_EL2_Type_FGTnXS w__3)
+  let w__4 ← (( do readReg HFGITR_EL2 ) : SailM (BitVec 64) )
+  let __HFGITR_EL2_TLBIRVAALE1IS : (BitVec 1) := (_get_HFGITR_EL2_Type_TLBIRVAALE1IS w__4)
+  let w__5 ← (( do (IsFeatureImplemented FEAT_XS) ) : SailM Bool )
+  if ((! w__5) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
+    (do
+      if ((__PSTATE_EL == EL0) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else
+        (do
+          if ((__PSTATE_EL == EL1) : Bool)
+          then
+            (do
+              let w__7 ← (( do
+                (pure ((← do
+                      (EL2Enabled ())) && ((__HCR_EL2_TTLB == 1#1) : Bool))) ) : SailM Bool )
+              if (w__7 : Bool)
+              then
+                (do
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x14#8)))
+              else
+                (do
+                  let w__9 ← (( do
+                    (pure ((← do
+                          (EL2Enabled ())) && ((__HCR_EL2_TTLBIS == 1#1) : Bool))) ) : SailM Bool )
+                  if (w__9 : Bool)
+                  then
+                    (do
+                      (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x14#8)))
+                  else
+                    (do
+                      let w__22 ← (( do
+                        (pure ((← do
+                              if ((← do
+                                   if ((← do
+                                        if ((← do
+                                             if ((← do
+                                                  (EL2Enabled ())) : Bool)
+                                             then
+                                               (do
+                                                 (IsFeatureImplemented FEAT_FGT))
+                                             else (pure false)) : Bool)
+                                        then
+                                          (do
+                                            if ((← do
+                                                 let w__13 ← (( do (HaveEL EL3) ) : SailM Bool )
+                                                 (pure (((! w__13) : Bool)))) : Bool)
+                                            then (pure true)
+                                            else
+                                              (do
+                                                let w__14 ← (( do readReg SCR_EL3 ) : SailM
+                                                  (BitVec 64) )
+                                                (pure ((((_get_SCR_EL3_Type_FGTEn w__14) == 1#1) : Bool)))))
+                                        else (pure false)) : Bool)
+                                   then
+                                     (do
+                                       (IsFeatureImplemented FEAT_HCX))
+                                   else (pure false)) : Bool)
+                              then
+                                (do
+                                  (pure ((← do
+                                        let w__19 ← (( do (IsHCRXEL2Enabled ()) ) : SailM Bool )
+                                        (pure (((! w__19) : Bool)))) || ((__HCRX_EL2_FGTnXS == 0#1) : Bool))))
+                              else (pure false)) && ((__HFGITR_EL2_TLBIRVAALE1IS == 1#1) : Bool))) )
+                        : SailM Bool )
+                      if (w__22 : Bool)
+                      then
+                        (do
+                          (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x14#8)))
+                      else
+                        (do
+                          let w__23 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                          let w__24 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                          let w__25 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                          let w__26 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                          (AArch64_TLBIP_RVAA w__23 Regime_EL10 w__24 Shareability_ISH
+                            TLBILevel_Last TLBI_ExcludeXS (w__25 +++ w__26))))))
+          else
+            (do
+              if ((__PSTATE_EL == EL2) : Bool)
+              then
+                (do
+                  let w__27 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                  let w__28 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                  if ((((_get_HCR_EL2_Type_E2H w__27) +++ (_get_HCR_EL2_Type_TGE w__28)) == 0b11#2) : Bool)
+                  then
+                    (do
+                      let w__29 ← (( do (SecurityStateAtEL EL2) ) : SailM SecurityState )
+                      let w__30 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                      let w__31 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      (AArch64_TLBIP_RVAA w__29 Regime_EL20 VMID_NONE Shareability_ISH
+                        TLBILevel_Last TLBI_ExcludeXS (w__30 +++ w__31)))
+                  else
+                    (do
+                      let w__32 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                      let w__33 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                      let w__34 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                      let w__35 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      (AArch64_TLBIP_RVAA w__32 Regime_EL10 w__33 Shareability_ISH TLBILevel_Last
+                        TLBI_ExcludeXS (w__34 +++ w__35))))
+              else
+                (do
+                  if ((__PSTATE_EL == EL3) : Bool)
+                  then
+                    (do
+                      let w__36 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                      let w__37 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                      if ((((_get_HCR_EL2_Type_E2H w__36) +++ (_get_HCR_EL2_Type_TGE w__37)) == 0b11#2) : Bool)
+                      then
+                        (do
+                          let w__38 ← (( do (SecurityStateAtEL EL2) ) : SailM SecurityState )
+                          let w__39 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                          let w__40 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                          (AArch64_TLBIP_RVAA w__38 Regime_EL20 VMID_NONE Shareability_ISH
+                            TLBILevel_Last TLBI_ExcludeXS (w__39 +++ w__40)))
+                      else
+                        (do
+                          let w__41 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                          let w__42 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                          let w__43 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                          let w__44 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                          (AArch64_TLBIP_RVAA w__41 Regime_EL10 w__42 Shareability_ISH
+                            TLBILevel_Last TLBI_ExcludeXS (w__43 +++ w__44))))
+                  else (pure (()))))))
+
+
+/-- Type quantifiers: t : Int, t2 : Int -/
+def TLBIP_RVAALE1OS_SysOpsWrite128_4c5726524a6ca4f1 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) (t2 : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_TTLB : (BitVec 1) := (_get_HCR_EL2_Type_TTLB w__1)
+  let w__2 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_TTLBOS : (BitVec 1) := (_get_HCR_EL2_Type_TTLBOS w__2)
+  let w__3 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+  let __SCR_EL3_FGTEn : (BitVec 1) := (_get_SCR_EL3_Type_FGTEn w__3)
+  let w__4 ← (( do readReg HFGITR_EL2 ) : SailM (BitVec 64) )
+  let __HFGITR_EL2_TLBIRVAALE1OS : (BitVec 1) := (_get_HFGITR_EL2_Type_TLBIRVAALE1OS w__4)
+  let w__5 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+  let __HCRX_EL2_FnXS : (BitVec 1) := (_get_HCRX_EL2_Type_FnXS w__5)
   if ((__PSTATE_EL == EL0) : Bool)
   then sailThrow ((Error_Undefined ()))
   else
@@ -367,376 +419,403 @@ def AIFSR_SysRegRead32_dcd7a0d08b788988 (el : (BitVec 2)) (coproc : (BitVec 4)) 
       if ((__PSTATE_EL == EL1) : Bool)
       then
         (do
-          let w__9 ← (( do
+          let w__7 ← (( do
             (pure ((← do
-                  if ((← do
-                       (EL2Enabled ())) : Bool)
-                  then
-                    (do
-                      let w__7 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                      (pure (((! w__7) : Bool))))
-                  else (pure false)) && ((__HSTR_EL2_T5 == 1#1) : Bool))) ) : SailM Bool )
-          if (w__9 : Bool)
+                  (EL2Enabled ())) && ((__HCR_EL2_TTLB == 1#1) : Bool))) ) : SailM Bool )
+          if (w__7 : Bool)
           then
             (do
-              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
+              (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x14#8)))
           else
             (do
-              let w__13 ← (( do
+              let w__9 ← (( do
                 (pure ((← do
-                      if ((← do
-                           (EL2Enabled ())) : Bool)
-                      then
-                        (do
-                          (ELUsingAArch32 EL2))
-                      else (pure false)) && ((__HSTR_T5 == 1#1) : Bool))) ) : SailM Bool )
-              if (w__13 : Bool)
+                      (EL2Enabled ())) && ((__HCR_EL2_TTLBOS == 1#1) : Bool))) ) : SailM Bool )
+              if (w__9 : Bool)
               then
                 (do
-                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x14#8)))
               else
                 (do
-                  let w__17 ← (( do
+                  let w__16 ← (( do
                     (pure ((← do
                           if ((← do
-                               (EL2Enabled ())) : Bool)
+                               if ((← do
+                                    (EL2Enabled ())) : Bool)
+                               then
+                                 (do
+                                   (IsFeatureImplemented FEAT_FGT))
+                               else (pure false)) : Bool)
                           then
                             (do
-                              let w__15 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                              (pure (((! w__15) : Bool))))
-                          else (pure false)) && ((__HCR_EL2_TRVM == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__17 : Bool)
+                              (pure ((← do
+                                    let w__13 ← (( do (HaveEL EL3) ) : SailM Bool )
+                                    (pure (((! w__13) : Bool)))) || ((__SCR_EL3_FGTEn == 1#1) : Bool))))
+                          else (pure false)) && ((__HFGITR_EL2_TLBIRVAALE1OS == 1#1) : Bool))) ) :
+                    SailM Bool )
+                  if (w__16 : Bool)
                   then
                     (do
-                      (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
+                      (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x14#8)))
                   else
                     (do
-                      let w__21 ← (( do
+                      let w__22 ← (( do
                         (pure ((← do
                               if ((← do
-                                   (EL2Enabled ())) : Bool)
+                                   if ((← do
+                                        (IsFeatureImplemented FEAT_XS)) : Bool)
+                                   then
+                                     (do
+                                       (IsFeatureImplemented FEAT_HCX))
+                                   else (pure false)) : Bool)
                               then
                                 (do
-                                  (ELUsingAArch32 EL2))
-                              else (pure false)) && ((__HCR_TRVM == 1#1) : Bool))) ) : SailM Bool )
-                      if (w__21 : Bool)
+                                  (IsHCRXEL2Enabled ()))
+                              else (pure false)) && ((__HCRX_EL2_FnXS == 1#1) : Bool))) ) : SailM
+                        Bool )
+                      if (w__22 : Bool)
                       then
                         (do
-                          (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
+                          let w__23 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                          let w__24 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                          let w__25 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                          let w__26 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                          (AArch64_TLBIP_RVAA w__23 Regime_EL10 w__24 Shareability_OSH
+                            TLBILevel_Last TLBI_ExcludeXS (w__25 +++ w__26)))
                       else
                         (do
-                          let w__23 ← (( do
-                            if (((HaveEL EL3) : Bool) : Bool)
-                            then
-                              (do
-                                (ELUsingAArch32 EL3))
-                            else (pure false) ) : SailM Bool )
-                          if (w__23 : Bool)
-                          then
-                            (do
-                              let w__24 ← (( do (AIFSR_NS_read ()) ) : SailM (BitVec 32) )
-                              (R_set t w__24))
-                          else
-                            (do
-                              let w__25 ← (( do (AIFSR_read ()) ) : SailM (BitVec 32) )
-                              (R_set t w__25)))))))
+                          let w__27 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                          let w__28 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                          let w__29 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                          let w__30 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                          (AArch64_TLBIP_RVAA w__27 Regime_EL10 w__28 Shareability_OSH
+                            TLBILevel_Last TLBI_AllAttr (w__29 +++ w__30)))))))
       else
         (do
           if ((__PSTATE_EL == EL2) : Bool)
           then
             (do
-              let w__27 ← (( do
-                if (((HaveEL EL3) : Bool) : Bool)
-                then
-                  (do
-                    (ELUsingAArch32 EL3))
-                else (pure false) ) : SailM Bool )
-              if (w__27 : Bool)
+              let w__31 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+              let w__32 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+              if ((((_get_HCR_EL2_Type_E2H w__31) +++ (_get_HCR_EL2_Type_TGE w__32)) == 0b11#2) : Bool)
               then
                 (do
-                  let w__28 ← (( do (AIFSR_NS_read ()) ) : SailM (BitVec 32) )
-                  (R_set t w__28))
+                  let w__33 ← (( do (SecurityStateAtEL EL2) ) : SailM SecurityState )
+                  let w__34 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                  let w__35 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  (AArch64_TLBIP_RVAA w__33 Regime_EL20 VMID_NONE Shareability_OSH TLBILevel_Last
+                    TLBI_AllAttr (w__34 +++ w__35)))
               else
                 (do
-                  let w__29 ← (( do (AIFSR_read ()) ) : SailM (BitVec 32) )
-                  (R_set t w__29)))
+                  let w__36 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                  let w__37 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                  let w__38 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                  let w__39 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  (AArch64_TLBIP_RVAA w__36 Regime_EL10 w__37 Shareability_OSH TLBILevel_Last
+                    TLBI_AllAttr (w__38 +++ w__39))))
           else
             (do
               if ((__PSTATE_EL == EL3) : Bool)
               then
                 (do
-                  if ((__SCR_NS == 0#1) : Bool)
+                  let w__40 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                  let w__41 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                  if ((((_get_HCR_EL2_Type_E2H w__40) +++ (_get_HCR_EL2_Type_TGE w__41)) == 0b11#2) : Bool)
                   then
                     (do
-                      let w__30 ← (( do readReg AIFSR_S ) : SailM (BitVec 32) )
-                      (R_set t w__30))
+                      let w__42 ← (( do (SecurityStateAtEL EL2) ) : SailM SecurityState )
+                      let w__43 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                      let w__44 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      (AArch64_TLBIP_RVAA w__42 Regime_EL20 VMID_NONE Shareability_OSH
+                        TLBILevel_Last TLBI_AllAttr (w__43 +++ w__44)))
                   else
                     (do
-                      let w__31 ← (( do (AIFSR_NS_read ()) ) : SailM (BitVec 32) )
-                      (R_set t w__31)))
+                      let w__45 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                      let w__46 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                      let w__47 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                      let w__48 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      (AArch64_TLBIP_RVAA w__45 Regime_EL10 w__46 Shareability_OSH TLBILevel_Last
+                        TLBI_AllAttr (w__47 +++ w__48))))
               else (pure (())))))
 
 
-/-- Type quantifiers: t : Int -/
-def AMAIR0_SysRegRead32_9c3a882cb83d441e (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+/-- Type quantifiers: t : Int, t2 : Int -/
+def TLBIP_RVAALE1OS_SysOpsWrite128_fb31802a92e4d6d3 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) (t2 : Int) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
   let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T10 : (BitVec 1) := (_get_HSTR_EL2_Type_T10 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T10 : (BitVec 1) := (_get_HSTR_Type_T10 w__2)
-  let w__3 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_TRVM : (BitVec 1) := (_get_HCR_EL2_Type_TRVM w__3)
-  let w__4 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-  let __HCR_TRVM : (BitVec 1) := (_get_HCR_Type_TRVM w__4)
-  let w__5 ← (( do readReg SCR ) : SailM (BitVec 32) )
-  let __SCR_NS : (BitVec 1) := (_get_SCR_Type_NS w__5)
-  if ((__PSTATE_EL == EL0) : Bool)
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_TTLB : (BitVec 1) := (_get_HCR_EL2_Type_TTLB w__1)
+  let w__2 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_TTLBOS : (BitVec 1) := (_get_HCR_EL2_Type_TTLBOS w__2)
+  let w__3 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+  let __HCRX_EL2_FGTnXS : (BitVec 1) := (_get_HCRX_EL2_Type_FGTnXS w__3)
+  let w__4 ← (( do readReg HFGITR_EL2 ) : SailM (BitVec 64) )
+  let __HFGITR_EL2_TLBIRVAALE1OS : (BitVec 1) := (_get_HFGITR_EL2_Type_TLBIRVAALE1OS w__4)
+  let w__5 ← (( do (IsFeatureImplemented FEAT_XS) ) : SailM Bool )
+  if ((! w__5) : Bool)
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__9 ← (( do
-            (pure ((← do
-                  if ((← do
-                       (EL2Enabled ())) : Bool)
-                  then
-                    (do
-                      let w__7 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                      (pure (((! w__7) : Bool))))
-                  else (pure false)) && ((__HSTR_EL2_T10 == 1#1) : Bool))) ) : SailM Bool )
-          if (w__9 : Bool)
-          then
-            (do
-              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-          else
-            (do
-              let w__13 ← (( do
-                (pure ((← do
-                      if ((← do
-                           (EL2Enabled ())) : Bool)
-                      then
-                        (do
-                          (ELUsingAArch32 EL2))
-                      else (pure false)) && ((__HSTR_T10 == 1#1) : Bool))) ) : SailM Bool )
-              if (w__13 : Bool)
-              then
-                (do
-                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
-              else
-                (do
-                  let w__17 ← (( do
-                    (pure ((← do
-                          if ((← do
-                               (EL2Enabled ())) : Bool)
-                          then
-                            (do
-                              let w__15 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                              (pure (((! w__15) : Bool))))
-                          else (pure false)) && ((__HCR_EL2_TRVM == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__17 : Bool)
-                  then
-                    (do
-                      (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-                  else
-                    (do
-                      let w__21 ← (( do
-                        (pure ((← do
-                              if ((← do
-                                   (EL2Enabled ())) : Bool)
-                              then
-                                (do
-                                  (ELUsingAArch32 EL2))
-                              else (pure false)) && ((__HCR_TRVM == 1#1) : Bool))) ) : SailM Bool )
-                      if (w__21 : Bool)
-                      then
-                        (do
-                          (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
-                      else
-                        (do
-                          let w__23 ← (( do
-                            if (((HaveEL EL3) : Bool) : Bool)
-                            then
-                              (do
-                                (ELUsingAArch32 EL3))
-                            else (pure false) ) : SailM Bool )
-                          if (w__23 : Bool)
-                          then
-                            (do
-                              let w__24 ← (( do (AMAIR0_NS_read ()) ) : SailM (BitVec 32) )
-                              (R_set t w__24))
-                          else
-                            (do
-                              let w__25 ← (( do (AMAIR0_read ()) ) : SailM (BitVec 32) )
-                              (R_set t w__25)))))))
+      if ((__PSTATE_EL == EL0) : Bool)
+      then sailThrow ((Error_Undefined ()))
       else
         (do
-          if ((__PSTATE_EL == EL2) : Bool)
+          if ((__PSTATE_EL == EL1) : Bool)
           then
             (do
-              let w__27 ← (( do
-                if (((HaveEL EL3) : Bool) : Bool)
-                then
-                  (do
-                    (ELUsingAArch32 EL3))
-                else (pure false) ) : SailM Bool )
-              if (w__27 : Bool)
+              let w__7 ← (( do
+                (pure ((← do
+                      (EL2Enabled ())) && ((__HCR_EL2_TTLB == 1#1) : Bool))) ) : SailM Bool )
+              if (w__7 : Bool)
               then
                 (do
-                  let w__28 ← (( do (AMAIR0_NS_read ()) ) : SailM (BitVec 32) )
-                  (R_set t w__28))
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x14#8)))
               else
                 (do
-                  let w__29 ← (( do (AMAIR0_read ()) ) : SailM (BitVec 32) )
-                  (R_set t w__29)))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  if ((__SCR_NS == 0#1) : Bool)
+                  let w__9 ← (( do
+                    (pure ((← do
+                          (EL2Enabled ())) && ((__HCR_EL2_TTLBOS == 1#1) : Bool))) ) : SailM Bool )
+                  if (w__9 : Bool)
                   then
                     (do
-                      let w__30 ← (( do readReg AMAIR0_S ) : SailM (BitVec 32) )
-                      (R_set t w__30))
+                      (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x14#8)))
                   else
                     (do
-                      let w__31 ← (( do (AMAIR0_NS_read ()) ) : SailM (BitVec 32) )
-                      (R_set t w__31)))
-              else (pure (())))))
+                      let w__22 ← (( do
+                        (pure ((← do
+                              if ((← do
+                                   if ((← do
+                                        if ((← do
+                                             if ((← do
+                                                  (EL2Enabled ())) : Bool)
+                                             then
+                                               (do
+                                                 (IsFeatureImplemented FEAT_FGT))
+                                             else (pure false)) : Bool)
+                                        then
+                                          (do
+                                            if ((← do
+                                                 let w__13 ← (( do (HaveEL EL3) ) : SailM Bool )
+                                                 (pure (((! w__13) : Bool)))) : Bool)
+                                            then (pure true)
+                                            else
+                                              (do
+                                                let w__14 ← (( do readReg SCR_EL3 ) : SailM
+                                                  (BitVec 64) )
+                                                (pure ((((_get_SCR_EL3_Type_FGTEn w__14) == 1#1) : Bool)))))
+                                        else (pure false)) : Bool)
+                                   then
+                                     (do
+                                       (IsFeatureImplemented FEAT_HCX))
+                                   else (pure false)) : Bool)
+                              then
+                                (do
+                                  (pure ((← do
+                                        let w__19 ← (( do (IsHCRXEL2Enabled ()) ) : SailM Bool )
+                                        (pure (((! w__19) : Bool)))) || ((__HCRX_EL2_FGTnXS == 0#1) : Bool))))
+                              else (pure false)) && ((__HFGITR_EL2_TLBIRVAALE1OS == 1#1) : Bool))) )
+                        : SailM Bool )
+                      if (w__22 : Bool)
+                      then
+                        (do
+                          (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x14#8)))
+                      else
+                        (do
+                          let w__23 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                          let w__24 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                          let w__25 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                          let w__26 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                          (AArch64_TLBIP_RVAA w__23 Regime_EL10 w__24 Shareability_OSH
+                            TLBILevel_Last TLBI_ExcludeXS (w__25 +++ w__26))))))
+          else
+            (do
+              if ((__PSTATE_EL == EL2) : Bool)
+              then
+                (do
+                  let w__27 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                  let w__28 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                  if ((((_get_HCR_EL2_Type_E2H w__27) +++ (_get_HCR_EL2_Type_TGE w__28)) == 0b11#2) : Bool)
+                  then
+                    (do
+                      let w__29 ← (( do (SecurityStateAtEL EL2) ) : SailM SecurityState )
+                      let w__30 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                      let w__31 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      (AArch64_TLBIP_RVAA w__29 Regime_EL20 VMID_NONE Shareability_OSH
+                        TLBILevel_Last TLBI_ExcludeXS (w__30 +++ w__31)))
+                  else
+                    (do
+                      let w__32 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                      let w__33 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                      let w__34 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                      let w__35 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      (AArch64_TLBIP_RVAA w__32 Regime_EL10 w__33 Shareability_OSH TLBILevel_Last
+                        TLBI_ExcludeXS (w__34 +++ w__35))))
+              else
+                (do
+                  if ((__PSTATE_EL == EL3) : Bool)
+                  then
+                    (do
+                      let w__36 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                      let w__37 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                      if ((((_get_HCR_EL2_Type_E2H w__36) +++ (_get_HCR_EL2_Type_TGE w__37)) == 0b11#2) : Bool)
+                      then
+                        (do
+                          let w__38 ← (( do (SecurityStateAtEL EL2) ) : SailM SecurityState )
+                          let w__39 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                          let w__40 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                          (AArch64_TLBIP_RVAA w__38 Regime_EL20 VMID_NONE Shareability_OSH
+                            TLBILevel_Last TLBI_ExcludeXS (w__39 +++ w__40)))
+                      else
+                        (do
+                          let w__41 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                          let w__42 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                          let w__43 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                          let w__44 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                          (AArch64_TLBIP_RVAA w__41 Regime_EL10 w__42 Shareability_OSH
+                            TLBILevel_Last TLBI_ExcludeXS (w__43 +++ w__44))))
+                  else (pure (()))))))
 
 
-/-- Type quantifiers: t : Int -/
-def AMAIR1_SysRegRead32_abbf588378c53393 (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+/-- Type quantifiers: t : Int, t2 : Int -/
+def TLBIP_RVAALE1_SysOpsWrite128_23742d31e3585c34 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) (t2 : Int) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
   let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T10 : (BitVec 1) := (_get_HSTR_EL2_Type_T10 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T10 : (BitVec 1) := (_get_HSTR_Type_T10 w__2)
-  let w__3 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_TRVM : (BitVec 1) := (_get_HCR_EL2_Type_TRVM w__3)
-  let w__4 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-  let __HCR_TRVM : (BitVec 1) := (_get_HCR_Type_TRVM w__4)
-  let w__5 ← (( do readReg SCR ) : SailM (BitVec 32) )
-  let __SCR_NS : (BitVec 1) := (_get_SCR_Type_NS w__5)
-  if ((__PSTATE_EL == EL0) : Bool)
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_TTLB : (BitVec 1) := (_get_HCR_EL2_Type_TTLB w__1)
+  let w__2 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+  let __HCRX_EL2_FGTnXS : (BitVec 1) := (_get_HCRX_EL2_Type_FGTnXS w__2)
+  let w__3 ← (( do readReg HFGITR_EL2 ) : SailM (BitVec 64) )
+  let __HFGITR_EL2_TLBIRVAALE1 : (BitVec 1) := (_get_HFGITR_EL2_Type_TLBIRVAALE1 w__3)
+  let w__4 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_FB : (BitVec 1) := (_get_HCR_EL2_Type_FB w__4)
+  let w__5 ← (( do (IsFeatureImplemented FEAT_XS) ) : SailM Bool )
+  if ((! w__5) : Bool)
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__9 ← (( do
-            (pure ((← do
-                  if ((← do
-                       (EL2Enabled ())) : Bool)
-                  then
-                    (do
-                      let w__7 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                      (pure (((! w__7) : Bool))))
-                  else (pure false)) && ((__HSTR_EL2_T10 == 1#1) : Bool))) ) : SailM Bool )
-          if (w__9 : Bool)
-          then
-            (do
-              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-          else
-            (do
-              let w__13 ← (( do
-                (pure ((← do
-                      if ((← do
-                           (EL2Enabled ())) : Bool)
-                      then
-                        (do
-                          (ELUsingAArch32 EL2))
-                      else (pure false)) && ((__HSTR_T10 == 1#1) : Bool))) ) : SailM Bool )
-              if (w__13 : Bool)
-              then
-                (do
-                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
-              else
-                (do
-                  let w__17 ← (( do
-                    (pure ((← do
-                          if ((← do
-                               (EL2Enabled ())) : Bool)
-                          then
-                            (do
-                              let w__15 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                              (pure (((! w__15) : Bool))))
-                          else (pure false)) && ((__HCR_EL2_TRVM == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__17 : Bool)
-                  then
-                    (do
-                      (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-                  else
-                    (do
-                      let w__21 ← (( do
-                        (pure ((← do
-                              if ((← do
-                                   (EL2Enabled ())) : Bool)
-                              then
-                                (do
-                                  (ELUsingAArch32 EL2))
-                              else (pure false)) && ((__HCR_TRVM == 1#1) : Bool))) ) : SailM Bool )
-                      if (w__21 : Bool)
-                      then
-                        (do
-                          (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
-                      else
-                        (do
-                          let w__23 ← (( do
-                            if (((HaveEL EL3) : Bool) : Bool)
-                            then
-                              (do
-                                (ELUsingAArch32 EL3))
-                            else (pure false) ) : SailM Bool )
-                          if (w__23 : Bool)
-                          then
-                            (do
-                              let w__24 ← (( do (AMAIR1_NS_read ()) ) : SailM (BitVec 32) )
-                              (R_set t w__24))
-                          else
-                            (do
-                              let w__25 ← (( do (AMAIR1_read ()) ) : SailM (BitVec 32) )
-                              (R_set t w__25)))))))
+      if ((__PSTATE_EL == EL0) : Bool)
+      then sailThrow ((Error_Undefined ()))
       else
         (do
-          if ((__PSTATE_EL == EL2) : Bool)
+          if ((__PSTATE_EL == EL1) : Bool)
           then
             (do
-              let w__27 ← (( do
-                if (((HaveEL EL3) : Bool) : Bool)
-                then
-                  (do
-                    (ELUsingAArch32 EL3))
-                else (pure false) ) : SailM Bool )
-              if (w__27 : Bool)
+              let w__7 ← (( do
+                (pure ((← do
+                      (EL2Enabled ())) && ((__HCR_EL2_TTLB == 1#1) : Bool))) ) : SailM Bool )
+              if (w__7 : Bool)
               then
                 (do
-                  let w__28 ← (( do (AMAIR1_NS_read ()) ) : SailM (BitVec 32) )
-                  (R_set t w__28))
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x14#8)))
               else
                 (do
-                  let w__29 ← (( do (AMAIR1_read ()) ) : SailM (BitVec 32) )
-                  (R_set t w__29)))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  if ((__SCR_NS == 0#1) : Bool)
+                  let w__20 ← (( do
+                    (pure ((← do
+                          if ((← do
+                               if ((← do
+                                    if ((← do
+                                         if ((← do
+                                              (EL2Enabled ())) : Bool)
+                                         then
+                                           (do
+                                             (IsFeatureImplemented FEAT_FGT))
+                                         else (pure false)) : Bool)
+                                    then
+                                      (do
+                                        if ((← do
+                                             let w__11 ← (( do (HaveEL EL3) ) : SailM Bool )
+                                             (pure (((! w__11) : Bool)))) : Bool)
+                                        then (pure true)
+                                        else
+                                          (do
+                                            let w__12 ← (( do readReg SCR_EL3 ) : SailM
+                                              (BitVec 64) )
+                                            (pure ((((_get_SCR_EL3_Type_FGTEn w__12) == 1#1) : Bool)))))
+                                    else (pure false)) : Bool)
+                               then
+                                 (do
+                                   (IsFeatureImplemented FEAT_HCX))
+                               else (pure false)) : Bool)
+                          then
+                            (do
+                              (pure ((← do
+                                    let w__17 ← (( do (IsHCRXEL2Enabled ()) ) : SailM Bool )
+                                    (pure (((! w__17) : Bool)))) || ((__HCRX_EL2_FGTnXS == 0#1) : Bool))))
+                          else (pure false)) && ((__HFGITR_EL2_TLBIRVAALE1 == 1#1) : Bool))) ) :
+                    SailM Bool )
+                  if (w__20 : Bool)
                   then
                     (do
-                      let w__30 ← (( do readReg AMAIR1_S ) : SailM (BitVec 32) )
-                      (R_set t w__30))
+                      (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x14#8)))
                   else
                     (do
-                      let w__31 ← (( do (AMAIR1_NS_read ()) ) : SailM (BitVec 32) )
-                      (R_set t w__31)))
-              else (pure (())))))
+                      let w__22 ← (( do
+                        (pure ((← do
+                              (EL2Enabled ())) && ((__HCR_EL2_FB == 1#1) : Bool))) ) : SailM Bool )
+                      if (w__22 : Bool)
+                      then
+                        (do
+                          let w__23 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                          let w__24 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                          let w__25 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                          let w__26 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                          (AArch64_TLBIP_RVAA w__23 Regime_EL10 w__24 Shareability_ISH
+                            TLBILevel_Last TLBI_ExcludeXS (w__25 +++ w__26)))
+                      else
+                        (do
+                          let w__27 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                          let w__28 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                          let w__29 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                          let w__30 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                          (AArch64_TLBIP_RVAA w__27 Regime_EL10 w__28 Shareability_NSH
+                            TLBILevel_Last TLBI_ExcludeXS (w__29 +++ w__30))))))
+          else
+            (do
+              if ((__PSTATE_EL == EL2) : Bool)
+              then
+                (do
+                  let w__31 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                  let w__32 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                  if ((((_get_HCR_EL2_Type_E2H w__31) +++ (_get_HCR_EL2_Type_TGE w__32)) == 0b11#2) : Bool)
+                  then
+                    (do
+                      let w__33 ← (( do (SecurityStateAtEL EL2) ) : SailM SecurityState )
+                      let w__34 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                      let w__35 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      (AArch64_TLBIP_RVAA w__33 Regime_EL20 VMID_NONE Shareability_NSH
+                        TLBILevel_Last TLBI_ExcludeXS (w__34 +++ w__35)))
+                  else
+                    (do
+                      let w__36 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                      let w__37 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                      let w__38 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                      let w__39 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      (AArch64_TLBIP_RVAA w__36 Regime_EL10 w__37 Shareability_NSH TLBILevel_Last
+                        TLBI_ExcludeXS (w__38 +++ w__39))))
+              else
+                (do
+                  if ((__PSTATE_EL == EL3) : Bool)
+                  then
+                    (do
+                      let w__40 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                      let w__41 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                      if ((((_get_HCR_EL2_Type_E2H w__40) +++ (_get_HCR_EL2_Type_TGE w__41)) == 0b11#2) : Bool)
+                      then
+                        (do
+                          let w__42 ← (( do (SecurityStateAtEL EL2) ) : SailM SecurityState )
+                          let w__43 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                          let w__44 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                          (AArch64_TLBIP_RVAA w__42 Regime_EL20 VMID_NONE Shareability_NSH
+                            TLBILevel_Last TLBI_ExcludeXS (w__43 +++ w__44)))
+                      else
+                        (do
+                          let w__45 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+                          let w__46 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                          let w__47 ← (( do (X_read t2 64) ) : SailM (BitVec 64) )
+                          let w__48 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                          (AArch64_TLBIP_RVAA w__45 Regime_EL10 w__46 Shareability_NSH
+                            TLBILevel_Last TLBI_ExcludeXS (w__47 +++ w__48))))
+                  else (pure (()))))))
 
 
 end ArmFull.Functions

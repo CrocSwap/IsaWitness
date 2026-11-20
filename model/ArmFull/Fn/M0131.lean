@@ -1,14 +1,15 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0042
-import ArmFull.Fn.M0058
-import ArmFull.Fn.M0072
-import ArmFull.Fn.M0073
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0042
+public import ArmFull.Fn.M0058
+public import ArmFull.Fn.M0072
+public import ArmFull.Fn.M0073
+public import ArmFull.Fn.M0074 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -109,56 +110,6 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
-
-def _set_HFGRTR_EL2_Type_ERXPFGCDN_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_HFGRTR_EL2_Type_ERXPFGCDN_EL1 r v)
-
-
-def _set_HFGWTR_EL2_Type_ERXPFGCTL_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_HFGWTR_EL2_Type_ERXPFGCTL_EL1 r v)
-
-
-def _set_HFGRTR_EL2_Type_ERXPFGCTL_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_HFGRTR_EL2_Type_ERXPFGCTL_EL1 r v)
-
-
-def _set_HFGWTR_EL2_Type_ERXSTATUS_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_HFGWTR_EL2_Type_ERXSTATUS_EL1 r v)
-
-
-def _set_HFGRTR_EL2_Type_ERXSTATUS_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_HFGRTR_EL2_Type_ERXSTATUS_EL1 r v)
-
-
-def _set_HFGWTR_EL2_Type_ESR_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_HFGWTR_EL2_Type_ESR_EL1 r v)
-
-
-def _set_HFGRTR_EL2_Type_ESR_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_HFGRTR_EL2_Type_ESR_EL1 r v)
-
-
-def _set_HFGWTR_EL2_Type_FAR_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_HFGWTR_EL2_Type_FAR_EL1 r v)
-
-
-def _set_HFGRTR_EL2_Type_FAR_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_HFGRTR_EL2_Type_FAR_EL1 r v)
-
-
-def _set_HFGWTR_EL2_Type_ICC_IGRPENn_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_HFGWTR_EL2_Type_ICC_IGRPENn_EL1 r v)
-
 
 def _set_HFGRTR_EL2_Type_ICC_IGRPENn_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
   let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
@@ -835,6 +786,56 @@ def _set_HDFGWTR2_EL2_Type_nSPMCR_EL0 (r_ref : (RegisterRef (BitVec 64))) (v : (
 def _set_HDFGRTR2_EL2_Type_nSPMCR_EL0 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
   let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
   writeRegRef r_ref (_update_HDFGRTR2_EL2_Type_nSPMCR_EL0 r v)
+
+
+def _set_HDFGWTR2_EL2_Type_nSPMEVCNTRn_EL0 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HDFGWTR2_EL2_Type_nSPMEVCNTRn_EL0 r v)
+
+
+def _set_HDFGRTR2_EL2_Type_nSPMEVCNTRn_EL0 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HDFGRTR2_EL2_Type_nSPMEVCNTRn_EL0 r v)
+
+
+def _set_HDFGWTR2_EL2_Type_nSPMEVTYPERn_EL0 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HDFGWTR2_EL2_Type_nSPMEVTYPERn_EL0 r v)
+
+
+def _set_HDFGRTR2_EL2_Type_nSPMEVTYPERn_EL0 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HDFGRTR2_EL2_Type_nSPMEVTYPERn_EL0 r v)
+
+
+def _set_HDFGWTR2_EL2_Type_nSPMINTEN (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HDFGWTR2_EL2_Type_nSPMINTEN r v)
+
+
+def _set_HDFGRTR2_EL2_Type_nSPMINTEN (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HDFGRTR2_EL2_Type_nSPMINTEN r v)
+
+
+def _set_HDFGWTR2_EL2_Type_nSPMOVS (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HDFGWTR2_EL2_Type_nSPMOVS r v)
+
+
+def _set_HDFGRTR2_EL2_Type_nSPMOVS (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HDFGRTR2_EL2_Type_nSPMOVS r v)
+
+
+def _set_HDFGWTR2_EL2_Type_nSPMSCR_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HDFGWTR2_EL2_Type_nSPMSCR_EL1 r v)
+
+
+def _set_HDFGRTR2_EL2_Type_nSPMSCR_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HDFGRTR2_EL2_Type_nSPMSCR_EL1 r v)
 
 
 end ArmFull.Functions

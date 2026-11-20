@@ -1,13 +1,13 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0056
-import ArmFull.Fn.M0057
-import ArmFull.Fn.M0058
-import ArmFull.Fn.M0071
-import ArmFull.Fn.M0072
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0057
+public import ArmFull.Fn.M0058
+public import ArmFull.Fn.M0059
+public import ArmFull.Fn.M0071
+public import ArmFull.Fn.M0072 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -108,56 +108,6 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
-
-def _set_GICD_TYPER_Type_A3V (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GICD_TYPER_Type_A3V r v)
-
-
-def _set_GICH_VTR_Type_A3V (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GICH_VTR_Type_A3V r v)
-
-
-def _set_ICC_CTLR_EL3_Type_A3V (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_ICC_CTLR_EL3_Type_A3V r v)
-
-
-def _set_ICC_CTLR_Type_A3V (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_ICC_CTLR_Type_A3V r v)
-
-
-def _set_ICC_MCTLR_Type_A3V (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_ICC_MCTLR_Type_A3V r v)
-
-
-def _set_ICH_VTR_EL2_Type_A3V (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_ICH_VTR_EL2_Type_A3V r v)
-
-
-def _set_ICH_VTR_Type_A3V (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_ICH_VTR_Type_A3V r v)
-
-
-def _set_ICV_CTLR_EL1_Type_A3V (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_ICV_CTLR_EL1_Type_A3V r v)
-
-
-def _set_ICV_CTLR_Type_A3V (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_ICV_CTLR_Type_A3V r v)
-
-
-def _set_ICC_CTLR_EL1_Type_CBPR (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
-  writeRegRef r_ref (_update_ICC_CTLR_EL1_Type_CBPR r v)
-
 
 def _set_GICC_CTLR_Type_CBPR (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
   let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
@@ -857,6 +807,56 @@ def _set_HFGRTR_EL2_Type_ERXMISCn_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (
 def _set_HFGWTR_EL2_Type_ERXPFGCDN_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
   let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
   writeRegRef r_ref (_update_HFGWTR_EL2_Type_ERXPFGCDN_EL1 r v)
+
+
+def _set_HFGRTR_EL2_Type_ERXPFGCDN_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HFGRTR_EL2_Type_ERXPFGCDN_EL1 r v)
+
+
+def _set_HFGWTR_EL2_Type_ERXPFGCTL_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HFGWTR_EL2_Type_ERXPFGCTL_EL1 r v)
+
+
+def _set_HFGRTR_EL2_Type_ERXPFGCTL_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HFGRTR_EL2_Type_ERXPFGCTL_EL1 r v)
+
+
+def _set_HFGWTR_EL2_Type_ERXSTATUS_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HFGWTR_EL2_Type_ERXSTATUS_EL1 r v)
+
+
+def _set_HFGRTR_EL2_Type_ERXSTATUS_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HFGRTR_EL2_Type_ERXSTATUS_EL1 r v)
+
+
+def _set_HFGWTR_EL2_Type_ESR_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HFGWTR_EL2_Type_ESR_EL1 r v)
+
+
+def _set_HFGRTR_EL2_Type_ESR_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HFGRTR_EL2_Type_ESR_EL1 r v)
+
+
+def _set_HFGWTR_EL2_Type_FAR_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HFGWTR_EL2_Type_FAR_EL1 r v)
+
+
+def _set_HFGRTR_EL2_Type_FAR_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HFGRTR_EL2_Type_FAR_EL1 r v)
+
+
+def _set_HFGWTR_EL2_Type_ICC_IGRPENn_EL1 (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_HFGWTR_EL2_Type_ICC_IGRPENn_EL1 r v)
 
 
 end ArmFull.Functions

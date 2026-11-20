@@ -4,9 +4,8 @@
     "commit": "c816ea7ad03cce98d51acee252540fd4215fede8",
     "tree": "dec6a0e5c2f7025517cdaddf02bdf550e3acab04"
   },
-  "frozen_runtime_commit": "66636e0d6e9101ebbb7e5948b0b10c2cec1634b3",
-  "schema": "isawitness-runtime-fetch-overlay-v2",
-  "scope": "Pinned active runtime/test sources and exact local package configuration; fetched files are not distributed in Git.",
+  "schema": "isawitness-runtime-edit-overlay-v3",
+  "scope": "Pinned active runtime and test sources, plus exact local package configuration.",
   "software_heritage": {
     "swhid": "swh:1:rev:c816ea7ad03cce98d51acee252540fd4215fede8",
     "resolver_url": "https://archive.softwareheritage.org/browse/revision/c816ea7ad03cce98d51acee252540fd4215fede8/",
@@ -17,37 +16,135 @@
     "Sail/AbstractReal.lean",
     "Sail/AbstractRealRat.lean"
   ],
-  "excluded_build_metadata_directories": [".lake"],
-  "license_status": "First-party additions: Apache-2.0, Crocodile Labs Inc. Upstream runtime permissions and patch context/deletion rights remain under review; fetching is not redistribution clearance.",
-  "patches": [
-    {"path": "patches/0001-frozen-runtime-sources.patch", "sha256": "ddbf6b01441032d9705af39bfc1c90ca1b29692ce824afdcdfc022b78551a40e"},
-    {"path": "patches/0002-local-package-configuration.patch", "sha256": "b44e62294fa9c15bc031317bd491d417b6f143eee55db98ec04cf9c442cd1661"}
+  "excluded_build_metadata_directories": [
+    ".lake"
   ],
-  "payload": [
-    {"path": "patches/series", "sha256": "65a1b7cb548af8b93b609f4b44bfce266b51f40ab1b452087b4ded70a651c560"}
-  ],
+  "license_status": "First-party additions: Apache-2.0, Crocodile Labs Inc. Upstream runtime licensing remains under review.",
   "sources": [
-    {"path": "Sail.lean", "sha256": "9ec78514a73be7840fed224dfa9ad0854a7e57102bdd845a43a3b3a972668b3d"},
-    {"path": "Sail/AbstractReal.lean", "sha256": "55247a4d0dfc76a808c1711d9ffe927af157b0d320e90f40c9a795a9b484b71c"},
-    {"path": "Sail/AbstractRealRat.lean", "sha256": "04ccca20cce62f37d673da33e92b1f99e244082c608e8473dd954054f903f14e"},
-    {"path": "Sail/ArchSem.lean", "sha256": "fc340039f5acf1b84beb4d8fde4cf94d3cad80bf063f8f1b1a8821835bcda4aa"},
-    {"path": "Sail/ArchSemSequential.lean", "sha256": "bd4877931ee554d3e999b9311761df0a2e74f48612130b21b65f6e694cbffb79"},
-    {"path": "Sail/Attr.lean", "sha256": "890c8435c6a7e13f07f20b746c88639baf075c6b21808d921f3bec4fda76211e"},
-    {"path": "Sail/BitVec.lean", "sha256": "cd5c41303182d29d16b1e9f832db404b6c3fec2195664ad9097598a7b2153bee"},
-    {"path": "Sail/Common.lean", "sha256": "1a8efa75d3a112ceb9e23f24f7ec391d8f0746d1c20491114693eb6bf451b15f"},
-    {"path": "Sail/ConcurrencyInterfaceV1.lean", "sha256": "fdfab689522b6a2ed4e7da5c6034180e7a761566a21e268255b2b0e1a4b51c02"},
-    {"path": "Sail/IntRange.lean", "sha256": "405efd008ef4811b8dc664ccb982d5d2838a53423875f131450aad139846e4a9"},
-    {"path": "Sail/Sail.lean", "sha256": "fdc8074a6c6ef5f1041b6781f0ee4008656f9e5a386547fd0f1df598aa0f4ed0"},
-    {"path": "SailTests/NatConversions.lean", "sha256": "e0da777e182e5625e4b79c9691fea2f67f246d656b8f389ceb0a1aa7ae4f5903"},
-    {"path": "SailTests/RealPower.lean", "sha256": "284407c60d32141de05afe9b0bb7e64b3cfb3cb961f3dc73ed59a4e64b15fdbb"},
-    {"path": "SailTests/SetSliceInt.lean", "sha256": "ad14d510c9281284169e235c2b9cba64294ef328e8866132d2ba27524babc82f"},
-    {"path": "SailTests/Widths.lean", "sha256": "b0f0bd0389ea17aead4eb1a0d7e4ab07cca123cd3e8efcbe45ad9fd693d714b7"}
+    {
+      "path": "Sail.lean",
+      "sha256": "85c8df9bc85cc47041c432709863ff6e92103d3fc4388e57f5ac9cc8f90277d9"
+    },
+    {
+      "path": "Sail/AbstractReal.lean",
+      "sha256": "65420b3725270ad9b1ea4c020ca9ab656567a3888fd38699238fc1dee52b0fde"
+    },
+    {
+      "path": "Sail/AbstractRealRat.lean",
+      "sha256": "4cb19b7e22224deadf1e3dfc0a93965a07476cbdc24057059113f5d6e8103588"
+    },
+    {
+      "path": "Sail/ArchSem.lean",
+      "sha256": "d2023f6941a21523add32560eb1b9a3fbd77443fea1086c771caaa1b0ae30e23"
+    },
+    {
+      "path": "Sail/ArchSemSequential.lean",
+      "sha256": "c0c2b9f479c4cf73d75f207ac7d0133442335606893e2296a0c6003f60956a02"
+    },
+    {
+      "path": "Sail/Attr.lean",
+      "sha256": "e0bc5d33c65fa968378f94684c818986aa9010374537a66207fc811ce77b43a7"
+    },
+    {
+      "path": "Sail/BitVec.lean",
+      "sha256": "fba95846ce0f936f6bc3cfbe354a6996b6766f28f9c2a852b3880c5425f6a0df"
+    },
+    {
+      "path": "Sail/Common.lean",
+      "sha256": "7aed5b0f6263354c83777bb01bdf2bad9c93482a04e4e7655e64862f5239d6c3"
+    },
+    {
+      "path": "Sail/ConcurrencyInterfaceV1.lean",
+      "sha256": "b0e6a5e981e695fe9c2982c6b04f0e902b9741ec3114d6156b7ea26712d1313c"
+    },
+    {
+      "path": "Sail/IntRange.lean",
+      "sha256": "c1bc14d8cf7d976a642e34cad7d9e49cc4535a3ca45c88f606aa62a9c3ad4d95"
+    },
+    {
+      "path": "Sail/Sail.lean",
+      "sha256": "c280d5dc85a745640e82eb0f99bea8b66a1150c717e1efbf318358f31e0ac6b3"
+    },
+    {
+      "path": "SailTests/NatConversions.lean",
+      "sha256": "e0da777e182e5625e4b79c9691fea2f67f246d656b8f389ceb0a1aa7ae4f5903"
+    },
+    {
+      "path": "SailTests/RealPower.lean",
+      "sha256": "284407c60d32141de05afe9b0bb7e64b3cfb3cb961f3dc73ed59a4e64b15fdbb"
+    },
+    {
+      "path": "SailTests/SetSliceInt.lean",
+      "sha256": "ad14d510c9281284169e235c2b9cba64294ef328e8866132d2ba27524babc82f"
+    },
+    {
+      "path": "SailTests/Widths.lean",
+      "sha256": "b0f0bd0389ea17aead4eb1a0d7e4ab07cca123cd3e8efcbe45ad9fd693d714b7"
+    }
   ],
   "configuration": [
-    {"path": "lakefile.lean", "sha256": "7376d5793fdea37feb37228f3262d6a07586ea513ad8f5f1ad4a0fc8adb44e7c"},
-    {"path": "lean-toolchain", "sha256": "ca5f1f601d34c49079e38d7e7041eb0f2a9c227fbc1df0f404820069a052330c"},
-    {"path": "lake-manifest.json", "sha256": "dd042660e06f7f1f154dac0002db837d93bd611a391491d2b9cc4121176df8c7"},
-    {"path": "AXIOMS.md", "sha256": "af8e19b7545a6bb53e99d8802a1dd56087f1bdab14a6504218b060ddd20f6c68"},
-    {"path": "gate.json", "sha256": "6da8dd8e412c2cb01688180f4ca698030648433f3d78fe13d5c232bb17089ad1"}
-  ]
+    {
+      "path": "lakefile.lean",
+      "sha256": "7376d5793fdea37feb37228f3262d6a07586ea513ad8f5f1ad4a0fc8adb44e7c"
+    },
+    {
+      "path": "lean-toolchain",
+      "sha256": "ca5f1f601d34c49079e38d7e7041eb0f2a9c227fbc1df0f404820069a052330c"
+    },
+    {
+      "path": "lake-manifest.json",
+      "sha256": "dd042660e06f7f1f154dac0002db837d93bd611a391491d2b9cc4121176df8c7"
+    },
+    {
+      "path": "AXIOMS.md",
+      "sha256": "af8e19b7545a6bb53e99d8802a1dd56087f1bdab14a6504218b060ddd20f6c68"
+    },
+    {
+      "path": "gate.json",
+      "sha256": "6da8dd8e412c2cb01688180f4ca698030648433f3d78fe13d5c232bb17089ad1"
+    }
+  ],
+  "bootstrap_files": [
+    "lakefile.lean",
+    "Sail/AbstractReal.lean",
+    "Sail/AbstractRealRat.lean"
+  ],
+  "upstream_files": {
+    "Sail/ArchSem.lean": "fc340039f5acf1b84beb4d8fde4cf94d3cad80bf063f8f1b1a8821835bcda4aa",
+    "Sail/ArchSemSequential.lean": "2b2ec493d1418d045f68403c86c6ca26304e88fa66357ae9f2477b3b340b7b67",
+    "Sail/Attr.lean": "890c8435c6a7e13f07f20b746c88639baf075c6b21808d921f3bec4fda76211e",
+    "Sail/BitVec.lean": "34c6424c6aa606206deaefa27867358a9df749fe3f53fe8b6f50cac64c601ed4",
+    "Sail/Common.lean": "5269603c159519b598edf26b39cc8ff5b0d54a79846b2b652f303950719d8452",
+    "Sail/ConcurrencyInterfaceV1.lean": "977d888e1f6b29e895a00571e228259632c7f96a6cdf5c8a817f26f1afacd201",
+    "Sail/IntRange.lean": "405efd008ef4811b8dc664ccb982d5d2838a53423875f131450aad139846e4a9",
+    "Sail/Sail.lean": "46a91965c4dd6f7844813ef846fc367d54bb29189a74f46f7546528ee3954f18",
+    "Sail.lean": "24b92934ac9f5508446f2f5ce415b8f90522c3057d24f9063f93a0e46c69f973",
+    "lake-manifest.json": "c594acda96b97595eca854bd4ca27e858419f244b485dc78cd38ac809becfb11",
+    "lakefile.toml": "b211177c7f8fceca1808c6a6f15471ce5d8c168f5873b276ef5caee44be834b7",
+    "lean-toolchain": "85b71aa934e019c03eac6ec5ed97526956b4dff51b54c5d558fca8a5b34703e6"
+  },
+  "reference_files": {
+    "SailTest/VectorConversion.lean": "e4e704b1846f28ad1780d49ee734048cbd543164c32e2b032022ec51f2141389"
+  },
+  "legacy_output": {
+    "Sail/ArchSem.lean": "fc340039f5acf1b84beb4d8fde4cf94d3cad80bf063f8f1b1a8821835bcda4aa",
+    "Sail/ArchSemSequential.lean": "bd4877931ee554d3e999b9311761df0a2e74f48612130b21b65f6e694cbffb79",
+    "Sail/Attr.lean": "890c8435c6a7e13f07f20b746c88639baf075c6b21808d921f3bec4fda76211e",
+    "Sail/BitVec.lean": "cd5c41303182d29d16b1e9f832db404b6c3fec2195664ad9097598a7b2153bee",
+    "Sail/Common.lean": "1a8efa75d3a112ceb9e23f24f7ec391d8f0746d1c20491114693eb6bf451b15f",
+    "Sail/ConcurrencyInterfaceV1.lean": "fdfab689522b6a2ed4e7da5c6034180e7a761566a21e268255b2b0e1a4b51c02",
+    "Sail/IntRange.lean": "405efd008ef4811b8dc664ccb982d5d2838a53423875f131450aad139846e4a9",
+    "Sail/Sail.lean": "fdc8074a6c6ef5f1041b6781f0ee4008656f9e5a386547fd0f1df598aa0f4ed0",
+    "Sail.lean": "9ec78514a73be7840fed224dfa9ad0854a7e57102bdd845a43a3b3a972668b3d",
+    "lake-manifest.json": "dd042660e06f7f1f154dac0002db837d93bd611a391491d2b9cc4121176df8c7",
+    "lean-toolchain": "ca5f1f601d34c49079e38d7e7041eb0f2a9c227fbc1df0f404820069a052330c",
+    "SailTests/NatConversions.lean": "e0da777e182e5625e4b79c9691fea2f67f246d656b8f389ceb0a1aa7ae4f5903",
+    "SailTests/RealPower.lean": "284407c60d32141de05afe9b0bb7e64b3cfb3cb961f3dc73ed59a4e64b15fdbb",
+    "SailTests/SetSliceInt.lean": "ad14d510c9281284169e235c2b9cba64294ef328e8866132d2ba27524babc82f",
+    "SailTests/Widths.lean": "b0f0bd0389ea17aead4eb1a0d7e4ab07cca123cd3e8efcbe45ad9fd693d714b7",
+    "AXIOMS.md": "af8e19b7545a6bb53e99d8802a1dd56087f1bdab14a6504218b060ddd20f6c68",
+    "gate.json": "6da8dd8e412c2cb01688180f4ca698030648433f3d78fe13d5c232bb17089ad1",
+    "lakefile.lean": "7376d5793fdea37feb37228f3262d6a07586ea513ad8f5f1ad4a0fc8adb44e7c"
+  },
+  "edits_sha256": "4b67ccb90f27d6e8adf6ab24917245da943acbe663058372e2e3295ce952337c"
 }

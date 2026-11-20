@@ -1,13 +1,22 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0050
-import ArmFull.Fn.M0064
-import ArmFull.Fn.M0084
-import ArmFull.Fn.M0085
-import ArmFull.Fn.M0086
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0020
+public import ArmFull.Fn.M0035
+public import ArmFull.Fn.M0040
+public import ArmFull.Fn.M0043
+public import ArmFull.Fn.M0048
+public import ArmFull.Fn.M0049
+public import ArmFull.Fn.M0050
+public import ArmFull.Fn.M0063
+public import ArmFull.Fn.M0064
+public import ArmFull.Fn.M0065
+public import ArmFull.Fn.M0066
+public import ArmFull.Fn.M0084
+public import ArmFull.Fn.M0085
+public import ArmFull.Fn.M0086 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -108,91 +117,6 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
-
-def _set_GITS_STATUSR_Type_WROD (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GITS_STATUSR_Type_WROD r v)
-
-
-def _set_GICM_TYPER_Type_CLR (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GICM_TYPER_Type_CLR r v)
-
-
-def _set_GICM_TYPER_Type_NumSPIs (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 11)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GICM_TYPER_Type_NumSPIs r v)
-
-
-def _set_GICD_TYPER2_Type_VID (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 5)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GICD_TYPER2_Type_VID r v)
-
-
-def _set_GICD_TYPER2_Type_VIL (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GICD_TYPER2_Type_VIL r v)
-
-
-def _set_GICD_TYPER2_Type_nASSGIcap (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GICD_TYPER2_Type_nASSGIcap r v)
-
-
-def _set_GICV_ABPR_Type_Binary_Point (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 3)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GICV_ABPR_Type_Binary_Point r v)
-
-
-def _set_GICC_ABPR_Type_Binary_Point (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 3)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GICC_ABPR_Type_Binary_Point r v)
-
-
-def _set_GICC_BPR_Type_Binary_Point (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 3)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GICC_BPR_Type_Binary_Point r v)
-
-
-def _set_GICV_BPR_Type_Binary_Point (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 3)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GICV_BPR_Type_Binary_Point r v)
-
-
-def _set_CTIDEVARCH_Type_ARCHID (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 16)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_CTIDEVARCH_Type_ARCHID r v)
-
-
-def _set_AMDEVARCH_Type_ARCHID (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 16)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_AMDEVARCH_Type_ARCHID r v)
-
-
-def _set_GICR_MPAMIDR_Type_PARTIDmax (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 16)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GICR_MPAMIDR_Type_PARTIDmax r v)
-
-
-def _set_GITS_MPAMIDR_Type_PARTIDmax (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 16)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GITS_MPAMIDR_Type_PARTIDmax r v)
-
-
-def _set_GICR_MPAMIDR_Type_PMGmax (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 8)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GICR_MPAMIDR_Type_PMGmax r v)
-
-
-def _set_GITS_MPAMIDR_Type_PMGmax (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 8)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GITS_MPAMIDR_Type_PMGmax r v)
-
-
-def _set_GICR_CTLR_Type_CES (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
-  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
-  writeRegRef r_ref (_update_GICR_CTLR_Type_CES r v)
-
 
 def _set_GICR_CTLR_Type_DPG0 (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
   let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
@@ -856,6 +780,92 @@ def __get_VTCR_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
   (Mk_VTCR_EL2_Type
     ((tmp &&& (Complement.complement 0xFFFFEC8001900000#64)) ||| (Sail.BitVec.castWidth (m := 64) (Sail.BitVec.zeroExtend
         0x80000000#32 64))))
+
+
+def __get_HDFGRTR_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : HDFGRTR_EL2_Type := value_name
+  (Mk_HDFGRTR_EL2_Type
+    (tmp &&& (Sail.BitVec.castWidth (m := 64) (Complement.complement
+        (Sail.BitVec.zeroExtend 0x1FE04C000300100#60 64)))))
+
+
+def __get_ICV_NMIAR1_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : ICV_NMIAR1_EL1_Type := value_name
+  (Mk_ICV_NMIAR1_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFF000000#64)))
+
+
+def __get_SPSR_abt (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : SPSR_abt_Type := value_name
+  (Mk_SPSR_abt_Type (tmp &&& (Complement.complement 0xFFFFFFFF00000000#64)))
+
+
+def __get_ICH_LR_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : ICH_LR_EL2_Type := value_name
+  (Mk_ICH_LR_EL2_Type
+    (tmp &&& (Sail.BitVec.castWidth (m := 64) (Complement.complement
+        (Sail.BitVec.zeroExtend 0x700E00000000000#60 64)))))
+
+
+def __get_MDCCINT_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : MDCCINT_EL1_Type := value_name
+  (Mk_MDCCINT_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFF9FFFFFFF#64)))
+
+
+def __get_ICC_HPPIR1_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : ICC_HPPIR1_EL1_Type := value_name
+  (Mk_ICC_HPPIR1_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFF000000#64)))
+
+
+def __get_TCR2_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : TCR2_EL2_Type := value_name
+  (Mk_TCR2_EL2_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFF0000#64)))
+
+
+def __get_ESR_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : ESR_EL1_Type := value_name
+  (Mk_ESR_EL1_Type (tmp &&& (Complement.complement 0xFFFFF88000000000#64)))
+
+
+def __get_ICV_BPR1_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : ICV_BPR1_EL1_Type := value_name
+  (Mk_ICV_BPR1_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFFF8#64)))
+
+
+def __get_TCR_EL3 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : TCR_EL3_Type := value_name
+  (Mk_TCR_EL3_Type
+    ((tmp &&& (Complement.complement 0xFFFFF180000800C0#64)) ||| (Sail.BitVec.castWidth (m := 64) (Sail.BitVec.zeroExtend
+        0x80800000#32 64))))
+
+
+def __get_PMECR_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : PMECR_EL1_Type := value_name
+  (Mk_PMECR_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFFE0#64)))
+
+
+def __get_ICC_PMR_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : ICC_PMR_EL1_Type := value_name
+  (Mk_ICC_PMR_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFF00#64)))
+
+
+def __get_RMR_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : RMR_EL1_Type := value_name
+  (Mk_RMR_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFFFC#64)))
+
+
+def __get_PMICFILTR_EL0 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : PMICFILTR_EL0_Type := value_name
+  (Mk_PMICFILTR_EL0_Type (tmp &&& (Complement.complement 0xFBFFFFFF020F0000#64)))
+
+
+def __get_ICC_HPPIR0_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : ICC_HPPIR0_EL1_Type := value_name
+  (Mk_ICC_HPPIR0_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFF000000#64)))
+
+
+def __get_CNTHPS_CTL_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : CNTHPS_CTL_EL2_Type := value_name
+  (Mk_CNTHPS_CTL_EL2_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFFF8#64)))
 
 
 end ArmFull.Functions

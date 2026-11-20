@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,10 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _update_S1PIRType_Perm3 (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 15 12 x)
+
 
 def _update_PIRE0_EL1_Type_Perm3 (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
   (Sail.BitVec.updateSubrange v 15 12 x)
@@ -898,10 +902,6 @@ def Mk_S2PIRType (v : (BitVec 64)) : (BitVec 64) :=
 
 def undefined_ESRType (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
   (undefined_bitvector_at (ℓ.child 0) 64)
-
-
-def Mk_ESRType (v : (BitVec 64)) : (BitVec 64) :=
-  v
 
 
 end ArmFull.Functions

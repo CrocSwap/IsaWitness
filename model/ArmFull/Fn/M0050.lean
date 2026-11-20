@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,72 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def CNTKCTL_read__1 (_ : Unit) : SailM (BitVec 32) := do
+  let r ← (( do readReg _CNTKCTL ) : SailM CNTKCTL_Type )
+  let w__0 ← (( do readReg CNTKCTL_EL1 ) : SailM (BitVec 64) )
+  let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__0 0 32)) : (BitVec 32))
+  (pure (r))
+
+
+/-- Type quantifiers: k_guardedpage : Bool -/
+def SetInGuardedPage (guardedpage : Bool) : SailM Unit := do
+  writeReg InGuardedPage guardedpage
+
+
+def BTypeCompatible_BTI (hintcode : (BitVec 2)) : SailM Bool := do
+  match hintcode with
+  | 0b00 => (pure (false))
+  | 0b01 =>
+    (do
+      let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+      (pure ((w__0.BTYPE != 0b11#2))))
+  | 0b10 =>
+    (do
+      let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
+      (pure ((w__1.BTYPE != 0b10#2))))
+  | 0b11 => (pure (true))
+  | _ =>
+    (do
+      (undefined_bool_at (← occLabel 1345) ()))
+
+
+/-- Type quantifiers: k_x : Bool -/
+def SetBTypeCompatible (x : Bool) : SailM Unit := do
+  writeReg BTypeCompatible x
+
+
+def SetBTypeNext (x : (BitVec 2)) : SailM Unit := do
+  writeReg BTypeNext x
+
+
+def undefined_GCR_EL1_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
+  (undefined_bitvector_at (ℓ.child 0) 64)
+
+
+def Mk_GCR_EL1_Type (v : (BitVec 64)) : (BitVec 64) :=
+  v
+
+
+def _get_GCR_EL1_Type_Exclude (v : (BitVec 64)) : (BitVec 16) :=
+  (Sail.BitVec.extractLsb v 15 0)
+
+
+def _update_GCR_EL1_Type_Exclude (v : (BitVec 64)) (x : (BitVec 16)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 15 0 x)
+
+
+def _get_GCR_EL1_Type_RRND (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 16 16)
+
+
+def _update_GCR_EL1_Type_RRND (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 16 16 x)
+
+
+def undefined_RGSR_EL1_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
+  (undefined_bitvector_at (ℓ.child 0) 64)
+
 
 def Mk_RGSR_EL1_Type (v : (BitVec 64)) : (BitVec 64) :=
   v
@@ -811,79 +877,6 @@ def _get_DBGWCR_EL1_Type_PAC (v : (BitVec 64)) : (BitVec 2) :=
 
 def _update_DBGWCR_EL1_Type_PAC (v : (BitVec 64)) (x : (BitVec 2)) : (BitVec 64) :=
   (Sail.BitVec.updateSubrange v 2 1 x)
-
-
-def _update_DBGWCR_Type_PAC (v : (BitVec 32)) (x : (BitVec 2)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 2 1 x)
-
-
-def _get_DBGWCR_Type_PAC (v : (BitVec 32)) : (BitVec 2) :=
-  (Sail.BitVec.extractLsb v 2 1)
-
-
-def _get_DBGWCR_EL1_Type_WT (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 20 20)
-
-
-def _update_DBGWCR_EL1_Type_WT (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 20 20 x)
-
-
-def _update_DBGWCR_Type_WT (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 20 20 x)
-
-
-def _update_PMCFGR_Type_WT (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 18 18 x)
-
-
-def _get_DBGWCR_Type_WT (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 20 20)
-
-
-def _get_PMCFGR_Type_WT (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 18 18)
-
-
-def undefined_DBGWVR_EL1_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
-  (undefined_bitvector_at (ℓ.child 0) 64)
-
-
-def Mk_DBGWVR_EL1_Type (v : (BitVec 64)) : (BitVec 64) :=
-  v
-
-
-def gic_readonly (offset : (BitVec 16)) : Unit :=
-  (prerr_bits "[GIC] Write to RO offset: " offset)
-
-
-/-- Type quantifiers: n : Nat, n > 0 -/
-def __WriteUART (offset : (BitVec 16)) (n : Nat) (data : (BitVec (8 * n))) : Unit :=
-  match offset with
-  | 0x0000 => (putchar (BitVec.toNat (Sail.BitVec.extractLsb data 7 0)))
-  | _ =>
-    (let _ : Unit := (prerr_bits "[UART] Unknown write offset: " offset)
-    (prerr_bits "[UART] Unknown write data: " data))
-
-
-def undefined_POR_EL1_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
-  (undefined_bitvector_at (ℓ.child 0) 64)
-
-
-def Mk_POR_EL1_Type (v : (BitVec 64)) : (BitVec 64) :=
-  v
-
-
-def undefined_POR_EL2_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
-  (undefined_bitvector_at (ℓ.child 0) 64)
-
-
-def Mk_POR_EL2_Type (v : (BitVec 64)) : (BitVec 64) :=
-  v
-
-
-def undefined_POR_EL3_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
-  (undefined_bitvector_at (ℓ.child 0) 64)
 
 
 end ArmFull.Functions

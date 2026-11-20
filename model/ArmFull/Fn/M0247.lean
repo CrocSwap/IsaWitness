@@ -1,34 +1,52 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0017
-import ArmFull.Fn.M0021
-import ArmFull.Fn.M0036
-import ArmFull.Fn.M0041
-import ArmFull.Fn.M0044
-import ArmFull.Fn.M0048
-import ArmFull.Fn.M0050
-import ArmFull.Fn.M0087
-import ArmFull.Fn.M0097
-import ArmFull.Fn.M0144
-import ArmFull.Fn.M0146
-import ArmFull.Fn.M0153
-import ArmFull.Fn.M0154
-import ArmFull.Fn.M0166
-import ArmFull.Fn.M0168
-import ArmFull.Fn.M0178
-import ArmFull.Fn.M0180
-import ArmFull.Fn.M0183
-import ArmFull.Fn.M0195
-import ArmFull.Fn.M0196
-import ArmFull.Fn.M0202
-import ArmFull.Fn.M0204
-import ArmFull.Fn.M0244
-import ArmFull.Fn.M0245
-import ArmFull.Fn.M0246
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0010
+public import ArmFull.Fn.M0011
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0019
+public import ArmFull.Fn.M0021
+public import ArmFull.Fn.M0035
+public import ArmFull.Fn.M0042
+public import ArmFull.Fn.M0043
+public import ArmFull.Fn.M0044
+public import ArmFull.Fn.M0049
+public import ArmFull.Fn.M0051
+public import ArmFull.Fn.M0087
+public import ArmFull.Fn.M0098
+public import ArmFull.Fn.M0100
+public import ArmFull.Fn.M0117
+public import ArmFull.Fn.M0144
+public import ArmFull.Fn.M0146
+public import ArmFull.Fn.M0147
+public import ArmFull.Fn.M0150
+public import ArmFull.Fn.M0151
+public import ArmFull.Fn.M0166
+public import ArmFull.Fn.M0167
+public import ArmFull.Fn.M0168
+public import ArmFull.Fn.M0169
+public import ArmFull.Fn.M0170
+public import ArmFull.Fn.M0171
+public import ArmFull.Fn.M0174
+public import ArmFull.Fn.M0178
+public import ArmFull.Fn.M0180
+public import ArmFull.Fn.M0182
+public import ArmFull.Fn.M0183
+public import ArmFull.Fn.M0184
+public import ArmFull.Fn.M0187
+public import ArmFull.Fn.M0190
+public import ArmFull.Fn.M0195
+public import ArmFull.Fn.M0202
+public import ArmFull.Fn.M0203
+public import ArmFull.Fn.M0215
+public import ArmFull.Fn.M0236
+public import ArmFull.Fn.M0237
+public import ArmFull.Fn.M0240
+public import ArmFull.Fn.M0245 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -130,630 +148,706 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-def decode_dsb_aarch64_instrs_system_barriers_dsb_nxs (imm2 : (BitVec 2)) : SailM Unit := do
-  let w__0 ← (( do (HaveFeatXS ()) ) : SailM Bool )
-  if ((! w__0) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else (pure (()))
-  let types : MBReqTypes := MBReqTypes_All
-  let nXS : Bool := true
-  let alias' : DSBAlias := DSBAlias_DSB
-  let domain ← (( do (undefined_MBReqDomain (← occLabel 4101) ()) ) : SailM MBReqDomain )
-  let domain : MBReqDomain :=
-    match imm2 with
-    | 0b00 => MBReqDomain_OuterShareable
-    | 0b01 => MBReqDomain_Nonshareable
-    | 0b10 => MBReqDomain_InnerShareable
-    | _ => MBReqDomain_FullSystem
-  let domain := domain
-  (execute_aarch64_instrs_system_barriers_dsb alias' domain nXS types)
-
-
-def execute_aarch64_instrs_system_exceptions_debug_halt (_ : Unit) : SailM Unit := do
-  let is_async : Bool := false
-  (Halt__1 DebugHalt_HaltInstruction is_async)
-
-
-def CheckForPMUOverflow (_ : Unit) : SailM Unit := do
-  let check_cnten : Bool := false
-  let check_e : Bool := true
-  let check_inten : Bool := true
-  let include_lo_name : Bool := true
-  let include_hi_name : Bool := true
-  let exclude_cyc : Bool := false
-  let exclude_sync : Bool := false
-  let pmuirq ← (( do
-    (PMUOverflowCondition check_e check_cnten check_inten include_hi_name include_lo_name
-      exclude_cyc exclude_sync) ) : SailM Bool )
-  (SetInterruptRequestLevel InterruptID_PMUIRQ
-    (if (pmuirq : Bool)
-    then Signal_High
-    else Signal_Low))
-  let _ : Unit :=
-    (CTI_SetEventLevel CrossTriggerIn_PMUOverflow
-      (if (pmuirq : Bool)
-      then Signal_High
-      else Signal_Low))
+/-- Type quantifiers: lr_offset : Int, vect_offset : Int -/
+def AArch32_EnterMode (target_mode : (BitVec 5)) (preferred_exception_return : (BitVec 32)) (lr_offset : Int) (vect_offset : Int) : SailM Unit := do
+  let _ : Unit := (SynchronizeContext ())
   let w__2 ← (( do
     if ((← do
-         (HavePMUv3p9 ())) : Bool)
+         (ELUsingAArch32 EL1)) : Bool)
     then
       (do
-        (Havev8p9Debug ()))
+        let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
+        (pure (((w__1.EL != EL2) : Bool))))
     else (pure false) ) : SailM Bool )
-  if (w__2 : Bool)
+  ArmFull.assert w__2 "sail-inputs/03-v8_base.sail:14067.49-14067.50"
+  let w__3 ← (( do (Halted ()) ) : SailM Bool )
+  if (w__3 : Bool)
   then
     (do
-      let w__6 ← (( do
-        if ((← if (pmuirq : Bool)
-             then
-               (do
-                 (HaltingAllowed ()))
-             else (pure false)) : Bool)
-        then
-          (do
-            let w__5 ← (( do readReg EDECR ) : SailM (BitVec 32) )
-            (pure ((((_get_EDECR_Type_PME w__5) == 1#1) : Bool))))
-        else (pure false) ) : SailM Bool )
-      if (w__6 : Bool)
-      then
-        (do
-          (Halt DebugHalt_EDBGRQ))
-      else (pure (())))
-  else (pure (()))
-  let w__7 ← (( do (ShouldBRBEFreeze ()) ) : SailM Bool )
-  if (w__7 : Bool)
-  then
-    (do
-      (BRBEFreeze ()))
-  else (pure (()))
-
-
-/-- Type quantifiers: k_exception_entry : Bool -/
-def CheckExceptionCatch (exception_entry : Bool) : SailM Unit := do
-  let ctrl ← (( do (undefined_bitvector_at (← occLabel 701) 2) ) : SailM (BitVec 2) )
-  let exception_exit ← (( do (undefined_bool_at (← occLabel 702) ()) ) : SailM Bool )
-  let increment_name ← (( do (undefined_int_at (← occLabel 703) ()) ) : SailM Int )
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let ss ← (( do (SecurityStateAtEL w__0.EL) ) : SailM SecurityState )
-  let base : Int := 0
-  let base : Int :=
-    match ss with
-    | .SS_Secure => 0
-    | .SS_NonSecure => 4
-    | .SS_Realm => 16
-    | .SS_Root => 0
-  let base : Int := base
-  let w__1 ← (( do (HaltingAllowed ()) ) : SailM Bool )
-  if (w__1 : Bool)
-  then
-    (do
-      let halt ← (( do (undefined_bool_at (← occLabel 704) ()) ) : SailM Bool )
-      let w__2 ← (( do (HaveExtendedECDebugEvents ()) ) : SailM Bool )
-      let halt ← (( do
-        if (w__2 : Bool)
-        then
-          (do
-            let exception_exit : Bool := (! exception_entry)
-            let increment_name : Int :=
-              if ((BEq.beq ss SS_Realm) : Bool)
-              then 4
-              else 8
-            let w__3 ← (( do (EDECCR_read ()) ) : SailM (BitVec 32) )
-            let w__4 ← (( do readReg PSTATE ) : SailM ProcState )
-            let w__5 ← (( do (EDECCR_read ()) ) : SailM (BitVec 32) )
-            let w__6 ← (( do readReg PSTATE ) : SailM ProcState )
-            let ctrl : (BitVec 2) :=
-              ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access w__3
-                    (Sail.Int.toNatChecked ((((BitVec.toNat w__4.EL) +i base) +i increment_name))))])) +++ (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                    w__5 (Sail.Int.toNatChecked (((BitVec.toNat w__6.EL) +i base))))])))
-            let halt : Bool :=
-              match ctrl with
-              | 0b00 => false
-              | 0b01 => true
-              | 0b10 => (exception_exit == true)
-              | _ => (exception_entry == true)
-            (pure (halt)))
-        else
-          (do
-            let w__7 ← (( do (EDECCR_read ()) ) : SailM (BitVec 32) )
-            let w__8 ← (( do readReg PSTATE ) : SailM ProcState )
-            let halt :=
-              (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access w__7
-                    (Sail.Int.toNatChecked (((BitVec.toNat w__8.EL) +i base))))])) == 1#1) : Bool)
-            (pure (halt))) ) : SailM Bool )
-      if (halt : Bool)
-      then
-        (do
-          let w__10 ← (( do
-            (pure ((← do
-                  (Havev8p8Debug ())) && (exception_entry : Bool))) ) : SailM Bool )
-          if (w__10 : Bool)
-          then
-            (do
-              let w__11 ← (( do readReg EDESR ) : SailM (BitVec 32) )
-              writeReg EDESR (Sail.BitVec.updateSubrange w__11 3 3 1#1))
-          else
-            (do
-              (Halt DebugHalt_ExceptionCatch)))
-      else (pure (())))
-  else (pure (()))
-
-
-/-- Type quantifiers: N : Nat, List.elem N [32, 64, 128] -/
-def FetchDescriptor (ee : (BitVec 1)) (walkaddress : AddressDescriptor) (walkaccess : AccessDescriptor) (fault_in : FaultRecord) (N : Nat) (translation_info : TranslationInfo) : SailM (FaultRecord × (BitVec N)) := SailME.run do
-  ArmFull.assert (((N == 32) || (N == 64)) || (N == 128)) "sail-arm/v8_base.sail:19932.41-19932.42"
-  let descriptor ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1244)
-      (Sail.Int.toNatChecked (N)))) ) : SailME (FaultRecord × (BitVec N)) (BitVec N) )
-  let fault : FaultRecord := fault_in
-  let w__0 ← (( do (HaveRME ()) ) : SailME (FaultRecord × (BitVec N)) Bool )
-  let fault ← (( do
-    if (w__0 : Bool)
-    then
-      (do
-        let w__1 ← (( do (GranuleProtectionCheck walkaddress walkaccess) ) : SailME
-          (FaultRecord × (BitVec N)) GPCFRecord )
-        let fault := ({ fault with gpcf := w__1 } : FaultRecord)
-        if ((bne fault.gpcf.gpf GPCF_None) : Bool)
-        then
-          (do
-            let fault : FaultRecord := { fault with statuscode := Fault_GPCFOnWalk }
-            let fault : FaultRecord := { fault with paddress := walkaddress.paddress }
-            let fault : FaultRecord := { fault with gpcfs2walk := fault.secondstage }
-            let w__2 ← (( do ((Sail.BitVec.castWidth ) <$> (__UNKNOWN_bits N)) ) : SailME
-              (FaultRecord × (BitVec N)) (BitVec N) )
-            SailME.throw ((fault, w__2) : (FaultRecord × (BitVec N)))
-            (pure (fault)))
-        else (pure (fault)))
-    else (pure (fault)) ) : SailME (FaultRecord × (BitVec N)) FaultRecord )
-  let memstatus ← (( do (undefined_PhysMemRetStatus (← occLabel 1245) ()) ) : SailME
-    (FaultRecord × (BitVec N)) PhysMemRetStatus )
-  let w__3 ← (( do
-    ((fun (x0, x1) => (x0, (Sail.BitVec.castWidth x1))) <$> (PhysMemRead walkaddress
-      (Sail.Int.toNatChecked ((Int.ediv N 8))) walkaccess (some translation_info))) ) : SailME
-    (FaultRecord × (BitVec N)) (PhysMemRetStatus × (BitVec (8 * (N / 8)))) )
-  let (tup__0, tup__1) := (w__3 : (PhysMemRetStatus × (BitVec (8 * (N / 8)))))
-  let memstatus : PhysMemRetStatus := tup__0
-  let descriptor : (BitVec N) := (Sail.BitVec.castWidth tup__1)
-  let fault ← (( do
-    if ((IsFault__2 memstatus) : Bool)
-    then
-      (do
-        let iswrite : Bool := false
-        let w__4 ← (( do
-          (HandleExternalTTWAbort memstatus iswrite walkaddress walkaccess (Int.ediv N 8) fault) ) :
-          SailME (FaultRecord × (BitVec N)) FaultRecord )
-        let fault := (w__4 : FaultRecord)
-        if ((IsFault__1 fault.statuscode) : Bool)
-        then
-          (do
-            let w__5 ← (( do ((Sail.BitVec.castWidth ) <$> (__UNKNOWN_bits N)) ) : SailME
-              (FaultRecord × (BitVec N)) (BitVec N) )
-            SailME.throw ((fault, w__5) : (FaultRecord × (BitVec N))))
-        else (pure (()))
-        (pure (fault)))
-    else (pure (fault)) ) : SailME (FaultRecord × (BitVec N)) FaultRecord )
-  let descriptor : (BitVec N) :=
-    if ((ee == 1#1) : Bool)
-    then (reverse_endianness descriptor)
-    else descriptor
-  let descriptor := descriptor
-  (pure ((fault, descriptor)))
-
-
-/-- Type quantifiers: size : Int -/
-def AArch64_CheckBreakpoint (fault_in : FaultRecord) (vaddress : (BitVec 64)) (accdesc : AccessDescriptor) (size : Int) : SailM FaultRecord := do
-  let is_mismatch_i ← (( do (undefined_bool_at (← occLabel 1392) ()) ) : SailM Bool )
-  let match_i ← (( do (undefined_bool_at (← occLabel 1393) ()) ) : SailM Bool )
-  let reason ← (( do (undefined_bitvector_at (← occLabel 1394) 6) ) : SailM (BitVec 6) )
-  let w__0 ← (( do (S1TranslationRegime__1 ()) ) : SailM (BitVec 2) )
-  let w__1 ← (( do (ELUsingAArch32 w__0) ) : SailM Bool )
-  ArmFull.assert (! w__1) "sail-arm/v8_base.sail:23655.61-23655.62"
-  let w__4 ← (( do
-    (pure ((← do
-          (pure ((← do
-                (UsingAArch32 ())) && (((size == 2) || (size == 4)) : Bool)))) || ((size == 4) : Bool)))
-    ) : SailM Bool )
-  ArmFull.assert w__4 "sail-arm/v8_base.sail:23656.63-23656.64"
-  let fault : FaultRecord := fault_in
-  let val_match : Bool := false
-  let mismatch : Bool := true
-  let mismatch_bp : Bool := false
-  let w__5 ← (( do (NumBreakpointsImplemented ()) ) : SailM Int )
-  let (is_mismatch_i, match_i, mismatch, mismatch_bp, val_match) ← (( do
-    let loop_i_lower : Nat := 0
-    let loop_i_upper : Int := (w__5 -i 1)
-    (do
-      let mut loop_vars := (is_mismatch_i, match_i, mismatch, mismatch_bp, val_match)
-      for i in [loop_i_lower:loop_i_upper:1]i do
-        let (is_mismatch_i, match_i, mismatch, mismatch_bp, val_match) := loop_vars
-        loop_vars ← do
-          ArmFull.assert ((i <b 64) || (! (((size == 2) || (size == 4)) || (size == 4)))) "sail-arm/v8_base.sail:23662.67-23662.68"
-          let w__6 ← (( do
-            (AArch64_BreakpointMatch (Sail.Int.toNatChecked (i)) vaddress accdesc size) ) : SailM
-            (Bool × Bool) )
-          let (tup__0, tup__1) := (w__6 : (Bool × Bool))
-          let match_i : Bool := tup__0
-          let is_mismatch_i : Bool := tup__1
-          let (mismatch, mismatch_bp, val_match) : (Bool × Bool × Bool) :=
-            if (is_mismatch_i : Bool)
-            then
-              (let mismatch_bp : Bool := true
-              let mismatch : Bool := (mismatch && (! match_i))
-              (mismatch, mismatch_bp, val_match))
-            else
-              (let val_match : Bool := (val_match || match_i)
-              (mismatch, mismatch_bp, val_match))
-          (pure ((is_mismatch_i, match_i, mismatch, mismatch_bp, val_match)))
-      (pure loop_vars)) ) : SailM (Bool × Bool × Bool × Bool × Bool) )
-  if ((val_match || (mismatch && mismatch_bp)) : Bool)
-  then
-    (do
-      let fault : FaultRecord := { fault with statuscode := Fault_Debug }
-      let w__7 ← (( do (HaltOnBreakpointOrWatchpoint ()) ) : SailM Bool )
-      if (w__7 : Bool)
-      then
-        (do
-          let reason : (BitVec 6) := DebugHalt_Breakpoint
-          (Halt reason))
-      else (pure (()))
-      (pure (fault)))
-  else (pure (fault))
-
-
-/-- Type quantifiers: size : Int -/
-def AArch64_CheckWatchpoint (fault_in : FaultRecord) (vaddress : (BitVec 64)) (accdesc : AccessDescriptor) (size : Int) : SailM FaultRecord := SailME.run do
-  let reason ← (( do (undefined_bitvector_at (← occLabel 1402) 6) ) : SailME FaultRecord
-    (BitVec 6) )
-  let w__0 ← (( do (S1TranslationRegime__1 ()) ) : SailME FaultRecord (BitVec 2) )
-  let w__1 ← (( do (ELUsingAArch32 w__0) ) : SailME FaultRecord Bool )
-  ArmFull.assert (! w__1) "sail-arm/v8_base.sail:23817.61-23817.62"
-  let fault : FaultRecord := fault_in
-  if ((BEq.beq accdesc.acctype AccessType_DC) : Bool)
-  then
-    (do
-      if ((bne accdesc.cacheop CacheOp_Invalidate) : Bool)
-      then
-        (do
-          SailME.throw (fault : FaultRecord))
-      else (pure (())))
+      (AArch32_EnterModeInDebugState target_mode))
   else
     (do
-      if ((! (IsDataAccess accdesc.acctype)) : Bool)
+      let spsr ← (( do (GetPSRFromPSTATE AArch32_NonDebugState 32) ) : SailM (BitVec 32) )
+      let w__4 ← (( do readReg PSTATE ) : SailM ProcState )
+      if ((w__4.M == M32_Monitor) : Bool)
       then
         (do
-          SailME.throw (fault : FaultRecord))
-      else (pure (())))
-  let w__2 ← (( do (NumWatchpointsImplemented ()) ) : SailME FaultRecord Int )
-  let fault ← (( do
-    let loop_i_lower : Nat := 0
-    let loop_i_upper : Int := (w__2 -i 1)
-    (do
-      let mut loop_vars := fault
-      for i in [loop_i_lower:loop_i_upper:1]i do
-        let fault := loop_vars
-        loop_vars ← do
-          ArmFull.assert (i <b 64) "sail-arm/v8_base.sail:23828.39-23828.40"
-          let w__3 ← (( do
-            (AArch64_WatchpointMatch (Sail.Int.toNatChecked (i)) vaddress size accdesc) ) : SailME
-            FaultRecord Bool )
-          if (w__3 : Bool)
+          let w__5 ← (( do readReg SCR ) : SailM (BitVec 32) )
+          writeReg SCR (Sail.BitVec.updateSubrange w__5 0 0 0#1))
+      else (pure (()))
+      (AArch32_WriteMode target_mode)
+      (SPSR_set (N := 32) spsr)
+      (R_set 14 (BitVec.addInt preferred_exception_return lr_offset))
+      let w__6 ← (( do readReg PSTATE ) : SailM ProcState )
+      let w__7 ← (( do (SCTLR_read__2 ()) ) : SailM (BitVec 32) )
+      writeReg PSTATE { w__6 with T := (_get_SCTLR_Type_TE w__7) }
+      let w__8 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__8 with SS := 0#1 }
+      if ((target_mode == M32_FIQ) : Bool)
+      then
+        (do
+          let w__9 ← (( do readReg PSTATE ) : SailM ProcState )
+          writeReg PSTATE { w__9 with A := (Sail.BitVec.extractLsb 0b111#3 2 2) }
+          let w__10 ← (( do readReg PSTATE ) : SailM ProcState )
+          writeReg PSTATE { w__10 with I := (Sail.BitVec.extractLsb 0b111#3 1 1) }
+          let w__11 ← (( do readReg PSTATE ) : SailM ProcState )
+          writeReg PSTATE { w__11 with F := (Sail.BitVec.extractLsb 0b111#3 0 0) })
+      else
+        (do
+          if (((target_mode == M32_Abort) || (target_mode == M32_IRQ)) : Bool)
           then
             (do
-              let fault : FaultRecord := { fault with statuscode := Fault_Debug }
-              let w__5 ← (( do
-                (pure ((← do
-                      let w__4 ← (( do readReg DBGWCR_EL1 ) : SailME FaultRecord
-                        (Vector (BitVec 64) 64) )
-                      (pure ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                              (_get_DBGWCR_EL1_Type_LSC
-                                (GetElem?.getElem! w__4 (Sail.Int.toNatChecked (i)))) 0)])) == 1#1) : Bool)))) && (accdesc.read : Bool)))
-                ) : SailME FaultRecord Bool )
-              if (w__5 : Bool)
-              then
-                (let fault : FaultRecord := { fault with write := false }
-                (pure (fault)))
-              else
-                (do
-                  let w__7 ← (( do
-                    (pure ((← do
-                          let w__6 ← (( do readReg DBGWCR_EL1 ) : SailME FaultRecord
-                            (Vector (BitVec 64) 64) )
-                          (pure ((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                                  (_get_DBGWCR_EL1_Type_LSC
-                                    (GetElem?.getElem! w__6 (Sail.Int.toNatChecked (i)))) 1)])) == 1#1) : Bool)))) && (accdesc.write : Bool)))
-                    ) : SailME FaultRecord Bool )
-                  let fault : FaultRecord :=
-                    if (w__7 : Bool)
-                    then { fault with write := true }
-                    else fault
-                  (pure (fault))))
-          else (pure (fault))
-      (pure loop_vars)) ) : SailME FaultRecord FaultRecord )
-  let w__11 ← (( do
-    (pure ((← do
-          (pure ((← do
-                if (((BEq.beq fault.statuscode Fault_Debug) : Bool) : Bool)
-                then
-                  (do
-                    (HaltOnBreakpointOrWatchpoint ()))
-                else (pure false)) && ((! accdesc.nonfault) : Bool)))) && ((! (accdesc.firstfault && (! accdesc.first))) : Bool)))
-    ) : SailME FaultRecord Bool )
-  if (w__11 : Bool)
-  then
-    (do
-      let reason : (BitVec 6) := DebugHalt_Watchpoint
-      writeReg EDWAR vaddress
-      (Halt reason))
-  else (pure (()))
-  (pure (fault))
-
-
-/-- Type quantifiers: k_N : Nat, List.elem k_N [64, 128] -/
-def AArch64_MemSwapTableDesc (fault_in : FaultRecord) (prev_desc : (BitVec k_N)) (new_desc : (BitVec k_N)) (ee : (BitVec 1)) (descaccess : AccessDescriptor) (descpaddr : AddressDescriptor) (translation_info : TranslationInfo) : SailM (FaultRecord × (BitVec k_N)) := SailME.run do
-  let ordered_new_desc ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1406)
-      (Sail.BitVec.length prev_desc))) ) : SailME (FaultRecord × (BitVec k_N)) (BitVec k_N) )
-  let fault : FaultRecord := fault_in
-  let iswrite ← (( do (undefined_bool_at (← occLabel 1407) ()) ) : SailME
-    (FaultRecord × (BitVec k_N)) Bool )
-  let w__0 ← (( do (HaveRME ()) ) : SailME (FaultRecord × (BitVec k_N)) Bool )
-  let fault ← (( do
-    if (w__0 : Bool)
-    then
-      (do
-        let w__1 ← (( do (GranuleProtectionCheck descpaddr descaccess) ) : SailME
-          (FaultRecord × (BitVec k_N)) GPCFRecord )
-        let fault := ({ fault with gpcf := w__1 } : FaultRecord)
-        if ((bne fault.gpcf.gpf GPCF_None) : Bool)
+              let w__12 ← (( do readReg PSTATE ) : SailM ProcState )
+              writeReg PSTATE { w__12 with A := (Sail.BitVec.extractLsb 0b11#2 1 1) }
+              let w__13 ← (( do readReg PSTATE ) : SailM ProcState )
+              writeReg PSTATE { w__13 with I := (Sail.BitVec.extractLsb 0b11#2 0 0) })
+          else
+            (do
+              let w__14 ← (( do readReg PSTATE ) : SailM ProcState )
+              writeReg PSTATE { w__14 with I := 1#1 }))
+      let w__15 ← (( do readReg PSTATE ) : SailM ProcState )
+      let w__16 ← (( do (SCTLR_read__2 ()) ) : SailM (BitVec 32) )
+      writeReg PSTATE { w__15 with E := (_get_SCTLR_Type_EE w__16) }
+      let w__17 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__17 with IL := 0#1 }
+      let w__18 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__18 with IT := 0b00000000#8 }
+      let w__21 ← (( do
+        if ((← do
+             (HavePANExt ())) : Bool)
         then
           (do
-            let fault : FaultRecord := { fault with statuscode := Fault_GPCFOnWalk }
-            let fault : FaultRecord := { fault with paddress := descpaddr.paddress }
-            let fault : FaultRecord := { fault with gpcfs2walk := fault.secondstage }
-            let w__2 ← (( do
-              ((Sail.BitVec.castWidth ) <$> (__UNKNOWN_bits (Sail.BitVec.length prev_desc))) ) :
-              SailME (FaultRecord × (BitVec k_N)) (BitVec k_N) )
-            SailME.throw ((fault, w__2) : (FaultRecord × (BitVec k_N)))
-            (pure (fault)))
-        else (pure (fault)))
-    else (pure (fault)) ) : SailME (FaultRecord × (BitVec k_N)) FaultRecord )
-  let mem_desc ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1408)
-      (Sail.BitVec.length prev_desc))) ) : SailME (FaultRecord × (BitVec k_N)) (BitVec k_N) )
-  let memstatus ← (( do (undefined_PhysMemRetStatus (← occLabel 1409) ()) ) : SailME
-    (FaultRecord × (BitVec k_N)) PhysMemRetStatus )
-  let w__3 ← (( do
-    ((fun (x0, x1) => (x0, (Sail.BitVec.castWidth x1))) <$> (PhysMemRead descpaddr
-      (Sail.Int.toNatChecked ((Int.ediv (Sail.BitVec.length prev_desc) 8))) descaccess
-      (some translation_info))) ) : SailME (FaultRecord × (BitVec k_N))
-    (PhysMemRetStatus × (BitVec (8 * (k_N / 8)))) )
-  let (tup__0, tup__1) := (w__3 : (PhysMemRetStatus × (BitVec (8 * (k_N / 8)))))
-  let memstatus : PhysMemRetStatus := tup__0
-  let mem_desc : (BitVec k_N) := (Sail.BitVec.castWidth tup__1)
-  let mem_desc : (BitVec k_N) :=
-    if ((ee == 1#1) : Bool)
-    then (reverse_endianness mem_desc)
-    else mem_desc
-  let (fault, iswrite) ← (( do
-    if ((IsFault__2 memstatus) : Bool)
-    then
-      (do
-        let iswrite : Bool := false
-        let w__4 ← (( do
-          (HandleExternalTTWAbort memstatus iswrite descpaddr descaccess
-            (Int.ediv (Sail.BitVec.length prev_desc) 8) fault) ) : SailME
-          (FaultRecord × (BitVec k_N)) FaultRecord )
-        let fault := (w__4 : FaultRecord)
-        if ((IsFault__1 fault.statuscode) : Bool)
-        then
-          (do
-            let w__5 ← (( do
-              ((Sail.BitVec.castWidth ) <$> (__UNKNOWN_bits (Sail.BitVec.length prev_desc))) ) :
-              SailME (FaultRecord × (BitVec k_N)) (BitVec k_N) )
-            SailME.throw ((fault, w__5) : (FaultRecord × (BitVec k_N))))
-        else (pure (()))
-        (pure ((fault, iswrite))))
-    else (pure ((fault, iswrite))) ) : SailME (FaultRecord × (BitVec k_N)) (FaultRecord × Bool) )
-  if ((mem_desc == prev_desc) : Bool)
-  then
-    (do
-      let ordered_new_desc : (BitVec k_N) :=
-        if ((ee == 1#1) : Bool)
-        then (reverse_endianness new_desc)
-        else new_desc
-      let memstatus ← (( do
-        (PhysMemWrite descpaddr
-          (Sail.Int.toNatChecked ((Int.ediv (Sail.BitVec.length prev_desc) 8))) descaccess
-          (some translation_info) (Sail.BitVec.castWidth ordered_new_desc)) ) : SailME
-        (FaultRecord × (BitVec k_N)) PhysMemRetStatus )
-      let fault ← (( do
-        if ((IsFault__2 memstatus) : Bool)
-        then
-          (do
-            let iswrite : Bool := true
-            let w__6 ← (( do
-              (HandleExternalTTWAbort memstatus iswrite descpaddr descaccess
-                (Int.ediv (Sail.BitVec.length prev_desc) 8) fault) ) : SailME
-              (FaultRecord × (BitVec k_N)) FaultRecord )
-            let fault := (w__6 : FaultRecord)
-            if ((IsFault__1 fault.statuscode) : Bool)
-            then
-              (do
-                let w__7 ← (( do
-                  ((Sail.BitVec.castWidth ) <$> (__UNKNOWN_bits (Sail.BitVec.length prev_desc))) ) :
-                  SailME (FaultRecord × (BitVec k_N)) (BitVec k_N) )
-                SailME.throw ((fault, w__7) : (FaultRecord × (BitVec k_N))))
-            else (pure (()))
-            (pure (fault)))
-        else (pure (fault)) ) : SailME (FaultRecord × (BitVec k_N)) FaultRecord )
-      let mem_desc : (BitVec k_N) := new_desc
-      (pure ((fault, mem_desc))))
-  else (pure ((fault, mem_desc)))
+            let w__20 ← (( do (SCTLR_read__2 ()) ) : SailM (BitVec 32) )
+            (pure ((((_get_SCTLR_Type_SPAN w__20) == 0#1) : Bool))))
+        else (pure false) ) : SailM Bool )
+      if (w__21 : Bool)
+      then
+        (do
+          let w__22 ← (( do readReg PSTATE ) : SailM ProcState )
+          writeReg PSTATE { w__22 with PAN := 1#1 })
+      else (pure (()))
+      let w__23 ← (( do (HaveSSBSExt ()) ) : SailM Bool )
+      if (w__23 : Bool)
+      then
+        (do
+          let w__24 ← (( do readReg PSTATE ) : SailM ProcState )
+          let w__25 ← (( do (SCTLR_read__2 ()) ) : SailM (BitVec 32) )
+          writeReg PSTATE { w__24 with SSBS := (_get_SCTLR_Type_DSSBS w__25) })
+      else (pure (()))
+      let branch_conditional : Bool := false
+      let w__26 ← (( do (ExcVectorBase ()) ) : SailM (BitVec 32) )
+      (BranchTo ((Sail.BitVec.extractLsb w__26 31 5) +++ (integer_subrange vect_offset 4 0))
+        BranchType_EXCEPTION branch_conditional)
+      (CheckExceptionCatch true)
+      (EndOfInstruction ()))
 
 
-def CheckResetCatch (_ : Unit) : SailM Unit := do
-  let w__6 ← (( do
+/-- Type quantifiers: lr_offset : Int, vect_offset : Int -/
+def AArch32_EnterMonitorMode (preferred_exception_return : (BitVec 32)) (lr_offset : Int) (vect_offset : Int) : SailM Unit := do
+  let _ : Unit := (SynchronizeContext ())
+  let w__2 ← (( do
     if ((← do
-         if ((← do
-              (HaveDoPD ())) : Bool)
-         then
-           (do
-             let w__1 ← (( do readReg CTIDEVCTL ) : SailM (BitVec 32) )
-             (pure ((((_get_CTIDEVCTL_Type_RCE w__1) == 1#1) : Bool))))
-         else (pure false)) : Bool)
-    then (pure true)
+         (HaveEL EL3)) : Bool)
+    then
+      (do
+        (ELUsingAArch32 EL3))
+    else (pure false) ) : SailM Bool )
+  ArmFull.assert w__2 "sail-inputs/03-v8_base.sail:14146.44-14146.45"
+  let w__3 ← (( do (CurrentSecurityState ()) ) : SailM SecurityState )
+  let from_secure : Bool := (BEq.beq w__3 SS_Secure)
+  let w__4 ← (( do (Halted ()) ) : SailM Bool )
+  if (w__4 : Bool)
+  then
+    (do
+      (AArch32_EnterMonitorModeInDebugState ()))
+  else
+    (do
+      let spsr ← (( do (GetPSRFromPSTATE AArch32_NonDebugState 32) ) : SailM (BitVec 32) )
+      let w__5 ← (( do readReg PSTATE ) : SailM ProcState )
+      if ((w__5.M == M32_Monitor) : Bool)
+      then
+        (do
+          let w__6 ← (( do readReg SCR ) : SailM (BitVec 32) )
+          writeReg SCR (Sail.BitVec.updateSubrange w__6 0 0 0#1))
+      else (pure (()))
+      (AArch32_WriteMode M32_Monitor)
+      (SPSR_set (N := 32) spsr)
+      (R_set 14 (BitVec.addInt preferred_exception_return lr_offset))
+      let w__7 ← (( do readReg PSTATE ) : SailM ProcState )
+      let w__8 ← (( do (SCTLR_read__2 ()) ) : SailM (BitVec 32) )
+      writeReg PSTATE { w__7 with T := (_get_SCTLR_Type_TE w__8) }
+      let w__9 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__9 with SS := 0#1 }
+      let w__10 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__10 with A := (Sail.BitVec.extractLsb 0b111#3 2 2) }
+      let w__11 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__11 with I := (Sail.BitVec.extractLsb 0b111#3 1 1) }
+      let w__12 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__12 with F := (Sail.BitVec.extractLsb 0b111#3 0 0) }
+      let w__13 ← (( do readReg PSTATE ) : SailM ProcState )
+      let w__14 ← (( do (SCTLR_read__2 ()) ) : SailM (BitVec 32) )
+      writeReg PSTATE { w__13 with E := (_get_SCTLR_Type_EE w__14) }
+      let w__15 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__15 with IL := 0#1 }
+      let w__16 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__16 with IT := 0b00000000#8 }
+      let w__17 ← (( do (HavePANExt ()) ) : SailM Bool )
+      if (w__17 : Bool)
+      then
+        (do
+          if ((! from_secure) : Bool)
+          then
+            (do
+              let w__18 ← (( do readReg PSTATE ) : SailM ProcState )
+              writeReg PSTATE { w__18 with PAN := 0#1 })
+          else
+            (do
+              let w__19 ← (( do (SCTLR_read__2 ()) ) : SailM (BitVec 32) )
+              if (((_get_SCTLR_Type_SPAN w__19) == 0#1) : Bool)
+              then
+                (do
+                  let w__20 ← (( do readReg PSTATE ) : SailM ProcState )
+                  writeReg PSTATE { w__20 with PAN := 1#1 })
+              else (pure (()))))
+      else (pure (()))
+      let w__21 ← (( do (HaveSSBSExt ()) ) : SailM Bool )
+      if (w__21 : Bool)
+      then
+        (do
+          let w__22 ← (( do readReg PSTATE ) : SailM ProcState )
+          let w__23 ← (( do (SCTLR_read__2 ()) ) : SailM (BitVec 32) )
+          writeReg PSTATE { w__22 with SSBS := (_get_SCTLR_Type_DSSBS w__23) })
+      else (pure (()))
+      let branch_conditional : Bool := false
+      let w__24 ← (( do readReg MVBAR ) : SailM (BitVec 32) )
+      (BranchTo ((Sail.BitVec.extractLsb w__24 31 5) +++ (integer_subrange vect_offset 4 0))
+        BranchType_EXCEPTION branch_conditional)
+      (CheckExceptionCatch true)
+      (EndOfInstruction ()))
+
+
+/-- Type quantifiers: size : Int -/
+def AArch64_CheckDebug (vaddress : (BitVec 64)) (accdesc : AccessDescriptor) (size : Int) : SailM FaultRecord := do
+  let mask ← (( do (undefined_bitvector_at (← occLabel 1403) 1) ) : SailM (BitVec 1) )
+  let ss ← (( do (undefined_SecurityState (← occLabel 1404) ()) ) : SailM SecurityState )
+  let fault ← (( do (NoFault__1 accdesc) ) : SailM FaultRecord )
+  let generate_exception ← (( do (undefined_bool_at (← occLabel 1405) ()) ) : SailM Bool )
+  let d_side : Bool := ((IsDataAccess accdesc.acctype) || (BEq.beq accdesc.acctype AccessType_DC))
+  let i_side : Bool := (BEq.beq accdesc.acctype AccessType_IFETCH)
+  let generate_exception ← (( do
+    if ((BEq.beq accdesc.acctype AccessType_NV2) : Bool)
+    then
+      (do
+        let mask : (BitVec 1) := 0#1
+        let ss ← (( do (CurrentSecurityState ()) ) : SailM SecurityState )
+        if ((← do
+             (AArch64_GenerateDebugExceptionsFrom EL2 ss mask)) : Bool)
+        then
+          (do
+            let w__1 ← (( do readReg MDSCR_EL1 ) : SailM (BitVec 64) )
+            (pure ((((_get_MDSCR_EL1_Type_MDE w__1) == 1#1) : Bool))))
+        else (pure false))
     else
       (do
         if ((← do
-             let w__3 ← (( do (HaveDoPD ()) ) : SailM Bool )
-             (pure (((! w__3) : Bool)))) : Bool)
+             (AArch64_GenerateDebugExceptions ())) : Bool)
         then
           (do
-            let w__4 ← (( do readReg EDECR ) : SailM (BitVec 32) )
-            (pure ((((_get_EDECR_Type_RCE w__4) == 1#1) : Bool))))
+            let w__4 ← (( do readReg MDSCR_EL1 ) : SailM (BitVec 64) )
+            (pure ((((_get_MDSCR_EL1_Type_MDE w__4) == 1#1) : Bool))))
         else (pure false)) ) : SailM Bool )
-  if (w__6 : Bool)
+  let halt ← (( do (HaltOnBreakpointOrWatchpoint ()) ) : SailM Bool )
+  if ((generate_exception || halt) : Bool)
   then
     (do
-      let w__7 ← (( do readReg EDESR ) : SailM (BitVec 32) )
-      writeReg EDESR (Sail.BitVec.updateSubrange w__7 1 1 1#1)
-      let w__8 ← (( do (HaltingAllowed ()) ) : SailM Bool )
-      if (w__8 : Bool)
+      if (d_side : Bool)
       then
         (do
-          (Halt DebugHalt_ResetCatch))
-      else (pure (())))
-  else (pure (()))
-
-
-/-- Type quantifiers: size : Int -/
-def AArch32_CheckBreakpoint (fault_in : FaultRecord) (vaddress : (BitVec 32)) (accdesc : AccessDescriptor) (size : Int) : SailM FaultRecord := do
-  let match_i ← (( do (undefined_bool_at (← occLabel 2663) ()) ) : SailM Bool )
-  let mismatch_i ← (( do (undefined_bool_at (← occLabel 2664) ()) ) : SailM Bool )
-  let reason ← (( do (undefined_bitvector_at (← occLabel 2665) 6) ) : SailM (BitVec 6) )
-  let w__0 ← (( do (S1TranslationRegime__1 ()) ) : SailM (BitVec 2) )
-  let w__1 ← (( do (ELUsingAArch32 w__0) ) : SailM Bool )
-  ArmFull.assert w__1 "sail-arm/v8_base.sail:40488.51-40488.52"
-  ArmFull.assert ((size == 2) || (size == 4)) "sail-arm/v8_base.sail:40489.32-40489.33"
-  let fault : FaultRecord := fault_in
-  let val_match : Bool := false
-  let mismatch : Bool := false
-  let w__2 ← (( do (NumBreakpointsImplemented ()) ) : SailM Int )
-  let (match_i, mismatch, mismatch_i, val_match) ← (( do
-    let loop_i_lower : Nat := 0
-    let loop_i_upper : Int := (w__2 -i 1)
-    (do
-      let mut loop_vars := (match_i, mismatch, mismatch_i, val_match)
-      for i in [loop_i_lower:loop_i_upper:1]i do
-        let (match_i, mismatch, mismatch_i, val_match) := loop_vars
-        loop_vars ← do
-          ArmFull.assert ((i <b 16) || (! ((size == 2) || (size == 4)))) "sail-arm/v8_base.sail:40494.64-40494.65"
-          let w__3 ← (( do
-            (AArch32_BreakpointMatch (Sail.Int.toNatChecked (i)) vaddress accdesc size) ) : SailM
-            (Bool × Bool) )
-          let (tup__0, tup__1) := (w__3 : (Bool × Bool))
-          let match_i : Bool := tup__0
-          let mismatch_i : Bool := tup__1
-          let val_match : Bool := (val_match || match_i)
-          let mismatch : Bool := (mismatch || mismatch_i)
-          (pure ((match_i, mismatch, mismatch_i, val_match)))
-      (pure loop_vars)) ) : SailM (Bool × Bool × Bool × Bool) )
-  let w__5 ← (( do
-    if ((val_match : Bool) : Bool)
-    then
-      (do
-        (HaltOnBreakpointOrWatchpoint ()))
-    else (pure false) ) : SailM Bool )
-  if (w__5 : Bool)
-  then
-    (do
-      let reason : (BitVec 6) := DebugHalt_Breakpoint
-      (Halt reason)
-      (pure (fault)))
-  else
-    (let fault : FaultRecord :=
-      if ((val_match || mismatch) : Bool)
-      then
-        (let fault : FaultRecord := { fault with statuscode := Fault_Debug }
-        { fault with debugmoe := DebugException_Breakpoint })
-      else fault
-    (pure (fault)))
-
-
-/-- Type quantifiers: size : Int -/
-def AArch32_CheckWatchpoint (fault_in : FaultRecord) (vaddress : (BitVec 32)) (accdesc : AccessDescriptor) (size : Int) : SailM FaultRecord := SailME.run do
-  let reason ← (( do (undefined_bitvector_at (← occLabel 2677) 6) ) : SailME FaultRecord
-    (BitVec 6) )
-  let w__0 ← (( do (S1TranslationRegime__1 ()) ) : SailME FaultRecord (BitVec 2) )
-  let w__1 ← (( do (ELUsingAArch32 w__0) ) : SailME FaultRecord Bool )
-  ArmFull.assert w__1 "sail-arm/v8_base.sail:40757.51-40757.52"
-  let fault : FaultRecord := fault_in
-  if ((BEq.beq accdesc.acctype AccessType_DC) : Bool)
-  then
-    (do
-      if ((bne accdesc.cacheop CacheOp_Invalidate) : Bool)
-      then
-        (do
-          SailME.throw (fault : FaultRecord))
+          (AArch64_CheckWatchpoint fault vaddress accdesc size))
       else
         (do
-          let w__2 ← (( do (__IMPDEF_boolean "DCIMVAC generates watchpoint") ) : SailME
-            FaultRecord Bool )
-          if ((! w__2) : Bool)
+          if (i_side : Bool)
           then
             (do
-              SailME.throw (fault : FaultRecord))
-          else (pure (()))))
-  else
-    (do
-      if ((! (IsDataAccess accdesc.acctype)) : Bool)
-      then
-        (do
-          SailME.throw (fault : FaultRecord))
-      else (pure (())))
-  let val_match : Bool := false
-  let w__3 ← (( do (NumWatchpointsImplemented ()) ) : SailME FaultRecord Int )
-  let val_match ← (( do
-    let loop_i_lower : Nat := 0
-    let loop_i_upper : Int := (w__3 -i 1)
-    (do
-      let mut loop_vars := val_match
-      for i in [loop_i_lower:loop_i_upper:1]i do
-        let val_match := loop_vars
-        loop_vars ← do
-          ArmFull.assert (i <b 16) "sail-arm/v8_base.sail:40770.39-40770.40"
-          let w__4 ← (( do
-            (AArch32_WatchpointMatch (Sail.Int.toNatChecked (i)) vaddress size accdesc) ) : SailME
-            FaultRecord Bool )
-          let val_match : Bool :=
-            if (w__4 : Bool)
-            then true
-            else val_match
-          (pure (val_match))
-      (pure loop_vars)) ) : SailME FaultRecord Bool )
-  let w__6 ← (( do
-    if ((val_match : Bool) : Bool)
+              (AArch64_CheckBreakpoint fault vaddress accdesc size))
+          else (pure (fault))))
+  else (pure (fault))
+
+
+/-- Type quantifiers: N : Nat, List.elem N [32, 64, 128] -/
+def AArch64_S2Walk (fault_in : FaultRecord) (ipa : AddressDescriptor) (walkparams : S2TTWParams) (accdesc : AccessDescriptor) (s1level : (Option Int)) (N : Nat) : SailM (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) := SailME.run do
+  let fault : FaultRecord := fault_in
+  let ipa_64 : (BitVec 64) := (Sail.BitVec.zeroExtend ipa.paddress.address 64)
+  let tlbcontext ← (( do (undefined_TLBContext (← occLabel 1574) ()) ) : SailME
+    (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) TLBContext )
+  let tlbrecord ← (( do (undefined_TLBRecord (← occLabel 1575) ()) ) : SailME
+    (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) TLBRecord )
+  let w__0 ← (( do readReg __tlb_enabled ) : SailME
+    (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) Bool )
+  let (fault, tlbcontext, tlbrecord) ← (( do
+    if (w__0 : Bool)
     then
       (do
-        (HaltOnBreakpointOrWatchpoint ()))
-    else (pure false) ) : SailME FaultRecord Bool )
-  if (w__6 : Bool)
+        let w__1 ← (( do (AArch64_GetS2TLBContext accdesc.ss ipa.paddress walkparams.tgx) ) :
+          SailME (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) TLBContext )
+        let tlbcontext := (w__1 : TLBContext)
+        let tlbentry ← (( do (S2TLBLookup tlbcontext) ) : SailME
+          (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) TLBLine )
+        let tlbrecord : TLBRecord := tlbentry.tlbrecord
+        let oa ← (( do (StageOA ipa_64 walkparams.d128 walkparams.tgx tlbrecord.walkstate) ) :
+          SailME (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) FullAddress )
+        let w__4 ← (( do
+          (pure ((← do
+                if ((tlbentry.valid_name : Bool) : Bool)
+                then
+                  (do
+                    let w__2 ← (( do
+                      (AArch64_OAOutOfRange oa.address walkparams.d128 walkparams.ps walkparams.tgx)
+                      ) : SailME (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) Bool )
+                    (pure (((! w__2) : Bool))))
+                else (pure false)) && ((! ((((((walkparams.ha +++ walkparams.hd) == 0b11#2) && ((walkparams.s2pie == 1#1) || ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
+                                tlbrecord.s2descriptor 51)])) == 1#1))) && ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
+                            tlbrecord.s2descriptor 7)])) == 0#1)) && accdesc.write) && (! ((BEq.beq
+                        accdesc.acctype AccessType_AT) || ((BEq.beq accdesc.acctype AccessType_IC) || (BEq.beq
+                          accdesc.acctype AccessType_DC)))))) : Bool))) ) : SailME
+          (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) Bool )
+        let (fault, tlbrecord) ← (( do
+          if (w__4 : Bool)
+          then
+            (do
+              let tlbrecord ← (( do
+                if ((walkparams.fwb == 1#1) : Bool)
+                then
+                  (do
+                    let w__5 ← (( do
+                      (AArch64_S2ApplyFWBMemAttrs ipa.memattrs walkparams tlbrecord.s2descriptor) )
+                      : SailME (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                      MemoryAttributes )
+                    let tlbrecord :=
+                      ({ tlbrecord with walkstate := { tlbrecord.walkstate with memattrs := w__5 } } : TLBRecord)
+                    let tlbrecord : TLBRecord :=
+                      if (((Sail.BitVec.castWidth (m := 3) (Sail.BitVec.extractLsb
+                             tlbrecord.s2descriptor 5 3)) == 0b111#3) : Bool)
+                      then
+                        { tlbrecord with walkstate := { tlbrecord.walkstate with permissions := { tlbrecord.walkstate.permissions with s2tag_na := 1#1 } } }
+                      else
+                        { tlbrecord with walkstate := { tlbrecord.walkstate with permissions := { tlbrecord.walkstate.permissions with s2tag_na := 0#1 } } }
+                    (pure (tlbrecord)))
+                else (pure (tlbrecord)) ) : SailME
+                (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) TLBRecord )
+              let fault : FaultRecord := { fault with level := tlbrecord.walkstate.level }
+              let w__6 ← (( do (__UNKNOWN_AddressDescriptor ()) ) : SailME
+                (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) AddressDescriptor )
+              SailME.throw ((fault, w__6, tlbrecord.walkstate, (Sail.BitVec.castWidth (Sail.BitVec.extractLsb
+                  tlbrecord.s2descriptor (Sail.Int.toNatChecked ((N -i 1))) 0))) : (FaultRecord × AddressDescriptor × TTWState × (BitVec N)))
+              (pure ((fault, tlbrecord))))
+          else (pure ((fault, tlbrecord))) ) : SailME
+          (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) (FaultRecord × TLBRecord) )
+        (pure ((fault, tlbcontext, tlbrecord))))
+    else (pure ((fault, tlbcontext, tlbrecord))) ) : SailME
+    (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+    (FaultRecord × TLBContext × TLBRecord) )
+  let walkstate ← (( do (undefined_TTWState (← occLabel 1576) ()) ) : SailME
+    (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) TTWState )
+  let walkstate ← (( do
+    if ((BEq.beq accdesc.ss SS_Secure) : Bool)
+    then
+      (do
+        (AArch64_SS2InitialTTWState walkparams ipa.paddress.paspace))
+    else
+      (do
+        (AArch64_S2InitialTTWState accdesc.ss walkparams)) ) : SailME
+    (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) TTWState )
+  let startlevel : Int := walkstate.level
+  let descriptor ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1577)
+      (Sail.Int.toNatChecked (N)))) ) : SailME
+    (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) (BitVec N) )
+  let walkaccess ← (( do (CreateAccDescS2TTW accdesc) ) : SailME
+    (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) AccessDescriptor )
+  let walkaddress ← (( do (undefined_AddressDescriptor (← occLabel 1578) ()) ) : SailME
+    (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) AddressDescriptor )
+  let skl : (BitVec 2) := 0b00#2
+  let walkaddress : AddressDescriptor := { walkaddress with vaddress := ipa.vaddress }
+  let w__9 ← (( do (AArch64_TTWalkMECID walkparams.emec Regime_EL10 accdesc.ss) ) : SailME
+    (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) (BitVec 16) )
+  let walkaddress := ({ walkaddress with mecid := w__9 } : AddressDescriptor)
+  let w__10 ← (( do readReg HCR_EL2 ) : SailME
+    (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) (BitVec 64) )
+  let walkaddress ← (( do
+    if (((_get_HCR_EL2_Type_CD w__10) == 1#1) : Bool)
+    then
+      (do
+        let w__11 ← (( do (NormalNCMemAttr ()) ) : SailME
+          (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) MemoryAttributes )
+        let walkaddress := ({ walkaddress with memattrs := w__11 } : AddressDescriptor)
+        let walkaddress : AddressDescriptor :=
+          { walkaddress with memattrs := { walkaddress.memattrs with xs := walkstate.memattrs.xs } }
+        (pure (walkaddress)))
+    else
+      (let walkaddress : AddressDescriptor := { walkaddress with memattrs := walkstate.memattrs }
+      (pure (walkaddress))) ) : SailME (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+    AddressDescriptor )
+  let walkaddress : AddressDescriptor :=
+    { walkaddress with memattrs := { walkaddress.memattrs with shareability := (EffectiveShareability
+          walkaddress.memattrs) } }
+  let walkaddress : AddressDescriptor := { walkaddress with tlbcontext := tlbcontext }
+  let desctype ← (( do (undefined_DescriptorType (← occLabel 1579) ()) ) : SailME
+    (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) DescriptorType )
+  let descaddress ← (( do
+    (AArch64_S2SLTTEntryAddress walkparams ipa.paddress.address walkstate.baseaddress) ) : SailME
+    (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) FullAddress )
+  let w__12 ← (( do
+    (AArch64_OAOutOfRange descaddress.address walkparams.d128 walkparams.ps walkparams.tgx) ) :
+    SailME (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) Bool )
+  if (w__12 : Bool)
   then
     (do
-      let reason : (BitVec 6) := DebugHalt_Watchpoint
-      writeReg EDWAR (Sail.BitVec.zeroExtend vaddress 64)
-      (Halt reason)
-      (pure (fault)))
+      let fault : FaultRecord := { fault with statuscode := Fault_AddressSize }
+      let fault : FaultRecord := { fault with level := 0 }
+      let w__13 ← (( do (__UNKNOWN_AddressDescriptor ()) ) : SailME
+        (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) AddressDescriptor )
+      let w__14 ← (( do (__UNKNOWN_TTWState ()) ) : SailME
+        (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) TTWState )
+      let w__15 ← (( do ((Sail.BitVec.castWidth ) <$> (__UNKNOWN_bits N)) ) : SailME
+        (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) (BitVec N) )
+      (pure ((fault, w__13, w__14, w__15))))
   else
-    (let fault : FaultRecord :=
-      if (val_match : Bool)
+    (do
+      let (descaddress, descriptor, desctype, fault, skl, walkaddress, walkstate) ← (( do
+        let loop_vars ← sailUntilFuelM (fuel := 1048576) (fun (descaddress, descriptor, desctype, fault, skl, walkaddress, walkstate) => (pure (BEq.beq
+            desctype DescriptorType_Leaf))) (descaddress, descriptor, desctype, fault, skl, walkaddress, walkstate)
+          fun (descaddress, descriptor, desctype, fault, skl, walkaddress, walkstate) => do
+            let fault : FaultRecord := { fault with level := walkstate.level }
+            let walkaddress : AddressDescriptor := { walkaddress with paddress := descaddress }
+            let w__16 ← (( do (VMID_read ()) ) : SailME
+              (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) (BitVec 16) )
+            let translation_info : TranslationInfo :=
+              { regime := Regime_EL10
+                vmid := (some w__16)
+                asid := none
+                va := walkaddress.vaddress
+                s1level := s1level
+                s2info := (some (ipa_64, walkstate.level))
+                s1params := none
+                s2params := (some walkparams)
+                memattrs := walkaddress.memattrs }
+            let w__17 ← (( do
+              ((fun (x0, x1) => (x0, (Sail.BitVec.castWidth x1))) <$> (FetchDescriptor walkparams.ee
+                walkaddress walkaccess fault N translation_info)) ) : SailME
+              (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+              (FaultRecord × (BitVec N)) )
+            let (tup__0, tup__1) := (w__17 : (FaultRecord × (BitVec N)))
+            let fault : FaultRecord := tup__0
+            let descriptor : (BitVec N) := tup__1
+            let (descaddress, descriptor, desctype, fault, skl, walkstate) ← (( do
+              if ((bne fault.statuscode Fault_None) : Bool)
+              then
+                (do
+                  let w__18 ← (( do (__UNKNOWN_AddressDescriptor ()) ) : SailME
+                    (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) AddressDescriptor )
+                  let w__19 ← (( do (__UNKNOWN_TTWState ()) ) : SailME
+                    (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) TTWState )
+                  let w__20 ← (( do ((Sail.BitVec.castWidth ) <$> (__UNKNOWN_bits N)) ) : SailME
+                    (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) (BitVec N) )
+                  SailME.throw ((fault, w__18, w__19, w__20) : (FaultRecord × AddressDescriptor × TTWState × (BitVec N)))
+                  (pure ((descaddress, descriptor, desctype, fault, skl, walkstate))))
+              else
+                (do
+                  let new_descriptor ← (( do
+                    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 1581)
+                      (Sail.Int.toNatChecked (N)))) ) : SailME
+                    (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) (BitVec N) )
+                  let (descaddress, descriptor, desctype, fault, new_descriptor, skl, walkstate) ← (( do
+                    let loop_vars_1 ← sailUntilFuelM (fuel := 1048576) (fun (descaddress, descriptor, desctype, fault, new_descriptor, skl, walkstate) => (pure (new_descriptor == descriptor))) (descaddress, descriptor, desctype, fault, new_descriptor, skl, walkstate)
+                      fun (descaddress, descriptor, desctype, fault, new_descriptor, skl, walkstate) => do
+                        let new_descriptor : (BitVec N) := descriptor
+                        let w__21 ← (( do
+                          (AArch64_DecodeDescriptorType descriptor walkparams.d128 walkparams.ds
+                            walkparams.tgx walkstate.level) ) : SailME
+                          (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                          DescriptorType )
+                        let desctype := (w__21 : DescriptorType)
+                        let (descaddress, fault, new_descriptor, skl, walkstate) ← (( do
+                          match desctype with
+                          | .DescriptorType_Table =>
+                            (do
+                              let w__22 ← (( do
+                                (AArch64_S2NextWalkStateTable walkstate walkparams descriptor) ) :
+                                SailME (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                TTWState )
+                              let walkstate := (w__22 : TTWState)
+                              let w__23 ← (( do
+                                if ((walkparams.d128 == 1#1) : Bool)
+                                then
+                                  (do
+                                    ArmFull.assert (110 <b N) "sail-inputs/03-v8_base.sail:27125.49-27125.50"
+                                    (pure ((Sail.BitVec.extractLsb descriptor 110 109))))
+                                else (pure (0b00#2)) ) : SailME
+                                (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                (BitVec 2) )
+                              let skl := (w__23 : (BitVec 2))
+                              let w__24 ← (( do
+                                (AArch64_TTEntryAddress walkstate.level walkparams.d128 skl
+                                  walkparams.tgx walkparams.txsz ipa_64 walkstate.baseaddress) ) :
+                                SailME (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                FullAddress )
+                              let descaddress := (w__24 : FullAddress)
+                              let w__25 ← (( do
+                                (AArch64_OAOutOfRange descaddress.address walkparams.d128
+                                  walkparams.ps walkparams.tgx) ) : SailME
+                                (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) Bool )
+                              let (fault, new_descriptor) ← (( do
+                                if (w__25 : Bool)
+                                then
+                                  (do
+                                    let fault : FaultRecord :=
+                                      { fault with statuscode := Fault_AddressSize }
+                                    let w__26 ← (( do (__UNKNOWN_AddressDescriptor ()) ) : SailME
+                                      (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                      AddressDescriptor )
+                                    let w__27 ← (( do (__UNKNOWN_TTWState ()) ) : SailME
+                                      (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                      TTWState )
+                                    let w__28 ← (( do
+                                      ((Sail.BitVec.castWidth ) <$> (__UNKNOWN_bits N)) ) : SailME
+                                      (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                      (BitVec N) )
+                                    SailME.throw ((fault, w__26, w__27, w__28) : (FaultRecord × AddressDescriptor × TTWState × (BitVec N)))
+                                    (pure ((fault, new_descriptor))))
+                                else
+                                  (do
+                                    let new_descriptor : (BitVec N) :=
+                                      if ((walkparams.haft == 1#1) : Bool)
+                                      then (BitVec.update new_descriptor 10 (Bit 1#1))
+                                      else new_descriptor
+                                    let w__30 ← (( do
+                                      if ((((walkparams.d128 == 1#1) && (skl != 0b00#2)) : Bool) : Bool)
+                                      then
+                                        (do
+                                          (AArch64_BlocknTFaults walkparams.d128 descriptor))
+                                      else (pure false) ) : SailME
+                                      (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                      Bool )
+                                    let fault ← (( do
+                                      if (w__30 : Bool)
+                                      then
+                                        (do
+                                          let fault : FaultRecord :=
+                                            { fault with statuscode := Fault_Translation }
+                                          let w__31 ← (( do (__UNKNOWN_AddressDescriptor ()) ) :
+                                            SailME
+                                            (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                            AddressDescriptor )
+                                          let w__32 ← (( do (__UNKNOWN_TTWState ()) ) : SailME
+                                            (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                            TTWState )
+                                          let w__33 ← (( do
+                                            ((Sail.BitVec.castWidth ) <$> (__UNKNOWN_bits N)) ) :
+                                            SailME
+                                            (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                            (BitVec N) )
+                                          SailME.throw ((fault, w__31, w__32, w__33) : (FaultRecord × AddressDescriptor × TTWState × (BitVec N)))
+                                          (pure (fault)))
+                                      else (pure (fault)) ) : SailME
+                                      (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                      FaultRecord )
+                                    (pure ((fault, new_descriptor)))) ) : SailME
+                                (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                (FaultRecord × (BitVec N)) )
+                              (pure ((descaddress, fault, new_descriptor, skl, walkstate))))
+                          | .DescriptorType_Leaf =>
+                            (do
+                              ArmFull.assert (52 <b N) "sail-inputs/03-v8_base.sail:27143.44-27143.45"
+                              let w__34 ← (( do
+                                (AArch64_S2NextWalkStateLeaf walkstate accdesc.ss walkparams ipa
+                                  descriptor) ) : SailME
+                                (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                TTWState )
+                              let walkstate := (w__34 : TTWState)
+                              (pure ((descaddress, fault, new_descriptor, skl, walkstate))))
+                          | .DescriptorType_Invalid =>
+                            (do
+                              let fault : FaultRecord :=
+                                { fault with statuscode := Fault_Translation }
+                              let w__35 ← (( do (__UNKNOWN_AddressDescriptor ()) ) : SailME
+                                (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                AddressDescriptor )
+                              let w__36 ← (( do (__UNKNOWN_TTWState ()) ) : SailME
+                                (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                TTWState )
+                              let w__37 ← (( do ((Sail.BitVec.castWidth ) <$> (__UNKNOWN_bits N))
+                                ) : SailME
+                                (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                (BitVec N) )
+                              SailME.throw ((fault, w__35, w__36, w__37) : (FaultRecord × AddressDescriptor × TTWState × (BitVec N)))
+                              (pure ((descaddress, fault, new_descriptor, skl, walkstate)))) ) :
+                          SailME (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                          (FullAddress × FaultRecord × (BitVec N) × (BitVec 2) × TTWState) )
+                        let (descriptor, fault) ← (( do
+                          if ((new_descriptor != descriptor) : Bool)
+                          then
+                            (do
+                              let descaccess ← (( do (CreateAccDescTTEUpdate accdesc) ) : SailME
+                                (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                AccessDescriptor )
+                              ArmFull.assert ((N == 64) || (N == 128)) "sail-inputs/03-v8_base.sail:27156.50-27156.51"
+                              let w__38 ← (( do
+                                (AArch64_MemSwapTableDesc fault descriptor new_descriptor
+                                  walkparams.ee descaccess walkaddress translation_info) ) : SailME
+                                (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                (FaultRecord × (BitVec N)) )
+                              let (tup__0, tup__1) := (w__38 : (FaultRecord × (BitVec N)))
+                              let fault : FaultRecord := tup__0
+                              let descriptor : (BitVec N) := tup__1
+                              if ((bne fault.statuscode Fault_None) : Bool)
+                              then
+                                (do
+                                  let w__39 ← (( do (__UNKNOWN_AddressDescriptor ()) ) : SailME
+                                    (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                    AddressDescriptor )
+                                  let w__40 ← (( do (__UNKNOWN_TTWState ()) ) : SailME
+                                    (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                    TTWState )
+                                  let w__41 ← (( do
+                                    ((Sail.BitVec.castWidth ) <$> (__UNKNOWN_bits N)) ) : SailME
+                                    (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                                    (BitVec N) )
+                                  SailME.throw ((fault, w__39, w__40, w__41) : (FaultRecord × AddressDescriptor × TTWState × (BitVec N))))
+                              else (pure (()))
+                              (pure ((descriptor, fault))))
+                          else (pure ((descriptor, fault))) ) : SailME
+                          (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                          ((BitVec N) × FaultRecord) )
+                        (pure ((descaddress, descriptor, desctype, fault, new_descriptor, skl, walkstate)))
+                    (pure loop_vars_1) ) : SailME
+                    (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+                    (FullAddress × (BitVec N) × DescriptorType × FaultRecord × (BitVec N) × (BitVec 2) × TTWState)
+                    )
+                  (pure ((descaddress, descriptor, desctype, fault, skl, walkstate)))) ) : SailME
+              (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+              (FullAddress × (BitVec N) × DescriptorType × FaultRecord × (BitVec 2) × TTWState)
+              )
+            (pure ((descaddress, descriptor, desctype, fault, skl, walkaddress, walkstate)))
+        (pure loop_vars) ) : SailME (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+        (FullAddress × (BitVec N) × DescriptorType × FaultRecord × (BitVec 2) × AddressDescriptor × TTWState)
+        )
+      let oa ← (( do (StageOA ipa_64 walkparams.d128 walkparams.tgx walkstate) ) : SailME
+        (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) FullAddress )
+      let w__43 ← (( do
+        if (((walkstate.contiguous == 1#1) : Bool) : Bool)
+        then
+          (do
+            (AArch64_ContiguousBitFaults walkparams.d128 walkparams.txsz walkparams.tgx
+              walkstate.level))
+        else (pure false) ) : SailME (FaultRecord × AddressDescriptor × TTWState × (BitVec N))
+        Bool )
+      let fault ← (( do
+        if (w__43 : Bool)
+        then
+          (let fault : FaultRecord := { fault with statuscode := Fault_Translation }
+          (pure (fault)))
+        else
+          (do
+            let w__45 ← (( do
+              if ((((BEq.beq desctype DescriptorType_Leaf) && (walkstate.level <b FINAL_LEVEL)) : Bool) : Bool)
+              then
+                (do
+                  (AArch64_BlocknTFaults walkparams.d128 descriptor))
+              else (pure false) ) : SailME
+              (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) Bool )
+            if (w__45 : Bool)
+            then
+              (let fault : FaultRecord := { fault with statuscode := Fault_Translation }
+              (pure (fault)))
+            else
+              (do
+                let w__46 ← (( do
+                  (AArch64_OAOutOfRange oa.address walkparams.d128 walkparams.ps walkparams.tgx) ) :
+                  SailME (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) Bool )
+                if (w__46 : Bool)
+                then
+                  (let fault : FaultRecord := { fault with statuscode := Fault_AddressSize }
+                  (pure (fault)))
+                else
+                  (do
+                    let w__49 ← (( do
+                      if (((((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 10)])) == 0#1) && (walkparams.ha == 0#1)) : Bool) : Bool)
+                      then
+                        (do
+                          let w__48 ← (( do
+                            if ((((BEq.beq accdesc.acctype AccessType_DC) || (BEq.beq
+                                   accdesc.acctype AccessType_IC)) : Bool) : Bool)
+                            then
+                              (do
+                                let w__47 ← (( do
+                                  (__IMPDEF_boolean "Generate access flag fault on IC/DC operations")
+                                  ) : SailME
+                                  (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) Bool
+                                  )
+                                (pure (((! w__47) : Bool))))
+                            else (pure false) ) : SailME
+                            (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) Bool )
+                          (pure (((! w__48) : Bool))))
+                      else (pure false) ) : SailME
+                      (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) Bool )
+                    let fault : FaultRecord :=
+                      if (w__49 : Bool)
+                      then { fault with statuscode := Fault_AccessFlag }
+                      else fault
+                    (pure (fault))))) ) : SailME
+        (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) FaultRecord )
+      let w__52 ← (( do
+        (pure ((← do
+              (pure ((← do
+                    readReg __tlb_enabled) && ((BEq.beq fault.statuscode Fault_None) : Bool)))) && (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
+                  descriptor 10)])) == 1#1) : Bool))) ) : SailME
+        (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) Bool )
+      if (w__52 : Bool)
       then
-        (let fault : FaultRecord := { fault with statuscode := Fault_Debug }
-        { fault with debugmoe := DebugException_Watchpoint })
-      else fault
-    (pure (fault)))
+        (do
+          let tlbcontext : TLBContext := { tlbcontext with xs := walkstate.memattrs.xs }
+          let tlbcontext : TLBContext := { tlbcontext with level := walkstate.level }
+          let tlbcontext : TLBContext := { tlbcontext with isd128 := (walkparams.d128 == 1#1) }
+          let tlbrecord : TLBRecord := { tlbrecord with context := tlbcontext }
+          let tlbrecord : TLBRecord := { tlbrecord with walkstate := walkstate }
+          let tlbrecord : TLBRecord :=
+            { tlbrecord with blocksize := (TranslationSize walkparams.d128 walkparams.tgx
+                walkstate.level) }
+          let tlbrecord ← (( do
+            if ((walkparams.d128 == 1#1) : Bool)
+            then
+              (do
+                ArmFull.assert (127 <b N) "sail-inputs/03-v8_base.sail:27184.39-27184.40"
+                let tlbrecord : TLBRecord :=
+                  { tlbrecord with s2descriptor := (Sail.BitVec.extractLsb descriptor 127 0) }
+                (pure (tlbrecord)))
+            else
+              (do
+                ArmFull.assert (63 <b N) "sail-inputs/03-v8_base.sail:27187.38-27187.39"
+                let tlbrecord : TLBRecord :=
+                  { tlbrecord with s2descriptor := (Sail.BitVec.updateSubrange
+                      tlbrecord.s2descriptor 63 0 (Sail.BitVec.extractLsb descriptor 63 0)) }
+                let tlbrecord : TLBRecord :=
+                  { tlbrecord with s2descriptor := (Sail.BitVec.updateSubrange
+                      tlbrecord.s2descriptor 127 64 (Zeros (n := 64))) }
+                (pure (tlbrecord))) ) : SailME
+            (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) TLBRecord )
+          let tlbrecord ← (( do
+            if ((walkstate.contiguous == 1#1) : Bool)
+            then
+              (do
+                let w__53 ← (( do (ContiguousSize walkparams.d128 walkparams.tgx walkstate.level)
+                  ) : SailME (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) Int )
+                let tlbrecord := ({ tlbrecord with contigsize := w__53 } : TLBRecord)
+                (pure (tlbrecord)))
+            else
+              (let tlbrecord : TLBRecord := { tlbrecord with contigsize := 0 }
+              (pure (tlbrecord))) ) : SailME
+            (FaultRecord × AddressDescriptor × TTWState × (BitVec N)) TLBRecord )
+          (pure ((S2TLBCache tlbrecord))))
+      else (pure (()))
+      (pure ((fault, walkaddress, walkstate, descriptor))))
 
 
 end ArmFull.Functions

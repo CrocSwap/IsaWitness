@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,53 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _get_PMCFGR_Type_SS (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 22 22)
+
+
+def _get_PMPCSCTL_Type_SS (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 4 4)
+
+
+def _get_PMSSCR_EL1_Type_SS (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 0 0)
+
+
+def _get_SPSR_EL1_Type_SS (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 21 21)
+
+
+def _get_SPSR_EL2_Type_SS (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 21 21)
+
+
+def _get_SPSR_EL3_Type_SS (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 21 21)
+
+
+def DLR_write (value_name : (BitVec 32)) : SailM Unit := do
+  let r : DLR_Type := value_name
+  let w__0 ← (( do readReg DLR_EL0 ) : SailM (BitVec 64) )
+  writeReg DLR_EL0 (Sail.BitVec.updateSubrange w__0 31 0 (BitVec.slice r 0 32))
+  writeReg _DLR r
+
+
+def undefined_DSPSR_EL0_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
+  (undefined_bitvector_at (ℓ.child 0) 64)
+
+
+def Mk_DSPSR_EL0_Type (v : (BitVec 64)) : (BitVec 64) :=
+  v
+
+
+def _get_DSPSR_EL0_Type_ALLINT (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 13 13)
+
+
+def _update_DSPSR_EL0_Type_ALLINT (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 13 13 x)
+
 
 def _update_SPSR_EL1_Type_ALLINT (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
   (Sail.BitVec.updateSubrange v 13 13 x)
@@ -834,54 +881,6 @@ def _get_SPSR_svc_Type_PAN (v : (BitVec 32)) : (BitVec 1) :=
 
 def _get_SPSR_und_Type_PAN (v : (BitVec 64)) : (BitVec 1) :=
   (Sail.BitVec.extractLsb v 22 22)
-
-
-def _get_DSPSR_EL0_Type_PM (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 32 32)
-
-
-def _update_DSPSR_EL0_Type_PM (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 32 32 x)
-
-
-def _update_SPSR_EL1_Type_PM (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 32 32 x)
-
-
-def _update_SPSR_EL2_Type_PM (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 32 32 x)
-
-
-def _update_SPSR_EL3_Type_PM (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 32 32 x)
-
-
-def _get_SPSR_EL1_Type_PM (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 32 32)
-
-
-def _get_SPSR_EL2_Type_PM (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 32 32)
-
-
-def _get_SPSR_EL3_Type_PM (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 32 32)
-
-
-def _get_DSPSR_EL0_Type_PPEND (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 33 33)
-
-
-def _update_DSPSR_EL0_Type_PPEND (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 33 33 x)
-
-
-def _update_DSPSR2_Type_PPEND (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 1 1 x)
-
-
-def _update_SPSR_EL1_Type_PPEND (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 33 33 x)
 
 
 end ArmFull.Functions

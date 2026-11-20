@@ -1,5 +1,5 @@
-import Sail
-import ArmFull.Defs
+module public import Sail
+public import ArmFull.Defs set_option backward.proofsInPublic true @[expose] public section
 
 open Sail ConcurrencyInterfaceV1
 

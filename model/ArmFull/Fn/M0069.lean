@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,98 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _update_GICM_IIDR_Type_Variant (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 19 16 x)
+
+
+def _update_GICR_IIDR_Type_Variant (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 19 16 x)
+
+
+def _update_GITS_IIDR_Type_Variant (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 19 16 x)
+
+
+def _update_PMIIDR_Type_Variant (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 19 16 x)
+
+
+def _update_VPIDR_EL2_Type_Variant (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 23 20 x)
+
+
+def _get_AMIIDR_Type_Variant (v : (BitVec 32)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 19 16)
+
+
+def _get_FPSID_Type_Variant (v : (BitVec 32)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 7 4)
+
+
+def _get_GICD_IIDR_Type_Variant (v : (BitVec 32)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 19 16)
+
+
+def _get_GICM_IIDR_Type_Variant (v : (BitVec 32)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 19 16)
+
+
+def _get_GICR_IIDR_Type_Variant (v : (BitVec 32)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 19 16)
+
+
+def _get_GITS_IIDR_Type_Variant (v : (BitVec 32)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 19 16)
+
+
+def _get_MIDR_Type_Variant (v : (BitVec 32)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 23 20)
+
+
+def _get_PMIIDR_Type_Variant (v : (BitVec 64)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 19 16)
+
+
+def _get_VPIDR_EL2_Type_Variant (v : (BitVec 64)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 23 20)
+
+
+def _get_VPIDR_Type_Variant (v : (BitVec 32)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 23 20)
+
+
+def Mk_ICC_RPR_EL1_Type (v : (BitVec 64)) : (BitVec 64) :=
+  v
+
+
+def _get_ICC_RPR_EL1_Type_NMI_NS (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 62 62)
+
+
+def _update_ICC_RPR_EL1_Type_NMI_NS (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 62 62 x)
+
+
+def Mk_ICH_ELRSR_EL2_Type (v : (BitVec 64)) : (BitVec 64) :=
+  v
+
+
+def Mk_ICC_SGI0R_EL1_Type (v : (BitVec 64)) : (BitVec 64) :=
+  v
+
+
+def _get_ICC_SGI0R_EL1_Type_Aff1 (v : (BitVec 64)) : (BitVec 8) :=
+  (Sail.BitVec.extractLsb v 23 16)
+
+
+def _update_ICC_SGI0R_EL1_Type_Aff1 (v : (BitVec 64)) (x : (BitVec 8)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 23 16 x)
+
+
+def _update_GITS_MPIDR_Type_Aff1 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 15 8 x)
+
 
 def _update_ICC_ASGI1R_EL1_Type_Aff1 (v : (BitVec 64)) (x : (BitVec 8)) : (BitVec 64) :=
   (Sail.BitVec.updateSubrange v 23 16 x)
@@ -810,98 +902,6 @@ def _update_ID_AA64PFR0_EL1_Type_EL3 (v : (BitVec 64)) (x : (BitVec 4)) : (BitVe
 
 def _update_EDAA32PFR_Type_EL3 (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
   (Sail.BitVec.updateSubrange v 15 12 x)
-
-
-def _update_EDPFR_Type_EL3 (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 15 12 x)
-
-
-def _get_EDAA32PFR_Type_EL3 (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 15 12)
-
-
-def _get_EDPFR_Type_EL3 (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 15 12)
-
-
-def _get_ID_AA64PFR0_EL1_Type_FP (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 19 16)
-
-
-def _update_ID_AA64PFR0_EL1_Type_FP (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 19 16 x)
-
-
-def _update_EDPFR_Type_FP (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 19 16 x)
-
-
-def _get_EDPFR_Type_FP (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 19 16)
-
-
-def _update_ID_AA64PFR0_EL1_Type_GIC (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 27 24 x)
-
-
-def _update_EDPFR_Type_GIC (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 27 24 x)
-
-
-def _update_ID_PFR1_EL1_Type_GIC (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 31 28 x)
-
-
-def _get_EDPFR_Type_GIC (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 27 24)
-
-
-def _get_ID_PFR1_EL1_Type_GIC (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 31 28)
-
-
-def _get_ID_PFR1_Type_GIC (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 31 28)
-
-
-def _update_ID_AA64PFR0_EL1_Type_MPAM (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 43 40 x)
-
-
-def _update_GITS_TYPER_Type_MPAM (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 38 38 x)
-
-
-def _get_GITS_TYPER_Type_MPAM (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 38 38)
-
-
-def _get_ID_AA64PFR0_EL1_Type_RAS (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 31 28)
-
-
-def _update_ID_AA64PFR0_EL1_Type_RAS (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 31 28 x)
-
-
-def _update_ID_PFR0_EL1_Type_RAS (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 31 28 x)
-
-
-def _get_ID_PFR0_EL1_Type_RAS (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 31 28)
-
-
-def _get_ID_PFR0_Type_RAS (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 31 28)
-
-
-def _get_ID_AA64PFR0_EL1_Type_RME (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 55 52)
-
-
-def _update_ID_AA64PFR0_EL1_Type_RME (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 55 52 x)
 
 
 end ArmFull.Functions

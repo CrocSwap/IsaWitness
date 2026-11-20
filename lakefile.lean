@@ -11,7 +11,8 @@ require ArmCertObservers from "observers"
 
 @[default_target]
 lean_lib ArmCert where
-  roots := #[`ArmCert, `RuntimeChecks]
+  roots := #[]
+  globs := #[.one `ArmCert, .one `RuntimeChecks]
 
 script gate args do
   let child ← IO.Process.spawn {

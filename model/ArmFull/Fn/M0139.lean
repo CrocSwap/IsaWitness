@@ -1,44 +1,43 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0019
-import ArmFull.Fn.M0020
-import ArmFull.Fn.M0023
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0034
-import ArmFull.Fn.M0035
-import ArmFull.Fn.M0036
-import ArmFull.Fn.M0038
-import ArmFull.Fn.M0039
-import ArmFull.Fn.M0040
-import ArmFull.Fn.M0041
-import ArmFull.Fn.M0042
-import ArmFull.Fn.M0043
-import ArmFull.Fn.M0046
-import ArmFull.Fn.M0047
-import ArmFull.Fn.M0048
-import ArmFull.Fn.M0049
-import ArmFull.Fn.M0050
-import ArmFull.Fn.M0051
-import ArmFull.Fn.M0058
-import ArmFull.Fn.M0059
-import ArmFull.Fn.M0061
-import ArmFull.Fn.M0062
-import ArmFull.Fn.M0063
-import ArmFull.Fn.M0064
-import ArmFull.Fn.M0065
-import ArmFull.Fn.M0066
-import ArmFull.Fn.M0067
-import ArmFull.Fn.M0068
-import ArmFull.Fn.M0069
-import ArmFull.Fn.M0070
-import ArmFull.Fn.M0071
-import ArmFull.Fn.M0072
-import ArmFull.Fn.M0073
-import ArmFull.Fn.M0074
-import ArmFull.Fn.M0075
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0019
+public import ArmFull.Fn.M0023
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0025
+public import ArmFull.Fn.M0034
+public import ArmFull.Fn.M0035
+public import ArmFull.Fn.M0036
+public import ArmFull.Fn.M0037
+public import ArmFull.Fn.M0038
+public import ArmFull.Fn.M0039
+public import ArmFull.Fn.M0041
+public import ArmFull.Fn.M0042
+public import ArmFull.Fn.M0043
+public import ArmFull.Fn.M0046
+public import ArmFull.Fn.M0047
+public import ArmFull.Fn.M0048
+public import ArmFull.Fn.M0049
+public import ArmFull.Fn.M0050
+public import ArmFull.Fn.M0051
+public import ArmFull.Fn.M0058
+public import ArmFull.Fn.M0059
+public import ArmFull.Fn.M0061
+public import ArmFull.Fn.M0062
+public import ArmFull.Fn.M0063
+public import ArmFull.Fn.M0066
+public import ArmFull.Fn.M0067
+public import ArmFull.Fn.M0068
+public import ArmFull.Fn.M0069
+public import ArmFull.Fn.M0070
+public import ArmFull.Fn.M0071
+public import ArmFull.Fn.M0072
+public import ArmFull.Fn.M0073
+public import ArmFull.Fn.M0074
+public import ArmFull.Fn.M0075
+public import ArmFull.Fn.M0076 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -139,92 +138,6 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
-
-def __get_HDFGRTR_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
-  let tmp : HDFGRTR_EL2_Type := value_name
-  (Mk_HDFGRTR_EL2_Type
-    (tmp &&& (Sail.BitVec.castWidth (m := 64) (Complement.complement
-        (Sail.BitVec.zeroExtend 0x1FE04C000300100#60 64)))))
-
-
-def __get_ICV_NMIAR1_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
-  let tmp : ICV_NMIAR1_EL1_Type := value_name
-  (Mk_ICV_NMIAR1_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFF000000#64)))
-
-
-def __get_SPSR_abt (value_name : (BitVec 64)) : (BitVec 64) :=
-  let tmp : SPSR_abt_Type := value_name
-  (Mk_SPSR_abt_Type (tmp &&& (Complement.complement 0xFFFFFFFF00000000#64)))
-
-
-def __get_ICH_LR_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
-  let tmp : ICH_LR_EL2_Type := value_name
-  (Mk_ICH_LR_EL2_Type
-    (tmp &&& (Sail.BitVec.castWidth (m := 64) (Complement.complement
-        (Sail.BitVec.zeroExtend 0x700E00000000000#60 64)))))
-
-
-def __get_MDCCINT_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
-  let tmp : MDCCINT_EL1_Type := value_name
-  (Mk_MDCCINT_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFF9FFFFFFF#64)))
-
-
-def __get_ICC_HPPIR1_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
-  let tmp : ICC_HPPIR1_EL1_Type := value_name
-  (Mk_ICC_HPPIR1_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFF000000#64)))
-
-
-def __get_TCR2_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
-  let tmp : TCR2_EL2_Type := value_name
-  (Mk_TCR2_EL2_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFF0000#64)))
-
-
-def __get_ESR_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
-  let tmp : ESR_EL1_Type := value_name
-  (Mk_ESR_EL1_Type (tmp &&& (Complement.complement 0xFFFFF88000000000#64)))
-
-
-def __get_ICV_BPR1_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
-  let tmp : ICV_BPR1_EL1_Type := value_name
-  (Mk_ICV_BPR1_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFFF8#64)))
-
-
-def __get_TCR_EL3 (value_name : (BitVec 64)) : (BitVec 64) :=
-  let tmp : TCR_EL3_Type := value_name
-  (Mk_TCR_EL3_Type
-    ((tmp &&& (Complement.complement 0xFFFFF180000800C0#64)) ||| (Sail.BitVec.castWidth (m := 64) (Sail.BitVec.zeroExtend
-        0x80800000#32 64))))
-
-
-def __get_PMECR_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
-  let tmp : PMECR_EL1_Type := value_name
-  (Mk_PMECR_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFFE0#64)))
-
-
-def __get_ICC_PMR_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
-  let tmp : ICC_PMR_EL1_Type := value_name
-  (Mk_ICC_PMR_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFF00#64)))
-
-
-def __get_RMR_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
-  let tmp : RMR_EL1_Type := value_name
-  (Mk_RMR_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFFFC#64)))
-
-
-def __get_PMICFILTR_EL0 (value_name : (BitVec 64)) : (BitVec 64) :=
-  let tmp : PMICFILTR_EL0_Type := value_name
-  (Mk_PMICFILTR_EL0_Type (tmp &&& (Complement.complement 0xFBFFFFFF020F0000#64)))
-
-
-def __get_ICC_HPPIR0_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
-  let tmp : ICC_HPPIR0_EL1_Type := value_name
-  (Mk_ICC_HPPIR0_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFF000000#64)))
-
-
-def __get_CNTHPS_CTL_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
-  let tmp : CNTHPS_CTL_EL2_Type := value_name
-  (Mk_CNTHPS_CTL_EL2_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFFF8#64)))
-
 
 def __get_VMECID_A_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
   let tmp : VMECID_A_EL2_Type := value_name
@@ -885,6 +798,92 @@ def __get_ICH_HCR_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
 def __get_ICC_IGRPEN0_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
   let tmp : ICC_IGRPEN0_EL1_Type := value_name
   (Mk_ICC_IGRPEN0_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFFFE#64)))
+
+
+def __get_CNTHPS_TVAL_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : CNTHPS_TVAL_EL2_Type := value_name
+  (Mk_CNTHPS_TVAL_EL2_Type (tmp &&& (Complement.complement 0xFFFFFFFF00000000#64)))
+
+
+def __get_ICC_BPR1_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : ICC_BPR1_EL1_Type := value_name
+  (Mk_ICC_BPR1_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFFF8#64)))
+
+
+def __get_ICC_BPR1_EL1_NS (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : ICC_BPR1_EL1_Type := value_name
+  (Mk_ICC_BPR1_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFFF8#64)))
+
+
+def __get_ICC_BPR1_EL1_S (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : ICC_BPR1_EL1_Type := value_name
+  (Mk_ICC_BPR1_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFFF8#64)))
+
+
+def __get_MECID_A1_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : MECID_A1_EL2_Type := value_name
+  (Mk_MECID_A1_EL2_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFF0000#64)))
+
+
+def __get_ID_AA64MMFR0_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : ID_AA64MMFR0_EL1_Type := value_name
+  (Mk_ID_AA64MMFR0_EL1_Type
+    (tmp &&& (Sail.BitVec.castWidth (m := 64) (Complement.complement
+        (Sail.BitVec.zeroExtend 0xFF000000000000#56 64)))))
+
+
+def __get_HDFGRTR2_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : HDFGRTR2_EL2_Type := value_name
+  (Mk_HDFGRTR2_EL2_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFF00000#64)))
+
+
+def __get_DBGPRCR_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : DBGPRCR_EL1_Type := value_name
+  (Mk_DBGPRCR_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFFFE#64)))
+
+
+def __get_PMCNTENCLR_EL0 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : PMCNTENCLR_EL0_Type := value_name
+  (Mk_PMCNTENCLR_EL0_Type (tmp &&& (Complement.complement 0xFFFFFFFE00000000#64)))
+
+
+def __get_SDER32_EL3 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : SDER32_EL3_Type := value_name
+  (Mk_SDER32_EL3_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFFFC#64)))
+
+
+def __get_HPFAR_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : HPFAR_EL2_Type := value_name
+  (Mk_HPFAR_EL2_Type (tmp &&& (Complement.complement 0x7FFF00000000000F#64)))
+
+
+def __get_VMPIDR_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : VMPIDR_EL2_Type := value_name
+  (Mk_VMPIDR_EL2_Type
+    ((tmp &&& (Complement.complement 0xFFFFFF003E000000#64)) ||| (Sail.BitVec.castWidth (m := 64) (Sail.BitVec.zeroExtend
+        0x80000000#32 64))))
+
+
+def __get_ID_AA64MMFR3_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : ID_AA64MMFR3_EL1_Type := value_name
+  (Mk_ID_AA64MMFR3_EL1_Type
+    (tmp &&& (Sail.BitVec.castWidth (m := 64) (Complement.complement
+        (Sail.BitVec.zeroExtend 0xF000000000000#52 64)))))
+
+
+def __get_ICH_VTR_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : ICH_VTR_EL2_Type := value_name
+  (Mk_ICH_VTR_EL2_Type (tmp &&& (Complement.complement 0xFFFFFFFF0003FFE0#64)))
+
+
+def __get_MDSELR_EL1 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : MDSELR_EL1_Type := value_name
+  (Mk_MDSELR_EL1_Type (tmp &&& (Complement.complement 0xFFFFFFFFFFFFFFCF#64)))
+
+
+def __get_MDCR_EL2 (value_name : (BitVec 64)) : (BitVec 64) :=
+  let tmp : MDCR_EL2_Type := value_name
+  (Mk_MDCR_EL2_Type (tmp &&& (Complement.complement 0xFFFFF4EF03750000#64)))
 
 
 end ArmFull.Functions

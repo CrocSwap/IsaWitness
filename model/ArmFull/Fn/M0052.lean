@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,82 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _update_HFGITR_EL2_Type_SVC_EL0 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 52 52 x)
+
+
+def _get_HFGITR_EL2_Type_SVC_EL1 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 53 53)
+
+
+def _update_HFGITR_EL2_Type_SVC_EL1 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 53 53 x)
+
+
+def _get_HFGITR_EL2_Type_TLBIASIDE1 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 44 44)
+
+
+def _update_HFGITR_EL2_Type_TLBIASIDE1 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 44 44 x)
+
+
+def _get_HFGITR_EL2_Type_TLBIASIDE1IS (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 30 30)
+
+
+def _update_HFGITR_EL2_Type_TLBIASIDE1IS (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 30 30 x)
+
+
+def _get_HFGITR_EL2_Type_TLBIASIDE1OS (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 20 20)
+
+
+def _update_HFGITR_EL2_Type_TLBIASIDE1OS (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 20 20 x)
+
+
+def _get_HFGITR_EL2_Type_TLBIRVAAE1 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 39 39)
+
+
+def _update_HFGITR_EL2_Type_TLBIRVAAE1 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 39 39 x)
+
+
+def _get_HFGITR_EL2_Type_TLBIRVAAE1IS (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 35 35)
+
+
+def _update_HFGITR_EL2_Type_TLBIRVAAE1IS (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 35 35 x)
+
+
+def _get_HFGITR_EL2_Type_TLBIRVAAE1OS (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 25 25)
+
+
+def _update_HFGITR_EL2_Type_TLBIRVAAE1OS (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 25 25 x)
+
+
+def _get_HFGITR_EL2_Type_TLBIRVAALE1 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 41 41)
+
+
+def _update_HFGITR_EL2_Type_TLBIRVAALE1 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 41 41 x)
+
+
+def _get_HFGITR_EL2_Type_TLBIRVAALE1IS (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 37 37)
+
+
+def _update_HFGITR_EL2_Type_TLBIRVAALE1IS (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 37 37 x)
+
 
 def _get_HFGITR_EL2_Type_TLBIRVAALE1OS (v : (BitVec 64)) : (BitVec 1) :=
   (Sail.BitVec.extractLsb v 27 27)
@@ -823,82 +899,6 @@ def undefined_GICH_MISR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) 
 
 def undefined_GICH_VMCR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
   (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def undefined_GICH_VTR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def undefined_GICM_CLRSPI_NSR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def undefined_GICM_CLRSPI_SR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def undefined_GICM_IIDR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def undefined_GICM_SETSPI_NSR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def undefined_GICM_SETSPI_SR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def undefined_GICM_TYPER_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def undefined_GICR_CLRLPIR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
-  (undefined_bitvector_at (ℓ.child 0) 64)
-
-
-def undefined_GICR_CTLR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def undefined_GICR_IIDR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def undefined_GICR_INMIR0_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def undefined_GICR_INVALLR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
-  (undefined_bitvector_at (ℓ.child 0) 64)
-
-
-def undefined_GICR_INVLPIR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
-  (undefined_bitvector_at (ℓ.child 0) 64)
-
-
-def undefined_GICR_ISENABLER0_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def undefined_GICR_MPAMIDR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def undefined_GICR_PARTIDR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def undefined_GICR_PENDBASER_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
-  (undefined_bitvector_at (ℓ.child 0) 64)
-
-
-def undefined_GICR_PROPBASER_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
-  (undefined_bitvector_at (ℓ.child 0) 64)
-
-
-def undefined_GICR_SETLPIR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
-  (undefined_bitvector_at (ℓ.child 0) 64)
 
 
 end ArmFull.Functions

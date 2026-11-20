@@ -1,46 +1,71 @@
 #!/usr/bin/env python3
-"""Check frozen model source identities and, optionally, every built artifact."""
+"""Verify the canonical model and, on request, the built module inventory."""
 import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 
-parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--artifacts', action='store_true', help='require all canonical .olean hashes')
-args = parser.parse_args()
-root = Path(__file__).resolve().parents[1] / 'model'
-manifest = json.loads((root / 'SOURCES.json').read_text())
-rows = manifest['files']
-errors = []
-modules = {row['module'] for row in rows}
-if len(rows) != 1481 or len(modules) != 1481 or manifest['modules'] != 1481:
-    errors.append('manifest must contain exactly 1481 distinct model modules')
-expected_sources = set()
-expected_artifacts = set()
-for row in rows:
-    relative = Path(*row['module'].split('.')).with_suffix('.lean')
-    if str(relative) != row['source'] or relative.is_absolute() or '..' in relative.parts:
-        errors.append('invalid module/source mapping: ' + row['module'])
-        continue
-    expected_sources.add(relative.as_posix())
-    source = root / relative
-    if not source.is_file() or hashlib.sha256(source.read_bytes()).hexdigest() != row['source_sha256']:
-        errors.append('source identity mismatch: ' + row['source'])
-    if args.artifacts:
-        relative_artifact = relative.with_suffix('.olean')
-        expected_artifacts.add(relative_artifact.as_posix())
-        artifact = root / '.lake/build/lib/lean' / relative_artifact
-        if not artifact.is_file() or hashlib.sha256(artifact.read_bytes()).hexdigest() != row['canonical_olean_sha256']:
-            errors.append('artifact identity mismatch or missing: ' + row['module'])
-actual_sources = {str(p.relative_to(root)) for p in (root / 'ArmFull').rglob('*.lean')}
-actual_sources.add('ArmFull.lean')
-if actual_sources != expected_sources:
-    errors.append('model source inventory differs from frozen manifest')
-if args.artifacts:
-    artifact_root = root / '.lake/build/lib/lean'
-    actual_artifacts = {str(p.relative_to(artifact_root)) for p in artifact_root.rglob('*.olean')}
-    if actual_artifacts != expected_artifacts:
-        errors.append('built model module inventory differs from frozen manifest')
-print(json.dumps(dict(status='FAIL' if errors else 'PASS', modules=len(rows),
-                      artifacts_checked=args.artifacts, errors=errors), indent=2))
-raise SystemExit(bool(errors))
+ROOT = Path(__file__).resolve().parents[1]
+MANIFEST = ROOT / "model/CANONICAL-SOURCES.sha256"
+REVISION = ROOT / "model/REVISION.json"
+SOURCE_GROUPS = (
+    ("model", "ArmFull", 1560),
+    ("vendor/lean-sail", "Sail", 11),
+)
+
+
+def sha256(path):
+    with path.open("rb") as source:
+        return hashlib.file_digest(source, "sha256").hexdigest()
+
+
+def inventory(root, module, suffix):
+    sources = set((root / module).rglob("*" + suffix))
+    root_file = (root / module).with_suffix(suffix)
+    if root_file.is_file():
+        sources.add(root_file)
+    return sources
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--built", action="store_true", help="also require all canonical modules to have built .olean files")
+    args = parser.parse_args()
+    rev = json.loads(REVISION.read_text())
+    errors = []
+    rows = {}
+    for line in MANIFEST.read_text().splitlines():
+        match = re.fullmatch(r"([0-9a-f]{64})  ((?:model/ArmFull|vendor/lean-sail/Sail)(?:/[A-Za-z0-9_]+)*\.lean)", line)
+        if not match or match[2] in rows:
+            errors.append(f"invalid or duplicate manifest record {line!r}")
+            continue
+        rows[match[2]] = match[1]
+    if rev["source_manifest_sha256"] != sha256(MANIFEST):
+        errors.append("source manifest checksum disagrees with REVISION.json")
+
+    for name, digest in rows.items():
+        source = ROOT / name
+        if not source.is_file() or source.is_symlink() or sha256(source) != digest:
+            errors.append(f"source identity mismatch or missing source {name}")
+
+    for package, module, count in SOURCE_GROUPS:
+        src_dir = ROOT / package
+        source_rows = {name for name in rows if name.startswith(f"{package}/{module}")}
+        source_files = {str(p.relative_to(ROOT)) for p in inventory(src_dir, module, ".lean")}
+        if source_rows != source_files or len(source_rows) != count or rev["modules"][module] != count:
+            errors.append(f"{module} source inventory differs from the {count}-module manifest")
+        if args.built:
+            lib = src_dir / ".lake/build/lib/lean"
+            expected = {str(Path(name).relative_to(package).with_suffix(".olean")) for name in source_rows}
+            artifacts = {str(p.relative_to(lib)) for p in inventory(lib, module, ".olean")}
+            if artifacts != expected:
+                errors.append(f"{module} built module inventory differs from the canonical source inventory")
+
+    print(json.dumps(dict(status="FAIL" if errors else "PASS", revision=rev["proof_commit"],
+                          sources=len(rows), built_modules_checked=args.built, errors=errors), indent=2))
+    raise SystemExit(bool(errors))
+
+
+if __name__ == "__main__":
+    main()

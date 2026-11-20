@@ -1,16 +1,28 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0051
-import ArmFull.Fn.M0087
-import ArmFull.Fn.M0146
-import ArmFull.Fn.M0147
-import ArmFull.Fn.M0215
-import ArmFull.Fn.M0218
-import ArmFull.Fn.M0840
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0022
+public import ArmFull.Fn.M0042
+public import ArmFull.Fn.M0044
+public import ArmFull.Fn.M0047
+public import ArmFull.Fn.M0054
+public import ArmFull.Fn.M0059
+public import ArmFull.Fn.M0092
+public import ArmFull.Fn.M0098
+public import ArmFull.Fn.M0144
+public import ArmFull.Fn.M0149
+public import ArmFull.Fn.M0178
+public import ArmFull.Fn.M0181
+public import ArmFull.Fn.M0182
+public import ArmFull.Fn.M0183
+public import ArmFull.Fn.M0184
+public import ArmFull.Fn.M0201
+public import ArmFull.Fn.M0252
+public import ArmFull.Fn.M0258 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -112,638 +124,664 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-/-- Type quantifiers: VL : Nat, dn : Nat, esize : Nat, g : Nat, k_is_unsigned : Bool, m : Nat, 0 ≤
-  m ∧
-  m ≤ 31 ∧
-  List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧
-  List.elem esize [8, 16, 32, 64] ∧ 0 ≤ dn ∧ dn ≤ 31 ∧ (is_VL VL) -/
-def execute_UMULH_Z_P_ZZ__ (VL : Nat) (dn : Nat) (esize : Nat) (g : Nat) (m : Nat) (is_unsigned : Bool) : SailM Unit := do
-  (CheckSVEEnabled ())
-  let VL : Nat := VL
-  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
-  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
-  let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
-    (BitVec (Sail.Int.toNatChecked PL)) )
-  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read dn VL)) ) : SailM (BitVec VL) )
-  let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
-  let operand2 ← (( do
-    if (w__0 : Bool)
-    then
-      (do
-        ((Sail.BitVec.castWidth ) <$> (Z_read m VL)))
-    else (pure ((Sail.BitVec.castWidth (Zeros (n := VL))))) ) : SailM (BitVec VL) )
-  let result ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5230)
-      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
-  let result ← (( do
-    let loop_e_lower : Nat := 0
-    let loop_e_upper : Int := (elements -i 1)
+/-- Type quantifiers: t : Int -/
+def TLBIMVAA_SysRegWrite32_cb49c2a9a16e5968 (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
+  let __HSTR_EL2_T8 : (BitVec 1) := (_get_HSTR_EL2_Type_T8 w__1)
+  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+  let __HSTR_T8 : (BitVec 1) := (_get_HSTR_Type_T8 w__2)
+  let w__3 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_TTLB : (BitVec 1) := (_get_HCR_EL2_Type_TTLB w__3)
+  let w__4 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
+  let __HCR_TTLB : (BitVec 1) := (_get_HCR_Type_TTLB w__4)
+  let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_FB : (BitVec 1) := (_get_HCR_EL2_Type_FB w__5)
+  let w__6 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+  let __HCRX_EL2_FnXS : (BitVec 1) := (_get_HCRX_EL2_Type_FnXS w__6)
+  let w__7 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
+  let __HCR_FB : (BitVec 1) := (_get_HCR_Type_FB w__7)
+  if ((__PSTATE_EL == EL0) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
     (do
-      let mut loop_vars := result
-      for e in [loop_e_lower:loop_e_upper:1]i do
-        let result := loop_vars
-        loop_vars ← do
-          let w__2 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 e esize)) ) : SailM
-            (BitVec esize) )
-          let element1 ← (( do (asl_Int w__2 is_unsigned) ) : SailM Int )
-          let w__3 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 e esize)) ) : SailM
-            (BitVec esize) )
-          let element2 ← (( do (asl_Int w__3 is_unsigned) ) : SailM Int )
-          let w__4 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
-          if (w__4 : Bool)
+      if ((__PSTATE_EL == EL1) : Bool)
+      then
+        (do
+          let w__11 ← (( do
+            (pure ((← do
+                  if ((← do
+                       (EL2Enabled ())) : Bool)
+                  then
+                    (do
+                      let w__9 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
+                      (pure (((! w__9) : Bool))))
+                  else (pure false)) && ((__HSTR_EL2_T8 == 1#1) : Bool))) ) : SailM Bool )
+          if (w__11 : Bool)
           then
             (do
-              let product : Int := (Int.shiftr (element1 *i element2) esize)
-              (Elem_set result e esize
-                (Sail.BitVec.castWidth (integer_subrange product (esize -i 1) 0))))
+              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
           else
             (do
-              let w__6 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 e esize)) ) :
-                SailM (BitVec esize) )
-              (Elem_set result e esize (Sail.BitVec.castWidth w__6)))
-      (pure loop_vars)) ) : SailM (BitVec VL) )
-  (Z_set dn VL (Sail.BitVec.castWidth result))
-
-
-/-- Type quantifiers: VL : Nat, dn : Nat, esize : Nat, g : Nat, k_is_unsigned : Bool, m : Nat, 0 ≤
-  m ∧
-  m ≤ 31 ∧
-  List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧
-  List.elem esize [8, 16, 32, 64] ∧ 0 ≤ dn ∧ dn ≤ 31 ∧ (is_VL VL) -/
-def execute_SMULH_Z_P_ZZ__ (VL : Nat) (dn : Nat) (esize : Nat) (g : Nat) (m : Nat) (is_unsigned : Bool) : SailM Unit := do
-  (CheckSVEEnabled ())
-  let VL : Nat := VL
-  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
-  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
-  let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
-    (BitVec (Sail.Int.toNatChecked PL)) )
-  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read dn VL)) ) : SailM (BitVec VL) )
-  let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
-  let operand2 ← (( do
-    if (w__0 : Bool)
-    then
-      (do
-        ((Sail.BitVec.castWidth ) <$> (Z_read m VL)))
-    else (pure ((Sail.BitVec.castWidth (Zeros (n := VL))))) ) : SailM (BitVec VL) )
-  let result ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5231)
-      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
-  let result ← (( do
-    let loop_e_lower : Nat := 0
-    let loop_e_upper : Int := (elements -i 1)
-    (do
-      let mut loop_vars := result
-      for e in [loop_e_lower:loop_e_upper:1]i do
-        let result := loop_vars
-        loop_vars ← do
-          let w__2 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 e esize)) ) : SailM
-            (BitVec esize) )
-          let element1 ← (( do (asl_Int w__2 is_unsigned) ) : SailM Int )
-          let w__3 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 e esize)) ) : SailM
-            (BitVec esize) )
-          let element2 ← (( do (asl_Int w__3 is_unsigned) ) : SailM Int )
-          let w__4 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
-          if (w__4 : Bool)
+              let w__15 ← (( do
+                (pure ((← do
+                      if ((← do
+                           (EL2Enabled ())) : Bool)
+                      then
+                        (do
+                          (ELUsingAArch32 EL2))
+                      else (pure false)) && ((__HSTR_T8 == 1#1) : Bool))) ) : SailM Bool )
+              if (w__15 : Bool)
+              then
+                (do
+                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
+              else
+                (do
+                  let w__19 ← (( do
+                    (pure ((← do
+                          if ((← do
+                               (EL2Enabled ())) : Bool)
+                          then
+                            (do
+                              let w__17 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
+                              (pure (((! w__17) : Bool))))
+                          else (pure false)) && ((__HCR_EL2_TTLB == 1#1) : Bool))) ) : SailM Bool )
+                  if (w__19 : Bool)
+                  then
+                    (do
+                      (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
+                  else
+                    (do
+                      let w__23 ← (( do
+                        (pure ((← do
+                              if ((← do
+                                   (EL2Enabled ())) : Bool)
+                              then
+                                (do
+                                  (ELUsingAArch32 EL2))
+                              else (pure false)) && ((__HCR_TTLB == 1#1) : Bool))) ) : SailM Bool )
+                      if (w__23 : Bool)
+                      then
+                        (do
+                          (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
+                      else
+                        (do
+                          let w__27 ← (( do
+                            (pure ((← do
+                                  if ((← do
+                                       (EL2Enabled ())) : Bool)
+                                  then
+                                    (do
+                                      let w__25 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
+                                      (pure (((! w__25) : Bool))))
+                                  else (pure false)) && ((__HCR_EL2_FB == 1#1) : Bool))) ) : SailM
+                            Bool )
+                          if (w__27 : Bool)
+                          then
+                            (do
+                              let w__33 ← (( do
+                                (pure ((← do
+                                      if ((← do
+                                           if ((← do
+                                                (IsFeatureImplemented FEAT_XS)) : Bool)
+                                           then
+                                             (do
+                                               (IsFeatureImplemented FEAT_HCX))
+                                           else (pure false)) : Bool)
+                                      then
+                                        (do
+                                          (IsHCRXEL2Enabled ()))
+                                      else (pure false)) && ((__HCRX_EL2_FnXS == 1#1) : Bool))) ) :
+                                SailM Bool )
+                              if (w__33 : Bool)
+                              then
+                                (do
+                                  let w__34 ← (( do (SecurityStateAtEL EL1) ) : SailM
+                                    SecurityState )
+                                  let w__35 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                                  let w__36 ← (( do (R_read t) ) : SailM (BitVec 32) )
+                                  (AArch32_TLBI_VAA w__34 Regime_EL10 w__35 Shareability_ISH
+                                    TLBILevel_Any TLBI_ExcludeXS w__36))
+                              else
+                                (do
+                                  let w__37 ← (( do (SecurityStateAtEL EL1) ) : SailM
+                                    SecurityState )
+                                  let w__38 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                                  let w__39 ← (( do (R_read t) ) : SailM (BitVec 32) )
+                                  (AArch32_TLBI_VAA w__37 Regime_EL10 w__38 Shareability_ISH
+                                    TLBILevel_Any TLBI_AllAttr w__39)))
+                          else
+                            (do
+                              let w__43 ← (( do
+                                (pure ((← do
+                                      if ((← do
+                                           (EL2Enabled ())) : Bool)
+                                      then
+                                        (do
+                                          (ELUsingAArch32 EL2))
+                                      else (pure false)) && ((__HCR_FB == 1#1) : Bool))) ) : SailM
+                                Bool )
+                              if (w__43 : Bool)
+                              then
+                                (do
+                                  let w__44 ← (( do (SecurityStateAtEL EL1) ) : SailM
+                                    SecurityState )
+                                  let w__45 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                                  let w__46 ← (( do (R_read t) ) : SailM (BitVec 32) )
+                                  (AArch32_TLBI_VAA w__44 Regime_EL10 w__45 Shareability_ISH
+                                    TLBILevel_Any TLBI_AllAttr w__46))
+                              else
+                                (do
+                                  let w__54 ← (( do
+                                    (pure ((← do
+                                          if ((← do
+                                               if ((← do
+                                                    if ((← do
+                                                         (IsFeatureImplemented FEAT_XS)) : Bool)
+                                                    then
+                                                      (do
+                                                        let w__48 ← (( do (ELUsingAArch32 EL2) ) :
+                                                          SailM Bool )
+                                                        (pure (((! w__48) : Bool))))
+                                                    else (pure false)) : Bool)
+                                               then
+                                                 (do
+                                                   (IsFeatureImplemented FEAT_HCX))
+                                               else (pure false)) : Bool)
+                                          then
+                                            (do
+                                              (IsHCRXEL2Enabled ()))
+                                          else (pure false)) && ((__HCRX_EL2_FnXS == 1#1) : Bool)))
+                                    ) : SailM Bool )
+                                  if (w__54 : Bool)
+                                  then
+                                    (do
+                                      let w__55 ← (( do (SecurityStateAtEL EL1) ) : SailM
+                                        SecurityState )
+                                      let w__56 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                                      let w__57 ← (( do (R_read t) ) : SailM (BitVec 32) )
+                                      (AArch32_TLBI_VAA w__55 Regime_EL10 w__56 Shareability_NSH
+                                        TLBILevel_Any TLBI_ExcludeXS w__57))
+                                  else
+                                    (do
+                                      let w__58 ← (( do (SecurityStateAtEL EL1) ) : SailM
+                                        SecurityState )
+                                      let w__59 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                                      let w__60 ← (( do (R_read t) ) : SailM (BitVec 32) )
+                                      (AArch32_TLBI_VAA w__58 Regime_EL10 w__59 Shareability_NSH
+                                        TLBILevel_Any TLBI_AllAttr w__60)))))))))
+      else
+        (do
+          if ((__PSTATE_EL == EL2) : Bool)
           then
             (do
-              let product : Int := (Int.shiftr (element1 *i element2) esize)
-              (Elem_set result e esize
-                (Sail.BitVec.castWidth (integer_subrange product (esize -i 1) 0))))
+              let w__61 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+              let w__62 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+              let w__63 ← (( do (R_read t) ) : SailM (BitVec 32) )
+              (AArch32_TLBI_VAA w__61 Regime_EL10 w__62 Shareability_NSH TLBILevel_Any TLBI_AllAttr
+                w__63))
           else
             (do
-              let w__6 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 e esize)) ) :
-                SailM (BitVec esize) )
-              (Elem_set result e esize (Sail.BitVec.castWidth w__6)))
-      (pure loop_vars)) ) : SailM (BitVec VL) )
-  (Z_set dn VL (Sail.BitVec.castWidth result))
+              if ((__PSTATE_EL == EL3) : Bool)
+              then
+                (do
+                  let w__64 ← (( do (SecurityStateAtEL EL3) ) : SailM SecurityState )
+                  let w__65 ← (( do (R_read t) ) : SailM (BitVec 32) )
+                  (AArch32_TLBI_VAA w__64 Regime_EL30 VMID_NONE Shareability_NSH TLBILevel_Any
+                    TLBI_AllAttr w__65))
+              else (pure (())))))
 
 
-/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, k_is_unsigned : Bool, m : Nat, n : Nat, rsize
-  : Nat, List.elem rsize [32, 64] ∧
-  0 ≤ n ∧
-  n ≤ 31 ∧
-  0 ≤ m ∧ m ≤ 31 ∧ List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 15 ∧ (is_VL VL) -/
-def execute_WHILELO_P_P_RR__ (VL : Nat) (d : Nat) (esize : Nat) (m : Nat) (n : Nat) (op : SVECmp) (rsize : Nat) (is_unsigned : Bool) : SailM Unit := do
-  (CheckSVEEnabled ())
-  let VL : Nat := VL
-  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
-  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
-  let mask : (BitVec (Sail.Int.toNatChecked PL)) := (Sail.BitVec.castWidth (Ones (n := PL)))
-  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read n rsize)) ) : SailM (BitVec rsize) )
-  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read m rsize)) ) : SailM (BitVec rsize) )
-  let result ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5232)
-      (Sail.Int.toNatChecked (PL)))) ) : SailM (BitVec (Sail.Int.toNatChecked PL)) )
-  let last : Bool := true
-  let psize : Nat := (Sail.Int.toNatChecked ((Int.ediv esize 8)))
-  let (last, operand1, result) ← (( do
-    let loop_e_lower : Nat := 0
-    let loop_e_upper : Int := (elements -i 1)
+/-- Type quantifiers: t : Int -/
+def TLBIMVAHIS_SysRegWrite32_5da1d1a785b555e8 (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
+  let __HSTR_EL2_T8 : (BitVec 1) := (_get_HSTR_EL2_Type_T8 w__1)
+  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+  let __HSTR_T8 : (BitVec 1) := (_get_HSTR_Type_T8 w__2)
+  if ((__PSTATE_EL == EL0) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
     (do
-      let mut loop_vars := (last, operand1, result)
-      for e in [loop_e_lower:loop_e_upper:1]i do
-        let (last, operand1, result) := loop_vars
-        loop_vars ← do
-          let cond ← (( do (undefined_bool_at (← occLabel 5233) ()) ) : SailM Bool )
-          let cond ← (( do
-            match op with
-            | .Cmp_LT =>
-              (do
-                let w__0 ← (( do (asl_Int operand1 is_unsigned) ) : SailM Int )
-                let w__1 ← (( do (asl_Int operand2 is_unsigned) ) : SailM Int )
-                let cond := ((w__0 <b w__1) : Bool)
-                (pure (cond)))
-            | .Cmp_LE =>
-              (do
-                let w__2 ← (( do (asl_Int operand1 is_unsigned) ) : SailM Int )
-                let w__3 ← (( do (asl_Int operand2 is_unsigned) ) : SailM Int )
-                let cond := ((w__2 ≤b w__3) : Bool)
-                (pure (cond)))
-            | _ => (pure (cond)) ) : SailM Bool )
-          let last : Bool := (last && cond)
-          let pbit : (BitVec 1) :=
-            if (last : Bool)
-            then 1#1
-            else 0#1
-          let w__4 ← (( do
-            (Elem_set result e psize (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend pbit psize))) )
-            : SailM (BitVec (Sail.Int.toNatChecked PL)) )
-          let result := (w__4 : (BitVec (Sail.Int.toNatChecked PL)))
-          let operand1 : (BitVec rsize) := (BitVec.addInt operand1 1)
-          (pure ((last, operand1, result)))
-      (pure loop_vars)) ) : SailM (Bool × (BitVec rsize) × (BitVec (Sail.Int.toNatChecked PL))) )
-  let split_vec ← (( do (PredTest mask result esize) ) : SailM (BitVec 4) )
-  let w__5 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__5 with N := (Sail.BitVec.extractLsb split_vec 3 3) }
-  let w__6 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__6 with Z := (Sail.BitVec.extractLsb split_vec 2 2) }
-  let w__7 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__7 with C := (Sail.BitVec.extractLsb split_vec 1 1) }
-  let w__8 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__8 with V := (Sail.BitVec.extractLsb split_vec 0 0) }
-  (P_set d PL (Sail.BitVec.castWidth result))
+      if ((__PSTATE_EL == EL1) : Bool)
+      then
+        (do
+          let w__6 ← (( do
+            (pure ((← do
+                  if ((← do
+                       (EL2Enabled ())) : Bool)
+                  then
+                    (do
+                      let w__4 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
+                      (pure (((! w__4) : Bool))))
+                  else (pure false)) && ((__HSTR_EL2_T8 == 1#1) : Bool))) ) : SailM Bool )
+          if (w__6 : Bool)
+          then
+            (do
+              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
+          else
+            (do
+              let w__10 ← (( do
+                (pure ((← do
+                      if ((← do
+                           (EL2Enabled ())) : Bool)
+                      then
+                        (do
+                          (ELUsingAArch32 EL2))
+                      else (pure false)) && ((__HSTR_T8 == 1#1) : Bool))) ) : SailM Bool )
+              if (w__10 : Bool)
+              then
+                (do
+                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
+              else sailThrow ((Error_Undefined ()))))
+      else
+        (do
+          if ((__PSTATE_EL == EL2) : Bool)
+          then
+            (do
+              let w__11 ← (( do (SecurityStateAtEL EL2) ) : SailM SecurityState )
+              let w__12 ← (( do (R_read t) ) : SailM (BitVec 32) )
+              (AArch32_TLBI_VA w__11 Regime_EL2 VMID_NONE Shareability_ISH TLBILevel_Any
+                TLBI_AllAttr w__12))
+          else
+            (do
+              if ((__PSTATE_EL == EL3) : Bool)
+              then
+                (do
+                  let w__13 ← (( do (HaveEL EL2) ) : SailM Bool )
+                  if ((! w__13) : Bool)
+                  then sailThrow ((Error_Undefined ()))
+                  else
+                    (do
+                      let w__14 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                      let w__15 ← (( do (R_read t) ) : SailM (BitVec 32) )
+                      (AArch32_TLBI_VA SS_NonSecure Regime_EL2 w__14 Shareability_ISH TLBILevel_Any
+                        TLBI_AllAttr w__15)))
+              else (pure (())))))
 
 
-/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, k_is_unsigned : Bool, m : Nat, n : Nat, rsize
-  : Nat, List.elem rsize [32, 64] ∧
-  0 ≤ n ∧
-  n ≤ 31 ∧
-  0 ≤ m ∧ m ≤ 31 ∧ List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 15 ∧ (is_VL VL) -/
-def execute_WHILELS_P_P_RR__ (VL : Nat) (d : Nat) (esize : Nat) (m : Nat) (n : Nat) (op : SVECmp) (rsize : Nat) (is_unsigned : Bool) : SailM Unit := do
-  (CheckSVEEnabled ())
-  let VL : Nat := VL
-  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
-  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
-  let mask : (BitVec (Sail.Int.toNatChecked PL)) := (Sail.BitVec.castWidth (Ones (n := PL)))
-  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read n rsize)) ) : SailM (BitVec rsize) )
-  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read m rsize)) ) : SailM (BitVec rsize) )
-  let result ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5234)
-      (Sail.Int.toNatChecked (PL)))) ) : SailM (BitVec (Sail.Int.toNatChecked PL)) )
-  let last : Bool := true
-  let psize : Nat := (Sail.Int.toNatChecked ((Int.ediv esize 8)))
-  let (last, operand1, result) ← (( do
-    let loop_e_lower : Nat := 0
-    let loop_e_upper : Int := (elements -i 1)
+/-- Type quantifiers: t : Int -/
+def TLBIMVAH_SysRegWrite32_4fb355f41064966b (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
+  let __HSTR_EL2_T8 : (BitVec 1) := (_get_HSTR_EL2_Type_T8 w__1)
+  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+  let __HSTR_T8 : (BitVec 1) := (_get_HSTR_Type_T8 w__2)
+  if ((__PSTATE_EL == EL0) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
     (do
-      let mut loop_vars := (last, operand1, result)
-      for e in [loop_e_lower:loop_e_upper:1]i do
-        let (last, operand1, result) := loop_vars
-        loop_vars ← do
-          let cond ← (( do (undefined_bool_at (← occLabel 5235) ()) ) : SailM Bool )
-          let cond ← (( do
-            match op with
-            | .Cmp_LT =>
-              (do
-                let w__0 ← (( do (asl_Int operand1 is_unsigned) ) : SailM Int )
-                let w__1 ← (( do (asl_Int operand2 is_unsigned) ) : SailM Int )
-                let cond := ((w__0 <b w__1) : Bool)
-                (pure (cond)))
-            | .Cmp_LE =>
-              (do
-                let w__2 ← (( do (asl_Int operand1 is_unsigned) ) : SailM Int )
-                let w__3 ← (( do (asl_Int operand2 is_unsigned) ) : SailM Int )
-                let cond := ((w__2 ≤b w__3) : Bool)
-                (pure (cond)))
-            | _ => (pure (cond)) ) : SailM Bool )
-          let last : Bool := (last && cond)
-          let pbit : (BitVec 1) :=
-            if (last : Bool)
-            then 1#1
-            else 0#1
-          let w__4 ← (( do
-            (Elem_set result e psize (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend pbit psize))) )
-            : SailM (BitVec (Sail.Int.toNatChecked PL)) )
-          let result := (w__4 : (BitVec (Sail.Int.toNatChecked PL)))
-          let operand1 : (BitVec rsize) := (BitVec.addInt operand1 1)
-          (pure ((last, operand1, result)))
-      (pure loop_vars)) ) : SailM (Bool × (BitVec rsize) × (BitVec (Sail.Int.toNatChecked PL))) )
-  let split_vec ← (( do (PredTest mask result esize) ) : SailM (BitVec 4) )
-  let w__5 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__5 with N := (Sail.BitVec.extractLsb split_vec 3 3) }
-  let w__6 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__6 with Z := (Sail.BitVec.extractLsb split_vec 2 2) }
-  let w__7 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__7 with C := (Sail.BitVec.extractLsb split_vec 1 1) }
-  let w__8 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__8 with V := (Sail.BitVec.extractLsb split_vec 0 0) }
-  (P_set d PL (Sail.BitVec.castWidth result))
+      if ((__PSTATE_EL == EL1) : Bool)
+      then
+        (do
+          let w__6 ← (( do
+            (pure ((← do
+                  if ((← do
+                       (EL2Enabled ())) : Bool)
+                  then
+                    (do
+                      let w__4 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
+                      (pure (((! w__4) : Bool))))
+                  else (pure false)) && ((__HSTR_EL2_T8 == 1#1) : Bool))) ) : SailM Bool )
+          if (w__6 : Bool)
+          then
+            (do
+              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
+          else
+            (do
+              let w__10 ← (( do
+                (pure ((← do
+                      if ((← do
+                           (EL2Enabled ())) : Bool)
+                      then
+                        (do
+                          (ELUsingAArch32 EL2))
+                      else (pure false)) && ((__HSTR_T8 == 1#1) : Bool))) ) : SailM Bool )
+              if (w__10 : Bool)
+              then
+                (do
+                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
+              else sailThrow ((Error_Undefined ()))))
+      else
+        (do
+          if ((__PSTATE_EL == EL2) : Bool)
+          then
+            (do
+              let w__11 ← (( do (SecurityStateAtEL EL2) ) : SailM SecurityState )
+              let w__12 ← (( do (R_read t) ) : SailM (BitVec 32) )
+              (AArch32_TLBI_VA w__11 Regime_EL2 VMID_NONE Shareability_NSH TLBILevel_Any
+                TLBI_AllAttr w__12))
+          else
+            (do
+              if ((__PSTATE_EL == EL3) : Bool)
+              then
+                (do
+                  let w__13 ← (( do (HaveEL EL2) ) : SailM Bool )
+                  if ((! w__13) : Bool)
+                  then sailThrow ((Error_Undefined ()))
+                  else
+                    (do
+                      let w__14 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                      let w__15 ← (( do (R_read t) ) : SailM (BitVec 32) )
+                      (AArch32_TLBI_VA SS_NonSecure Regime_EL2 w__14 Shareability_NSH TLBILevel_Any
+                        TLBI_AllAttr w__15)))
+              else (pure (())))))
 
 
-/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, k_is_unsigned : Bool, m : Nat, n : Nat, rsize
-  : Nat, List.elem rsize [32, 64] ∧
-  0 ≤ n ∧
-  n ≤ 31 ∧
-  0 ≤ m ∧ m ≤ 31 ∧ List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 15 ∧ (is_VL VL) -/
-def execute_WHILELT_P_P_RR__ (VL : Nat) (d : Nat) (esize : Nat) (m : Nat) (n : Nat) (op : SVECmp) (rsize : Nat) (is_unsigned : Bool) : SailM Unit := do
-  (CheckSVEEnabled ())
-  let VL : Nat := VL
-  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
-  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
-  let mask : (BitVec (Sail.Int.toNatChecked PL)) := (Sail.BitVec.castWidth (Ones (n := PL)))
-  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read n rsize)) ) : SailM (BitVec rsize) )
-  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read m rsize)) ) : SailM (BitVec rsize) )
-  let result ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5236)
-      (Sail.Int.toNatChecked (PL)))) ) : SailM (BitVec (Sail.Int.toNatChecked PL)) )
-  let last : Bool := true
-  let psize : Nat := (Sail.Int.toNatChecked ((Int.ediv esize 8)))
-  let (last, operand1, result) ← (( do
-    let loop_e_lower : Nat := 0
-    let loop_e_upper : Int := (elements -i 1)
+/-- Type quantifiers: t : Int -/
+def TLBIMVAIS_SysRegWrite32_bfc80b2d7757a07f (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
+  let __HSTR_EL2_T8 : (BitVec 1) := (_get_HSTR_EL2_Type_T8 w__1)
+  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+  let __HSTR_T8 : (BitVec 1) := (_get_HSTR_Type_T8 w__2)
+  let w__3 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_TTLB : (BitVec 1) := (_get_HCR_EL2_Type_TTLB w__3)
+  let w__4 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_TTLBIS : (BitVec 1) := (_get_HCR_EL2_Type_TTLBIS w__4)
+  let w__5 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
+  let __HCR_TTLB : (BitVec 1) := (_get_HCR_Type_TTLB w__5)
+  let w__6 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
+  let __HCR2_TTLBIS : (BitVec 1) := (_get_HCR2_Type_TTLBIS w__6)
+  let w__7 ← (( do readReg HCRX_EL2 ) : SailM (BitVec 64) )
+  let __HCRX_EL2_FnXS : (BitVec 1) := (_get_HCRX_EL2_Type_FnXS w__7)
+  if ((__PSTATE_EL == EL0) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
     (do
-      let mut loop_vars := (last, operand1, result)
-      for e in [loop_e_lower:loop_e_upper:1]i do
-        let (last, operand1, result) := loop_vars
-        loop_vars ← do
-          let cond ← (( do (undefined_bool_at (← occLabel 5237) ()) ) : SailM Bool )
-          let cond ← (( do
-            match op with
-            | .Cmp_LT =>
-              (do
-                let w__0 ← (( do (asl_Int operand1 is_unsigned) ) : SailM Int )
-                let w__1 ← (( do (asl_Int operand2 is_unsigned) ) : SailM Int )
-                let cond := ((w__0 <b w__1) : Bool)
-                (pure (cond)))
-            | .Cmp_LE =>
-              (do
-                let w__2 ← (( do (asl_Int operand1 is_unsigned) ) : SailM Int )
-                let w__3 ← (( do (asl_Int operand2 is_unsigned) ) : SailM Int )
-                let cond := ((w__2 ≤b w__3) : Bool)
-                (pure (cond)))
-            | _ => (pure (cond)) ) : SailM Bool )
-          let last : Bool := (last && cond)
-          let pbit : (BitVec 1) :=
-            if (last : Bool)
-            then 1#1
-            else 0#1
-          let w__4 ← (( do
-            (Elem_set result e psize (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend pbit psize))) )
-            : SailM (BitVec (Sail.Int.toNatChecked PL)) )
-          let result := (w__4 : (BitVec (Sail.Int.toNatChecked PL)))
-          let operand1 : (BitVec rsize) := (BitVec.addInt operand1 1)
-          (pure ((last, operand1, result)))
-      (pure loop_vars)) ) : SailM (Bool × (BitVec rsize) × (BitVec (Sail.Int.toNatChecked PL))) )
-  let split_vec ← (( do (PredTest mask result esize) ) : SailM (BitVec 4) )
-  let w__5 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__5 with N := (Sail.BitVec.extractLsb split_vec 3 3) }
-  let w__6 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__6 with Z := (Sail.BitVec.extractLsb split_vec 2 2) }
-  let w__7 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__7 with C := (Sail.BitVec.extractLsb split_vec 1 1) }
-  let w__8 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__8 with V := (Sail.BitVec.extractLsb split_vec 0 0) }
-  (P_set d PL (Sail.BitVec.castWidth result))
+      if ((__PSTATE_EL == EL1) : Bool)
+      then
+        (do
+          let w__11 ← (( do
+            (pure ((← do
+                  if ((← do
+                       (EL2Enabled ())) : Bool)
+                  then
+                    (do
+                      let w__9 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
+                      (pure (((! w__9) : Bool))))
+                  else (pure false)) && ((__HSTR_EL2_T8 == 1#1) : Bool))) ) : SailM Bool )
+          if (w__11 : Bool)
+          then
+            (do
+              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
+          else
+            (do
+              let w__15 ← (( do
+                (pure ((← do
+                      if ((← do
+                           (EL2Enabled ())) : Bool)
+                      then
+                        (do
+                          (ELUsingAArch32 EL2))
+                      else (pure false)) && ((__HSTR_T8 == 1#1) : Bool))) ) : SailM Bool )
+              if (w__15 : Bool)
+              then
+                (do
+                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
+              else
+                (do
+                  let w__19 ← (( do
+                    (pure ((← do
+                          if ((← do
+                               (EL2Enabled ())) : Bool)
+                          then
+                            (do
+                              let w__17 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
+                              (pure (((! w__17) : Bool))))
+                          else (pure false)) && ((__HCR_EL2_TTLB == 1#1) : Bool))) ) : SailM Bool )
+                  if (w__19 : Bool)
+                  then
+                    (do
+                      (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
+                  else
+                    (do
+                      let w__23 ← (( do
+                        (pure ((← do
+                              if ((← do
+                                   (EL2Enabled ())) : Bool)
+                              then
+                                (do
+                                  let w__21 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
+                                  (pure (((! w__21) : Bool))))
+                              else (pure false)) && ((__HCR_EL2_TTLBIS == 1#1) : Bool))) ) : SailM
+                        Bool )
+                      if (w__23 : Bool)
+                      then
+                        (do
+                          (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
+                      else
+                        (do
+                          let w__27 ← (( do
+                            (pure ((← do
+                                  if ((← do
+                                       (EL2Enabled ())) : Bool)
+                                  then
+                                    (do
+                                      (ELUsingAArch32 EL2))
+                                  else (pure false)) && ((__HCR_TTLB == 1#1) : Bool))) ) : SailM
+                            Bool )
+                          if (w__27 : Bool)
+                          then
+                            (do
+                              (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
+                          else
+                            (do
+                              let w__31 ← (( do
+                                (pure ((← do
+                                      if ((← do
+                                           (EL2Enabled ())) : Bool)
+                                      then
+                                        (do
+                                          (ELUsingAArch32 EL2))
+                                      else (pure false)) && ((__HCR2_TTLBIS == 1#1) : Bool))) ) :
+                                SailM Bool )
+                              if (w__31 : Bool)
+                              then
+                                (do
+                                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
+                              else
+                                (do
+                                  let w__39 ← (( do
+                                    (pure ((← do
+                                          if ((← do
+                                               if ((← do
+                                                    if ((← do
+                                                         (IsFeatureImplemented FEAT_XS)) : Bool)
+                                                    then
+                                                      (do
+                                                        let w__33 ← (( do (ELUsingAArch32 EL2) ) :
+                                                          SailM Bool )
+                                                        (pure (((! w__33) : Bool))))
+                                                    else (pure false)) : Bool)
+                                               then
+                                                 (do
+                                                   (IsFeatureImplemented FEAT_HCX))
+                                               else (pure false)) : Bool)
+                                          then
+                                            (do
+                                              (IsHCRXEL2Enabled ()))
+                                          else (pure false)) && ((__HCRX_EL2_FnXS == 1#1) : Bool)))
+                                    ) : SailM Bool )
+                                  if (w__39 : Bool)
+                                  then
+                                    (do
+                                      let w__40 ← (( do (SecurityStateAtEL EL1) ) : SailM
+                                        SecurityState )
+                                      let w__41 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                                      let w__42 ← (( do (R_read t) ) : SailM (BitVec 32) )
+                                      (AArch32_TLBI_VA w__40 Regime_EL10 w__41 Shareability_ISH
+                                        TLBILevel_Any TLBI_ExcludeXS w__42))
+                                  else
+                                    (do
+                                      let w__43 ← (( do (SecurityStateAtEL EL1) ) : SailM
+                                        SecurityState )
+                                      let w__44 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                                      let w__45 ← (( do (R_read t) ) : SailM (BitVec 32) )
+                                      (AArch32_TLBI_VA w__43 Regime_EL10 w__44 Shareability_ISH
+                                        TLBILevel_Any TLBI_AllAttr w__45)))))))))
+      else
+        (do
+          if ((__PSTATE_EL == EL2) : Bool)
+          then
+            (do
+              let w__46 ← (( do (SecurityStateAtEL EL1) ) : SailM SecurityState )
+              let w__47 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+              let w__48 ← (( do (R_read t) ) : SailM (BitVec 32) )
+              (AArch32_TLBI_VA w__46 Regime_EL10 w__47 Shareability_ISH TLBILevel_Any TLBI_AllAttr
+                w__48))
+          else
+            (do
+              if ((__PSTATE_EL == EL3) : Bool)
+              then
+                (do
+                  let w__49 ← (( do (SecurityStateAtEL EL3) ) : SailM SecurityState )
+                  let w__50 ← (( do (R_read t) ) : SailM (BitVec 32) )
+                  (AArch32_TLBI_VA w__49 Regime_EL30 VMID_NONE Shareability_ISH TLBILevel_Any
+                    TLBI_AllAttr w__50))
+              else (pure (())))))
 
 
-/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, k_is_unsigned : Bool, m : Nat, n : Nat, rsize
-  : Nat, List.elem rsize [32, 64] ∧
-  0 ≤ n ∧
-  n ≤ 31 ∧
-  0 ≤ m ∧ m ≤ 31 ∧ List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 15 ∧ (is_VL VL) -/
-def execute_WHILELE_P_P_RR__ (VL : Nat) (d : Nat) (esize : Nat) (m : Nat) (n : Nat) (op : SVECmp) (rsize : Nat) (is_unsigned : Bool) : SailM Unit := do
-  (CheckSVEEnabled ())
-  let VL : Nat := VL
-  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
-  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
-  let mask : (BitVec (Sail.Int.toNatChecked PL)) := (Sail.BitVec.castWidth (Ones (n := PL)))
-  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read n rsize)) ) : SailM (BitVec rsize) )
-  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read m rsize)) ) : SailM (BitVec rsize) )
-  let result ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5238)
-      (Sail.Int.toNatChecked (PL)))) ) : SailM (BitVec (Sail.Int.toNatChecked PL)) )
-  let last : Bool := true
-  let psize : Nat := (Sail.Int.toNatChecked ((Int.ediv esize 8)))
-  let (last, operand1, result) ← (( do
-    let loop_e_lower : Nat := 0
-    let loop_e_upper : Int := (elements -i 1)
+/-- Type quantifiers: t : Int -/
+def TLBIMVALHIS_SysRegWrite32_89a451ea9208e882 (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
+  let __HSTR_EL2_T8 : (BitVec 1) := (_get_HSTR_EL2_Type_T8 w__1)
+  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+  let __HSTR_T8 : (BitVec 1) := (_get_HSTR_Type_T8 w__2)
+  if ((__PSTATE_EL == EL0) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
     (do
-      let mut loop_vars := (last, operand1, result)
-      for e in [loop_e_lower:loop_e_upper:1]i do
-        let (last, operand1, result) := loop_vars
-        loop_vars ← do
-          let cond ← (( do (undefined_bool_at (← occLabel 5239) ()) ) : SailM Bool )
-          let cond ← (( do
-            match op with
-            | .Cmp_LT =>
-              (do
-                let w__0 ← (( do (asl_Int operand1 is_unsigned) ) : SailM Int )
-                let w__1 ← (( do (asl_Int operand2 is_unsigned) ) : SailM Int )
-                let cond := ((w__0 <b w__1) : Bool)
-                (pure (cond)))
-            | .Cmp_LE =>
-              (do
-                let w__2 ← (( do (asl_Int operand1 is_unsigned) ) : SailM Int )
-                let w__3 ← (( do (asl_Int operand2 is_unsigned) ) : SailM Int )
-                let cond := ((w__2 ≤b w__3) : Bool)
-                (pure (cond)))
-            | _ => (pure (cond)) ) : SailM Bool )
-          let last : Bool := (last && cond)
-          let pbit : (BitVec 1) :=
-            if (last : Bool)
-            then 1#1
-            else 0#1
-          let w__4 ← (( do
-            (Elem_set result e psize (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend pbit psize))) )
-            : SailM (BitVec (Sail.Int.toNatChecked PL)) )
-          let result := (w__4 : (BitVec (Sail.Int.toNatChecked PL)))
-          let operand1 : (BitVec rsize) := (BitVec.addInt operand1 1)
-          (pure ((last, operand1, result)))
-      (pure loop_vars)) ) : SailM (Bool × (BitVec rsize) × (BitVec (Sail.Int.toNatChecked PL))) )
-  let split_vec ← (( do (PredTest mask result esize) ) : SailM (BitVec 4) )
-  let w__5 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__5 with N := (Sail.BitVec.extractLsb split_vec 3 3) }
-  let w__6 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__6 with Z := (Sail.BitVec.extractLsb split_vec 2 2) }
-  let w__7 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__7 with C := (Sail.BitVec.extractLsb split_vec 1 1) }
-  let w__8 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__8 with V := (Sail.BitVec.extractLsb split_vec 0 0) }
-  (P_set d PL (Sail.BitVec.castWidth result))
+      if ((__PSTATE_EL == EL1) : Bool)
+      then
+        (do
+          let w__6 ← (( do
+            (pure ((← do
+                  if ((← do
+                       (EL2Enabled ())) : Bool)
+                  then
+                    (do
+                      let w__4 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
+                      (pure (((! w__4) : Bool))))
+                  else (pure false)) && ((__HSTR_EL2_T8 == 1#1) : Bool))) ) : SailM Bool )
+          if (w__6 : Bool)
+          then
+            (do
+              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
+          else
+            (do
+              let w__10 ← (( do
+                (pure ((← do
+                      if ((← do
+                           (EL2Enabled ())) : Bool)
+                      then
+                        (do
+                          (ELUsingAArch32 EL2))
+                      else (pure false)) && ((__HSTR_T8 == 1#1) : Bool))) ) : SailM Bool )
+              if (w__10 : Bool)
+              then
+                (do
+                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
+              else sailThrow ((Error_Undefined ()))))
+      else
+        (do
+          if ((__PSTATE_EL == EL2) : Bool)
+          then
+            (do
+              let w__11 ← (( do (SecurityStateAtEL EL2) ) : SailM SecurityState )
+              let w__12 ← (( do (R_read t) ) : SailM (BitVec 32) )
+              (AArch32_TLBI_VA w__11 Regime_EL2 VMID_NONE Shareability_ISH TLBILevel_Last
+                TLBI_AllAttr w__12))
+          else
+            (do
+              if ((__PSTATE_EL == EL3) : Bool)
+              then
+                (do
+                  let w__13 ← (( do (HaveEL EL2) ) : SailM Bool )
+                  if ((! w__13) : Bool)
+                  then sailThrow ((Error_Undefined ()))
+                  else
+                    (do
+                      let w__14 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                      let w__15 ← (( do (R_read t) ) : SailM (BitVec 32) )
+                      (AArch32_TLBI_VA SS_NonSecure Regime_EL2 w__14 Shareability_ISH TLBILevel_Last
+                        TLBI_AllAttr w__15)))
+              else (pure (())))))
 
 
-/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, k_is_unsigned : Bool, m : Nat, n : Nat, rsize
-  : Nat, List.elem rsize [32, 64] ∧
-  0 ≤ n ∧
-  n ≤ 31 ∧
-  0 ≤ m ∧ m ≤ 31 ∧ List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 15 ∧ (is_VL VL) -/
-def execute_WHILEHI_P_P_RR__ (VL : Nat) (d : Nat) (esize : Nat) (m : Nat) (n : Nat) (op : SVECmp) (rsize : Nat) (is_unsigned : Bool) : SailM Unit := do
-  (CheckSVEEnabled ())
-  let VL : Nat := VL
-  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
-  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
-  let mask : (BitVec (Sail.Int.toNatChecked PL)) := (Sail.BitVec.castWidth (Ones (n := PL)))
-  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read n rsize)) ) : SailM (BitVec rsize) )
-  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read m rsize)) ) : SailM (BitVec rsize) )
-  let result ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5240)
-      (Sail.Int.toNatChecked (PL)))) ) : SailM (BitVec (Sail.Int.toNatChecked PL)) )
-  let last : Bool := true
-  let psize : Nat := (Sail.Int.toNatChecked ((Int.ediv esize 8)))
-  let (last, operand1, result) ← (( do
-    let loop_e_lower : Nat := 0
-    let loop_e_upper : Int := (elements -i 1)
+/-- Type quantifiers: t : Int -/
+def TLBIMVALH_SysRegWrite32_e910bf47238cb4c5 (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
+  let __HSTR_EL2_T8 : (BitVec 1) := (_get_HSTR_EL2_Type_T8 w__1)
+  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
+  let __HSTR_T8 : (BitVec 1) := (_get_HSTR_Type_T8 w__2)
+  if ((__PSTATE_EL == EL0) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
     (do
-      let mut loop_vars := (last, operand1, result)
-      for e in [loop_e_upper:loop_e_lower:-1]i do
-        let (last, operand1, result) := loop_vars
-        loop_vars ← do
-          let cond ← (( do (undefined_bool_at (← occLabel 5241) ()) ) : SailM Bool )
-          let cond ← (( do
-            match op with
-            | .Cmp_GT =>
-              (do
-                let w__0 ← (( do (asl_Int operand1 is_unsigned) ) : SailM Int )
-                let w__1 ← (( do (asl_Int operand2 is_unsigned) ) : SailM Int )
-                let cond := ((w__0 >b w__1) : Bool)
-                (pure (cond)))
-            | .Cmp_GE =>
-              (do
-                let w__2 ← (( do (asl_Int operand1 is_unsigned) ) : SailM Int )
-                let w__3 ← (( do (asl_Int operand2 is_unsigned) ) : SailM Int )
-                let cond := ((w__2 ≥b w__3) : Bool)
-                (pure (cond)))
-            | _ => (pure (cond)) ) : SailM Bool )
-          let last : Bool := (last && cond)
-          let pbit : (BitVec 1) :=
-            if (last : Bool)
-            then 1#1
-            else 0#1
-          let w__4 ← (( do
-            (Elem_set result e psize (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend pbit psize))) )
-            : SailM (BitVec (Sail.Int.toNatChecked PL)) )
-          let result := (w__4 : (BitVec (Sail.Int.toNatChecked PL)))
-          let operand1 : (BitVec rsize) := (BitVec.subInt operand1 1)
-          (pure ((last, operand1, result)))
-      (pure loop_vars)) ) : SailM (Bool × (BitVec rsize) × (BitVec (Sail.Int.toNatChecked PL))) )
-  let split_vec ← (( do (PredTest mask result esize) ) : SailM (BitVec 4) )
-  let w__5 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__5 with N := (Sail.BitVec.extractLsb split_vec 3 3) }
-  let w__6 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__6 with Z := (Sail.BitVec.extractLsb split_vec 2 2) }
-  let w__7 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__7 with C := (Sail.BitVec.extractLsb split_vec 1 1) }
-  let w__8 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__8 with V := (Sail.BitVec.extractLsb split_vec 0 0) }
-  (P_set d PL (Sail.BitVec.castWidth result))
-
-
-/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, k_is_unsigned : Bool, m : Nat, n : Nat, rsize
-  : Nat, List.elem rsize [32, 64] ∧
-  0 ≤ n ∧
-  n ≤ 31 ∧
-  0 ≤ m ∧ m ≤ 31 ∧ List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 15 ∧ (is_VL VL) -/
-def execute_WHILEHS_P_P_RR__ (VL : Nat) (d : Nat) (esize : Nat) (m : Nat) (n : Nat) (op : SVECmp) (rsize : Nat) (is_unsigned : Bool) : SailM Unit := do
-  (CheckSVEEnabled ())
-  let VL : Nat := VL
-  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
-  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
-  let mask : (BitVec (Sail.Int.toNatChecked PL)) := (Sail.BitVec.castWidth (Ones (n := PL)))
-  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read n rsize)) ) : SailM (BitVec rsize) )
-  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read m rsize)) ) : SailM (BitVec rsize) )
-  let result ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5242)
-      (Sail.Int.toNatChecked (PL)))) ) : SailM (BitVec (Sail.Int.toNatChecked PL)) )
-  let last : Bool := true
-  let psize : Nat := (Sail.Int.toNatChecked ((Int.ediv esize 8)))
-  let (last, operand1, result) ← (( do
-    let loop_e_lower : Nat := 0
-    let loop_e_upper : Int := (elements -i 1)
-    (do
-      let mut loop_vars := (last, operand1, result)
-      for e in [loop_e_upper:loop_e_lower:-1]i do
-        let (last, operand1, result) := loop_vars
-        loop_vars ← do
-          let cond ← (( do (undefined_bool_at (← occLabel 5243) ()) ) : SailM Bool )
-          let cond ← (( do
-            match op with
-            | .Cmp_GT =>
-              (do
-                let w__0 ← (( do (asl_Int operand1 is_unsigned) ) : SailM Int )
-                let w__1 ← (( do (asl_Int operand2 is_unsigned) ) : SailM Int )
-                let cond := ((w__0 >b w__1) : Bool)
-                (pure (cond)))
-            | .Cmp_GE =>
-              (do
-                let w__2 ← (( do (asl_Int operand1 is_unsigned) ) : SailM Int )
-                let w__3 ← (( do (asl_Int operand2 is_unsigned) ) : SailM Int )
-                let cond := ((w__2 ≥b w__3) : Bool)
-                (pure (cond)))
-            | _ => (pure (cond)) ) : SailM Bool )
-          let last : Bool := (last && cond)
-          let pbit : (BitVec 1) :=
-            if (last : Bool)
-            then 1#1
-            else 0#1
-          let w__4 ← (( do
-            (Elem_set result e psize (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend pbit psize))) )
-            : SailM (BitVec (Sail.Int.toNatChecked PL)) )
-          let result := (w__4 : (BitVec (Sail.Int.toNatChecked PL)))
-          let operand1 : (BitVec rsize) := (BitVec.subInt operand1 1)
-          (pure ((last, operand1, result)))
-      (pure loop_vars)) ) : SailM (Bool × (BitVec rsize) × (BitVec (Sail.Int.toNatChecked PL))) )
-  let split_vec ← (( do (PredTest mask result esize) ) : SailM (BitVec 4) )
-  let w__5 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__5 with N := (Sail.BitVec.extractLsb split_vec 3 3) }
-  let w__6 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__6 with Z := (Sail.BitVec.extractLsb split_vec 2 2) }
-  let w__7 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__7 with C := (Sail.BitVec.extractLsb split_vec 1 1) }
-  let w__8 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__8 with V := (Sail.BitVec.extractLsb split_vec 0 0) }
-  (P_set d PL (Sail.BitVec.castWidth result))
-
-
-/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, k_is_unsigned : Bool, m : Nat, n : Nat, rsize
-  : Nat, List.elem rsize [32, 64] ∧
-  0 ≤ n ∧
-  n ≤ 31 ∧
-  0 ≤ m ∧ m ≤ 31 ∧ List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 15 ∧ (is_VL VL) -/
-def execute_WHILEGT_P_P_RR__ (VL : Nat) (d : Nat) (esize : Nat) (m : Nat) (n : Nat) (op : SVECmp) (rsize : Nat) (is_unsigned : Bool) : SailM Unit := do
-  (CheckSVEEnabled ())
-  let VL : Nat := VL
-  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
-  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
-  let mask : (BitVec (Sail.Int.toNatChecked PL)) := (Sail.BitVec.castWidth (Ones (n := PL)))
-  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read n rsize)) ) : SailM (BitVec rsize) )
-  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read m rsize)) ) : SailM (BitVec rsize) )
-  let result ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5244)
-      (Sail.Int.toNatChecked (PL)))) ) : SailM (BitVec (Sail.Int.toNatChecked PL)) )
-  let last : Bool := true
-  let psize : Nat := (Sail.Int.toNatChecked ((Int.ediv esize 8)))
-  let (last, operand1, result) ← (( do
-    let loop_e_lower : Nat := 0
-    let loop_e_upper : Int := (elements -i 1)
-    (do
-      let mut loop_vars := (last, operand1, result)
-      for e in [loop_e_upper:loop_e_lower:-1]i do
-        let (last, operand1, result) := loop_vars
-        loop_vars ← do
-          let cond ← (( do (undefined_bool_at (← occLabel 5245) ()) ) : SailM Bool )
-          let cond ← (( do
-            match op with
-            | .Cmp_GT =>
-              (do
-                let w__0 ← (( do (asl_Int operand1 is_unsigned) ) : SailM Int )
-                let w__1 ← (( do (asl_Int operand2 is_unsigned) ) : SailM Int )
-                let cond := ((w__0 >b w__1) : Bool)
-                (pure (cond)))
-            | .Cmp_GE =>
-              (do
-                let w__2 ← (( do (asl_Int operand1 is_unsigned) ) : SailM Int )
-                let w__3 ← (( do (asl_Int operand2 is_unsigned) ) : SailM Int )
-                let cond := ((w__2 ≥b w__3) : Bool)
-                (pure (cond)))
-            | _ => (pure (cond)) ) : SailM Bool )
-          let last : Bool := (last && cond)
-          let pbit : (BitVec 1) :=
-            if (last : Bool)
-            then 1#1
-            else 0#1
-          let w__4 ← (( do
-            (Elem_set result e psize (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend pbit psize))) )
-            : SailM (BitVec (Sail.Int.toNatChecked PL)) )
-          let result := (w__4 : (BitVec (Sail.Int.toNatChecked PL)))
-          let operand1 : (BitVec rsize) := (BitVec.subInt operand1 1)
-          (pure ((last, operand1, result)))
-      (pure loop_vars)) ) : SailM (Bool × (BitVec rsize) × (BitVec (Sail.Int.toNatChecked PL))) )
-  let split_vec ← (( do (PredTest mask result esize) ) : SailM (BitVec 4) )
-  let w__5 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__5 with N := (Sail.BitVec.extractLsb split_vec 3 3) }
-  let w__6 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__6 with Z := (Sail.BitVec.extractLsb split_vec 2 2) }
-  let w__7 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__7 with C := (Sail.BitVec.extractLsb split_vec 1 1) }
-  let w__8 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__8 with V := (Sail.BitVec.extractLsb split_vec 0 0) }
-  (P_set d PL (Sail.BitVec.castWidth result))
-
-
-/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, k_is_unsigned : Bool, m : Nat, n : Nat, rsize
-  : Nat, List.elem rsize [32, 64] ∧
-  0 ≤ n ∧
-  n ≤ 31 ∧
-  0 ≤ m ∧ m ≤ 31 ∧ List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 15 ∧ (is_VL VL) -/
-def execute_WHILEGE_P_P_RR__ (VL : Nat) (d : Nat) (esize : Nat) (m : Nat) (n : Nat) (op : SVECmp) (rsize : Nat) (is_unsigned : Bool) : SailM Unit := do
-  (CheckSVEEnabled ())
-  let VL : Nat := VL
-  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
-  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
-  let mask : (BitVec (Sail.Int.toNatChecked PL)) := (Sail.BitVec.castWidth (Ones (n := PL)))
-  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read n rsize)) ) : SailM (BitVec rsize) )
-  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read m rsize)) ) : SailM (BitVec rsize) )
-  let result ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5246)
-      (Sail.Int.toNatChecked (PL)))) ) : SailM (BitVec (Sail.Int.toNatChecked PL)) )
-  let last : Bool := true
-  let psize : Nat := (Sail.Int.toNatChecked ((Int.ediv esize 8)))
-  let (last, operand1, result) ← (( do
-    let loop_e_lower : Nat := 0
-    let loop_e_upper : Int := (elements -i 1)
-    (do
-      let mut loop_vars := (last, operand1, result)
-      for e in [loop_e_upper:loop_e_lower:-1]i do
-        let (last, operand1, result) := loop_vars
-        loop_vars ← do
-          let cond ← (( do (undefined_bool_at (← occLabel 5247) ()) ) : SailM Bool )
-          let cond ← (( do
-            match op with
-            | .Cmp_GT =>
-              (do
-                let w__0 ← (( do (asl_Int operand1 is_unsigned) ) : SailM Int )
-                let w__1 ← (( do (asl_Int operand2 is_unsigned) ) : SailM Int )
-                let cond := ((w__0 >b w__1) : Bool)
-                (pure (cond)))
-            | .Cmp_GE =>
-              (do
-                let w__2 ← (( do (asl_Int operand1 is_unsigned) ) : SailM Int )
-                let w__3 ← (( do (asl_Int operand2 is_unsigned) ) : SailM Int )
-                let cond := ((w__2 ≥b w__3) : Bool)
-                (pure (cond)))
-            | _ => (pure (cond)) ) : SailM Bool )
-          let last : Bool := (last && cond)
-          let pbit : (BitVec 1) :=
-            if (last : Bool)
-            then 1#1
-            else 0#1
-          let w__4 ← (( do
-            (Elem_set result e psize (Sail.BitVec.castWidth (Sail.BitVec.zeroExtend pbit psize))) )
-            : SailM (BitVec (Sail.Int.toNatChecked PL)) )
-          let result := (w__4 : (BitVec (Sail.Int.toNatChecked PL)))
-          let operand1 : (BitVec rsize) := (BitVec.subInt operand1 1)
-          (pure ((last, operand1, result)))
-      (pure loop_vars)) ) : SailM (Bool × (BitVec rsize) × (BitVec (Sail.Int.toNatChecked PL))) )
-  let split_vec ← (( do (PredTest mask result esize) ) : SailM (BitVec 4) )
-  let w__5 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__5 with N := (Sail.BitVec.extractLsb split_vec 3 3) }
-  let w__6 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__6 with Z := (Sail.BitVec.extractLsb split_vec 2 2) }
-  let w__7 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__7 with C := (Sail.BitVec.extractLsb split_vec 1 1) }
-  let w__8 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__8 with V := (Sail.BitVec.extractLsb split_vec 0 0) }
-  (P_set d PL (Sail.BitVec.castWidth result))
+      if ((__PSTATE_EL == EL1) : Bool)
+      then
+        (do
+          let w__6 ← (( do
+            (pure ((← do
+                  if ((← do
+                       (EL2Enabled ())) : Bool)
+                  then
+                    (do
+                      let w__4 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
+                      (pure (((! w__4) : Bool))))
+                  else (pure false)) && ((__HSTR_EL2_T8 == 1#1) : Bool))) ) : SailM Bool )
+          if (w__6 : Bool)
+          then
+            (do
+              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
+          else
+            (do
+              let w__10 ← (( do
+                (pure ((← do
+                      if ((← do
+                           (EL2Enabled ())) : Bool)
+                      then
+                        (do
+                          (ELUsingAArch32 EL2))
+                      else (pure false)) && ((__HSTR_T8 == 1#1) : Bool))) ) : SailM Bool )
+              if (w__10 : Bool)
+              then
+                (do
+                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
+              else sailThrow ((Error_Undefined ()))))
+      else
+        (do
+          if ((__PSTATE_EL == EL2) : Bool)
+          then
+            (do
+              let w__11 ← (( do (SecurityStateAtEL EL2) ) : SailM SecurityState )
+              let w__12 ← (( do (R_read t) ) : SailM (BitVec 32) )
+              (AArch32_TLBI_VA w__11 Regime_EL2 VMID_NONE Shareability_NSH TLBILevel_Last
+                TLBI_AllAttr w__12))
+          else
+            (do
+              if ((__PSTATE_EL == EL3) : Bool)
+              then
+                (do
+                  let w__13 ← (( do (HaveEL EL2) ) : SailM Bool )
+                  if ((! w__13) : Bool)
+                  then sailThrow ((Error_Undefined ()))
+                  else
+                    (do
+                      let w__14 ← (( do (VMID_read ()) ) : SailM (BitVec 16) )
+                      let w__15 ← (( do (R_read t) ) : SailM (BitVec 32) )
+                      (AArch32_TLBI_VA SS_NonSecure Regime_EL2 w__14 Shareability_NSH TLBILevel_Last
+                        TLBI_AllAttr w__15)))
+              else (pure (())))))
 
 
 end ArmFull.Functions

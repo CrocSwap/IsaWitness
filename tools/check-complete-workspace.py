@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run all four fresh owned-package gates; launch with run-cold-build.sh on GB10."""
+"""Run all four fresh owned-package gates; launch with run-cold-build.sh."""
 import argparse
 import json
 import os
@@ -26,7 +26,7 @@ with (output / 'fetch-lean-sail.log').open('w') as log:
 fetch_seconds = time.monotonic() - fetch_opened
 if fetch_code:
     summary = dict(status='FAIL', fetch_exit_code=fetch_code, fetch_seconds=fetch_seconds,
-                   packages=[], model_artifact_check_exit=None,
+                   packages=[], canonical_module_check_exit=None,
                    wall_seconds=time.monotonic()-started,
                    scope='Runtime fetch failed; no Lake update/build/gate was attempted.')
     (output / 'summary.json').write_text(json.dumps(summary, indent=2) + '\n')
@@ -52,15 +52,15 @@ for name, relative in packages:
 model_check = None
 if len(results) == len(packages) and all(r['exit_code'] == 0 for r in results):
     with (output / 'model-reproduction.json').open('w') as log:
-        model_check = subprocess.run(['python3', 'tools/check-model-reproduction.py', '--artifacts'],
+        model_check = subprocess.run(['python3', 'tools/check-model-reproduction.py', '--built'],
                                      cwd=root, stdout=log, stderr=subprocess.STDOUT).returncode
 elapsed = time.monotonic() - started
 passed = (len(results) == len(packages) and all(r['exit_code'] == 0 for r in results)
           and model_check == 0 and elapsed <= 600)
 summary = dict(status='PASS' if passed else 'FAIL', fetch_exit_code=fetch_code, fetch_seconds=fetch_seconds, packages=results,
                wall_seconds=elapsed, within_600_seconds=elapsed <= 600,
-               model_artifact_check_exit=model_check,
-               scope='Fresh owned-package builds/gates and all canonical model hashes. For a cold measurement use a fresh source checkout without build products.')
+               canonical_module_check_exit=model_check,
+               scope='Fresh owned-package builds/gates and all canonical source hashes and built module inventory. For a cold measurement use a fresh source checkout without build products.')
 (output / 'summary.json').write_text(json.dumps(summary, indent=2) + '\n')
 print(json.dumps(summary, indent=2))
 raise SystemExit(not passed)

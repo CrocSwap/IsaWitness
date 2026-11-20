@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -412,10 +412,6 @@ def _update_SCR_EL3_Type_TWERR (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) 
   (Sail.BitVec.updateSubrange v 52 52 x)
 
 
-def HaveEL (el : (BitVec 2)) : Bool :=
-  true
-
-
 def undefined_SCR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
   (undefined_bitvector_at (ℓ.child 0) 32)
 
@@ -424,8 +420,53 @@ def Mk_SCR_Type (v : (BitVec 32)) : (BitVec 32) :=
   v
 
 
-def HasArchVersion (version : ArchVersion) : Bool :=
-  true
+def HasArchVersion (version : ArchVersion) : SailM Bool := do
+  match version with
+  | .v8Ap0 =>
+    (do
+      readReg v8Ap0_IMPLEMENTED)
+  | .v8Ap1 =>
+    (do
+      readReg v8Ap1_IMPLEMENTED)
+  | .v8Ap2 =>
+    (do
+      readReg v8Ap2_IMPLEMENTED)
+  | .v8Ap3 =>
+    (do
+      readReg v8Ap3_IMPLEMENTED)
+  | .v8Ap4 =>
+    (do
+      readReg v8Ap4_IMPLEMENTED)
+  | .v8Ap5 =>
+    (do
+      readReg v8Ap5_IMPLEMENTED)
+  | .v8Ap6 =>
+    (do
+      readReg v8Ap6_IMPLEMENTED)
+  | .v8Ap7 =>
+    (do
+      readReg v8Ap7_IMPLEMENTED)
+  | .v8Ap8 =>
+    (do
+      readReg v8Ap8_IMPLEMENTED)
+  | .v8Ap9 =>
+    (do
+      readReg v8Ap9_IMPLEMENTED)
+  | .v9Ap0 =>
+    (do
+      readReg v9Ap0_IMPLEMENTED)
+  | .v9Ap1 =>
+    (do
+      readReg v9Ap1_IMPLEMENTED)
+  | .v9Ap2 =>
+    (do
+      readReg v9Ap2_IMPLEMENTED)
+  | .v9Ap3 =>
+    (do
+      readReg v9Ap3_IMPLEMENTED)
+  | .v9Ap4 =>
+    (do
+      readReg v9Ap4_IMPLEMENTED)
 
 
 def undefined_FPSCR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
@@ -846,62 +887,6 @@ def _get_MDCR_EL2_Type_HPMD (v : (BitVec 64)) : (BitVec 1) :=
 
 def _get_HDCR_Type_HPME (v : (BitVec 32)) : (BitVec 1) :=
   (Sail.BitVec.extractLsb v 7 7)
-
-
-def _update_HDCR_Type_HPME (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 7 7 x)
-
-
-def _update_MDCR_EL2_Type_HPME (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 7 7 x)
-
-
-def _get_MDCR_EL2_Type_HPME (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 7 7)
-
-
-def _get_HDCR_Type_HPMFZO (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 29 29)
-
-
-def _update_HDCR_Type_HPMFZO (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 29 29 x)
-
-
-def _update_MDCR_EL2_Type_HPMFZO (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 29 29 x)
-
-
-def _get_MDCR_EL2_Type_HPMFZO (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 29 29)
-
-
-def _get_HDCR_Type_HPMN (v : (BitVec 32)) : (BitVec 5) :=
-  (Sail.BitVec.extractLsb v 4 0)
-
-
-def _update_HDCR_Type_HPMN (v : (BitVec 32)) (x : (BitVec 5)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 4 0 x)
-
-
-def _update_MDCR_EL2_Type_HPMN (v : (BitVec 64)) (x : (BitVec 5)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 4 0 x)
-
-
-def _get_MDCR_EL2_Type_HPMN (v : (BitVec 64)) : (BitVec 5) :=
-  (Sail.BitVec.extractLsb v 4 0)
-
-
-def _get_HDCR_Type_MTPME (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 28 28)
-
-
-def _update_HDCR_Type_MTPME (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 28 28 x)
-
-
-def _update_MDCR_EL2_Type_MTPME (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 28 28 x)
 
 
 end ArmFull.Functions

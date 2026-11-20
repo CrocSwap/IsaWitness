@@ -1,17 +1,17 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0051
-import ArmFull.Fn.M0061
-import ArmFull.Fn.M0118
-import ArmFull.Fn.M0146
-import ArmFull.Fn.M0147
-import ArmFull.Fn.M0218
-import ArmFull.Fn.M0227
-import ArmFull.Fn.M0840
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0051
+public import ArmFull.Fn.M0087
+public import ArmFull.Fn.M0145
+public import ArmFull.Fn.M0146
+public import ArmFull.Fn.M0147
+public import ArmFull.Fn.M0214
+public import ArmFull.Fn.M0217
+public import ArmFull.Fn.M0866 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -113,642 +113,651 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-/-- Type quantifiers: VL : Nat, esize : Nat, g : Nat, level : Nat, n : Nat, offset : Int, scale :
-  Nat, k_stream : Bool, scale = 3 ∧
-  0 ≤ n ∧
-  n ≤ 31 ∧
-  List.elem level [0, 1, 2, 3] ∧
-  List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧ esize = 64 ∧ (is_VL VL) -/
-def execute_PRFD_I_P_BI_S (VL : Nat) (esize : Nat) (g : Nat) (level : Nat) (n : Nat) (offset : Int) (pref_hint : PrefetchHint) (scale : Nat) (stream : Bool) : SailM Unit := do
+/-- Type quantifiers: VL : Nat, dn : Nat, esize : Nat, imm : Nat, k_is_unsigned : Bool, 1 ≤ imm
+  ∧ imm ≤ 16 ∧ esize = 64 ∧ 0 ≤ dn ∧ dn ≤ 31 ∧ (is_VL VL) -/
+def execute_UQDECD_Z_ZS__ (VL : Nat) (dn : Nat) (esize : Nat) (imm : Nat) (pat : (BitVec 5)) (is_unsigned : Bool) : SailM Unit := do
+  (CheckSVEEnabled ())
+  let VL : Nat := VL
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let count ← (( do (DecodePredCount pat esize) ) : SailM Int )
+  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read dn VL)) ) : SailM (BitVec VL) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5360)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let result ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
+    (do
+      let mut loop_vars := result
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let result := loop_vars
+        loop_vars ← do
+          let w__0 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 e esize)) ) : SailM
+            (BitVec esize) )
+          let element1 ← (( do (asl_Int w__0 is_unsigned) ) : SailM Int )
+          let (__tup_0, _) ← (( do
+            ((fun (x0, x1) => ((Sail.BitVec.castWidth x0), x1)) <$> (SatQ
+              (element1 -i (count *i imm)) esize is_unsigned)) ) : SailM ((BitVec esize) × Bool) )
+          (Elem_set result e esize (Sail.BitVec.castWidth __tup_0))
+      (pure loop_vars)) ) : SailM (BitVec VL) )
+  (Z_set dn VL (Sail.BitVec.castWidth result))
+
+
+/-- Type quantifiers: VL : Nat, dn : Nat, esize : Nat, imm : Nat, k_is_unsigned : Bool, 1 ≤ imm
+  ∧ imm ≤ 16 ∧ esize = 16 ∧ 0 ≤ dn ∧ dn ≤ 31 ∧ (is_VL VL) -/
+def execute_SQDECH_Z_ZS__ (VL : Nat) (dn : Nat) (esize : Nat) (imm : Nat) (pat : (BitVec 5)) (is_unsigned : Bool) : SailM Unit := do
+  (CheckSVEEnabled ())
+  let VL : Nat := VL
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let count ← (( do (DecodePredCount pat esize) ) : SailM Int )
+  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read dn VL)) ) : SailM (BitVec VL) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5361)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let result ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
+    (do
+      let mut loop_vars := result
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let result := loop_vars
+        loop_vars ← do
+          let w__0 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 e esize)) ) : SailM
+            (BitVec esize) )
+          let element1 ← (( do (asl_Int w__0 is_unsigned) ) : SailM Int )
+          let (__tup_0, _) ← (( do
+            ((fun (x0, x1) => ((Sail.BitVec.castWidth x0), x1)) <$> (SatQ
+              (element1 -i (count *i imm)) esize is_unsigned)) ) : SailM ((BitVec esize) × Bool) )
+          (Elem_set result e esize (Sail.BitVec.castWidth __tup_0))
+      (pure loop_vars)) ) : SailM (BitVec VL) )
+  (Z_set dn VL (Sail.BitVec.castWidth result))
+
+
+/-- Type quantifiers: VL : Nat, dn : Nat, esize : Nat, imm : Nat, k_is_unsigned : Bool, 1 ≤ imm
+  ∧ imm ≤ 16 ∧ esize = 32 ∧ 0 ≤ dn ∧ dn ≤ 31 ∧ (is_VL VL) -/
+def execute_SQDECW_Z_ZS__ (VL : Nat) (dn : Nat) (esize : Nat) (imm : Nat) (pat : (BitVec 5)) (is_unsigned : Bool) : SailM Unit := do
+  (CheckSVEEnabled ())
+  let VL : Nat := VL
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let count ← (( do (DecodePredCount pat esize) ) : SailM Int )
+  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read dn VL)) ) : SailM (BitVec VL) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5362)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let result ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
+    (do
+      let mut loop_vars := result
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let result := loop_vars
+        loop_vars ← do
+          let w__0 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 e esize)) ) : SailM
+            (BitVec esize) )
+          let element1 ← (( do (asl_Int w__0 is_unsigned) ) : SailM Int )
+          let (__tup_0, _) ← (( do
+            ((fun (x0, x1) => ((Sail.BitVec.castWidth x0), x1)) <$> (SatQ
+              (element1 -i (count *i imm)) esize is_unsigned)) ) : SailM ((BitVec esize) × Bool) )
+          (Elem_set result e esize (Sail.BitVec.castWidth __tup_0))
+      (pure loop_vars)) ) : SailM (BitVec VL) )
+  (Z_set dn VL (Sail.BitVec.castWidth result))
+
+
+/-- Type quantifiers: VL : Nat, dn : Nat, esize : Nat, imm : Nat, k_is_unsigned : Bool, 1 ≤ imm
+  ∧ imm ≤ 16 ∧ esize = 64 ∧ 0 ≤ dn ∧ dn ≤ 31 ∧ (is_VL VL) -/
+def execute_SQDECD_Z_ZS__ (VL : Nat) (dn : Nat) (esize : Nat) (imm : Nat) (pat : (BitVec 5)) (is_unsigned : Bool) : SailM Unit := do
+  (CheckSVEEnabled ())
+  let VL : Nat := VL
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let count ← (( do (DecodePredCount pat esize) ) : SailM Int )
+  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read dn VL)) ) : SailM (BitVec VL) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5363)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let result ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
+    (do
+      let mut loop_vars := result
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let result := loop_vars
+        loop_vars ← do
+          let w__0 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 e esize)) ) : SailM
+            (BitVec esize) )
+          let element1 ← (( do (asl_Int w__0 is_unsigned) ) : SailM Int )
+          let (__tup_0, _) ← (( do
+            ((fun (x0, x1) => ((Sail.BitVec.castWidth x0), x1)) <$> (SatQ
+              (element1 -i (count *i imm)) esize is_unsigned)) ) : SailM ((BitVec esize) × Bool) )
+          (Elem_set result e esize (Sail.BitVec.castWidth __tup_0))
+      (pure loop_vars)) ) : SailM (BitVec VL) )
+  (Z_set dn VL (Sail.BitVec.castWidth result))
+
+
+/-- Type quantifiers: esize : Nat, m : Nat, n : Nat, 0 ≤ n ∧
+  n ≤ 31 ∧ 0 ≤ m ∧ m ≤ 31 ∧ List.elem esize [32, 64] -/
+def execute_CTERMEQ_RR__ (esize : Nat) (m : Nat) (n : Nat) (op : SVECmp) : SailM Unit := do
+  (CheckSVEEnabled ())
+  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read n esize)) ) : SailM (BitVec esize) )
+  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read m esize)) ) : SailM (BitVec esize) )
+  let element1 : Int := (BitVec.toNat operand1)
+  let element2 : Int := (BitVec.toNat operand2)
+  let term ← (( do (undefined_bool_at (← occLabel 5364) ()) ) : SailM Bool )
+  let term : Bool :=
+    match op with
+    | .Cmp_EQ => (element1 == element2)
+    | .Cmp_NE => (element1 != element2)
+    | _ => term
+  if (term : Bool)
+  then
+    (do
+      let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__0 with N := 1#1 }
+      let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__1 with V := 0#1 })
+  else
+    (do
+      let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__2 with N := 0#1 }
+      let w__3 ← (( do readReg PSTATE ) : SailM ProcState )
+      let w__4 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__3 with V := (Complement.complement w__4.C) })
+
+
+/-- Type quantifiers: esize : Nat, m : Nat, n : Nat, 0 ≤ n ∧
+  n ≤ 31 ∧ 0 ≤ m ∧ m ≤ 31 ∧ List.elem esize [32, 64] -/
+def execute_CTERMNE_RR__ (esize : Nat) (m : Nat) (n : Nat) (op : SVECmp) : SailM Unit := do
+  (CheckSVEEnabled ())
+  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read n esize)) ) : SailM (BitVec esize) )
+  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (X_read m esize)) ) : SailM (BitVec esize) )
+  let element1 : Int := (BitVec.toNat operand1)
+  let element2 : Int := (BitVec.toNat operand2)
+  let term ← (( do (undefined_bool_at (← occLabel 5365) ()) ) : SailM Bool )
+  let term : Bool :=
+    match op with
+    | .Cmp_EQ => (element1 == element2)
+    | .Cmp_NE => (element1 != element2)
+    | _ => term
+  if (term : Bool)
+  then
+    (do
+      let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__0 with N := 1#1 }
+      let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__1 with V := 0#1 })
+  else
+    (do
+      let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__2 with N := 0#1 }
+      let w__3 ← (( do readReg PSTATE ) : SailM ProcState )
+      let w__4 ← (( do readReg PSTATE ) : SailM ProcState )
+      writeReg PSTATE { w__3 with V := (Complement.complement w__4.C) })
+
+
+/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, List.elem esize [8, 16, 32, 64] ∧
+  0 ≤ d ∧ d ≤ 31 ∧ (is_VL VL) -/
+def execute_FDUP_Z_I__ (VL : Nat) (d : Nat) (esize : Nat) (imm : (BitVec esize)) : SailM Unit := do
+  (CheckSVEEnabled ())
+  let VL : Nat := VL
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5366)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let result ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
+    (do
+      let mut loop_vars := result
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let result := loop_vars
+        loop_vars ← do (Elem_set result e esize (Sail.BitVec.castWidth imm))
+      (pure loop_vars)) ) : SailM (BitVec VL) )
+  (Z_set d VL (Sail.BitVec.castWidth result))
+
+
+/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, g : Nat, 0 ≤ g ∧
+  g ≤ 15 ∧ List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 31 ∧ (is_VL VL) -/
+def execute_FCPY_Z_P_I__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (imm : (BitVec esize)) : SailM Unit := do
   (CheckSVEEnabled ())
   let VL : Nat := VL
   let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
   let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
   let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
     (BitVec (Sail.Int.toNatChecked PL)) )
-  let base ← (( do (undefined_bitvector_at (← occLabel 5832) 64) ) : SailM (BitVec 64) )
-  let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
-  let base ← (( do
-    if (w__0 : Bool)
-    then
-      (do
-        if ((n == 31) : Bool)
-        then
-          (do
-            (SP_read ()))
-        else
-          (do
-            (X_read n 64)))
-    else (pure (base)) ) : SailM (BitVec 64) )
-  let base := base
-  let loop_e_lower : Nat := 0
-  let loop_e_upper : Int := (elements -i 1)
-  (do
-    let mut loop_vars := ()
-    for e in [loop_e_lower:loop_e_upper:1]i do
-      let () := loop_vars
-      loop_vars ← do
-        let w__4 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
-        let _ : Unit :=
-          if (w__4 : Bool)
-          then
-            (let eoff : Int := ((offset *i elements) +i e)
-            let addr : (BitVec 64) := (BitVec.addInt base (Int.shiftl eoff scale))
-            (Hint_Prefetch addr pref_hint level stream))
-          else ()
-        (pure (()))
-    (pure loop_vars))
-
-
-/-- Type quantifiers: VL : Nat, esize : Nat, g : Nat, level : Nat, m : Nat, n : Nat, scale : Nat, k_stream
-  : Bool, scale = 0 ∧
-  0 ≤ n ∧
-  n ≤ 31 ∧
-  0 ≤ m ∧
-  m ≤ 31 ∧
-  List.elem level [0, 1, 2, 3] ∧ List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧ esize = 8 ∧ (is_VL VL) -/
-def execute_PRFB_I_P_BR_S (VL : Nat) (esize : Nat) (g : Nat) (level : Nat) (m : Nat) (n : Nat) (pref_hint : PrefetchHint) (scale : Nat) (stream : Bool) : SailM Unit := do
-  (CheckSVEEnabled ())
-  let VL : Nat := VL
-  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
-  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
-  let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
-    (BitVec (Sail.Int.toNatChecked PL)) )
-  let base ← (( do (undefined_bitvector_at (← occLabel 5833) 64) ) : SailM (BitVec 64) )
-  let offset ← (( do (undefined_bitvector_at (← occLabel 5834) 64) ) : SailM (BitVec 64) )
-  let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
-  let (base, offset) ← (( do
-    if (w__0 : Bool)
-    then
-      (do
-        let w__3 ← (( do
-          if ((n == 31) : Bool)
+  let result ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read d VL)) ) : SailM (BitVec VL) )
+  let result ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
+    (do
+      let mut loop_vars := result
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let result := loop_vars
+        loop_vars ← do
+          let w__0 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
+          if (w__0 : Bool)
           then
             (do
-              (SP_read ()))
+              (Elem_set result e esize (Sail.BitVec.castWidth imm)))
+          else (pure (result))
+      (pure loop_vars)) ) : SailM (BitVec VL) )
+  (Z_set d VL (Sail.BitVec.castWidth result))
+
+
+/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, imm : Int, List.elem esize [8, 16, 32, 64] ∧
+  0 ≤ d ∧ d ≤ 31 ∧ (is_VL VL) -/
+def execute_DUP_Z_I__ (VL : Nat) (d : Nat) (esize : Nat) (imm : Int) : SailM Unit := do
+  (CheckSVEEnabled ())
+  let VL : Nat := VL
+  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
+  let result : (BitVec VL) :=
+    (Sail.BitVec.castWidth (Replicate__1 (n := (Sail.Int.toNatChecked (VL)))
+      (integer_subrange imm (esize -i 1) 0)))
+  (Z_set d VL (Sail.BitVec.castWidth result))
+
+
+/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, g : Nat, imm : Int, k_merging : Bool, 0 ≤ g
+  ∧ g ≤ 15 ∧ List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 31 ∧ (is_VL VL) -/
+def execute_CPY_Z_P_I__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (imm : Int) (merging : Bool) : SailM Unit := do
+  (CheckSVEEnabled ())
+  let VL : Nat := VL
+  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let dest ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read d VL)) ) : SailM (BitVec VL) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5367)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let result ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
+    (do
+      let mut loop_vars := result
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let result := loop_vars
+        loop_vars ← do
+          let w__0 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
+          if (w__0 : Bool)
+          then
+            (do
+              (Elem_set result e esize (Sail.BitVec.castWidth (integer_subrange imm (esize -i 1) 0))))
           else
             (do
-              (X_read n 64)) ) : SailM (BitVec 64) )
-        let base := (w__3 : (BitVec 64))
-        let w__4 ← (( do (X_read m 64) ) : SailM (BitVec 64) )
-        let offset := (w__4 : (BitVec 64))
-        (pure ((base, offset))))
-    else (pure ((base, offset))) ) : SailM ((BitVec 64) × (BitVec 64)) )
-  let offset := offset
-  let base := base
-  let loop_e_lower : Nat := 0
-  let loop_e_upper : Int := (elements -i 1)
-  (do
-    let mut loop_vars := ()
-    for e in [loop_e_lower:loop_e_upper:1]i do
-      let () := loop_vars
-      loop_vars ← do
-        let w__5 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
-        let _ : Unit :=
-          if (w__5 : Bool)
-          then
-            (let eoff : Int := ((BitVec.toNat offset) +i e)
-            let addr : (BitVec 64) := (BitVec.addInt base (Int.shiftl eoff scale))
-            (Hint_Prefetch addr pref_hint level stream))
-          else ()
-        (pure (()))
-    (pure loop_vars))
+              if (merging : Bool)
+              then
+                (do
+                  let w__2 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read dest e esize)) ) :
+                    SailM (BitVec esize) )
+                  (Elem_set result e esize (Sail.BitVec.castWidth w__2)))
+              else
+                (do
+                  (Elem_set result e esize (Sail.BitVec.castWidth (Zeros (n := esize))))))
+      (pure loop_vars)) ) : SailM (BitVec VL) )
+  (Z_set d VL (Sail.BitVec.castWidth result))
 
 
-/-- Type quantifiers: VL : Nat, esize : Nat, g : Nat, level : Nat, m : Nat, n : Nat, scale : Nat, k_stream
-  : Bool, scale = 1 ∧
-  0 ≤ n ∧
-  n ≤ 31 ∧
-  0 ≤ m ∧
-  m ≤ 31 ∧
-  List.elem level [0, 1, 2, 3] ∧
-  List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧ esize = 16 ∧ (is_VL VL) -/
-def execute_PRFH_I_P_BR_S (VL : Nat) (esize : Nat) (g : Nat) (level : Nat) (m : Nat) (n : Nat) (pref_hint : PrefetchHint) (scale : Nat) (stream : Bool) : SailM Unit := do
+/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, g : Nat, imm : Int, k_merging : Bool, 0 ≤ g
+  ∧ g ≤ 15 ∧ List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 31 ∧ (is_VL VL) -/
+def execute_CPY_Z_O_I__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (imm : Int) (merging : Bool) : SailM Unit := do
   (CheckSVEEnabled ())
   let VL : Nat := VL
   let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
   let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
   let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
     (BitVec (Sail.Int.toNatChecked PL)) )
-  let base ← (( do (undefined_bitvector_at (← occLabel 5835) 64) ) : SailM (BitVec 64) )
-  let offset ← (( do (undefined_bitvector_at (← occLabel 5836) 64) ) : SailM (BitVec 64) )
-  let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
-  let (base, offset) ← (( do
-    if (w__0 : Bool)
-    then
-      (do
-        let w__3 ← (( do
-          if ((n == 31) : Bool)
+  let dest ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read d VL)) ) : SailM (BitVec VL) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 5368)
+      (Sail.Int.toNatChecked (VL)))) ) : SailM (BitVec VL) )
+  let result ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
+    (do
+      let mut loop_vars := result
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let result := loop_vars
+        loop_vars ← do
+          let w__0 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
+          if (w__0 : Bool)
           then
             (do
-              (SP_read ()))
+              (Elem_set result e esize (Sail.BitVec.castWidth (integer_subrange imm (esize -i 1) 0))))
           else
             (do
-              (X_read n 64)) ) : SailM (BitVec 64) )
-        let base := (w__3 : (BitVec 64))
-        let w__4 ← (( do (X_read m 64) ) : SailM (BitVec 64) )
-        let offset := (w__4 : (BitVec 64))
-        (pure ((base, offset))))
-    else (pure ((base, offset))) ) : SailM ((BitVec 64) × (BitVec 64)) )
-  let offset := offset
-  let base := base
-  let loop_e_lower : Nat := 0
-  let loop_e_upper : Int := (elements -i 1)
-  (do
-    let mut loop_vars := ()
-    for e in [loop_e_lower:loop_e_upper:1]i do
-      let () := loop_vars
-      loop_vars ← do
-        let w__5 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
-        let _ : Unit :=
-          if (w__5 : Bool)
-          then
-            (let eoff : Int := ((BitVec.toNat offset) +i e)
-            let addr : (BitVec 64) := (BitVec.addInt base (Int.shiftl eoff scale))
-            (Hint_Prefetch addr pref_hint level stream))
-          else ()
-        (pure (()))
-    (pure loop_vars))
+              if (merging : Bool)
+              then
+                (do
+                  let w__2 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read dest e esize)) ) :
+                    SailM (BitVec esize) )
+                  (Elem_set result e esize (Sail.BitVec.castWidth w__2)))
+              else
+                (do
+                  (Elem_set result e esize (Sail.BitVec.castWidth (Zeros (n := esize))))))
+      (pure loop_vars)) ) : SailM (BitVec VL) )
+  (Z_set d VL (Sail.BitVec.castWidth result))
 
 
-/-- Type quantifiers: VL : Nat, esize : Nat, g : Nat, level : Nat, m : Nat, n : Nat, scale : Nat, k_stream
-  : Bool, scale = 2 ∧
+/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, esize = 64 ∧
+  0 ≤ d ∧ d ≤ 31 ∧ (is_VL VL) -/
+def execute_DUPM_Z_I__ (VL : Nat) (d : Nat) (esize : Nat) (imm : (BitVec esize)) : SailM Unit := do
+  (CheckSVEEnabled ())
+  let VL : Nat := VL
+  let result : (BitVec VL) :=
+    (Sail.BitVec.castWidth (BitVec.replicateBits imm (Sail.Int.toNatChecked ((Int.ediv VL esize)))))
+  (Z_set d VL (Sail.BitVec.castWidth result))
+
+
+/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, g : Nat, k_is_unsigned : Bool, n : Nat, s_esize
+  : Nat, s_esize = 8 ∧
   0 ≤ n ∧
   n ≤ 31 ∧
-  0 ≤ m ∧
-  m ≤ 31 ∧
-  List.elem level [0, 1, 2, 3] ∧
-  List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧ esize = 32 ∧ (is_VL VL) -/
-def execute_PRFW_I_P_BR_S (VL : Nat) (esize : Nat) (g : Nat) (level : Nat) (m : Nat) (n : Nat) (pref_hint : PrefetchHint) (scale : Nat) (stream : Bool) : SailM Unit := do
+  List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 31 ∧ (is_VL VL) -/
+def execute_UXTB_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (n : Nat) (s_esize : Nat) (is_unsigned : Bool) : SailM Unit := do
   (CheckSVEEnabled ())
   let VL : Nat := VL
   let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
   let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
   let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
     (BitVec (Sail.Int.toNatChecked PL)) )
-  let base ← (( do (undefined_bitvector_at (← occLabel 5837) 64) ) : SailM (BitVec 64) )
-  let offset ← (( do (undefined_bitvector_at (← occLabel 5838) 64) ) : SailM (BitVec 64) )
   let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
-  let (base, offset) ← (( do
+  let operand ← (( do
     if (w__0 : Bool)
     then
       (do
-        let w__3 ← (( do
-          if ((n == 31) : Bool)
+        ((Sail.BitVec.castWidth ) <$> (Z_read n VL)))
+    else (pure ((Sail.BitVec.castWidth (Zeros (n := VL))))) ) : SailM (BitVec VL) )
+  let result ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read d VL)) ) : SailM (BitVec VL) )
+  let result ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
+    (do
+      let mut loop_vars := result
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let result := loop_vars
+        loop_vars ← do
+          let w__2 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
+          if (w__2 : Bool)
           then
             (do
-              (SP_read ()))
-          else
-            (do
-              (X_read n 64)) ) : SailM (BitVec 64) )
-        let base := (w__3 : (BitVec 64))
-        let w__4 ← (( do (X_read m 64) ) : SailM (BitVec 64) )
-        let offset := (w__4 : (BitVec 64))
-        (pure ((base, offset))))
-    else (pure ((base, offset))) ) : SailM ((BitVec 64) × (BitVec 64)) )
-  let offset := offset
-  let base := base
-  let loop_e_lower : Nat := 0
-  let loop_e_upper : Int := (elements -i 1)
-  (do
-    let mut loop_vars := ()
-    for e in [loop_e_lower:loop_e_upper:1]i do
-      let () := loop_vars
-      loop_vars ← do
-        let w__5 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
-        let _ : Unit :=
-          if (w__5 : Bool)
-          then
-            (let eoff : Int := ((BitVec.toNat offset) +i e)
-            let addr : (BitVec 64) := (BitVec.addInt base (Int.shiftl eoff scale))
-            (Hint_Prefetch addr pref_hint level stream))
-          else ()
-        (pure (()))
-    (pure loop_vars))
+              let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
+                SailM (BitVec esize) )
+              let w__3 ← (( do
+                ((Sail.BitVec.castWidth ) <$> (Extend
+                  (Sail.BitVec.extractLsb element (Sail.Int.toNatChecked ((s_esize -i 1))) 0) esize
+                  is_unsigned)) ) : SailM (BitVec esize) )
+              (Elem_set result e esize (Sail.BitVec.castWidth w__3)))
+          else (pure (result))
+      (pure loop_vars)) ) : SailM (BitVec VL) )
+  (Z_set d VL (Sail.BitVec.castWidth result))
 
 
-/-- Type quantifiers: VL : Nat, esize : Nat, g : Nat, level : Nat, m : Nat, n : Nat, scale : Nat, k_stream
-  : Bool, scale = 3 ∧
+/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, g : Nat, k_is_unsigned : Bool, n : Nat, s_esize
+  : Nat, s_esize = 16 ∧
   0 ≤ n ∧
   n ≤ 31 ∧
-  0 ≤ m ∧
-  m ≤ 31 ∧
-  List.elem level [0, 1, 2, 3] ∧
-  List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧ esize = 64 ∧ (is_VL VL) -/
-def execute_PRFD_I_P_BR_S (VL : Nat) (esize : Nat) (g : Nat) (level : Nat) (m : Nat) (n : Nat) (pref_hint : PrefetchHint) (scale : Nat) (stream : Bool) : SailM Unit := do
+  List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 31 ∧ (is_VL VL) -/
+def execute_UXTH_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (n : Nat) (s_esize : Nat) (is_unsigned : Bool) : SailM Unit := do
   (CheckSVEEnabled ())
   let VL : Nat := VL
   let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
   let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
   let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
     (BitVec (Sail.Int.toNatChecked PL)) )
-  let base ← (( do (undefined_bitvector_at (← occLabel 5839) 64) ) : SailM (BitVec 64) )
-  let offset ← (( do (undefined_bitvector_at (← occLabel 5840) 64) ) : SailM (BitVec 64) )
   let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
-  let (base, offset) ← (( do
+  let operand ← (( do
     if (w__0 : Bool)
     then
       (do
-        let w__3 ← (( do
-          if ((n == 31) : Bool)
+        ((Sail.BitVec.castWidth ) <$> (Z_read n VL)))
+    else (pure ((Sail.BitVec.castWidth (Zeros (n := VL))))) ) : SailM (BitVec VL) )
+  let result ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read d VL)) ) : SailM (BitVec VL) )
+  let result ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
+    (do
+      let mut loop_vars := result
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let result := loop_vars
+        loop_vars ← do
+          let w__2 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
+          if (w__2 : Bool)
           then
             (do
-              (SP_read ()))
-          else
-            (do
-              (X_read n 64)) ) : SailM (BitVec 64) )
-        let base := (w__3 : (BitVec 64))
-        let w__4 ← (( do (X_read m 64) ) : SailM (BitVec 64) )
-        let offset := (w__4 : (BitVec 64))
-        (pure ((base, offset))))
-    else (pure ((base, offset))) ) : SailM ((BitVec 64) × (BitVec 64)) )
-  let offset := offset
-  let base := base
-  let loop_e_lower : Nat := 0
-  let loop_e_upper : Int := (elements -i 1)
-  (do
-    let mut loop_vars := ()
-    for e in [loop_e_lower:loop_e_upper:1]i do
-      let () := loop_vars
-      loop_vars ← do
-        let w__5 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
-        let _ : Unit :=
-          if (w__5 : Bool)
+              let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
+                SailM (BitVec esize) )
+              ArmFull.assert ((0 ≤b (s_esize -i 1)) && ((s_esize -i 1) <b esize)) "sail-inputs/16-instrs64_sve.sail:23846.74-23846.75"
+              let w__3 ← (( do
+                ((Sail.BitVec.castWidth ) <$> (Extend
+                  (Sail.BitVec.extractLsb element (Sail.Int.toNatChecked ((s_esize -i 1))) 0) esize
+                  is_unsigned)) ) : SailM (BitVec esize) )
+              (Elem_set result e esize (Sail.BitVec.castWidth w__3)))
+          else (pure (result))
+      (pure loop_vars)) ) : SailM (BitVec VL) )
+  (Z_set d VL (Sail.BitVec.castWidth result))
+
+
+/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, g : Nat, k_is_unsigned : Bool, n : Nat, s_esize
+  : Nat, s_esize = 32 ∧
+  0 ≤ n ∧
+  n ≤ 31 ∧
+  List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 31 ∧ (is_VL VL) -/
+def execute_UXTW_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (n : Nat) (s_esize : Nat) (is_unsigned : Bool) : SailM Unit := do
+  (CheckSVEEnabled ())
+  let VL : Nat := VL
+  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
+  let operand ← (( do
+    if (w__0 : Bool)
+    then
+      (do
+        ((Sail.BitVec.castWidth ) <$> (Z_read n VL)))
+    else (pure ((Sail.BitVec.castWidth (Zeros (n := VL))))) ) : SailM (BitVec VL) )
+  let result ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read d VL)) ) : SailM (BitVec VL) )
+  let result ← (( do
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
+    (do
+      let mut loop_vars := result
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let result := loop_vars
+        loop_vars ← do
+          let w__2 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
+          if (w__2 : Bool)
           then
-            (let eoff : Int := ((BitVec.toNat offset) +i e)
-            let addr : (BitVec 64) := (BitVec.addInt base (Int.shiftl eoff scale))
-            (Hint_Prefetch addr pref_hint level stream))
-          else ()
-        (pure (()))
-    (pure loop_vars))
+            (do
+              let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
+                SailM (BitVec esize) )
+              ArmFull.assert ((0 ≤b (s_esize -i 1)) && ((s_esize -i 1) <b esize)) "sail-inputs/16-instrs64_sve.sail:23921.74-23921.75"
+              let w__3 ← (( do
+                ((Sail.BitVec.castWidth ) <$> (Extend
+                  (Sail.BitVec.extractLsb element (Sail.Int.toNatChecked ((s_esize -i 1))) 0) esize
+                  is_unsigned)) ) : SailM (BitVec esize) )
+              (Elem_set result e esize (Sail.BitVec.castWidth w__3)))
+          else (pure (result))
+      (pure loop_vars)) ) : SailM (BitVec VL) )
+  (Z_set d VL (Sail.BitVec.castWidth result))
 
 
-/-- Type quantifiers: VL : Nat, a : Nat, b : Nat, da : Nat, dim_dim_esize : Nat, esize : Nat, m :
-  Nat, n : Nat, k_op1_unsigned : Bool, k_op2_unsigned : Bool, k_sub_op : Bool, 0 ≤ n ∧
+/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, g : Nat, k_is_unsigned : Bool, n : Nat, s_esize
+  : Nat, s_esize = 8 ∧
+  0 ≤ n ∧
   n ≤ 31 ∧
-  0 ≤ m ∧
-  m ≤ 31 ∧
-  esize = 32 ∧
-  List.elem da [0, 1, 2, 3] ∧
-  List.elem b [0, 1, 2, 3, 4, 5, 6, 7] ∧
-  List.elem a [0, 1, 2, 3, 4, 5, 6, 7] ∧
-  (is_VL VL) ∧ dim_dim_esize = (VL / esize * (VL / esize * esize)) -/
-def execute_SMOPA_ZA_PP_ZZ_32 (VL : Nat) (dim_dim_esize : Nat) (a : Nat) (b : Nat) (da : Nat) (esize : Nat) (m : Nat) (n : Nat) (op1_unsigned : Bool) (op2_unsigned : Bool) (sub_op : Bool) : SailM Unit := do
-  (CheckStreamingSVEAndZAEnabled ())
+  List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 31 ∧ (is_VL VL) -/
+def execute_SXTB_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (n : Nat) (s_esize : Nat) (is_unsigned : Bool) : SailM Unit := do
+  (CheckSVEEnabled ())
   let VL : Nat := VL
   let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
-  let dim : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
-  let mask1 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read a PL)) ) : SailM
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
     (BitVec (Sail.Int.toNatChecked PL)) )
-  let mask2 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read b PL)) ) : SailM
-    (BitVec (Sail.Int.toNatChecked PL)) )
-  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read n VL)) ) : SailM (BitVec VL) )
-  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read m VL)) ) : SailM (BitVec VL) )
-  let operand3 ← (( do ((Sail.BitVec.castWidth ) <$> (ZAtile_read VL da esize dim_dim_esize)) ) :
-    SailM (BitVec dim_dim_esize) )
+  let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
+  let operand ← (( do
+    if (w__0 : Bool)
+    then
+      (do
+        ((Sail.BitVec.castWidth ) <$> (Z_read n VL)))
+    else (pure ((Sail.BitVec.castWidth (Zeros (n := VL))))) ) : SailM (BitVec VL) )
+  let result ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read d VL)) ) : SailM (BitVec VL) )
   let result ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6991)
-      (Sail.Int.toNatChecked (dim_dim_esize)))) ) : SailM (BitVec dim_dim_esize) )
-  let prod ← (( do (undefined_int_at (← occLabel 6992) ()) ) : SailM Int )
-  let (prod, result) ← (( do
-    let loop_row_lower : Nat := 0
-    let loop_row_upper : Int := (dim -i 1)
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
     (do
-      let mut loop_vars := (prod, result)
-      for row in [loop_row_lower:loop_row_upper:1]i do
-        let (prod, result) := loop_vars
+      let mut loop_vars := result
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let result := loop_vars
         loop_vars ← do
-          let loop_col_lower : Nat := 0
-          let loop_col_upper : Int := (dim -i 1)
-          (do
-            let mut loop_vars_1 := (prod, result)
-            for col in [loop_col_lower:loop_col_upper:1]i do
-              let (prod, result) := loop_vars_1
-              loop_vars_1 ← do
-                let sum ← (( do
-                  ((Sail.BitVec.castWidth ) <$> (Elem_read operand3 ((row *i dim) +i col) esize)) )
-                  : SailM (BitVec esize) )
-                let (prod, sum) ← (( do
-                  let loop_k_lower : Nat := 0
-                  let loop_k_upper : Nat := 3
-                  (do
-                    let mut loop_vars_2 := (prod, sum)
-                    for k in [loop_k_lower:loop_k_upper:1]i do
-                      let (prod, sum) := loop_vars_2
-                      loop_vars_2 ← do
-                        let w__2 ← (( do
-                          if ((← do
-                               (ActivePredicateElement mask1 ((4 *i row) +i k) (Int.ediv esize 4))) : Bool)
-                          then
-                            (do
-                              (ActivePredicateElement mask2 ((4 *i col) +i k) (Int.ediv esize 4)))
-                          else (pure false) ) : SailM Bool )
-                        if (w__2 : Bool)
-                        then
-                          (do
-                            let w__3 ← (( do
-                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 ((4 *i row) +i k)
-                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
-                              (BitVec (esize / 4)) )
-                            let w__4 ← (( do (asl_Int w__3 op1_unsigned) ) : SailM Int )
-                            let w__5 ← (( do
-                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 ((4 *i col) +i k)
-                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
-                              (BitVec (esize / 4)) )
-                            let w__6 ← (( do (asl_Int w__5 op2_unsigned) ) : SailM Int )
-                            let prod : Int := ((w__4 *i w__6) : Int)
-                            let prod : Int :=
-                              if (sub_op : Bool)
-                              then (Neg.neg prod)
-                              else prod
-                            let sum : (BitVec esize) := (BitVec.addInt sum prod)
-                            (pure ((prod, sum))))
-                        else (pure ((prod, sum)))
-                    (pure loop_vars_2)) ) : SailM (Int × (BitVec esize)) )
-                let w__7 ← (( do
-                  (Elem_set result ((row *i dim) +i col) esize (Sail.BitVec.castWidth sum)) ) :
-                  SailM (BitVec dim_dim_esize) )
-                let result := (w__7 : (BitVec dim_dim_esize))
-                (pure ((prod, result)))
-            (pure loop_vars_1))
-      (pure loop_vars)) ) : SailM (Int × (BitVec dim_dim_esize)) )
-  (ZAtile_set VL da esize dim_dim_esize (Sail.BitVec.castWidth result))
+          let w__2 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
+          if (w__2 : Bool)
+          then
+            (do
+              let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
+                SailM (BitVec esize) )
+              let w__3 ← (( do
+                ((Sail.BitVec.castWidth ) <$> (Extend
+                  (Sail.BitVec.extractLsb element (Sail.Int.toNatChecked ((s_esize -i 1))) 0) esize
+                  is_unsigned)) ) : SailM (BitVec esize) )
+              (Elem_set result e esize (Sail.BitVec.castWidth w__3)))
+          else (pure (result))
+      (pure loop_vars)) ) : SailM (BitVec VL) )
+  (Z_set d VL (Sail.BitVec.castWidth result))
 
 
-/-- Type quantifiers: VL : Nat, a : Nat, b : Nat, da : Nat, dim_dim_esize : Nat, esize : Nat, m :
-  Nat, n : Nat, k_op1_unsigned : Bool, k_op2_unsigned : Bool, k_sub_op : Bool, 0 ≤ n ∧
+/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, g : Nat, k_is_unsigned : Bool, n : Nat, s_esize
+  : Nat, s_esize = 16 ∧
+  0 ≤ n ∧
   n ≤ 31 ∧
-  0 ≤ m ∧
-  m ≤ 31 ∧
-  esize = 32 ∧
-  List.elem da [0, 1, 2, 3] ∧
-  List.elem b [0, 1, 2, 3, 4, 5, 6, 7] ∧
-  List.elem a [0, 1, 2, 3, 4, 5, 6, 7] ∧
-  (is_VL VL) ∧ dim_dim_esize = (VL / esize * (VL / esize * esize)) -/
-def execute_SUMOPA_ZA_PP_ZZ_32 (VL : Nat) (dim_dim_esize : Nat) (a : Nat) (b : Nat) (da : Nat) (esize : Nat) (m : Nat) (n : Nat) (op1_unsigned : Bool) (op2_unsigned : Bool) (sub_op : Bool) : SailM Unit := do
-  (CheckStreamingSVEAndZAEnabled ())
+  List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 31 ∧ (is_VL VL) -/
+def execute_SXTH_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (n : Nat) (s_esize : Nat) (is_unsigned : Bool) : SailM Unit := do
+  (CheckSVEEnabled ())
   let VL : Nat := VL
   let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
-  let dim : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
-  let mask1 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read a PL)) ) : SailM
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
     (BitVec (Sail.Int.toNatChecked PL)) )
-  let mask2 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read b PL)) ) : SailM
-    (BitVec (Sail.Int.toNatChecked PL)) )
-  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read n VL)) ) : SailM (BitVec VL) )
-  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read m VL)) ) : SailM (BitVec VL) )
-  let operand3 ← (( do ((Sail.BitVec.castWidth ) <$> (ZAtile_read VL da esize dim_dim_esize)) ) :
-    SailM (BitVec dim_dim_esize) )
+  let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
+  let operand ← (( do
+    if (w__0 : Bool)
+    then
+      (do
+        ((Sail.BitVec.castWidth ) <$> (Z_read n VL)))
+    else (pure ((Sail.BitVec.castWidth (Zeros (n := VL))))) ) : SailM (BitVec VL) )
+  let result ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read d VL)) ) : SailM (BitVec VL) )
   let result ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6993)
-      (Sail.Int.toNatChecked (dim_dim_esize)))) ) : SailM (BitVec dim_dim_esize) )
-  let prod ← (( do (undefined_int_at (← occLabel 6994) ()) ) : SailM Int )
-  let (prod, result) ← (( do
-    let loop_row_lower : Nat := 0
-    let loop_row_upper : Int := (dim -i 1)
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
     (do
-      let mut loop_vars := (prod, result)
-      for row in [loop_row_lower:loop_row_upper:1]i do
-        let (prod, result) := loop_vars
+      let mut loop_vars := result
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let result := loop_vars
         loop_vars ← do
-          let loop_col_lower : Nat := 0
-          let loop_col_upper : Int := (dim -i 1)
-          (do
-            let mut loop_vars_1 := (prod, result)
-            for col in [loop_col_lower:loop_col_upper:1]i do
-              let (prod, result) := loop_vars_1
-              loop_vars_1 ← do
-                let sum ← (( do
-                  ((Sail.BitVec.castWidth ) <$> (Elem_read operand3 ((row *i dim) +i col) esize)) )
-                  : SailM (BitVec esize) )
-                let (prod, sum) ← (( do
-                  let loop_k_lower : Nat := 0
-                  let loop_k_upper : Nat := 3
-                  (do
-                    let mut loop_vars_2 := (prod, sum)
-                    for k in [loop_k_lower:loop_k_upper:1]i do
-                      let (prod, sum) := loop_vars_2
-                      loop_vars_2 ← do
-                        let w__2 ← (( do
-                          if ((← do
-                               (ActivePredicateElement mask1 ((4 *i row) +i k) (Int.ediv esize 4))) : Bool)
-                          then
-                            (do
-                              (ActivePredicateElement mask2 ((4 *i col) +i k) (Int.ediv esize 4)))
-                          else (pure false) ) : SailM Bool )
-                        if (w__2 : Bool)
-                        then
-                          (do
-                            let w__3 ← (( do
-                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 ((4 *i row) +i k)
-                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
-                              (BitVec (esize / 4)) )
-                            let w__4 ← (( do (asl_Int w__3 op1_unsigned) ) : SailM Int )
-                            let w__5 ← (( do
-                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 ((4 *i col) +i k)
-                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
-                              (BitVec (esize / 4)) )
-                            let w__6 ← (( do (asl_Int w__5 op2_unsigned) ) : SailM Int )
-                            let prod : Int := ((w__4 *i w__6) : Int)
-                            let prod : Int :=
-                              if (sub_op : Bool)
-                              then (Neg.neg prod)
-                              else prod
-                            let sum : (BitVec esize) := (BitVec.addInt sum prod)
-                            (pure ((prod, sum))))
-                        else (pure ((prod, sum)))
-                    (pure loop_vars_2)) ) : SailM (Int × (BitVec esize)) )
-                let w__7 ← (( do
-                  (Elem_set result ((row *i dim) +i col) esize (Sail.BitVec.castWidth sum)) ) :
-                  SailM (BitVec dim_dim_esize) )
-                let result := (w__7 : (BitVec dim_dim_esize))
-                (pure ((prod, result)))
-            (pure loop_vars_1))
-      (pure loop_vars)) ) : SailM (Int × (BitVec dim_dim_esize)) )
-  (ZAtile_set VL da esize dim_dim_esize (Sail.BitVec.castWidth result))
+          let w__2 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
+          if (w__2 : Bool)
+          then
+            (do
+              let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
+                SailM (BitVec esize) )
+              ArmFull.assert ((0 ≤b (s_esize -i 1)) && ((s_esize -i 1) <b esize)) "sail-inputs/16-instrs64_sve.sail:24064.74-24064.75"
+              let w__3 ← (( do
+                ((Sail.BitVec.castWidth ) <$> (Extend
+                  (Sail.BitVec.extractLsb element (Sail.Int.toNatChecked ((s_esize -i 1))) 0) esize
+                  is_unsigned)) ) : SailM (BitVec esize) )
+              (Elem_set result e esize (Sail.BitVec.castWidth w__3)))
+          else (pure (result))
+      (pure loop_vars)) ) : SailM (BitVec VL) )
+  (Z_set d VL (Sail.BitVec.castWidth result))
 
 
-/-- Type quantifiers: VL : Nat, a : Nat, b : Nat, da : Nat, dim_dim_esize : Nat, esize : Nat, m :
-  Nat, n : Nat, k_op1_unsigned : Bool, k_op2_unsigned : Bool, k_sub_op : Bool, 0 ≤ n ∧
+/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, g : Nat, k_is_unsigned : Bool, n : Nat, s_esize
+  : Nat, s_esize = 32 ∧
+  0 ≤ n ∧
   n ≤ 31 ∧
-  0 ≤ m ∧
-  m ≤ 31 ∧
-  esize = 32 ∧
-  List.elem da [0, 1, 2, 3] ∧
-  List.elem b [0, 1, 2, 3, 4, 5, 6, 7] ∧
-  List.elem a [0, 1, 2, 3, 4, 5, 6, 7] ∧
-  (is_VL VL) ∧ dim_dim_esize = (VL / esize * (VL / esize * esize)) -/
-def execute_USMOPA_ZA_PP_ZZ_32 (VL : Nat) (dim_dim_esize : Nat) (a : Nat) (b : Nat) (da : Nat) (esize : Nat) (m : Nat) (n : Nat) (op1_unsigned : Bool) (op2_unsigned : Bool) (sub_op : Bool) : SailM Unit := do
-  (CheckStreamingSVEAndZAEnabled ())
+  List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 31 ∧ (is_VL VL) -/
+def execute_SXTW_Z_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (n : Nat) (s_esize : Nat) (is_unsigned : Bool) : SailM Unit := do
+  (CheckSVEEnabled ())
   let VL : Nat := VL
   let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
-  let dim : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
-  let mask1 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read a PL)) ) : SailM
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
     (BitVec (Sail.Int.toNatChecked PL)) )
-  let mask2 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read b PL)) ) : SailM
-    (BitVec (Sail.Int.toNatChecked PL)) )
-  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read n VL)) ) : SailM (BitVec VL) )
-  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read m VL)) ) : SailM (BitVec VL) )
-  let operand3 ← (( do ((Sail.BitVec.castWidth ) <$> (ZAtile_read VL da esize dim_dim_esize)) ) :
-    SailM (BitVec dim_dim_esize) )
+  let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
+  let operand ← (( do
+    if (w__0 : Bool)
+    then
+      (do
+        ((Sail.BitVec.castWidth ) <$> (Z_read n VL)))
+    else (pure ((Sail.BitVec.castWidth (Zeros (n := VL))))) ) : SailM (BitVec VL) )
+  let result ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read d VL)) ) : SailM (BitVec VL) )
   let result ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6995)
-      (Sail.Int.toNatChecked (dim_dim_esize)))) ) : SailM (BitVec dim_dim_esize) )
-  let prod ← (( do (undefined_int_at (← occLabel 6996) ()) ) : SailM Int )
-  let (prod, result) ← (( do
-    let loop_row_lower : Nat := 0
-    let loop_row_upper : Int := (dim -i 1)
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
     (do
-      let mut loop_vars := (prod, result)
-      for row in [loop_row_lower:loop_row_upper:1]i do
-        let (prod, result) := loop_vars
+      let mut loop_vars := result
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let result := loop_vars
         loop_vars ← do
-          let loop_col_lower : Nat := 0
-          let loop_col_upper : Int := (dim -i 1)
-          (do
-            let mut loop_vars_1 := (prod, result)
-            for col in [loop_col_lower:loop_col_upper:1]i do
-              let (prod, result) := loop_vars_1
-              loop_vars_1 ← do
-                let sum ← (( do
-                  ((Sail.BitVec.castWidth ) <$> (Elem_read operand3 ((row *i dim) +i col) esize)) )
-                  : SailM (BitVec esize) )
-                let (prod, sum) ← (( do
-                  let loop_k_lower : Nat := 0
-                  let loop_k_upper : Nat := 3
-                  (do
-                    let mut loop_vars_2 := (prod, sum)
-                    for k in [loop_k_lower:loop_k_upper:1]i do
-                      let (prod, sum) := loop_vars_2
-                      loop_vars_2 ← do
-                        let w__2 ← (( do
-                          if ((← do
-                               (ActivePredicateElement mask1 ((4 *i row) +i k) (Int.ediv esize 4))) : Bool)
-                          then
-                            (do
-                              (ActivePredicateElement mask2 ((4 *i col) +i k) (Int.ediv esize 4)))
-                          else (pure false) ) : SailM Bool )
-                        if (w__2 : Bool)
-                        then
-                          (do
-                            let w__3 ← (( do
-                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 ((4 *i row) +i k)
-                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
-                              (BitVec (esize / 4)) )
-                            let w__4 ← (( do (asl_Int w__3 op1_unsigned) ) : SailM Int )
-                            let w__5 ← (( do
-                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 ((4 *i col) +i k)
-                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
-                              (BitVec (esize / 4)) )
-                            let w__6 ← (( do (asl_Int w__5 op2_unsigned) ) : SailM Int )
-                            let prod : Int := ((w__4 *i w__6) : Int)
-                            let prod : Int :=
-                              if (sub_op : Bool)
-                              then (Neg.neg prod)
-                              else prod
-                            let sum : (BitVec esize) := (BitVec.addInt sum prod)
-                            (pure ((prod, sum))))
-                        else (pure ((prod, sum)))
-                    (pure loop_vars_2)) ) : SailM (Int × (BitVec esize)) )
-                let w__7 ← (( do
-                  (Elem_set result ((row *i dim) +i col) esize (Sail.BitVec.castWidth sum)) ) :
-                  SailM (BitVec dim_dim_esize) )
-                let result := (w__7 : (BitVec dim_dim_esize))
-                (pure ((prod, result)))
-            (pure loop_vars_1))
-      (pure loop_vars)) ) : SailM (Int × (BitVec dim_dim_esize)) )
-  (ZAtile_set VL da esize dim_dim_esize (Sail.BitVec.castWidth result))
+          let w__2 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
+          if (w__2 : Bool)
+          then
+            (do
+              let element ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
+                SailM (BitVec esize) )
+              ArmFull.assert ((0 ≤b (s_esize -i 1)) && ((s_esize -i 1) <b esize)) "sail-inputs/16-instrs64_sve.sail:24139.74-24139.75"
+              let w__3 ← (( do
+                ((Sail.BitVec.castWidth ) <$> (Extend
+                  (Sail.BitVec.extractLsb element (Sail.Int.toNatChecked ((s_esize -i 1))) 0) esize
+                  is_unsigned)) ) : SailM (BitVec esize) )
+              (Elem_set result e esize (Sail.BitVec.castWidth w__3)))
+          else (pure (result))
+      (pure loop_vars)) ) : SailM (BitVec VL) )
+  (Z_set d VL (Sail.BitVec.castWidth result))
 
 
-/-- Type quantifiers: VL : Nat, a : Nat, b : Nat, da : Nat, dim_dim_esize : Nat, esize : Nat, m :
-  Nat, n : Nat, k_op1_unsigned : Bool, k_op2_unsigned : Bool, k_sub_op : Bool, 0 ≤ n ∧
+/-- Type quantifiers: VL : Nat, d : Nat, esize : Nat, g : Nat, n : Nat, 0 ≤ n ∧
   n ≤ 31 ∧
-  0 ≤ m ∧
-  m ≤ 31 ∧
-  esize = 32 ∧
-  List.elem da [0, 1, 2, 3] ∧
-  List.elem b [0, 1, 2, 3, 4, 5, 6, 7] ∧
-  List.elem a [0, 1, 2, 3, 4, 5, 6, 7] ∧
-  (is_VL VL) ∧ dim_dim_esize = (VL / esize * (VL / esize * esize)) -/
-def execute_UMOPA_ZA_PP_ZZ_32 (VL : Nat) (dim_dim_esize : Nat) (a : Nat) (b : Nat) (da : Nat) (esize : Nat) (m : Nat) (n : Nat) (op1_unsigned : Bool) (op2_unsigned : Bool) (sub_op : Bool) : SailM Unit := do
-  (CheckStreamingSVEAndZAEnabled ())
+  List.elem g [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem esize [8, 16, 32, 64] ∧ 0 ≤ d ∧ d ≤ 31 ∧ (is_VL VL) -/
+def execute_ANDV_R_P_Z__ (VL : Nat) (d : Nat) (esize : Nat) (g : Nat) (n : Nat) : SailM Unit := do
+  (CheckSVEEnabled ())
   let VL : Nat := VL
   let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
-  let dim : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
-  let mask1 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read a PL)) ) : SailM
+  let elements : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask ← (( do ((Sail.BitVec.castWidth ) <$> (P_read g PL)) ) : SailM
     (BitVec (Sail.Int.toNatChecked PL)) )
-  let mask2 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read b PL)) ) : SailM
-    (BitVec (Sail.Int.toNatChecked PL)) )
-  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read n VL)) ) : SailM (BitVec VL) )
-  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read m VL)) ) : SailM (BitVec VL) )
-  let operand3 ← (( do ((Sail.BitVec.castWidth ) <$> (ZAtile_read VL da esize dim_dim_esize)) ) :
-    SailM (BitVec dim_dim_esize) )
+  let w__0 ← (( do (AnyActiveElement mask esize) ) : SailM Bool )
+  let operand ← (( do
+    if (w__0 : Bool)
+    then
+      (do
+        ((Sail.BitVec.castWidth ) <$> (Z_read n VL)))
+    else (pure ((Sail.BitVec.castWidth (Zeros (n := VL))))) ) : SailM (BitVec VL) )
+  let result : (BitVec esize) := (Sail.BitVec.castWidth (Ones (n := esize)))
   let result ← (( do
-    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 6997)
-      (Sail.Int.toNatChecked (dim_dim_esize)))) ) : SailM (BitVec dim_dim_esize) )
-  let prod ← (( do (undefined_int_at (← occLabel 6998) ()) ) : SailM Int )
-  let (prod, result) ← (( do
-    let loop_row_lower : Nat := 0
-    let loop_row_upper : Int := (dim -i 1)
+    let loop_e_lower : Nat := 0
+    let loop_e_upper : Int := (elements -i 1)
     (do
-      let mut loop_vars := (prod, result)
-      for row in [loop_row_lower:loop_row_upper:1]i do
-        let (prod, result) := loop_vars
+      let mut loop_vars := result
+      for e in [loop_e_lower:loop_e_upper:1]i do
+        let result := loop_vars
         loop_vars ← do
-          let loop_col_lower : Nat := 0
-          let loop_col_upper : Int := (dim -i 1)
-          (do
-            let mut loop_vars_1 := (prod, result)
-            for col in [loop_col_lower:loop_col_upper:1]i do
-              let (prod, result) := loop_vars_1
-              loop_vars_1 ← do
-                let sum ← (( do
-                  ((Sail.BitVec.castWidth ) <$> (Elem_read operand3 ((row *i dim) +i col) esize)) )
-                  : SailM (BitVec esize) )
-                let (prod, sum) ← (( do
-                  let loop_k_lower : Nat := 0
-                  let loop_k_upper : Nat := 3
-                  (do
-                    let mut loop_vars_2 := (prod, sum)
-                    for k in [loop_k_lower:loop_k_upper:1]i do
-                      let (prod, sum) := loop_vars_2
-                      loop_vars_2 ← do
-                        let w__2 ← (( do
-                          if ((← do
-                               (ActivePredicateElement mask1 ((4 *i row) +i k) (Int.ediv esize 4))) : Bool)
-                          then
-                            (do
-                              (ActivePredicateElement mask2 ((4 *i col) +i k) (Int.ediv esize 4)))
-                          else (pure false) ) : SailM Bool )
-                        if (w__2 : Bool)
-                        then
-                          (do
-                            let w__3 ← (( do
-                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 ((4 *i row) +i k)
-                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
-                              (BitVec (esize / 4)) )
-                            let w__4 ← (( do (asl_Int w__3 op1_unsigned) ) : SailM Int )
-                            let w__5 ← (( do
-                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 ((4 *i col) +i k)
-                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
-                              (BitVec (esize / 4)) )
-                            let w__6 ← (( do (asl_Int w__5 op2_unsigned) ) : SailM Int )
-                            let prod : Int := ((w__4 *i w__6) : Int)
-                            let prod : Int :=
-                              if (sub_op : Bool)
-                              then (Neg.neg prod)
-                              else prod
-                            let sum : (BitVec esize) := (BitVec.addInt sum prod)
-                            (pure ((prod, sum))))
-                        else (pure ((prod, sum)))
-                    (pure loop_vars_2)) ) : SailM (Int × (BitVec esize)) )
-                let w__7 ← (( do
-                  (Elem_set result ((row *i dim) +i col) esize (Sail.BitVec.castWidth sum)) ) :
-                  SailM (BitVec dim_dim_esize) )
-                let result := (w__7 : (BitVec dim_dim_esize))
-                (pure ((prod, result)))
-            (pure loop_vars_1))
-      (pure loop_vars)) ) : SailM (Int × (BitVec dim_dim_esize)) )
-  (ZAtile_set VL da esize dim_dim_esize (Sail.BitVec.castWidth result))
+          let w__2 ← (( do (ActivePredicateElement mask e esize) ) : SailM Bool )
+          if (w__2 : Bool)
+          then
+            (do
+              let w__3 ← (( do ((Sail.BitVec.castWidth ) <$> (Elem_read operand e esize)) ) :
+                SailM (BitVec esize) )
+              let result := ((result &&& w__3) : (BitVec esize))
+              (pure (result)))
+          else (pure (result))
+      (pure loop_vars)) ) : SailM (BitVec esize) )
+  (V_set d esize (Sail.BitVec.castWidth result))
 
 
 end ArmFull.Functions

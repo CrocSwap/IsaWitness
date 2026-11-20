@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,10 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _update_PMCFGR_Type_CC (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 14 14 x)
+
 
 def _get_BRBCR_EL1_Type_CC (v : (BitVec 64)) : (BitVec 1) :=
   (Sail.BitVec.extractLsb v 3 3)
@@ -670,9 +674,6 @@ def M32_System : (BitVec 5) := 0b11111#5
 
 
 def EL3 : (BitVec 2) := 0b11#2
-
-
-def EL2 : (BitVec 2) := 0b10#2
 
 
 def undefined_ProcState (ℓ : ChoiceLabel) (_ : Unit) : SailM ProcState := do

@@ -1,16 +1,12 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0021
-import ArmFull.Fn.M0086
-import ArmFull.Fn.M0124
-import ArmFull.Fn.M0144
-import ArmFull.Fn.M0175
-import ArmFull.Fn.M0202
-import ArmFull.Fn.M0215
-import ArmFull.Fn.M0222
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0124
+public import ArmFull.Fn.M0172
+public import ArmFull.Fn.M0221
+public import ArmFull.Fn.M0222 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -112,172 +108,24 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-def decode_aarch32_instrs_EOR_rr_A1enc_A_txt (cond : (BitVec 4)) (S : (BitVec 1)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rs : (BitVec 4)) (stype : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
+def decode_aarch32_instrs_QADD16_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
   let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:3311.29-3311.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:9237.29-9237.30"
       let d : Int := (BitVec.toNat Rd)
       let n : Int := (BitVec.toNat Rn)
       let m : Int := (BitVec.toNat Rm)
-      let s : Int := (BitVec.toNat Rs)
-      let setflags : Bool := (S == 1#1)
-      let shift_t ← (( do (DecodeRegShift stype) ) : SailM SRType )
-      if (((((d == 15) || (n == 15)) || (m == 15)) || (s == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_EOR_rr_Op_A_txt (Sail.Int.toNatChecked (d))
-        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (s)) setflags
-        shift_t))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LSL_i_T1enc_A_txt (imm5 : (BitVec 5)) (Rm : (BitVec 3)) (Rd : (BitVec 3)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let shift_n ← (( do (undefined_int_at (← occLabel 3102) ()) ) : SailM Int )
-      if ((imm5 == 0b00000#5) : Bool)
-      then sailThrow ((Error_See "MOV (register)"))
-      else (pure (()))
-      let d : Int := (BitVec.toNat Rd)
-      let m : Int := (BitVec.toNat Rm)
-      let w__1 ← (( do (InITBlock ()) ) : SailM Bool )
-      let setflags : Bool := (! w__1)
-      let (_, __tup_1) ← (( do (DecodeImmShift 0b00#2 imm5) ) : SailM (SRType × Int) )
-      let shift_n : Int := __tup_1
-      let shift_n : Int := shift_n
-      (execute_aarch32_instrs_LSL_i_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        setflags shift_n))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LSL_r_T1enc_A_txt (Rm : (BitVec 3)) (Rdn : (BitVec 3)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let d : Int := (BitVec.toNat Rdn)
-      let n : Int := (BitVec.toNat Rdn)
-      let m : Int := (BitVec.toNat Rm)
-      let w__1 ← (( do (InITBlock ()) ) : SailM Bool )
-      let setflags : Bool := (! w__1)
-      (execute_aarch32_instrs_LSL_r_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) setflags))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LSL_r_T2enc_A_txt (S : (BitVec 1)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let d : Int := (BitVec.toNat Rd)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      let setflags : Bool := (S == 1#1)
       if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      (execute_aarch32_instrs_LSL_r_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) setflags))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LSR_i_T1enc_A_txt (imm5 : (BitVec 5)) (Rm : (BitVec 3)) (Rd : (BitVec 3)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let shift_n ← (( do (undefined_int_at (← occLabel 3107) ()) ) : SailM Int )
-      let d : Int := (BitVec.toNat Rd)
-      let m : Int := (BitVec.toNat Rm)
-      let w__1 ← (( do (InITBlock ()) ) : SailM Bool )
-      let setflags : Bool := (! w__1)
-      let (_, __tup_1) ← (( do (DecodeImmShift 0b01#2 imm5) ) : SailM (SRType × Int) )
-      let shift_n : Int := __tup_1
-      let shift_n : Int := shift_n
-      (execute_aarch32_instrs_LSR_i_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        setflags shift_n))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LSR_r_T1enc_A_txt (Rm : (BitVec 3)) (Rdn : (BitVec 3)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let d : Int := (BitVec.toNat Rdn)
-      let n : Int := (BitVec.toNat Rdn)
-      let m : Int := (BitVec.toNat Rm)
-      let w__1 ← (( do (InITBlock ()) ) : SailM Bool )
-      let setflags : Bool := (! w__1)
-      (execute_aarch32_instrs_LSR_r_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) setflags))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_MLA_A1enc_A_txt (cond : (BitVec 4)) (S : (BitVec 1)) (Rd : (BitVec 4)) (Ra : (BitVec 4)) (Rm : (BitVec 4)) (Rn : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:7194.29-7194.30"
-      let d : Int := (BitVec.toNat Rd)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      let a : Int := (BitVec.toNat Ra)
-      let setflags : Bool := (S == 1#1)
-      if (((((d == 15) || (n == 15)) || (m == 15)) || (a == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_MLA_Op_A_txt (Sail.Int.toNatChecked (a)) (Sail.Int.toNatChecked (d))
-        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) setflags))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_MLA_T1enc_A_txt (Rn : (BitVec 4)) (Ra : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      if ((Ra == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "MUL"))
-      else (pure (()))
-      let d : Int := (BitVec.toNat Rd)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      let a : Int := (BitVec.toNat Ra)
-      let setflags : Bool := false
-      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_MLA_Op_A_txt (Sail.Int.toNatChecked (a)) (Sail.Int.toNatChecked (d))
-        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) setflags))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_MLS_A1enc_A_txt (cond : (BitVec 4)) (Rd : (BitVec 4)) (Ra : (BitVec 4)) (Rm : (BitVec 4)) (Rn : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:7264.29-7264.30"
-      let d : Int := (BitVec.toNat Rd)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rm)
-      let a : Int := (BitVec.toNat Ra)
-      if (((((d == 15) || (n == 15)) || (m == 15)) || (a == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_MLS_Op_A_txt (Sail.Int.toNatChecked (a)) (Sail.Int.toNatChecked (d))
+      (execute_aarch32_instrs_QADD16_Op_A_txt (Sail.Int.toNatChecked (d))
         (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))))
   else (pure (()))
 
 
-def decode_aarch32_instrs_MLS_T1enc_A_txt (Rn : (BitVec 4)) (Ra : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+def decode_aarch32_instrs_QADD16_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
   let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
   if (w__0 : Bool)
   then
@@ -285,137 +133,32 @@ def decode_aarch32_instrs_MLS_T1enc_A_txt (Rn : (BitVec 4)) (Ra : (BitVec 4)) (R
       let d : Int := (BitVec.toNat Rd)
       let n : Int := (BitVec.toNat Rn)
       let m : Int := (BitVec.toNat Rm)
-      let a : Int := (BitVec.toNat Ra)
-      if (((((d == 15) || (n == 15)) || (m == 15)) || (a == 15)) : Bool)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      (execute_aarch32_instrs_MLS_Op_A_txt (Sail.Int.toNatChecked (a)) (Sail.Int.toNatChecked (d))
+      (execute_aarch32_instrs_QADD16_Op_A_txt (Sail.Int.toNatChecked (d))
         (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))))
   else (pure (()))
 
 
-def decode_aarch32_instrs_MOV_rr_A1enc_A_txt (cond : (BitVec 4)) (S : (BitVec 1)) (Rd : (BitVec 4)) (Rs : (BitVec 4)) (stype : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
+def decode_aarch32_instrs_QADD8_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
   let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:7638.29-7638.30"
-      let d : Int := (BitVec.toNat Rd)
-      let m : Int := (BitVec.toNat Rm)
-      let s : Int := (BitVec.toNat Rs)
-      let setflags : Bool := (S == 1#1)
-      let shift_t ← (( do (DecodeRegShift stype) ) : SailM SRType )
-      if ((((d == 15) || (m == 15)) || (s == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_MOV_rr_Op_A_txt (Sail.Int.toNatChecked (d))
-        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (s)) setflags shift_t))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_MOV_rr_T1enc_A_txt (op : (BitVec 4)) (Rs : (BitVec 3)) (Rdm : (BitVec 3)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      if ((! ((op == 0b0010#4) || ((op == 0b0011#4) || ((op == 0b0100#4) || (op == 0b0111#4))))) : Bool)
-      then sailThrow ((Error_See "Related encodings"))
-      else (pure (()))
-      let d : Int := (BitVec.toNat Rdm)
-      let m : Int := (BitVec.toNat Rdm)
-      let s : Int := (BitVec.toNat Rs)
-      let w__1 ← (( do (InITBlock ()) ) : SailM Bool )
-      let setflags : Bool := (! w__1)
-      let shift_t ← (( do
-        (DecodeRegShift
-          ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access op 2)])) +++ (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access
-                op 0)])))) ) : SailM SRType )
-      (execute_aarch32_instrs_MOV_rr_Op_A_txt (Sail.Int.toNatChecked (d))
-        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (s)) setflags shift_t))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_MOV_rr_T2enc_A_txt (stype : (BitVec 2)) (S : (BitVec 1)) (Rm : (BitVec 4)) (Rd : (BitVec 4)) (Rs : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let d : Int := (BitVec.toNat Rd)
-      let m : Int := (BitVec.toNat Rm)
-      let s : Int := (BitVec.toNat Rs)
-      let setflags : Bool := (S == 1#1)
-      let shift_t ← (( do (DecodeRegShift stype) ) : SailM SRType )
-      if ((((d == 15) || (m == 15)) || (s == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_MOV_rr_Op_A_txt (Sail.Int.toNatChecked (d))
-        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (s)) setflags shift_t))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_MOVT_A1enc_A_txt (cond : (BitVec 4)) (imm4 : (BitVec 4)) (Rd : (BitVec 4)) (imm12 : (BitVec 12)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:7730.29-7730.30"
-      let d : Int := (BitVec.toNat Rd)
-      let imm16 : (BitVec 16) := (imm4 +++ imm12)
-      if ((d == 15) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_MOVT_Op_A_txt (Sail.Int.toNatChecked (d)) imm16))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_MOVT_T1enc_A_txt (i : (BitVec 1)) (imm4 : (BitVec 4)) (imm3 : (BitVec 3)) (Rd : (BitVec 4)) (imm8 : (BitVec 8)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let d : Int := (BitVec.toNat Rd)
-      let imm16 : (BitVec 16) := (((imm4 +++ i) +++ imm3) +++ imm8)
-      if ((d == 15) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_MOVT_Op_A_txt (Sail.Int.toNatChecked (d)) imm16))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_MUL_A1enc_A_txt (cond : (BitVec 4)) (S : (BitVec 1)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) (Rn : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:7912.29-7912.30"
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:9304.29-9304.30"
       let d : Int := (BitVec.toNat Rd)
       let n : Int := (BitVec.toNat Rn)
       let m : Int := (BitVec.toNat Rm)
-      let setflags : Bool := (S == 1#1)
       if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      (execute_aarch32_instrs_MUL_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) setflags))
+      (execute_aarch32_instrs_QADD8_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
   else (pure (()))
 
 
-def decode_aarch32_instrs_MUL_T1enc_A_txt (Rn : (BitVec 3)) (Rdm : (BitVec 3)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let d : Int := (BitVec.toNat Rdm)
-      let n : Int := (BitVec.toNat Rn)
-      let m : Int := (BitVec.toNat Rdm)
-      let w__1 ← (( do (InITBlock ()) ) : SailM Bool )
-      let setflags : Bool := (! w__1)
-      (execute_aarch32_instrs_MUL_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) setflags))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_MUL_T2enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+def decode_aarch32_instrs_QADD8_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
   let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
   if (w__0 : Bool)
   then
@@ -423,94 +166,452 @@ def decode_aarch32_instrs_MUL_T2enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (R
       let d : Int := (BitVec.toNat Rd)
       let n : Int := (BitVec.toNat Rn)
       let m : Int := (BitVec.toNat Rm)
-      let setflags : Bool := false
       if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      (execute_aarch32_instrs_MUL_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) setflags))
+      (execute_aarch32_instrs_QADD8_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
   else (pure (()))
 
 
-def decode_aarch32_instrs_MVN_rr_A1enc_A_txt (cond : (BitVec 4)) (S : (BitVec 1)) (Rd : (BitVec 4)) (Rs : (BitVec 4)) (stype : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
+def decode_aarch32_instrs_QADD_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
   let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:8202.29-8202.30"
-      let d : Int := (BitVec.toNat Rd)
-      let m : Int := (BitVec.toNat Rm)
-      let s : Int := (BitVec.toNat Rs)
-      let setflags : Bool := (S == 1#1)
-      let shift_t ← (( do (DecodeRegShift stype) ) : SailM SRType )
-      if ((((d == 15) || (m == 15)) || (s == 15)) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_MVN_rr_Op_A_txt (Sail.Int.toNatChecked (d))
-        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (s)) setflags shift_t))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_ORN_i_T1enc_A_txt (i : (BitVec 1)) (S : (BitVec 1)) (Rn : (BitVec 4)) (imm3 : (BitVec 3)) (Rd : (BitVec 4)) (imm8 : (BitVec 8)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let carry ← (( do (undefined_bitvector_at (← occLabel 3142) 1) ) : SailM (BitVec 1) )
-      let imm32 ← (( do (undefined_bitvector_at (← occLabel 3143) 32) ) : SailM (BitVec 32) )
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "MVN (immediate)"))
-      else (pure (()))
-      let d : Int := (BitVec.toNat Rd)
-      let n : Int := (BitVec.toNat Rn)
-      let setflags : Bool := (S == 1#1)
-      let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-      let w__2 ← (( do (T32ExpandImm_C ((i +++ imm3) +++ imm8) w__1.C) ) : SailM
-        ((BitVec 32) × (BitVec 1)) )
-      let (tup__0, tup__1) := (w__2 : ((BitVec 32) × (BitVec 1)))
-      let imm32 : (BitVec 32) := tup__0
-      let carry : (BitVec 1) := tup__1
-      if ((d == 15) : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_ORN_i_Op_A_txt carry (Sail.Int.toNatChecked (d)) imm32
-        (Sail.Int.toNatChecked (n)) setflags))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_ORN_r_T1enc_A_txt (S : (BitVec 1)) (Rn : (BitVec 4)) (imm3 : (BitVec 3)) (Rd : (BitVec 4)) (imm2 : (BitVec 2)) (stype : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let shift_n ← (( do (undefined_int_at (← occLabel 3146) ()) ) : SailM Int )
-      let shift_t ← (( do (undefined_SRType (← occLabel 3147) ()) ) : SailM SRType )
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "MVN (register)"))
-      else (pure (()))
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:9375.29-9375.30"
       let d : Int := (BitVec.toNat Rd)
       let n : Int := (BitVec.toNat Rn)
       let m : Int := (BitVec.toNat Rm)
-      let setflags : Bool := (S == 1#1)
-      let w__1 ← (( do (DecodeImmShift stype (imm3 +++ imm2)) ) : SailM (SRType × Int) )
-      let (tup__0, tup__1) := (w__1 : (SRType × Int))
-      let shift_t : SRType := tup__0
-      let shift_n : Int := tup__1
-      let shift_n : Int := shift_n
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_QADD_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_QADD_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_QADD_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_QASX_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:9438.29-9438.30"
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_QASX_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_QASX_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_QASX_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_QDADD_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:9512.29-9512.30"
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_QDADD_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_QDADD_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_QDADD_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_QDSUB_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:9586.29-9586.30"
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_QDSUB_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_QDSUB_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_QDSUB_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_QSAX_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:9649.29-9649.30"
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_QSAX_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_QSAX_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_QSAX_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_QSUB16_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:9712.29-9712.30"
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_QSUB16_Op_A_txt (Sail.Int.toNatChecked (d))
+        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_QSUB16_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_QSUB16_Op_A_txt (Sail.Int.toNatChecked (d))
+        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_QSUB8_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:9779.29-9779.30"
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_QSUB8_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_QSUB8_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_QSUB8_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_QSUB_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:9850.29-9850.30"
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_QSUB_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_QSUB_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_QSUB_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_RBIT_A1enc_A_txt (cond : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:9914.29-9914.30"
+      let d : Int := (BitVec.toNat Rd)
+      let m : Int := (BitVec.toNat Rm)
       if (((d == 15) || (m == 15)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      (execute_aarch32_instrs_ORN_r_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) setflags shift_n shift_t))
+      (execute_aarch32_instrs_RBIT_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))))
   else (pure (()))
 
 
-def decode_aarch32_instrs_ORR_rr_A1enc_A_txt (cond : (BitVec 4)) (S : (BitVec 1)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rs : (BitVec 4)) (stype : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
+def decode_aarch32_instrs_RBIT_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
   let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:8616.29-8616.30"
+      let d : Int := (BitVec.toNat Rd)
+      let m : Int := (BitVec.toNat Rm)
+      let n : Int := (BitVec.toNat Rn)
+      if ((((m != n) || (d == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_RBIT_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_REV16_A1enc_A_txt (cond : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:9977.29-9977.30"
+      let d : Int := (BitVec.toNat Rd)
+      let m : Int := (BitVec.toNat Rm)
+      if (((d == 15) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_REV16_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_REV16_T1enc_A_txt (Rm : (BitVec 3)) (Rd : (BitVec 3)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let d : Int := (BitVec.toNat Rd)
+      let m : Int := (BitVec.toNat Rm)
+      (execute_aarch32_instrs_REV16_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_REV16_T2enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let d : Int := (BitVec.toNat Rd)
+      let m : Int := (BitVec.toNat Rm)
+      let n : Int := (BitVec.toNat Rn)
+      if ((((m != n) || (d == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_REV16_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_REV_A1enc_A_txt (cond : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:10058.29-10058.30"
+      let d : Int := (BitVec.toNat Rd)
+      let m : Int := (BitVec.toNat Rm)
+      if (((d == 15) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_REV_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_REV_T1enc_A_txt (Rm : (BitVec 3)) (Rd : (BitVec 3)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let d : Int := (BitVec.toNat Rd)
+      let m : Int := (BitVec.toNat Rm)
+      (execute_aarch32_instrs_REV_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_REV_T2enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let d : Int := (BitVec.toNat Rd)
+      let m : Int := (BitVec.toNat Rm)
+      let n : Int := (BitVec.toNat Rn)
+      if ((((m != n) || (d == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_REV_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_REVSH_A1enc_A_txt (cond : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:10137.29-10137.30"
+      let d : Int := (BitVec.toNat Rd)
+      let m : Int := (BitVec.toNat Rm)
+      if (((d == 15) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_REVSH_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_REVSH_T1enc_A_txt (Rm : (BitVec 3)) (Rd : (BitVec 3)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let d : Int := (BitVec.toNat Rd)
+      let m : Int := (BitVec.toNat Rm)
+      (execute_aarch32_instrs_REVSH_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_REVSH_T2enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let d : Int := (BitVec.toNat Rd)
+      let m : Int := (BitVec.toNat Rm)
+      let n : Int := (BitVec.toNat Rn)
+      if ((((m != n) || (d == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_REVSH_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_ROR_r_T1enc_A_txt (Rm : (BitVec 3)) (Rdn : (BitVec 3)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let d : Int := (BitVec.toNat Rdn)
+      let n : Int := (BitVec.toNat Rdn)
+      let m : Int := (BitVec.toNat Rm)
+      let w__1 ← (( do (InITBlock ()) ) : SailM Bool )
+      let setflags : Bool := (! w__1)
+      (execute_aarch32_instrs_ROR_r_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n)) setflags))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_RSB_rr_A1enc_A_txt (cond : (BitVec 4)) (S : (BitVec 1)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rs : (BitVec 4)) (stype : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:10446.29-10446.30"
       let d : Int := (BitVec.toNat Rd)
       let n : Int := (BitVec.toNat Rn)
       let m : Int := (BitVec.toNat Rm)
@@ -520,246 +621,150 @@ def decode_aarch32_instrs_ORR_rr_A1enc_A_txt (cond : (BitVec 4)) (S : (BitVec 1)
       if (((((d == 15) || (n == 15)) || (m == 15)) || (s == 15)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      (execute_aarch32_instrs_ORR_rr_Op_A_txt (Sail.Int.toNatChecked (d))
+      (execute_aarch32_instrs_RSB_rr_Op_A_txt (Sail.Int.toNatChecked (d))
         (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (s)) setflags
         shift_t))
   else (pure (()))
 
 
-def decode_aarch32_instrs_PKH_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (imm5 : (BitVec 5)) (tb : (BitVec 1)) (Rm : (BitVec 4)) : SailM Unit := do
+def decode_aarch32_instrs_RSC_rr_A1enc_A_txt (cond : (BitVec 4)) (S : (BitVec 1)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rs : (BitVec 4)) (stype : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
   let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
   if (w__0 : Bool)
   then
     (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:8660.29-8660.30"
-      let shift_n ← (( do (undefined_int_at (← occLabel 3162) ()) ) : SailM Int )
-      let shift_t ← (( do (undefined_SRType (← occLabel 3163) ()) ) : SailM SRType )
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:10595.29-10595.30"
       let d : Int := (BitVec.toNat Rd)
       let n : Int := (BitVec.toNat Rn)
       let m : Int := (BitVec.toNat Rm)
-      let tbform : Bool := (tb == 1#1)
-      let w__1 ← (( do (DecodeImmShift (tb +++ 0#1) imm5) ) : SailM (SRType × Int) )
-      let (tup__0, tup__1) := (w__1 : (SRType × Int))
-      let shift_t : SRType := tup__0
-      let shift_n : Int := tup__1
-      let shift_n : Int := shift_n
-      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      let s : Int := (BitVec.toNat Rs)
+      let setflags : Bool := (S == 1#1)
+      let shift_t ← (( do (DecodeRegShift stype) ) : SailM SRType )
+      if (((((d == 15) || (n == 15)) || (m == 15)) || (s == 15)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      let shift_t := shift_t
-      let shift_n : Int := shift_n
-      (execute_aarch32_instrs_PKH_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) shift_n shift_t tbform))
+      (execute_aarch32_instrs_RSC_rr_Op_A_txt (Sail.Int.toNatChecked (d))
+        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (s)) setflags
+        shift_t))
   else (pure (()))
 
 
-def decode_aarch32_instrs_PKH_T1enc_A_txt (S : (BitVec 1)) (Rn : (BitVec 4)) (imm3 : (BitVec 3)) (Rd : (BitVec 4)) (imm2 : (BitVec 2)) (tb : (BitVec 1)) (T : (BitVec 1)) (Rm : (BitVec 4)) : SailM Unit := do
+def decode_aarch32_instrs_SADD16_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
   let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
   if (w__0 : Bool)
   then
     (do
-      let shift_n ← (( do (undefined_int_at (← occLabel 3164) ()) ) : SailM Int )
-      let shift_t ← (( do (undefined_SRType (← occLabel 3165) ()) ) : SailM SRType )
-      if (((S == 1#1) || (T == 1#1)) : Bool)
-      then sailThrow ((Error_Undefined ()))
-      else (pure (()))
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:10639.29-10639.30"
       let d : Int := (BitVec.toNat Rd)
       let n : Int := (BitVec.toNat Rn)
       let m : Int := (BitVec.toNat Rm)
-      let tbform : Bool := (tb == 1#1)
-      let w__1 ← (( do (DecodeImmShift (tb +++ 0#1) (imm3 +++ imm2)) ) : SailM (SRType × Int) )
-      let (tup__0, tup__1) := (w__1 : (SRType × Int))
-      let shift_t : SRType := tup__0
-      let shift_n : Int := tup__1
-      let shift_n : Int := shift_n
       if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      (execute_aarch32_instrs_PKH_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) shift_n shift_t tbform))
+      (execute_aarch32_instrs_SADD16_Op_A_txt (Sail.Int.toNatChecked (d))
+        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))))
   else (pure (()))
 
 
-def decode_aarch32_instrs_PLD_i_A1enc_A_txt (U : (BitVec 1)) (R : (BitVec 1)) (Rn : (BitVec 4)) (imm12 : (BitVec 12)) : SailM Unit := do
+def decode_aarch32_instrs_SADD16_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
   let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
   if (w__0 : Bool)
   then
     (do
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "PLD (literal)"))
-      else (pure (()))
-      let n : Int := (BitVec.toNat Rn)
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend imm12 32)
-      let add : Bool := (U == 1#1)
-      let is_pldw : Bool := (R == 0#1)
-      (execute_aarch32_instrs_PLD_i_Op_A_txt add imm32 is_pldw (Sail.Int.toNatChecked (n))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_PLD_i_T1enc_A_txt (W : (BitVec 1)) (Rn : (BitVec 4)) (imm12 : (BitVec 12)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "PLD (literal)"))
-      else (pure (()))
-      let n : Int := (BitVec.toNat Rn)
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend imm12 32)
-      let add : Bool := true
-      let is_pldw : Bool := (W == 1#1)
-      (execute_aarch32_instrs_PLD_i_Op_A_txt add imm32 is_pldw (Sail.Int.toNatChecked (n))))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_PLD_i_T2enc_A_txt (W : (BitVec 1)) (Rn : (BitVec 4)) (imm8 : (BitVec 8)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "PLD (literal)"))
-      else (pure (()))
-      let n : Int := (BitVec.toNat Rn)
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend imm8 32)
-      let add : Bool := false
-      let is_pldw : Bool := (W == 1#1)
-      (execute_aarch32_instrs_PLD_i_Op_A_txt add imm32 is_pldw (Sail.Int.toNatChecked (n))))
-  else (pure (()))
-
-
-/-- Type quantifiers: k_add : Bool -/
-def execute_aarch32_instrs_PLD_l_Op_A_txt (add : Bool) (imm32 : (BitVec 32)) : SailM Unit := do
-  let address ← (( do
-    if (add : Bool)
-    then
-      (do
-        let w__0 ← (( do (PC_read__1 ()) ) : SailM (BitVec 32) )
-        (pure (((Align_bits w__0 4) + imm32))))
-    else
-      (do
-        let w__1 ← (( do (PC_read__1 ()) ) : SailM (BitVec 32) )
-        (pure (((Align_bits w__1 4) - imm32)))) ) : SailM (BitVec 32) )
-  (pure ((Hint_PreloadData address)))
-
-
-def decode_aarch32_instrs_PLD_r_A1enc_A_txt (U : (BitVec 1)) (R : (BitVec 1)) (Rn : (BitVec 4)) (imm5 : (BitVec 5)) (stype : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      let shift_n ← (( do (undefined_int_at (← occLabel 3166) ()) ) : SailM Int )
-      let shift_t ← (( do (undefined_SRType (← occLabel 3167) ()) ) : SailM SRType )
+      let d : Int := (BitVec.toNat Rd)
       let n : Int := (BitVec.toNat Rn)
       let m : Int := (BitVec.toNat Rm)
-      let add : Bool := (U == 1#1)
-      let is_pldw : Bool := (R == 0#1)
-      let w__1 ← (( do (DecodeImmShift stype imm5) ) : SailM (SRType × Int) )
-      let (tup__0, tup__1) := (w__1 : (SRType × Int))
-      let shift_t : SRType := tup__0
-      let shift_n : Int := tup__1
-      let shift_n : Int := shift_n
-      if (((m == 15) || ((n == 15) && is_pldw)) : Bool)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      let shift_t := shift_t
-      let shift_n : Int := shift_n
-      (execute_aarch32_instrs_PLD_r_Op_A_txt add is_pldw (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) shift_n shift_t))
+      (execute_aarch32_instrs_SADD16_Op_A_txt (Sail.Int.toNatChecked (d))
+        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))))
   else (pure (()))
 
 
-def decode_aarch32_instrs_PLD_r_T1enc_A_txt (W : (BitVec 1)) (Rn : (BitVec 4)) (imm2 : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
+def decode_aarch32_instrs_SADD8_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
   let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
   if (w__0 : Bool)
   then
     (do
-      let shift_n ← (( do (undefined_int_at (← occLabel 3168) ()) ) : SailM Int )
-      let shift_t ← (( do (undefined_SRType (← occLabel 3169) ()) ) : SailM SRType )
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "PLD (literal)"))
-      else (pure (()))
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:10710.29-10710.30"
+      let d : Int := (BitVec.toNat Rd)
       let n : Int := (BitVec.toNat Rn)
       let m : Int := (BitVec.toNat Rm)
-      let add : Bool := true
-      let is_pldw : Bool := (W == 1#1)
-      let (tup__0, tup__1) := ((SRType_LSL, (BitVec.toNat imm2)) : (SRType × Int))
-      let shift_t : SRType := tup__0
-      let shift_n : Int := tup__1
-      let shift_n : Int := shift_n
-      if ((m == 15) : Bool)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      (execute_aarch32_instrs_PLD_r_Op_A_txt add is_pldw (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) shift_n shift_t))
+      (execute_aarch32_instrs_SADD8_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
   else (pure (()))
 
 
-/-- Type quantifiers: k_add : Bool, n : Nat, 0 ≤ n ∧ n ≤ 15 -/
-def execute_aarch32_instrs_PLI_i_Op_A_txt (add : Bool) (imm32 : (BitVec 32)) (n : Nat) : SailM Unit := do
-  let base ← (( do
-    if ((n == 15) : Bool)
-    then
-      (do
-        let w__0 ← (( do (PC_read__1 ()) ) : SailM (BitVec 32) )
-        (pure ((Align_bits w__0 4))))
-    else
-      (do
-        (R_read n)) ) : SailM (BitVec 32) )
-  let address : (BitVec 32) :=
-    if (add : Bool)
-    then (base + imm32)
-    else (base - imm32)
-  (pure ((Hint_PreloadInstr address)))
-
-
-def decode_aarch32_instrs_PLI_r_A1enc_A_txt (U : (BitVec 1)) (Rn : (BitVec 4)) (imm5 : (BitVec 5)) (stype : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
+def decode_aarch32_instrs_SADD8_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
   let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
   if (w__0 : Bool)
   then
     (do
-      let shift_n ← (( do (undefined_int_at (← occLabel 3170) ()) ) : SailM Int )
-      let shift_t ← (( do (undefined_SRType (← occLabel 3171) ()) ) : SailM SRType )
+      let d : Int := (BitVec.toNat Rd)
       let n : Int := (BitVec.toNat Rn)
       let m : Int := (BitVec.toNat Rm)
-      let add : Bool := (U == 1#1)
-      let w__1 ← (( do (DecodeImmShift stype imm5) ) : SailM (SRType × Int) )
-      let (tup__0, tup__1) := (w__1 : (SRType × Int))
-      let shift_t : SRType := tup__0
-      let shift_n : Int := tup__1
-      let shift_n : Int := shift_n
-      if ((m == 15) : Bool)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      let shift_t := shift_t
-      let shift_n : Int := shift_n
-      (execute_aarch32_instrs_PLI_r_Op_A_txt add (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) shift_n shift_t))
+      (execute_aarch32_instrs_SADD8_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
   else (pure (()))
 
 
-def decode_aarch32_instrs_PLI_r_T1enc_A_txt (Rn : (BitVec 4)) (imm2 : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
+def decode_aarch32_instrs_SASX_A1enc_A_txt (cond : (BitVec 4)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
   let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
   if (w__0 : Bool)
   then
     (do
-      let shift_n ← (( do (undefined_int_at (← occLabel 3172) ()) ) : SailM Int )
-      let shift_t ← (( do (undefined_SRType (← occLabel 3173) ()) ) : SailM SRType )
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "PLI (immediate, literal)"))
-      else (pure (()))
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:10775.29-10775.30"
+      let d : Int := (BitVec.toNat Rd)
       let n : Int := (BitVec.toNat Rn)
       let m : Int := (BitVec.toNat Rm)
-      let add : Bool := true
-      let (tup__0, tup__1) := ((SRType_LSL, (BitVec.toNat imm2)) : (SRType × Int))
-      let shift_t : SRType := tup__0
-      let shift_n : Int := tup__1
-      let shift_n : Int := shift_n
-      if ((m == 15) : Bool)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
       then sailThrow ((Error_Unpredictable ()))
       else (pure (()))
-      (execute_aarch32_instrs_PLI_r_Op_A_txt add (Sail.Int.toNatChecked (m))
-        (Sail.Int.toNatChecked (n)) shift_n shift_t))
+      (execute_aarch32_instrs_SASX_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_SASX_T1enc_A_txt (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      if ((((d == 15) || (n == 15)) || (m == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_SASX_Op_A_txt (Sail.Int.toNatChecked (d)) (Sail.Int.toNatChecked (m))
+        (Sail.Int.toNatChecked (n))))
+  else (pure (()))
+
+
+def decode_aarch32_instrs_SBC_rr_A1enc_A_txt (cond : (BitVec 4)) (S : (BitVec 1)) (Rn : (BitVec 4)) (Rd : (BitVec 4)) (Rs : (BitVec 4)) (stype : (BitVec 2)) (Rm : (BitVec 4)) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      ArmFull.assert (cond != 0b1111#4) "sail-inputs/14-instrs32.sail:11079.29-11079.30"
+      let d : Int := (BitVec.toNat Rd)
+      let n : Int := (BitVec.toNat Rn)
+      let m : Int := (BitVec.toNat Rm)
+      let s : Int := (BitVec.toNat Rs)
+      let setflags : Bool := (S == 1#1)
+      let shift_t ← (( do (DecodeRegShift stype) ) : SailM SRType )
+      if (((((d == 15) || (n == 15)) || (m == 15)) || (s == 15)) : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_SBC_rr_Op_A_txt (Sail.Int.toNatChecked (d))
+        (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n)) (Sail.Int.toNatChecked (s)) setflags
+        shift_t))
   else (pure (()))
 
 

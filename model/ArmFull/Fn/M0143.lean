@@ -1,59 +1,62 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0008
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0015
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0019
-import ArmFull.Fn.M0020
-import ArmFull.Fn.M0021
-import ArmFull.Fn.M0022
-import ArmFull.Fn.M0023
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0034
-import ArmFull.Fn.M0035
-import ArmFull.Fn.M0036
-import ArmFull.Fn.M0038
-import ArmFull.Fn.M0039
-import ArmFull.Fn.M0040
-import ArmFull.Fn.M0041
-import ArmFull.Fn.M0042
-import ArmFull.Fn.M0043
-import ArmFull.Fn.M0044
-import ArmFull.Fn.M0045
-import ArmFull.Fn.M0046
-import ArmFull.Fn.M0047
-import ArmFull.Fn.M0048
-import ArmFull.Fn.M0049
-import ArmFull.Fn.M0050
-import ArmFull.Fn.M0051
-import ArmFull.Fn.M0052
-import ArmFull.Fn.M0053
-import ArmFull.Fn.M0054
-import ArmFull.Fn.M0055
-import ArmFull.Fn.M0056
-import ArmFull.Fn.M0057
-import ArmFull.Fn.M0058
-import ArmFull.Fn.M0059
-import ArmFull.Fn.M0061
-import ArmFull.Fn.M0062
-import ArmFull.Fn.M0063
-import ArmFull.Fn.M0065
-import ArmFull.Fn.M0069
-import ArmFull.Fn.M0070
-import ArmFull.Fn.M0071
-import ArmFull.Fn.M0072
-import ArmFull.Fn.M0074
-import ArmFull.Fn.M0076
-import ArmFull.Fn.M0079
-import ArmFull.Fn.M0080
-import ArmFull.Fn.M0081
-import ArmFull.Fn.M0082
-import ArmFull.Fn.M0086
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0008
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0015
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0019
+public import ArmFull.Fn.M0020
+public import ArmFull.Fn.M0021
+public import ArmFull.Fn.M0022
+public import ArmFull.Fn.M0023
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0025
+public import ArmFull.Fn.M0034
+public import ArmFull.Fn.M0035
+public import ArmFull.Fn.M0036
+public import ArmFull.Fn.M0037
+public import ArmFull.Fn.M0038
+public import ArmFull.Fn.M0039
+public import ArmFull.Fn.M0040
+public import ArmFull.Fn.M0041
+public import ArmFull.Fn.M0042
+public import ArmFull.Fn.M0043
+public import ArmFull.Fn.M0044
+public import ArmFull.Fn.M0045
+public import ArmFull.Fn.M0046
+public import ArmFull.Fn.M0047
+public import ArmFull.Fn.M0048
+public import ArmFull.Fn.M0049
+public import ArmFull.Fn.M0050
+public import ArmFull.Fn.M0051
+public import ArmFull.Fn.M0052
+public import ArmFull.Fn.M0053
+public import ArmFull.Fn.M0054
+public import ArmFull.Fn.M0055
+public import ArmFull.Fn.M0056
+public import ArmFull.Fn.M0057
+public import ArmFull.Fn.M0058
+public import ArmFull.Fn.M0059
+public import ArmFull.Fn.M0061
+public import ArmFull.Fn.M0062
+public import ArmFull.Fn.M0063
+public import ArmFull.Fn.M0065
+public import ArmFull.Fn.M0069
+public import ArmFull.Fn.M0070
+public import ArmFull.Fn.M0071
+public import ArmFull.Fn.M0072
+public import ArmFull.Fn.M0074
+public import ArmFull.Fn.M0076
+public import ArmFull.Fn.M0079
+public import ArmFull.Fn.M0080
+public import ArmFull.Fn.M0081
+public import ArmFull.Fn.M0082
+public import ArmFull.Fn.M0083
+public import ArmFull.Fn.M0086 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -156,81 +159,6 @@ open AccessType
 open ATAccess
 
 /-- Type quantifiers: t : Int -/
-def ICH_AP0R_SysRegWrite32_0687237dd975d38e (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T12 : (BitVec 1) := (_get_HSTR_EL2_Type_T12 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T12 : (BitVec 1) := (_get_HSTR_Type_T12 w__2)
-  let w__3 ← (( do (ICC_HSRE_read ()) ) : SailM (BitVec 32) )
-  let __ICC_HSRE_SRE : (BitVec 1) := (_get_ICC_HSRE_Type_SRE w__3)
-  let w__4 ← (( do readReg ICC_MSRE ) : SailM (BitVec 32) )
-  let __ICC_MSRE_SRE : (BitVec 1) := (_get_ICC_MSRE_Type_SRE w__4)
-  sailThrow ((Error_Undefined ()))
-
-
-/-- Type quantifiers: t : Int -/
-def ICH_AP0R_SysRegWrite32_e8bf01c9f2e53161 (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T12 : (BitVec 1) := (_get_HSTR_EL2_Type_T12 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T12 : (BitVec 1) := (_get_HSTR_Type_T12 w__2)
-  let w__3 ← (( do (ICC_HSRE_read ()) ) : SailM (BitVec 32) )
-  let __ICC_HSRE_SRE : (BitVec 1) := (_get_ICC_HSRE_Type_SRE w__3)
-  let w__4 ← (( do readReg ICC_MSRE ) : SailM (BitVec 32) )
-  let __ICC_MSRE_SRE : (BitVec 1) := (_get_ICC_MSRE_Type_SRE w__4)
-  sailThrow ((Error_Undefined ()))
-
-
-/-- Type quantifiers: t : Int -/
-def ICH_AP0R_SysRegWrite32_e8e0b6211baf6183 (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T12 : (BitVec 1) := (_get_HSTR_EL2_Type_T12 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T12 : (BitVec 1) := (_get_HSTR_Type_T12 w__2)
-  let w__3 ← (( do (ICC_HSRE_read ()) ) : SailM (BitVec 32) )
-  let __ICC_HSRE_SRE : (BitVec 1) := (_get_ICC_HSRE_Type_SRE w__3)
-  let w__4 ← (( do readReg ICC_MSRE ) : SailM (BitVec 32) )
-  let __ICC_MSRE_SRE : (BitVec 1) := (_get_ICC_MSRE_Type_SRE w__4)
-  sailThrow ((Error_Undefined ()))
-
-
-/-- Type quantifiers: t : Int -/
-def ICH_AP1R_SysRegWrite32_100dab3ceee19d37 (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T12 : (BitVec 1) := (_get_HSTR_EL2_Type_T12 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T12 : (BitVec 1) := (_get_HSTR_Type_T12 w__2)
-  let w__3 ← (( do (ICC_HSRE_read ()) ) : SailM (BitVec 32) )
-  let __ICC_HSRE_SRE : (BitVec 1) := (_get_ICC_HSRE_Type_SRE w__3)
-  let w__4 ← (( do readReg ICC_MSRE ) : SailM (BitVec 32) )
-  let __ICC_MSRE_SRE : (BitVec 1) := (_get_ICC_MSRE_Type_SRE w__4)
-  sailThrow ((Error_Undefined ()))
-
-
-/-- Type quantifiers: t : Int -/
-def ICH_AP1R_SysRegWrite32_4eff4ec729dbfa39 (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T12 : (BitVec 1) := (_get_HSTR_EL2_Type_T12 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T12 : (BitVec 1) := (_get_HSTR_Type_T12 w__2)
-  let w__3 ← (( do (ICC_HSRE_read ()) ) : SailM (BitVec 32) )
-  let __ICC_HSRE_SRE : (BitVec 1) := (_get_ICC_HSRE_Type_SRE w__3)
-  let w__4 ← (( do readReg ICC_MSRE ) : SailM (BitVec 32) )
-  let __ICC_MSRE_SRE : (BitVec 1) := (_get_ICC_MSRE_Type_SRE w__4)
-  sailThrow ((Error_Undefined ()))
-
-
-/-- Type quantifiers: t : Int -/
 def ICH_AP1R_SysRegWrite32_9d0709acdf26e0db (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
   let __PSTATE_EL : (BitVec 2) := w__0.EL
@@ -309,24 +237,6 @@ def execute_aarch64_instrs_system_barriers_dmb (domain : MBReqDomain) (types : M
 
 def execute_aarch64_instrs_system_barriers_sb (_ : Unit) : SailM Unit := do
   (SpeculationBarrier ())
-
-
-/-- Type quantifiers: pc : Int -/
-def __DecodeA64_Reserved (pc : Int) (__opcode : (BitVec 32)) : SailM Unit := do
-  let w__1 ← (( do
-    if ((((Sail.BitVec.castWidth (m := 16) (Sail.BitVec.extractLsb __opcode 31 16)) == (0x0000#16 : (BitVec 16))) : Bool) : Bool)
-    then
-      (do
-        let w__0 ← (( do readReg SEE ) : SailM Int )
-        (pure (((w__0 <b 1017) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1 : Bool)
-  then
-    (do
-      writeReg SEE 1017
-      let imm16 := (BitVec.slice __opcode 0 16)
-      (decode_udf_perm_undef_aarch64_instrs_udf imm16))
-  else sailThrow ((Error_Undefined ()))
 
 
 def __DefaultCond (enc : __InstrEnc) : SailM (BitVec 4) := do

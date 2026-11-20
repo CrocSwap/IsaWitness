@@ -1,6 +1,7 @@
+module
 /- Copyright (c) 2026 Crocodile Labs Inc.
 SPDX-License-Identifier: Apache-2.0 -/
-import Sail.AbstractReal
+public import Sail.AbstractReal set_option backward.proofsInPublic true @[expose] public section
 
 /-!
 # Exact-rational instance of `SailReal` (computable, core `Rat`; no Mathlib)

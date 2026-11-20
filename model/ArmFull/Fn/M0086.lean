@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,102 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _get_GICR_ISENABLER0_Type_Set_enable_bit8 (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 8 8)
+
+
+def _update_GICR_ISENABLER0_Type_Set_enable_bit8 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 8 8 x)
+
+
+def _get_GICR_ISENABLER0_Type_Set_enable_bit9 (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 9 9)
+
+
+def _update_GICR_ISENABLER0_Type_Set_enable_bit9 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 9 9 x)
+
+
+def Mk_CTICIDR2_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def _get_CTICIDR2_Type_PRMBL_2 (v : (BitVec 32)) : (BitVec 8) :=
+  (Sail.BitVec.extractLsb v 7 0)
+
+
+def _update_CTICIDR2_Type_PRMBL_2 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 0 x)
+
+
+def _update_AMCIDR2_Type_PRMBL_2 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 0 x)
+
+
+def _update_EDCIDR2_Type_PRMBL_2 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 0 x)
+
+
+def _update_PMCIDR2_Type_PRMBL_2 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 0 x)
+
+
+def _get_AMCIDR2_Type_PRMBL_2 (v : (BitVec 32)) : (BitVec 8) :=
+  (Sail.BitVec.extractLsb v 7 0)
+
+
+def _get_EDCIDR2_Type_PRMBL_2 (v : (BitVec 32)) : (BitVec 8) :=
+  (Sail.BitVec.extractLsb v 7 0)
+
+
+def _get_PMCIDR2_Type_PRMBL_2 (v : (BitVec 32)) : (BitVec 8) :=
+  (Sail.BitVec.extractLsb v 7 0)
+
+
+def Mk_EDRCR_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def _get_EDRCR_Type_CBRRQ (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 4 4)
+
+
+def _update_EDRCR_Type_CBRRQ (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 4 4 x)
+
+
+def _get_EDRCR_Type_CSE (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 2 2)
+
+
+def _update_EDRCR_Type_CSE (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 2 2 x)
+
+
+def _get_EDRCR_Type_CSPA (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 3 3)
+
+
+def _update_EDRCR_Type_CSPA (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 3 3 x)
+
+
+def Mk_GICV_PMR_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_EDDEVID_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def _get_EDDEVID_Type_DebugPower (v : (BitVec 32)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 7 4)
+
+
+def _update_EDDEVID_Type_DebugPower (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 4 x)
+
 
 def Mk_GICC_DIR_Type (v : (BitVec 32)) : (BitVec 32) :=
   v
@@ -703,10 +799,6 @@ def Init_Devices (_ : Unit) : SailM Unit := do
   writeReg __GIC_Active none
 
 
-def HaveFP16Ext (_ : Unit) : Bool :=
-  true
-
-
 def ExclusiveMonitorsStatus (_ : Unit) : SailM (BitVec 1) := do
   (undefined_bitvector_at (← occLabel 2887) 1)
 
@@ -790,91 +882,6 @@ def SPMEVTYPER_EL0_set (s : Int) (n : Int) (value_name : (BitVec 64)) : Unit :=
 /-- Type quantifiers: s : Int -/
 def SPMINTENCLR_EL1_set (s : Int) (value_name : (BitVec 64)) : Unit :=
   ()
-
-
-/-- Type quantifiers: s : Int -/
-def SPMINTENSET_EL1_set (s : Int) (value_name : (BitVec 64)) : Unit :=
-  ()
-
-
-/-- Type quantifiers: s : Int -/
-def SPMOVSCLR_EL0_set (s : Int) (value_name : (BitVec 64)) : Unit :=
-  ()
-
-
-/-- Type quantifiers: s : Int -/
-def SPMOVSSET_EL0_set (s : Int) (value_name : (BitVec 64)) : Unit :=
-  ()
-
-
-/-- Type quantifiers: s : Int -/
-def SPMROOTCR_EL3_set (s : Int) (value_name : (BitVec 64)) : Unit :=
-  ()
-
-
-/-- Type quantifiers: s : Int -/
-def SPMSCR_EL1_set (s : Int) (value_name : (BitVec 64)) : Unit :=
-  ()
-
-
-/-- Type quantifiers: t : Int, t2 : Int -/
-def AArch64_ImpDefSysRegRead128 (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (CRm : (BitVec 4)) (op2 : (BitVec 3)) (t : Int) (t2 : Int) : SailM Unit := do
-  sailThrow ((Error_Undefined ()))
-
-
-/-- Type quantifiers: t : Int, t2 : Int -/
-def AArch64_ImpDefSysRegWrite128 (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (CRm : (BitVec 4)) (op2 : (BitVec 3)) (t : Int) (t2 : Int) : SailM Unit := do
-  sailThrow ((Error_Undefined ()))
-
-
-/-- Type quantifiers: el : Int, t : Int, t2 : Int -/
-def AArch64_ImpDefSysInstr128 (el : Int) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (CRm : (BitVec 4)) (op2 : (BitVec 3)) (t : Int) (t2 : Int) : SailM Unit := do
-  sailThrow ((Error_Undefined ()))
-
-
-def execute_aarch32_instrs_DBG_Op_A_txt (_ : Unit) : Unit :=
-  ()
-
-
-def execute_aarch32_instrs_NOP_Op_A_txt (_ : Unit) : Unit :=
-  ()
-
-
-def execute_aarch32_instrs_UDF_Op_A_txt (_ : Unit) : SailM Unit := do
-  sailThrow ((Error_Undefined ()))
-
-
-def execute_aarch64_instrs_integer_flags_axflag (_ : Unit) : SailM Unit := do
-  let n : (BitVec 1) := 0#1
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-  let z : (BitVec 1) := (w__0.Z ||| w__1.V)
-  let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
-  let w__3 ← (( do readReg PSTATE ) : SailM ProcState )
-  let c : (BitVec 1) := (w__2.C &&& (Complement.complement w__3.V))
-  let v : (BitVec 1) := 0#1
-  let w__4 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__4 with N := n }
-  let w__5 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__5 with Z := z }
-  let w__6 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__6 with C := c }
-  let w__7 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__7 with V := v }
-
-
-def execute_aarch64_instrs_integer_flags_cfinv (_ : Unit) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-  writeReg PSTATE { w__0 with C := (Complement.complement w__1.C) }
-
-
-def execute_aarch64_instrs_udf (_ : Unit) : Unit :=
-  ()
-
-
-def decode_udf_perm_undef_aarch64_instrs_udf (imm16 : (BitVec 16)) : SailM Unit := do
-  sailThrow ((Error_Undefined ()))
 
 
 end ArmFull.Functions

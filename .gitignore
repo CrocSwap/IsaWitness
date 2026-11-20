@@ -12,7 +12,7 @@ __pycache__/
 # Runtime sources/configuration are fetched and verified locally; do not distribute them.
 /vendor/lean-sail/*
 !/vendor/lean-sail/UPSTREAM.json
-!/vendor/lean-sail/patches/
+!/vendor/lean-sail/edits.json
 !/vendor/lean-sail/lakefile.lean
 !/vendor/lean-sail/Sail/
 /vendor/lean-sail/Sail/*

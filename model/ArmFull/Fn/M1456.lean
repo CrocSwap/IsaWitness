@@ -1,53 +1,22 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0160
-import ArmFull.Fn.M0161
-import ArmFull.Fn.M0186
-import ArmFull.Fn.M0261
-import ArmFull.Fn.M0265
-import ArmFull.Fn.M0269
-import ArmFull.Fn.M0276
-import ArmFull.Fn.M0277
-import ArmFull.Fn.M0313
-import ArmFull.Fn.M0314
-import ArmFull.Fn.M0315
-import ArmFull.Fn.M0321
-import ArmFull.Fn.M0322
-import ArmFull.Fn.M0323
-import ArmFull.Fn.M0324
-import ArmFull.Fn.M0325
-import ArmFull.Fn.M0326
-import ArmFull.Fn.M0327
-import ArmFull.Fn.M0333
-import ArmFull.Fn.M0334
-import ArmFull.Fn.M0335
-import ArmFull.Fn.M0336
-import ArmFull.Fn.M0337
-import ArmFull.Fn.M0338
-import ArmFull.Fn.M0342
-import ArmFull.Fn.M0343
-import ArmFull.Fn.M0347
-import ArmFull.Fn.M0349
-import ArmFull.Fn.M0351
-import ArmFull.Fn.M0354
-import ArmFull.Fn.M0357
-import ArmFull.Fn.M0392
-import ArmFull.Fn.M0394
-import ArmFull.Fn.M0397
-import ArmFull.Fn.M0430
-import ArmFull.Fn.M0432
-import ArmFull.Fn.M1351
-import ArmFull.Fn.M1361
-import ArmFull.Fn.M1365
-import ArmFull.Fn.M1366
-import ArmFull.Fn.M1367
-import ArmFull.Fn.M1373
-import ArmFull.Fn.M1374
-import ArmFull.Fn.M1375
-import ArmFull.Fn.M1378
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0021
+public import ArmFull.Fn.M0022
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0041
+public import ArmFull.Fn.M0058
+public import ArmFull.Fn.M0100
+public import ArmFull.Fn.M0144
+public import ArmFull.Fn.M0146
+public import ArmFull.Fn.M0170
+public import ArmFull.Fn.M0181
+public import ArmFull.Fn.M0252
+public import ArmFull.Fn.M1340 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -150,1176 +119,706 @@ open AccessType
 open ATAccess
 
 /-- Type quantifiers: t : Int -/
-def AArch64_AutoGen_SysRegRead__seg6 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Bool := do
-  if ((((((CRm == 0b0001#4) && (CRn == 0b0011#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b101#3)) : Bool)
-  then
-    (do
-      (HDFGWTR_EL2_SysRegRead_c6796c2a296d66f8 el op0 op1 CRn op2 CRm t)
-      (pure false))
+def AMEVCNTVOFF0_EL2_SysRegWrite_f6918a05ffc46bd6 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
+  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
+  let w__3 ← (( do readReg CPTR_EL3 ) : SailM (BitVec 64) )
+  let __CPTR_EL3_TAM : (BitVec 1) := (_get_CPTR_EL3_Type_TAM w__3)
+  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+  let __SCR_EL3_AMVOFFEN : (BitVec 1) := (_get_SCR_EL3_Type_AMVOFFEN w__4)
+  if ((__PSTATE_EL == EL0) : Bool)
+  then sailThrow ((Error_Undefined ()))
   else
     (do
-      if ((((((CRm == 0b0011#4) && (CRn == 0b0010#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b000#3)) : Bool)
+      if ((__PSTATE_EL == EL1) : Bool)
       then
         (do
-          (APGAKeyLo_EL1_SysRegRead_b90c447e3bdb3387 el op0 op1 CRn op2 CRm t)
-          (pure false))
-      else
-        (do
-          if ((((((CRm == 0b0010#4) && (CRn == 0b0010#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b001#3)) : Bool)
+          let w__8 ← (( do
+            if ((← do
+                 (EL2Enabled ())) : Bool)
+            then
+              (do
+                let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                let w__7 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                (pure (((((_get_HCR_EL2_Type_NV2 w__6) +++ (_get_HCR_EL2_Type_NV w__7)) == 0b11#2) : Bool))))
+            else (pure false) ) : SailM Bool )
+          if (w__8 : Bool)
           then
             (do
-              (APDAKeyHi_EL1_SysRegRead_6f8bf97afb0e465f el op0 op1 CRn op2 CRm t)
-              (pure false))
+              let w__9 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+              (NVMem_set ((BitVec.toNat 0xA00#12) +i (8 *i 0)) w__9))
           else
             (do
-              if ((((((CRm == 0b1100#4) && (CRn == 0b1001#4)) && (op0 == 0b11#2)) && (op1 == 0b011#3)) && (op2 == 0b111#3)) : Bool)
+              let w__11 ← (( do
+                (pure ((← do
+                      (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
+              if (w__11 : Bool)
               then
                 (do
-                  (PMCEID1_EL0_SysRegRead_88fe472f132d5d45 el op0 op1 CRn op2 CRm t)
-                  (pure false))
-              else
-                (do
-                  if ((((((CRm == 0b0010#4) && (CRn == 0b1110#4)) && (op0 == 0b11#2)) && (op1 == 0b111#3)) && (op2 == 0b010#3)) : Bool)
-                  then
-                    (do
-                      (CNTPS_CVAL_EL1_SysRegRead_21e9c10a0f76a1d1 el op0 op1 CRn op2 CRm t)
-                      (pure false))
-                  else
-                    (do
-                      if ((((((CRm == 0b0010#4) && (CRn == 0b1110#4)) && (op0 == 0b11#2)) && (op1 == 0b111#3)) && (op2 == 0b000#3)) : Bool)
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+              else sailThrow ((Error_Undefined ()))))
+      else
+        (do
+          if ((__PSTATE_EL == EL2) : Bool)
+          then
+            (do
+              let w__18 ← (( do
+                (pure ((← do
+                      if ((← do
+                           (pure ((← do
+                                 if ((← do
+                                      (Halted ())) : Bool)
+                                 then
+                                   (do
+                                     (HaveEL EL3))
+                                 else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
                       then
                         (do
-                          (CNTPS_TVAL_EL1_SysRegRead_748a1753bd033377 el op0 op1 CRn op2 CRm t)
-                          (pure false))
-                      else
-                        (do
-                          if ((((((CRm == 0b0101#4) && (CRn == 0b0000#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b101#3)) : Bool)
+                          (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
+                      else (pure false)) && ((__CPTR_EL3_TAM == 1#1) : Bool))) ) : SailM Bool )
+              if (w__18 : Bool)
+              then sailThrow ((Error_Undefined ()))
+              else
+                (do
+                  let w__25 ← (( do
+                    (pure ((← do
+                          if ((← do
+                               (pure ((← do
+                                     if ((← do
+                                          (Halted ())) : Bool)
+                                     then
+                                       (do
+                                         (HaveEL EL3))
+                                     else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
                           then
                             (do
-                              (ID_AA64AFR1_EL1_SysRegRead_1072eb4f153853b5 el op0 op1 CRn op2 CRm t)
-                              (pure false))
+                              (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
+                          else (pure false)) && ((__SCR_EL3_AMVOFFEN == 0#1) : Bool))) ) : SailM
+                    Bool )
+                  if (w__25 : Bool)
+                  then sailThrow ((Error_Undefined ()))
+                  else
+                    (do
+                      let w__27 ← (( do
+                        (pure ((← do
+                              (HaveEL EL3)) && ((__SCR_EL3_AMVOFFEN == 0#1) : Bool))) ) : SailM Bool
+                        )
+                      if (w__27 : Bool)
+                      then
+                        (do
+                          let w__29 ← (( do
+                            (pure ((← do
+                                  (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
+                          if (w__29 : Bool)
+                          then sailThrow ((Error_Undefined ()))
                           else
                             (do
-                              if ((((((CRm == 0b0001#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b110#3)) && (op2 == 0b001#3)) : Bool)
-                              then
-                                (do
-                                  (MAIR2_EL3_SysRegRead_06e8ce86a19999af el op0 op1 CRn op2 CRm t)
-                                  (pure false))
+                              (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                      else
+                        (do
+                          let w__31 ← (( do
+                            (pure ((← do
+                                  (HaveEL EL3)) && ((__CPTR_EL3_TAM == 1#1) : Bool))) ) : SailM Bool
+                            )
+                          if (w__31 : Bool)
+                          then
+                            (do
+                              let w__33 ← (( do
+                                (pure ((← do
+                                      (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool
+                                )
+                              if (w__33 : Bool)
+                              then sailThrow ((Error_Undefined ()))
                               else
                                 (do
-                                  if ((((((CRm == 0b0100#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b001#3)) : Bool)
-                                  then
-                                    (do
-                                      (LOREA_EL1_SysRegRead_c69af0a70feec9d7 el op0 op1 CRn op2 CRm
-                                        t)
-                                      (pure false))
+                                  (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                          else
+                            (do
+                              let w__34 ← (( do readReg AMEVCNTVOFF0_EL2 ) : SailM
+                                (Vector (BitVec 64) 16) )
+                              let w__35 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                              writeReg AMEVCNTVOFF0_EL2 (vectorUpdate w__34 0 w__35))))))
+          else
+            (do
+              if ((__PSTATE_EL == EL3) : Bool)
+              then
+                (do
+                  let w__36 ← (( do readReg AMEVCNTVOFF0_EL2 ) : SailM (Vector (BitVec 64) 16) )
+                  let w__37 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  writeReg AMEVCNTVOFF0_EL2 (vectorUpdate w__36 0 w__37))
+              else (pure (())))))
+
+
+/-- Type quantifiers: t : Int -/
+def AMEVCNTVOFF1_EL2_SysRegWrite_028cfcaff48c5d3b (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
+  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
+  let w__3 ← (( do readReg CPTR_EL3 ) : SailM (BitVec 64) )
+  let __CPTR_EL3_TAM : (BitVec 1) := (_get_CPTR_EL3_Type_TAM w__3)
+  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+  let __SCR_EL3_AMVOFFEN : (BitVec 1) := (_get_SCR_EL3_Type_AMVOFFEN w__4)
+  let w__5 ← (( do (IsG1ActivityMonitorOffsetImplemented 9) ) : SailM Bool )
+  if ((! w__5) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
+    (do
+      if ((__PSTATE_EL == EL0) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else
+        (do
+          if ((__PSTATE_EL == EL1) : Bool)
+          then
+            (do
+              let w__9 ← (( do
+                if ((← do
+                     (EL2Enabled ())) : Bool)
+                then
+                  (do
+                    let w__7 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                    let w__8 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                    (pure (((((_get_HCR_EL2_Type_NV2 w__7) +++ (_get_HCR_EL2_Type_NV w__8)) == 0b11#2) : Bool))))
+                else (pure false) ) : SailM Bool )
+              if (w__9 : Bool)
+              then
+                (do
+                  let w__10 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  (NVMem_set ((BitVec.toNat 0xA80#12) +i (8 *i 9)) w__10))
+              else
+                (do
+                  let w__12 ← (( do
+                    (pure ((← do
+                          (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
+                  if (w__12 : Bool)
+                  then
+                    (do
+                      (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+                  else sailThrow ((Error_Undefined ()))))
+          else
+            (do
+              if ((__PSTATE_EL == EL2) : Bool)
+              then
+                (do
+                  let w__19 ← (( do
+                    (pure ((← do
+                          if ((← do
+                               (pure ((← do
+                                     if ((← do
+                                          (Halted ())) : Bool)
+                                     then
+                                       (do
+                                         (HaveEL EL3))
+                                     else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
+                          then
+                            (do
+                              (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
+                          else (pure false)) && ((__CPTR_EL3_TAM == 1#1) : Bool))) ) : SailM Bool )
+                  if (w__19 : Bool)
+                  then sailThrow ((Error_Undefined ()))
+                  else
+                    (do
+                      let w__26 ← (( do
+                        (pure ((← do
+                              if ((← do
+                                   (pure ((← do
+                                         if ((← do
+                                              (Halted ())) : Bool)
+                                         then
+                                           (do
+                                             (HaveEL EL3))
+                                         else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
+                              then
+                                (do
+                                  (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
+                              else (pure false)) && ((__SCR_EL3_AMVOFFEN == 0#1) : Bool))) ) : SailM
+                        Bool )
+                      if (w__26 : Bool)
+                      then sailThrow ((Error_Undefined ()))
+                      else
+                        (do
+                          let w__28 ← (( do
+                            (pure ((← do
+                                  (HaveEL EL3)) && ((__SCR_EL3_AMVOFFEN == 0#1) : Bool))) ) : SailM
+                            Bool )
+                          if (w__28 : Bool)
+                          then
+                            (do
+                              let w__30 ← (( do
+                                (pure ((← do
+                                      (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool
+                                )
+                              if (w__30 : Bool)
+                              then sailThrow ((Error_Undefined ()))
+                              else
+                                (do
+                                  (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                          else
+                            (do
+                              let w__32 ← (( do
+                                (pure ((← do
+                                      (HaveEL EL3)) && ((__CPTR_EL3_TAM == 1#1) : Bool))) ) : SailM
+                                Bool )
+                              if (w__32 : Bool)
+                              then
+                                (do
+                                  let w__34 ← (( do
+                                    (pure ((← do
+                                          (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM
+                                    Bool )
+                                  if (w__34 : Bool)
+                                  then sailThrow ((Error_Undefined ()))
                                   else
                                     (do
-                                      if ((((((CRm == 0b0011#4) && (CRn == 0b1110#4)) && (op0 == 0b11#2)) && (op1 == 0b101#3)) && (op2 == 0b000#3)) : Bool)
-                                      then
-                                        (do
-                                          (CNTV_TVAL_EL0_SysRegRead_f682815b8c52312a el op0 op1 CRn
-                                            op2 CRm t)
-                                          (pure false))
-                                      else
-                                        (do
-                                          if ((((((CRm == 0b0010#4) && (CRn == 0b0010#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b010#3)) : Bool)
-                                          then
-                                            (do
-                                              (APDBKeyLo_EL1_SysRegRead_d57fe909b886c0fe el op0 op1
-                                                CRn op2 CRm t)
-                                              (pure false))
-                                          else
-                                            (do
-                                              if ((((((CRm == 0b1101#4) && (CRn == 0b1001#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b101#3)) : Bool)
-                                              then
-                                                (do
-                                                  (SPMDEVARCH_EL1_SysRegRead_f379f5d64ab8b025 el op0
-                                                    op1 CRn op2 CRm t)
-                                                  (pure false))
-                                              else
-                                                (do
-                                                  if ((((((CRm == 0b1001#4) && (CRn == 0b0111#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                  then
-                                                    (do
-                                                      (DBGCLAIMCLR_EL1_SysRegRead_ffbb497475eb383a
-                                                        el op0 op1 CRn op2 CRm t)
-                                                      (pure false))
-                                                  else
-                                                    (do
-                                                      if ((((((CRm == 0b1111#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                      then
-                                                        (do
-                                                          (DBGBVR_EL1_SysRegRead_d8b7590f7c00d19c el
-                                                            op0 op1 CRn op2 CRm t)
-                                                          (pure false))
-                                                      else
-                                                        (do
-                                                          if ((((((CRm == 0b1110#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                          then
-                                                            (do
-                                                              (DBGBVR_EL1_SysRegRead_c3ec1516735db5f7
-                                                                el op0 op1 CRn op2 CRm t)
-                                                              (pure false))
-                                                          else
-                                                            (do
-                                                              if ((((((CRm == 0b1101#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                              then
-                                                                (do
-                                                                  (DBGBVR_EL1_SysRegRead_d4c2dcc933af38a7
-                                                                    el op0 op1 CRn op2 CRm t)
-                                                                  (pure false))
-                                                              else
-                                                                (do
-                                                                  if ((((((CRm == 0b1100#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                  then
-                                                                    (do
-                                                                      (DBGBVR_EL1_SysRegRead_8a3cda8f4660427a
-                                                                        el op0 op1 CRn op2 CRm t)
-                                                                      (pure false))
-                                                                  else
-                                                                    (do
-                                                                      if ((((((CRm == 0b1011#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                      then
-                                                                        (do
-                                                                          (DBGBVR_EL1_SysRegRead_351ab37f466f6889
-                                                                            el op0 op1 CRn op2 CRm t)
-                                                                          (pure false))
-                                                                      else
-                                                                        (do
-                                                                          if ((((((CRm == 0b1010#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                          then
-                                                                            (do
-                                                                              (DBGBVR_EL1_SysRegRead_8c3e53570d26ce7a
-                                                                                el op0 op1 CRn op2
-                                                                                CRm t)
-                                                                              (pure false))
-                                                                          else
-                                                                            (do
-                                                                              if ((((((CRm == 0b1001#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                              then
-                                                                                (do
-                                                                                  (DBGBVR_EL1_SysRegRead_ab88cca85ec0eca9
-                                                                                    el op0 op1 CRn
-                                                                                    op2 CRm t)
-                                                                                  (pure false))
-                                                                              else
-                                                                                (do
-                                                                                  if ((((((CRm == 0b1000#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                                  then
-                                                                                    (do
-                                                                                      (DBGBVR_EL1_SysRegRead_a18f410293f246c4
-                                                                                        el op0 op1
-                                                                                        CRn op2 CRm
-                                                                                        t)
-                                                                                      (pure false))
-                                                                                  else
-                                                                                    (do
-                                                                                      if ((((((CRm == 0b0111#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                                      then
-                                                                                        (do
-                                                                                          (DBGBVR_EL1_SysRegRead_755afa7df870d9ab
-                                                                                            el op0
-                                                                                            op1 CRn
-                                                                                            op2 CRm
-                                                                                            t)
-                                                                                          (pure false))
-                                                                                      else
-                                                                                        (do
-                                                                                          if ((((((CRm == 0b0110#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                                          then
-                                                                                            (do
-                                                                                              (DBGBVR_EL1_SysRegRead_c5088163afaa4276
-                                                                                                el
-                                                                                                op0
-                                                                                                op1
-                                                                                                CRn
-                                                                                                op2
-                                                                                                CRm
-                                                                                                t)
-                                                                                              (pure false))
-                                                                                          else
-                                                                                            (do
-                                                                                              if ((((((CRm == 0b0101#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                                              then
-                                                                                                (do
-                                                                                                  (DBGBVR_EL1_SysRegRead_25b8861425ee4c26
-                                                                                                    el
-                                                                                                    op0
-                                                                                                    op1
-                                                                                                    CRn
-                                                                                                    op2
-                                                                                                    CRm
-                                                                                                    t)
-                                                                                                  (pure false))
-                                                                                              else
-                                                                                                (do
-                                                                                                  if ((((((CRm == 0b0100#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                                                  then
-                                                                                                    (do
-                                                                                                      (DBGBVR_EL1_SysRegRead_9deb23233bdb8631
-                                                                                                        el
-                                                                                                        op0
-                                                                                                        op1
-                                                                                                        CRn
-                                                                                                        op2
-                                                                                                        CRm
-                                                                                                        t)
-                                                                                                      (pure false))
-                                                                                                  else
-                                                                                                    (do
-                                                                                                      if ((((((CRm == 0b0011#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                                                      then
-                                                                                                        (do
-                                                                                                          (DBGBVR_EL1_SysRegRead_a6904466fe9c7a54
-                                                                                                            el
-                                                                                                            op0
-                                                                                                            op1
-                                                                                                            CRn
-                                                                                                            op2
-                                                                                                            CRm
-                                                                                                            t)
-                                                                                                          (pure false))
-                                                                                                      else
-                                                                                                        (do
-                                                                                                          if ((((((CRm == 0b0010#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                                                          then
-                                                                                                            (do
-                                                                                                              (DBGBVR_EL1_SysRegRead_7e4c0d4f3367d780
-                                                                                                                el
-                                                                                                                op0
-                                                                                                                op1
-                                                                                                                CRn
-                                                                                                                op2
-                                                                                                                CRm
-                                                                                                                t)
-                                                                                                              (pure false))
-                                                                                                          else
-                                                                                                            (do
-                                                                                                              if ((((((CRm == 0b0001#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                                                              then
-                                                                                                                (do
-                                                                                                                  (DBGBVR_EL1_SysRegRead_08fe9aa719e4e44c
-                                                                                                                    el
-                                                                                                                    op0
-                                                                                                                    op1
-                                                                                                                    CRn
-                                                                                                                    op2
-                                                                                                                    CRm
-                                                                                                                    t)
-                                                                                                                  (pure false))
-                                                                                                              else
-                                                                                                                (do
-                                                                                                                  if ((((((CRm == 0b0000#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                                                                  then
-                                                                                                                    (do
-                                                                                                                      (DBGBVR_EL1_SysRegRead_5ed77d081c253be3
-                                                                                                                        el
-                                                                                                                        op0
-                                                                                                                        op1
-                                                                                                                        CRn
-                                                                                                                        op2
-                                                                                                                        CRm
-                                                                                                                        t)
-                                                                                                                      (pure false))
-                                                                                                                  else
-                                                                                                                    (do
-                                                                                                                      if ((((((CRm == 0b1100#4) && (CRn == 0b1001#4)) && (op0 == 0b11#2)) && (op1 == 0b011#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                      then
-                                                                                                                        (do
-                                                                                                                          (PMCEID0_EL0_SysRegRead_f2e86782f8f3f9b7
-                                                                                                                            el
-                                                                                                                            op0
-                                                                                                                            op1
-                                                                                                                            CRn
-                                                                                                                            op2
-                                                                                                                            CRm
-                                                                                                                            t)
-                                                                                                                          (pure false))
-                                                                                                                      else
-                                                                                                                        (do
-                                                                                                                          if ((((((CRm == 0b1111#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                          then
-                                                                                                                            (do
-                                                                                                                              (DBGWVR_EL1_SysRegRead_419765ae001a7669
-                                                                                                                                el
-                                                                                                                                op0
-                                                                                                                                op1
-                                                                                                                                CRn
-                                                                                                                                op2
-                                                                                                                                CRm
-                                                                                                                                t)
-                                                                                                                              (pure false))
-                                                                                                                          else
-                                                                                                                            (do
-                                                                                                                              if ((((((CRm == 0b1110#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                              then
-                                                                                                                                (do
-                                                                                                                                  (DBGWVR_EL1_SysRegRead_27540f902a0177f1
-                                                                                                                                    el
-                                                                                                                                    op0
-                                                                                                                                    op1
-                                                                                                                                    CRn
-                                                                                                                                    op2
-                                                                                                                                    CRm
-                                                                                                                                    t)
-                                                                                                                                  (pure false))
-                                                                                                                              else
-                                                                                                                                (do
-                                                                                                                                  if ((((((CRm == 0b1101#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                  then
-                                                                                                                                    (do
-                                                                                                                                      (DBGWVR_EL1_SysRegRead_3ea4dd4eabbc6db1
-                                                                                                                                        el
-                                                                                                                                        op0
-                                                                                                                                        op1
-                                                                                                                                        CRn
-                                                                                                                                        op2
-                                                                                                                                        CRm
-                                                                                                                                        t)
-                                                                                                                                      (pure false))
-                                                                                                                                  else
-                                                                                                                                    (do
-                                                                                                                                      if ((((((CRm == 0b1100#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                      then
-                                                                                                                                        (do
-                                                                                                                                          (DBGWVR_EL1_SysRegRead_3ad260c7658f264f
-                                                                                                                                            el
-                                                                                                                                            op0
-                                                                                                                                            op1
-                                                                                                                                            CRn
-                                                                                                                                            op2
-                                                                                                                                            CRm
-                                                                                                                                            t)
-                                                                                                                                          (pure false))
-                                                                                                                                      else
-                                                                                                                                        (do
-                                                                                                                                          if ((((((CRm == 0b1011#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                          then
-                                                                                                                                            (do
-                                                                                                                                              (DBGWVR_EL1_SysRegRead_6c69a5a56e08fe81
-                                                                                                                                                el
-                                                                                                                                                op0
-                                                                                                                                                op1
-                                                                                                                                                CRn
-                                                                                                                                                op2
-                                                                                                                                                CRm
-                                                                                                                                                t)
-                                                                                                                                              (pure false))
-                                                                                                                                          else
-                                                                                                                                            (do
-                                                                                                                                              if ((((((CRm == 0b1010#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                              then
-                                                                                                                                                (do
-                                                                                                                                                  (DBGWVR_EL1_SysRegRead_bfffa222b59a2eac
-                                                                                                                                                    el
-                                                                                                                                                    op0
-                                                                                                                                                    op1
-                                                                                                                                                    CRn
-                                                                                                                                                    op2
-                                                                                                                                                    CRm
-                                                                                                                                                    t)
-                                                                                                                                                  (pure false))
-                                                                                                                                              else
-                                                                                                                                                (do
-                                                                                                                                                  if ((((((CRm == 0b1001#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                  then
-                                                                                                                                                    (do
-                                                                                                                                                      (DBGWVR_EL1_SysRegRead_395e92ea6cb1cbd3
-                                                                                                                                                        el
-                                                                                                                                                        op0
-                                                                                                                                                        op1
-                                                                                                                                                        CRn
-                                                                                                                                                        op2
-                                                                                                                                                        CRm
-                                                                                                                                                        t)
-                                                                                                                                                      (pure false))
-                                                                                                                                                  else
-                                                                                                                                                    (do
-                                                                                                                                                      if ((((((CRm == 0b1000#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                      then
-                                                                                                                                                        (do
-                                                                                                                                                          (DBGWVR_EL1_SysRegRead_e481fcd4bbdbbbdd
-                                                                                                                                                            el
-                                                                                                                                                            op0
-                                                                                                                                                            op1
-                                                                                                                                                            CRn
-                                                                                                                                                            op2
-                                                                                                                                                            CRm
-                                                                                                                                                            t)
-                                                                                                                                                          (pure false))
-                                                                                                                                                      else
-                                                                                                                                                        (do
-                                                                                                                                                          if ((((((CRm == 0b0111#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                          then
-                                                                                                                                                            (do
-                                                                                                                                                              (DBGWVR_EL1_SysRegRead_fae261a7c3341309
-                                                                                                                                                                el
-                                                                                                                                                                op0
-                                                                                                                                                                op1
-                                                                                                                                                                CRn
-                                                                                                                                                                op2
-                                                                                                                                                                CRm
-                                                                                                                                                                t)
-                                                                                                                                                              (pure false))
-                                                                                                                                                          else
-                                                                                                                                                            (do
-                                                                                                                                                              if ((((((CRm == 0b0110#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                              then
-                                                                                                                                                                (do
-                                                                                                                                                                  (DBGWVR_EL1_SysRegRead_469f2550ef085d68
-                                                                                                                                                                    el
-                                                                                                                                                                    op0
-                                                                                                                                                                    op1
-                                                                                                                                                                    CRn
-                                                                                                                                                                    op2
-                                                                                                                                                                    CRm
-                                                                                                                                                                    t)
-                                                                                                                                                                  (pure false))
-                                                                                                                                                              else
-                                                                                                                                                                (do
-                                                                                                                                                                  if ((((((CRm == 0b0101#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                                  then
-                                                                                                                                                                    (do
-                                                                                                                                                                      (DBGWVR_EL1_SysRegRead_5cfc3b8e8ae8a2a4
-                                                                                                                                                                        el
-                                                                                                                                                                        op0
-                                                                                                                                                                        op1
-                                                                                                                                                                        CRn
-                                                                                                                                                                        op2
-                                                                                                                                                                        CRm
-                                                                                                                                                                        t)
-                                                                                                                                                                      (pure false))
-                                                                                                                                                                  else
-                                                                                                                                                                    (do
-                                                                                                                                                                      if ((((((CRm == 0b0100#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                                      then
-                                                                                                                                                                        (do
-                                                                                                                                                                          (DBGWVR_EL1_SysRegRead_dd3a55e2d9bbec8f
-                                                                                                                                                                            el
-                                                                                                                                                                            op0
-                                                                                                                                                                            op1
-                                                                                                                                                                            CRn
-                                                                                                                                                                            op2
-                                                                                                                                                                            CRm
-                                                                                                                                                                            t)
-                                                                                                                                                                          (pure false))
-                                                                                                                                                                      else
-                                                                                                                                                                        (do
-                                                                                                                                                                          if ((((((CRm == 0b0011#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                                          then
-                                                                                                                                                                            (do
-                                                                                                                                                                              (DBGWVR_EL1_SysRegRead_9cebffd3d1c8ceeb
-                                                                                                                                                                                el
-                                                                                                                                                                                op0
-                                                                                                                                                                                op1
-                                                                                                                                                                                CRn
-                                                                                                                                                                                op2
-                                                                                                                                                                                CRm
-                                                                                                                                                                                t)
-                                                                                                                                                                              (pure false))
-                                                                                                                                                                          else
-                                                                                                                                                                            (do
-                                                                                                                                                                              if ((((((CRm == 0b0010#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                                              then
-                                                                                                                                                                                (do
-                                                                                                                                                                                  (DBGWVR_EL1_SysRegRead_06f47f0db897fdec
-                                                                                                                                                                                    el
-                                                                                                                                                                                    op0
-                                                                                                                                                                                    op1
-                                                                                                                                                                                    CRn
-                                                                                                                                                                                    op2
-                                                                                                                                                                                    CRm
-                                                                                                                                                                                    t)
-                                                                                                                                                                                  (pure false))
-                                                                                                                                                                              else
-                                                                                                                                                                                (do
-                                                                                                                                                                                  if ((((((CRm == 0b0001#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                                                  then
-                                                                                                                                                                                    (do
-                                                                                                                                                                                      (DBGWVR_EL1_SysRegRead_695a90ac9c89a050
-                                                                                                                                                                                        el
-                                                                                                                                                                                        op0
-                                                                                                                                                                                        op1
-                                                                                                                                                                                        CRn
-                                                                                                                                                                                        op2
-                                                                                                                                                                                        CRm
-                                                                                                                                                                                        t)
-                                                                                                                                                                                      (pure false))
-                                                                                                                                                                                  else
-                                                                                                                                                                                    (do
-                                                                                                                                                                                      if ((((((CRm == 0b0000#4) && (CRn == 0b0000#4)) && (op0 == 0b10#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                                                      then
-                                                                                                                                                                                        (do
-                                                                                                                                                                                          (DBGWVR_EL1_SysRegRead_19cc269e021d29f0
-                                                                                                                                                                                            el
-                                                                                                                                                                                            op0
-                                                                                                                                                                                            op1
-                                                                                                                                                                                            CRn
-                                                                                                                                                                                            op2
-                                                                                                                                                                                            CRm
-                                                                                                                                                                                            t)
-                                                                                                                                                                                          (pure false))
-                                                                                                                                                                                      else
-                                                                                                                                                                                        (do
-                                                                                                                                                                                          if ((((((CRm == 0b0010#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b101#3)) && (op2 == 0b010#3)) : Bool)
-                                                                                                                                                                                          then
-                                                                                                                                                                                            (do
-                                                                                                                                                                                              (PIRE0_EL1_SysRegRead_1431908c1f187dd9
-                                                                                                                                                                                                el
-                                                                                                                                                                                                op0
-                                                                                                                                                                                                op1
-                                                                                                                                                                                                CRn
-                                                                                                                                                                                                op2
-                                                                                                                                                                                                CRm
-                                                                                                                                                                                                t)
-                                                                                                                                                                                              (pure false))
-                                                                                                                                                                                          else
-                                                                                                                                                                                            (do
-                                                                                                                                                                                              if ((((((CRm == 0b0101#4) && (CRn == 0b0000#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                                                                                                                                              then
-                                                                                                                                                                                                (do
-                                                                                                                                                                                                  (ID_AA64AFR0_EL1_SysRegRead_d690252709f00b61
-                                                                                                                                                                                                    el
-                                                                                                                                                                                                    op0
-                                                                                                                                                                                                    op1
-                                                                                                                                                                                                    CRn
-                                                                                                                                                                                                    op2
-                                                                                                                                                                                                    CRm
-                                                                                                                                                                                                    t)
-                                                                                                                                                                                                  (pure false))
-                                                                                                                                                                                              else
-                                                                                                                                                                                                (do
-                                                                                                                                                                                                  if ((((((CRm == 0b0001#4) && (CRn == 0b0101#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b000#3)) : Bool)
-                                                                                                                                                                                                  then
-                                                                                                                                                                                                    (do
-                                                                                                                                                                                                      (AFSR0_EL2_SysRegRead_acffc015481d1ac8
-                                                                                                                                                                                                        el
-                                                                                                                                                                                                        op0
-                                                                                                                                                                                                        op1
-                                                                                                                                                                                                        CRn
-                                                                                                                                                                                                        op2
-                                                                                                                                                                                                        CRm
-                                                                                                                                                                                                        t)
-                                                                                                                                                                                                      (pure false))
-                                                                                                                                                                                                  else
-                                                                                                                                                                                                    (do
-                                                                                                                                                                                                      if ((((((CRm == 0b0011#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b101#3)) && (op2 == 0b001#3)) : Bool)
-                                                                                                                                                                                                      then
-                                                                                                                                                                                                        (do
-                                                                                                                                                                                                          (AMAIR2_EL1_SysRegRead_961066b22ab5b10e
-                                                                                                                                                                                                            el
-                                                                                                                                                                                                            op0
-                                                                                                                                                                                                            op1
-                                                                                                                                                                                                            CRn
-                                                                                                                                                                                                            op2
-                                                                                                                                                                                                            CRm
-                                                                                                                                                                                                            t)
-                                                                                                                                                                                                          (pure false))
-                                                                                                                                                                                                      else
-                                                                                                                                                                                                        (do
-                                                                                                                                                                                                          if ((((((CRm == 0b0011#4) && (CRn == 0b0000#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                                                                                                                                                          then
-                                                                                                                                                                                                            (do
-                                                                                                                                                                                                              (ID_PFR2_EL1_SysRegRead_d9584bfc0ea04005
-                                                                                                                                                                                                                el
-                                                                                                                                                                                                                op0
-                                                                                                                                                                                                                op1
-                                                                                                                                                                                                                CRn
-                                                                                                                                                                                                                op2
-                                                                                                                                                                                                                CRm
-                                                                                                                                                                                                                t)
-                                                                                                                                                                                                              (pure false))
-                                                                                                                                                                                                          else
-                                                                                                                                                                                                            (do
-                                                                                                                                                                                                              if ((((((CRm == 0b0010#4) && (CRn == 0b0100#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b010#3)) : Bool)
-                                                                                                                                                                                                              then
-                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                  (CurrentEL_SysRegRead_94be544516d41cc8
-                                                                                                                                                                                                                    el
-                                                                                                                                                                                                                    op0
-                                                                                                                                                                                                                    op1
-                                                                                                                                                                                                                    CRn
-                                                                                                                                                                                                                    op2
-                                                                                                                                                                                                                    CRm
-                                                                                                                                                                                                                    t)
-                                                                                                                                                                                                                  (pure false))
-                                                                                                                                                                                                              else
-                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                  if ((((((CRm == 0b1101#4) && (CRn == 0b1001#4)) && (op0 == 0b10#2)) && (op1 == 0b110#3)) && (op2 == 0b011#3)) : Bool)
-                                                                                                                                                                                                                  then
-                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                      (SPMACCESSR_EL3_SysRegRead_04a853a73f22109c
-                                                                                                                                                                                                                        el
-                                                                                                                                                                                                                        op0
-                                                                                                                                                                                                                        op1
-                                                                                                                                                                                                                        CRn
-                                                                                                                                                                                                                        op2
-                                                                                                                                                                                                                        CRm
-                                                                                                                                                                                                                        t)
-                                                                                                                                                                                                                      (pure false))
-                                                                                                                                                                                                                  else
-                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                      if ((((((CRm == 0b0011#4) && (CRn == 0b1110#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b001#3)) : Bool)
-                                                                                                                                                                                                                      then
-                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                          (CNTHV_CTL_EL2_SysRegRead_fe7c25cca2e88b3f
-                                                                                                                                                                                                                            el
-                                                                                                                                                                                                                            op0
-                                                                                                                                                                                                                            op1
-                                                                                                                                                                                                                            CRn
-                                                                                                                                                                                                                            op2
-                                                                                                                                                                                                                            CRm
-                                                                                                                                                                                                                            t)
-                                                                                                                                                                                                                          (pure false))
-                                                                                                                                                                                                                      else
-                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                          if ((((((CRm == 0b0000#4) && (CRn == 0b1110#4)) && (op0 == 0b11#2)) && (op1 == 0b011#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                                                                                          then
-                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                              (CNTVCT_EL0_SysRegRead_1d562372e622baf9
-                                                                                                                                                                                                                                el
-                                                                                                                                                                                                                                op0
-                                                                                                                                                                                                                                op1
-                                                                                                                                                                                                                                CRn
-                                                                                                                                                                                                                                op2
-                                                                                                                                                                                                                                CRm
-                                                                                                                                                                                                                                t)
-                                                                                                                                                                                                                              (pure false))
-                                                                                                                                                                                                                          else
-                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                              if ((((((CRm == 0b0100#4) && (CRn == 0b0000#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                                                                                                                                                                              then
-                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                  (ID_AA64ZFR0_EL1_SysRegRead_dd573310e3efc3be
-                                                                                                                                                                                                                                    el
-                                                                                                                                                                                                                                    op0
-                                                                                                                                                                                                                                    op1
-                                                                                                                                                                                                                                    CRn
-                                                                                                                                                                                                                                    op2
-                                                                                                                                                                                                                                    CRm
-                                                                                                                                                                                                                                    t)
-                                                                                                                                                                                                                                  (pure false))
-                                                                                                                                                                                                                              else
-                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                  if ((((((CRm == 0b0010#4) && (CRn == 0b0001#4)) && (op0 == 0b11#2)) && (op1 == 0b110#3)) && (op2 == 0b000#3)) : Bool)
-                                                                                                                                                                                                                                  then
-                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                      (ZCR_EL3_SysRegRead_db53f2dcbaed5b3a
-                                                                                                                                                                                                                                        el
-                                                                                                                                                                                                                                        op0
-                                                                                                                                                                                                                                        op1
-                                                                                                                                                                                                                                        CRn
-                                                                                                                                                                                                                                        op2
-                                                                                                                                                                                                                                        CRm
-                                                                                                                                                                                                                                        t)
-                                                                                                                                                                                                                                      (pure false))
-                                                                                                                                                                                                                                  else
-                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                      if ((((((CRm == 0b0010#4) && (CRn == 0b0001#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b000#3)) : Bool)
-                                                                                                                                                                                                                                      then
-                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                          (ZCR_EL1_SysRegRead_f79acfc1d948e192
-                                                                                                                                                                                                                                            el
-                                                                                                                                                                                                                                            op0
-                                                                                                                                                                                                                                            op1
-                                                                                                                                                                                                                                            CRn
-                                                                                                                                                                                                                                            op2
-                                                                                                                                                                                                                                            CRm
-                                                                                                                                                                                                                                            t)
-                                                                                                                                                                                                                                          (pure false))
-                                                                                                                                                                                                                                      else
-                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                          if ((((((CRm == 0b0010#4) && (CRn == 0b0001#4)) && (op0 == 0b11#2)) && (op1 == 0b101#3)) && (op2 == 0b000#3)) : Bool)
-                                                                                                                                                                                                                                          then
-                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                              (ZCR_EL1_SysRegRead_ae33ffd6ee977eba
-                                                                                                                                                                                                                                                el
-                                                                                                                                                                                                                                                op0
-                                                                                                                                                                                                                                                op1
-                                                                                                                                                                                                                                                CRn
-                                                                                                                                                                                                                                                op2
-                                                                                                                                                                                                                                                CRm
-                                                                                                                                                                                                                                                t)
-                                                                                                                                                                                                                                              (pure false))
-                                                                                                                                                                                                                                          else
-                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                              if ((((((CRm == 0b0010#4) && (CRn == 0b0001#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b000#3)) : Bool)
-                                                                                                                                                                                                                                              then
-                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                  (ZCR_EL2_SysRegRead_e12f14b3f5451ee5
-                                                                                                                                                                                                                                                    el
-                                                                                                                                                                                                                                                    op0
-                                                                                                                                                                                                                                                    op1
-                                                                                                                                                                                                                                                    CRn
-                                                                                                                                                                                                                                                    op2
-                                                                                                                                                                                                                                                    CRm
-                                                                                                                                                                                                                                                    t)
-                                                                                                                                                                                                                                                  (pure false))
-                                                                                                                                                                                                                                              else
-                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                  if ((((((CRm == 0b0010#4) && (CRn == 0b0001#4)) && (op0 == 0b11#2)) && (op1 == 0b110#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                                                                                                                  then
-                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                      (SMCR_EL3_SysRegRead_131f4d5255bb9624
-                                                                                                                                                                                                                                                        el
-                                                                                                                                                                                                                                                        op0
-                                                                                                                                                                                                                                                        op1
-                                                                                                                                                                                                                                                        CRn
-                                                                                                                                                                                                                                                        op2
-                                                                                                                                                                                                                                                        CRm
-                                                                                                                                                                                                                                                        t)
-                                                                                                                                                                                                                                                      (pure false))
-                                                                                                                                                                                                                                                  else
-                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                      if ((((((CRm == 0b0010#4) && (CRn == 0b0001#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                                                                                                                      then
-                                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                                          (SMCR_EL1_SysRegRead_924df8670c1f630f
-                                                                                                                                                                                                                                                            el
-                                                                                                                                                                                                                                                            op0
-                                                                                                                                                                                                                                                            op1
-                                                                                                                                                                                                                                                            CRn
-                                                                                                                                                                                                                                                            op2
-                                                                                                                                                                                                                                                            CRm
-                                                                                                                                                                                                                                                            t)
-                                                                                                                                                                                                                                                          (pure false))
-                                                                                                                                                                                                                                                      else
-                                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                                          if ((((((CRm == 0b0010#4) && (CRn == 0b0001#4)) && (op0 == 0b11#2)) && (op1 == 0b101#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                                                                                                                          then
-                                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                                              (SMCR_EL1_SysRegRead_ea88aa9e02fbf3b4
-                                                                                                                                                                                                                                                                el
-                                                                                                                                                                                                                                                                op0
-                                                                                                                                                                                                                                                                op1
-                                                                                                                                                                                                                                                                CRn
-                                                                                                                                                                                                                                                                op2
-                                                                                                                                                                                                                                                                CRm
-                                                                                                                                                                                                                                                                t)
-                                                                                                                                                                                                                                                              (pure false))
-                                                                                                                                                                                                                                                          else
-                                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                                              if ((((((CRm == 0b0010#4) && (CRn == 0b0001#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                                                                                                                              then
-                                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                                  (SMCR_EL2_SysRegRead_c0f6766b3afb8b13
-                                                                                                                                                                                                                                                                    el
-                                                                                                                                                                                                                                                                    op0
-                                                                                                                                                                                                                                                                    op1
-                                                                                                                                                                                                                                                                    CRn
-                                                                                                                                                                                                                                                                    op2
-                                                                                                                                                                                                                                                                    CRm
-                                                                                                                                                                                                                                                                    t)
-                                                                                                                                                                                                                                                                  (pure false))
-                                                                                                                                                                                                                                                              else
-                                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                                  if ((((((CRm == 0b0100#4) && (CRn == 0b0000#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b101#3)) : Bool)
-                                                                                                                                                                                                                                                                  then
-                                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                                      (ID_AA64SMFR0_EL1_SysRegRead_8f4054d57f9da064
-                                                                                                                                                                                                                                                                        el
-                                                                                                                                                                                                                                                                        op0
-                                                                                                                                                                                                                                                                        op1
-                                                                                                                                                                                                                                                                        CRn
-                                                                                                                                                                                                                                                                        op2
-                                                                                                                                                                                                                                                                        CRm
-                                                                                                                                                                                                                                                                        t)
-                                                                                                                                                                                                                                                                      (pure false))
-                                                                                                                                                                                                                                                                  else
-                                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                                      if ((((((CRm == 0b0110#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b010#3)) : Bool)
-                                                                                                                                                                                                                                                                      then
-                                                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                                                          (MPAMVPM2_EL2_SysRegRead_cd39f13f6feef099
-                                                                                                                                                                                                                                                                            el
-                                                                                                                                                                                                                                                                            op0
-                                                                                                                                                                                                                                                                            op1
-                                                                                                                                                                                                                                                                            CRn
-                                                                                                                                                                                                                                                                            op2
-                                                                                                                                                                                                                                                                            CRm
-                                                                                                                                                                                                                                                                            t)
-                                                                                                                                                                                                                                                                          (pure false))
-                                                                                                                                                                                                                                                                      else
-                                                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                                                          if ((((((CRm == 0b0110#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                                                                                                                                          then
-                                                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                                                              (MPAMVPM6_EL2_SysRegRead_a456f2178fffbd2a
-                                                                                                                                                                                                                                                                                el
-                                                                                                                                                                                                                                                                                op0
-                                                                                                                                                                                                                                                                                op1
-                                                                                                                                                                                                                                                                                CRn
-                                                                                                                                                                                                                                                                                op2
-                                                                                                                                                                                                                                                                                CRm
-                                                                                                                                                                                                                                                                                t)
-                                                                                                                                                                                                                                                                              (pure false))
-                                                                                                                                                                                                                                                                          else
-                                                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                                                              if ((((((CRm == 0b0110#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b101#3)) : Bool)
-                                                                                                                                                                                                                                                                              then
-                                                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                                                  (MPAMVPM5_EL2_SysRegRead_b3b860d951143744
-                                                                                                                                                                                                                                                                                    el
-                                                                                                                                                                                                                                                                                    op0
-                                                                                                                                                                                                                                                                                    op1
-                                                                                                                                                                                                                                                                                    CRn
-                                                                                                                                                                                                                                                                                    op2
-                                                                                                                                                                                                                                                                                    CRm
-                                                                                                                                                                                                                                                                                    t)
-                                                                                                                                                                                                                                                                                  (pure false))
-                                                                                                                                                                                                                                                                              else
-                                                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                                                  if ((((((CRm == 0b0100#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b000#3)) : Bool)
-                                                                                                                                                                                                                                                                                  then
-                                                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                                                      (MPAMHCR_EL2_SysRegRead_29e51a9bb9c934dc
-                                                                                                                                                                                                                                                                                        el
-                                                                                                                                                                                                                                                                                        op0
-                                                                                                                                                                                                                                                                                        op1
-                                                                                                                                                                                                                                                                                        CRn
-                                                                                                                                                                                                                                                                                        op2
-                                                                                                                                                                                                                                                                                        CRm
-                                                                                                                                                                                                                                                                                        t)
-                                                                                                                                                                                                                                                                                      (pure false))
-                                                                                                                                                                                                                                                                                  else
-                                                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                                                      if ((((((CRm == 0b0100#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b100#3)) : Bool)
-                                                                                                                                                                                                                                                                                      then
-                                                                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                                                                          (MPAMIDR_EL1_SysRegRead_e782b807b20cd739
-                                                                                                                                                                                                                                                                                            el
-                                                                                                                                                                                                                                                                                            op0
-                                                                                                                                                                                                                                                                                            op1
-                                                                                                                                                                                                                                                                                            CRn
-                                                                                                                                                                                                                                                                                            op2
-                                                                                                                                                                                                                                                                                            CRm
-                                                                                                                                                                                                                                                                                            t)
-                                                                                                                                                                                                                                                                                          (pure false))
-                                                                                                                                                                                                                                                                                      else
-                                                                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                                                                          if ((((((CRm == 0b0110#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b111#3)) : Bool)
-                                                                                                                                                                                                                                                                                          then
-                                                                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                                                                              (MPAMVPM7_EL2_SysRegRead_7f9fcda98e26326e
-                                                                                                                                                                                                                                                                                                el
-                                                                                                                                                                                                                                                                                                op0
-                                                                                                                                                                                                                                                                                                op1
-                                                                                                                                                                                                                                                                                                CRn
-                                                                                                                                                                                                                                                                                                op2
-                                                                                                                                                                                                                                                                                                CRm
-                                                                                                                                                                                                                                                                                                t)
-                                                                                                                                                                                                                                                                                              (pure false))
-                                                                                                                                                                                                                                                                                          else
-                                                                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                                                                              if ((((((CRm == 0b0101#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b000#3)) : Bool)
-                                                                                                                                                                                                                                                                                              then
-                                                                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                                                                  (MPAM2_EL2_SysRegRead_f89d395320b0f023
-                                                                                                                                                                                                                                                                                                    el
-                                                                                                                                                                                                                                                                                                    op0
-                                                                                                                                                                                                                                                                                                    op1
-                                                                                                                                                                                                                                                                                                    CRn
-                                                                                                                                                                                                                                                                                                    op2
-                                                                                                                                                                                                                                                                                                    CRm
-                                                                                                                                                                                                                                                                                                    t)
-                                                                                                                                                                                                                                                                                                  (pure false))
-                                                                                                                                                                                                                                                                                              else
-                                                                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                                                                  if ((((((CRm == 0b0101#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b000#3)) : Bool)
-                                                                                                                                                                                                                                                                                                  then
-                                                                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                                                                      (MPAM2_EL2_SysRegRead_8458d45c0c29ff85
-                                                                                                                                                                                                                                                                                                        el
-                                                                                                                                                                                                                                                                                                        op0
-                                                                                                                                                                                                                                                                                                        op1
-                                                                                                                                                                                                                                                                                                        CRn
-                                                                                                                                                                                                                                                                                                        op2
-                                                                                                                                                                                                                                                                                                        CRm
-                                                                                                                                                                                                                                                                                                        t)
-                                                                                                                                                                                                                                                                                                      (pure false))
-                                                                                                                                                                                                                                                                                                  else
-                                                                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                                                                      if ((((((CRm == 0b0110#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b001#3)) : Bool)
-                                                                                                                                                                                                                                                                                                      then
-                                                                                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                                                                                          (MPAMVPM1_EL2_SysRegRead_d5133d205dd80497
-                                                                                                                                                                                                                                                                                                            el
-                                                                                                                                                                                                                                                                                                            op0
-                                                                                                                                                                                                                                                                                                            op1
-                                                                                                                                                                                                                                                                                                            CRn
-                                                                                                                                                                                                                                                                                                            op2
-                                                                                                                                                                                                                                                                                                            CRm
-                                                                                                                                                                                                                                                                                                            t)
-                                                                                                                                                                                                                                                                                                          (pure false))
-                                                                                                                                                                                                                                                                                                      else
-                                                                                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                                                                                          if ((((((CRm == 0b0110#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b000#3)) : Bool)
-                                                                                                                                                                                                                                                                                                          then
-                                                                                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                                                                                              (MPAMVPM0_EL2_SysRegRead_0960f12de90321b6
-                                                                                                                                                                                                                                                                                                                el
-                                                                                                                                                                                                                                                                                                                op0
-                                                                                                                                                                                                                                                                                                                op1
-                                                                                                                                                                                                                                                                                                                CRn
-                                                                                                                                                                                                                                                                                                                op2
-                                                                                                                                                                                                                                                                                                                CRm
-                                                                                                                                                                                                                                                                                                                t)
-                                                                                                                                                                                                                                                                                                              (pure false))
-                                                                                                                                                                                                                                                                                                          else
-                                                                                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                                                                                              if ((((((CRm == 0b0110#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b011#3)) : Bool)
-                                                                                                                                                                                                                                                                                                              then
-                                                                                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                                                                                  (MPAMVPM3_EL2_SysRegRead_3655c8ba5ed54616
-                                                                                                                                                                                                                                                                                                                    el
-                                                                                                                                                                                                                                                                                                                    op0
-                                                                                                                                                                                                                                                                                                                    op1
-                                                                                                                                                                                                                                                                                                                    CRn
-                                                                                                                                                                                                                                                                                                                    op2
-                                                                                                                                                                                                                                                                                                                    CRm
-                                                                                                                                                                                                                                                                                                                    t)
-                                                                                                                                                                                                                                                                                                                  (pure false))
-                                                                                                                                                                                                                                                                                                              else
-                                                                                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                                                                                  if ((((((CRm == 0b0101#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b110#3)) && (op2 == 0b000#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                  then
-                                                                                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                                                                                      (MPAM3_EL3_SysRegRead_2770962b9f8f46c1
-                                                                                                                                                                                                                                                                                                                        el
-                                                                                                                                                                                                                                                                                                                        op0
-                                                                                                                                                                                                                                                                                                                        op1
-                                                                                                                                                                                                                                                                                                                        CRn
-                                                                                                                                                                                                                                                                                                                        op2
-                                                                                                                                                                                                                                                                                                                        CRm
-                                                                                                                                                                                                                                                                                                                        t)
-                                                                                                                                                                                                                                                                                                                      (pure false))
-                                                                                                                                                                                                                                                                                                                  else
-                                                                                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                                                                                      if ((((((CRm == 0b0101#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b001#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                      then
-                                                                                                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                                                                                                          (MPAM0_EL1_SysRegRead_26602bb382f28735
-                                                                                                                                                                                                                                                                                                                            el
-                                                                                                                                                                                                                                                                                                                            op0
-                                                                                                                                                                                                                                                                                                                            op1
-                                                                                                                                                                                                                                                                                                                            CRn
-                                                                                                                                                                                                                                                                                                                            op2
-                                                                                                                                                                                                                                                                                                                            CRm
-                                                                                                                                                                                                                                                                                                                            t)
-                                                                                                                                                                                                                                                                                                                          (pure false))
-                                                                                                                                                                                                                                                                                                                      else
-                                                                                                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                                                                                                          if ((((((CRm == 0b0101#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b011#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                          then
-                                                                                                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                                                                                                              (MPAMSM_EL1_SysRegRead_8b218aacc540b1cb
-                                                                                                                                                                                                                                                                                                                                el
-                                                                                                                                                                                                                                                                                                                                op0
-                                                                                                                                                                                                                                                                                                                                op1
-                                                                                                                                                                                                                                                                                                                                CRn
-                                                                                                                                                                                                                                                                                                                                op2
-                                                                                                                                                                                                                                                                                                                                CRm
-                                                                                                                                                                                                                                                                                                                                t)
-                                                                                                                                                                                                                                                                                                                              (pure false))
-                                                                                                                                                                                                                                                                                                                          else
-                                                                                                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                                                                                                              if ((((((CRm == 0b0110#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b100#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                              then
-                                                                                                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                                                                                                  (MPAMVPM4_EL2_SysRegRead_2c47261ee8f811ec
-                                                                                                                                                                                                                                                                                                                                    el
-                                                                                                                                                                                                                                                                                                                                    op0
-                                                                                                                                                                                                                                                                                                                                    op1
-                                                                                                                                                                                                                                                                                                                                    CRn
-                                                                                                                                                                                                                                                                                                                                    op2
-                                                                                                                                                                                                                                                                                                                                    CRm
-                                                                                                                                                                                                                                                                                                                                    t)
-                                                                                                                                                                                                                                                                                                                                  (pure false))
-                                                                                                                                                                                                                                                                                                                              else
-                                                                                                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                                                                                                  if ((((((CRm == 0b0101#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b101#3)) && (op2 == 0b000#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                                  then
-                                                                                                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                                                                                                      (MPAM1_EL1_SysRegRead_85039c69dab4c388
-                                                                                                                                                                                                                                                                                                                                        el
-                                                                                                                                                                                                                                                                                                                                        op0
-                                                                                                                                                                                                                                                                                                                                        op1
-                                                                                                                                                                                                                                                                                                                                        CRn
-                                                                                                                                                                                                                                                                                                                                        op2
-                                                                                                                                                                                                                                                                                                                                        CRm
-                                                                                                                                                                                                                                                                                                                                        t)
-                                                                                                                                                                                                                                                                                                                                      (pure false))
-                                                                                                                                                                                                                                                                                                                                  else
-                                                                                                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                                                                                                      if ((((((CRm == 0b0100#4) && (CRn == 0b1010#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b001#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                                      then
-                                                                                                                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                                                                                                                          (MPAMVPMV_EL2_SysRegRead_3717c7fd58152b67
-                                                                                                                                                                                                                                                                                                                                            el
-                                                                                                                                                                                                                                                                                                                                            op0
-                                                                                                                                                                                                                                                                                                                                            op1
-                                                                                                                                                                                                                                                                                                                                            CRn
-                                                                                                                                                                                                                                                                                                                                            op2
-                                                                                                                                                                                                                                                                                                                                            CRm
-                                                                                                                                                                                                                                                                                                                                            t)
-                                                                                                                                                                                                                                                                                                                                          (pure false))
-                                                                                                                                                                                                                                                                                                                                      else
-                                                                                                                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                                                                                                                          if ((((((CRm == 0b0000#4) && (CRn == 0b0000#4)) && (op0 == 0b11#2)) && (op1 == 0b001#3)) && (op2 == 0b100#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                                          then
-                                                                                                                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                                                                                                                              (GMID_EL1_SysRegRead_df65333e6c977d08
-                                                                                                                                                                                                                                                                                                                                                el
-                                                                                                                                                                                                                                                                                                                                                op0
-                                                                                                                                                                                                                                                                                                                                                op1
-                                                                                                                                                                                                                                                                                                                                                CRn
-                                                                                                                                                                                                                                                                                                                                                op2
-                                                                                                                                                                                                                                                                                                                                                CRm
-                                                                                                                                                                                                                                                                                                                                                t)
-                                                                                                                                                                                                                                                                                                                                              (pure false))
-                                                                                                                                                                                                                                                                                                                                          else
-                                                                                                                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                                                                                                                              if ((((((CRm == 0b0110#4) && (CRn == 0b0101#4)) && (op0 == 0b11#2)) && (op1 == 0b110#3)) && (op2 == 0b000#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                                              then
-                                                                                                                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                                                                                                                  (TFSR_EL3_SysRegRead_8cd0ca2e5d9daf2c
-                                                                                                                                                                                                                                                                                                                                                    el
-                                                                                                                                                                                                                                                                                                                                                    op0
-                                                                                                                                                                                                                                                                                                                                                    op1
-                                                                                                                                                                                                                                                                                                                                                    CRn
-                                                                                                                                                                                                                                                                                                                                                    op2
-                                                                                                                                                                                                                                                                                                                                                    CRm
-                                                                                                                                                                                                                                                                                                                                                    t)
-                                                                                                                                                                                                                                                                                                                                                  (pure false))
-                                                                                                                                                                                                                                                                                                                                              else
-                                                                                                                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                                                                                                                  if ((((((CRm == 0b0110#4) && (CRn == 0b0101#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b001#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                                                  then
-                                                                                                                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                                                                                                                      (TFSRE0_EL1_SysRegRead_e7166fad237839bf
-                                                                                                                                                                                                                                                                                                                                                        el
-                                                                                                                                                                                                                                                                                                                                                        op0
-                                                                                                                                                                                                                                                                                                                                                        op1
-                                                                                                                                                                                                                                                                                                                                                        CRn
-                                                                                                                                                                                                                                                                                                                                                        op2
-                                                                                                                                                                                                                                                                                                                                                        CRm
-                                                                                                                                                                                                                                                                                                                                                        t)
-                                                                                                                                                                                                                                                                                                                                                      (pure false))
-                                                                                                                                                                                                                                                                                                                                                  else
-                                                                                                                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                                                                                                                      if ((((((CRm == 0b0110#4) && (CRn == 0b0101#4)) && (op0 == 0b11#2)) && (op1 == 0b100#3)) && (op2 == 0b000#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                                                      then
-                                                                                                                                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                                                                                                                                          (TFSR_EL2_SysRegRead_c301d170f18e0e34
-                                                                                                                                                                                                                                                                                                                                                            el
-                                                                                                                                                                                                                                                                                                                                                            op0
-                                                                                                                                                                                                                                                                                                                                                            op1
-                                                                                                                                                                                                                                                                                                                                                            CRn
-                                                                                                                                                                                                                                                                                                                                                            op2
-                                                                                                                                                                                                                                                                                                                                                            CRm
-                                                                                                                                                                                                                                                                                                                                                            t)
-                                                                                                                                                                                                                                                                                                                                                          (pure false))
-                                                                                                                                                                                                                                                                                                                                                      else
-                                                                                                                                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                                                                                                                                          if ((((((CRm == 0b0110#4) && (CRn == 0b0101#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b000#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                                                          then
-                                                                                                                                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                                                                                                                                              (TFSR_EL2_SysRegRead_5ac7c240abc0c535
-                                                                                                                                                                                                                                                                                                                                                                el
-                                                                                                                                                                                                                                                                                                                                                                op0
-                                                                                                                                                                                                                                                                                                                                                                op1
-                                                                                                                                                                                                                                                                                                                                                                CRn
-                                                                                                                                                                                                                                                                                                                                                                op2
-                                                                                                                                                                                                                                                                                                                                                                CRm
-                                                                                                                                                                                                                                                                                                                                                                t)
-                                                                                                                                                                                                                                                                                                                                                              (pure false))
-                                                                                                                                                                                                                                                                                                                                                          else
-                                                                                                                                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                                                                                                                                              if ((((((CRm == 0b0110#4) && (CRn == 0b0101#4)) && (op0 == 0b11#2)) && (op1 == 0b101#3)) && (op2 == 0b000#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                                                              then
-                                                                                                                                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                                                                                                                                  (TFSR_EL1_SysRegRead_629d1d7950939eef
-                                                                                                                                                                                                                                                                                                                                                                    el
-                                                                                                                                                                                                                                                                                                                                                                    op0
-                                                                                                                                                                                                                                                                                                                                                                    op1
-                                                                                                                                                                                                                                                                                                                                                                    CRn
-                                                                                                                                                                                                                                                                                                                                                                    op2
-                                                                                                                                                                                                                                                                                                                                                                    CRm
-                                                                                                                                                                                                                                                                                                                                                                    t)
-                                                                                                                                                                                                                                                                                                                                                                  (pure false))
-                                                                                                                                                                                                                                                                                                                                                              else
-                                                                                                                                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                                                                                                                                  if ((((((CRm == 0b0000#4) && (CRn == 0b0001#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b101#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                                                                  then
-                                                                                                                                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                                                                                                                                      (RGSR_EL1_SysRegRead_64fa1a7b4e06fd7e
-                                                                                                                                                                                                                                                                                                                                                                        el
-                                                                                                                                                                                                                                                                                                                                                                        op0
-                                                                                                                                                                                                                                                                                                                                                                        op1
-                                                                                                                                                                                                                                                                                                                                                                        CRn
-                                                                                                                                                                                                                                                                                                                                                                        op2
-                                                                                                                                                                                                                                                                                                                                                                        CRm
-                                                                                                                                                                                                                                                                                                                                                                        t)
-                                                                                                                                                                                                                                                                                                                                                                      (pure false))
-                                                                                                                                                                                                                                                                                                                                                                  else
-                                                                                                                                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                                                                                                                                      if ((((((CRm == 0b0000#4) && (CRn == 0b0001#4)) && (op0 == 0b11#2)) && (op1 == 0b000#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                                                                      then
-                                                                                                                                                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                                                                                                                                                          (GCR_EL1_SysRegRead_62bd5315db9a2829
-                                                                                                                                                                                                                                                                                                                                                                            el
-                                                                                                                                                                                                                                                                                                                                                                            op0
-                                                                                                                                                                                                                                                                                                                                                                            op1
-                                                                                                                                                                                                                                                                                                                                                                            CRn
-                                                                                                                                                                                                                                                                                                                                                                            op2
-                                                                                                                                                                                                                                                                                                                                                                            CRm
-                                                                                                                                                                                                                                                                                                                                                                            t)
-                                                                                                                                                                                                                                                                                                                                                                          (pure false))
-                                                                                                                                                                                                                                                                                                                                                                      else
-                                                                                                                                                                                                                                                                                                                                                                        (do
-                                                                                                                                                                                                                                                                                                                                                                          if ((((((CRm == 0b0010#4) && (CRn == 0b0100#4)) && (op0 == 0b11#2)) && (op1 == 0b011#3)) && (op2 == 0b111#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                                                                          then
-                                                                                                                                                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                                                                                                                                                              (TCO_SysRegRead_fec6636824256193
-                                                                                                                                                                                                                                                                                                                                                                                el
-                                                                                                                                                                                                                                                                                                                                                                                op0
-                                                                                                                                                                                                                                                                                                                                                                                op1
-                                                                                                                                                                                                                                                                                                                                                                                CRn
-                                                                                                                                                                                                                                                                                                                                                                                op2
-                                                                                                                                                                                                                                                                                                                                                                                CRm
-                                                                                                                                                                                                                                                                                                                                                                                t)
-                                                                                                                                                                                                                                                                                                                                                                              (pure false))
-                                                                                                                                                                                                                                                                                                                                                                          else
-                                                                                                                                                                                                                                                                                                                                                                            (do
-                                                                                                                                                                                                                                                                                                                                                                              if ((((((CRm == 0b1101#4) && (CRn == 0b1101#4)) && (op0 == 0b11#2)) && (op1 == 0b011#3)) && (op2 == 0b111#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                                                                              then
-                                                                                                                                                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                                                                                                                                                  (AMEVCNTR1_EL0_SysRegRead_270554ed1cad7329
-                                                                                                                                                                                                                                                                                                                                                                                    el
-                                                                                                                                                                                                                                                                                                                                                                                    op0
-                                                                                                                                                                                                                                                                                                                                                                                    op1
-                                                                                                                                                                                                                                                                                                                                                                                    CRn
-                                                                                                                                                                                                                                                                                                                                                                                    op2
-                                                                                                                                                                                                                                                                                                                                                                                    CRm
-                                                                                                                                                                                                                                                                                                                                                                                    t)
-                                                                                                                                                                                                                                                                                                                                                                                  (pure false))
-                                                                                                                                                                                                                                                                                                                                                                              else
-                                                                                                                                                                                                                                                                                                                                                                                (do
-                                                                                                                                                                                                                                                                                                                                                                                  if ((((((CRm == 0b1101#4) && (CRn == 0b1101#4)) && (op0 == 0b11#2)) && (op1 == 0b011#3)) && (op2 == 0b110#3)) : Bool)
-                                                                                                                                                                                                                                                                                                                                                                                  then
-                                                                                                                                                                                                                                                                                                                                                                                    (do
-                                                                                                                                                                                                                                                                                                                                                                                      (AMEVCNTR1_EL0_SysRegRead_c7849b6a9ce28268
-                                                                                                                                                                                                                                                                                                                                                                                        el
-                                                                                                                                                                                                                                                                                                                                                                                        op0
-                                                                                                                                                                                                                                                                                                                                                                                        op1
-                                                                                                                                                                                                                                                                                                                                                                                        CRn
-                                                                                                                                                                                                                                                                                                                                                                                        op2
-                                                                                                                                                                                                                                                                                                                                                                                        CRm
-                                                                                                                                                                                                                                                                                                                                                                                        t)
-                                                                                                                                                                                                                                                                                                                                                                                      (pure false))
-                                                                                                                                                                                                                                                                                                                                                                                  else
-                                                                                                                                                                                                                                                                                                                                                                                    (pure true)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+                                      (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                              else
+                                (do
+                                  let w__35 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM
+                                    (Vector (BitVec 64) 16) )
+                                  let w__36 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                                  writeReg AMEVCNTVOFF1_EL2 (vectorUpdate w__35 9 w__36))))))
+              else
+                (do
+                  if ((__PSTATE_EL == EL3) : Bool)
+                  then
+                    (do
+                      let w__37 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM (Vector (BitVec 64) 16)
+                        )
+                      let w__38 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      writeReg AMEVCNTVOFF1_EL2 (vectorUpdate w__37 9 w__38))
+                  else (pure (()))))))
+
+
+/-- Type quantifiers: t : Int -/
+def AMEVCNTVOFF1_EL2_SysRegWrite_18b1c0f6609cfc70 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
+  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
+  let w__3 ← (( do readReg CPTR_EL3 ) : SailM (BitVec 64) )
+  let __CPTR_EL3_TAM : (BitVec 1) := (_get_CPTR_EL3_Type_TAM w__3)
+  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+  let __SCR_EL3_AMVOFFEN : (BitVec 1) := (_get_SCR_EL3_Type_AMVOFFEN w__4)
+  let w__5 ← (( do (IsG1ActivityMonitorOffsetImplemented 8) ) : SailM Bool )
+  if ((! w__5) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
+    (do
+      if ((__PSTATE_EL == EL0) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else
+        (do
+          if ((__PSTATE_EL == EL1) : Bool)
+          then
+            (do
+              let w__9 ← (( do
+                if ((← do
+                     (EL2Enabled ())) : Bool)
+                then
+                  (do
+                    let w__7 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                    let w__8 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                    (pure (((((_get_HCR_EL2_Type_NV2 w__7) +++ (_get_HCR_EL2_Type_NV w__8)) == 0b11#2) : Bool))))
+                else (pure false) ) : SailM Bool )
+              if (w__9 : Bool)
+              then
+                (do
+                  let w__10 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  (NVMem_set ((BitVec.toNat 0xA80#12) +i (8 *i 8)) w__10))
+              else
+                (do
+                  let w__12 ← (( do
+                    (pure ((← do
+                          (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
+                  if (w__12 : Bool)
+                  then
+                    (do
+                      (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+                  else sailThrow ((Error_Undefined ()))))
+          else
+            (do
+              if ((__PSTATE_EL == EL2) : Bool)
+              then
+                (do
+                  let w__19 ← (( do
+                    (pure ((← do
+                          if ((← do
+                               (pure ((← do
+                                     if ((← do
+                                          (Halted ())) : Bool)
+                                     then
+                                       (do
+                                         (HaveEL EL3))
+                                     else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
+                          then
+                            (do
+                              (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
+                          else (pure false)) && ((__CPTR_EL3_TAM == 1#1) : Bool))) ) : SailM Bool )
+                  if (w__19 : Bool)
+                  then sailThrow ((Error_Undefined ()))
+                  else
+                    (do
+                      let w__26 ← (( do
+                        (pure ((← do
+                              if ((← do
+                                   (pure ((← do
+                                         if ((← do
+                                              (Halted ())) : Bool)
+                                         then
+                                           (do
+                                             (HaveEL EL3))
+                                         else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
+                              then
+                                (do
+                                  (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
+                              else (pure false)) && ((__SCR_EL3_AMVOFFEN == 0#1) : Bool))) ) : SailM
+                        Bool )
+                      if (w__26 : Bool)
+                      then sailThrow ((Error_Undefined ()))
+                      else
+                        (do
+                          let w__28 ← (( do
+                            (pure ((← do
+                                  (HaveEL EL3)) && ((__SCR_EL3_AMVOFFEN == 0#1) : Bool))) ) : SailM
+                            Bool )
+                          if (w__28 : Bool)
+                          then
+                            (do
+                              let w__30 ← (( do
+                                (pure ((← do
+                                      (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool
+                                )
+                              if (w__30 : Bool)
+                              then sailThrow ((Error_Undefined ()))
+                              else
+                                (do
+                                  (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                          else
+                            (do
+                              let w__32 ← (( do
+                                (pure ((← do
+                                      (HaveEL EL3)) && ((__CPTR_EL3_TAM == 1#1) : Bool))) ) : SailM
+                                Bool )
+                              if (w__32 : Bool)
+                              then
+                                (do
+                                  let w__34 ← (( do
+                                    (pure ((← do
+                                          (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM
+                                    Bool )
+                                  if (w__34 : Bool)
+                                  then sailThrow ((Error_Undefined ()))
+                                  else
+                                    (do
+                                      (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                              else
+                                (do
+                                  let w__35 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM
+                                    (Vector (BitVec 64) 16) )
+                                  let w__36 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                                  writeReg AMEVCNTVOFF1_EL2 (vectorUpdate w__35 8 w__36))))))
+              else
+                (do
+                  if ((__PSTATE_EL == EL3) : Bool)
+                  then
+                    (do
+                      let w__37 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM (Vector (BitVec 64) 16)
+                        )
+                      let w__38 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      writeReg AMEVCNTVOFF1_EL2 (vectorUpdate w__37 8 w__38))
+                  else (pure (()))))))
+
+
+/-- Type quantifiers: t : Int -/
+def AMEVCNTVOFF1_EL2_SysRegWrite_1a046ba7336f9e16 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
+  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
+  let w__3 ← (( do readReg CPTR_EL3 ) : SailM (BitVec 64) )
+  let __CPTR_EL3_TAM : (BitVec 1) := (_get_CPTR_EL3_Type_TAM w__3)
+  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+  let __SCR_EL3_AMVOFFEN : (BitVec 1) := (_get_SCR_EL3_Type_AMVOFFEN w__4)
+  let w__5 ← (( do (IsG1ActivityMonitorOffsetImplemented 12) ) : SailM Bool )
+  if ((! w__5) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
+    (do
+      if ((__PSTATE_EL == EL0) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else
+        (do
+          if ((__PSTATE_EL == EL1) : Bool)
+          then
+            (do
+              let w__9 ← (( do
+                if ((← do
+                     (EL2Enabled ())) : Bool)
+                then
+                  (do
+                    let w__7 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                    let w__8 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                    (pure (((((_get_HCR_EL2_Type_NV2 w__7) +++ (_get_HCR_EL2_Type_NV w__8)) == 0b11#2) : Bool))))
+                else (pure false) ) : SailM Bool )
+              if (w__9 : Bool)
+              then
+                (do
+                  let w__10 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  (NVMem_set ((BitVec.toNat 0xA80#12) +i (8 *i 12)) w__10))
+              else
+                (do
+                  let w__12 ← (( do
+                    (pure ((← do
+                          (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
+                  if (w__12 : Bool)
+                  then
+                    (do
+                      (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+                  else sailThrow ((Error_Undefined ()))))
+          else
+            (do
+              if ((__PSTATE_EL == EL2) : Bool)
+              then
+                (do
+                  let w__19 ← (( do
+                    (pure ((← do
+                          if ((← do
+                               (pure ((← do
+                                     if ((← do
+                                          (Halted ())) : Bool)
+                                     then
+                                       (do
+                                         (HaveEL EL3))
+                                     else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
+                          then
+                            (do
+                              (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
+                          else (pure false)) && ((__CPTR_EL3_TAM == 1#1) : Bool))) ) : SailM Bool )
+                  if (w__19 : Bool)
+                  then sailThrow ((Error_Undefined ()))
+                  else
+                    (do
+                      let w__26 ← (( do
+                        (pure ((← do
+                              if ((← do
+                                   (pure ((← do
+                                         if ((← do
+                                              (Halted ())) : Bool)
+                                         then
+                                           (do
+                                             (HaveEL EL3))
+                                         else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
+                              then
+                                (do
+                                  (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
+                              else (pure false)) && ((__SCR_EL3_AMVOFFEN == 0#1) : Bool))) ) : SailM
+                        Bool )
+                      if (w__26 : Bool)
+                      then sailThrow ((Error_Undefined ()))
+                      else
+                        (do
+                          let w__28 ← (( do
+                            (pure ((← do
+                                  (HaveEL EL3)) && ((__SCR_EL3_AMVOFFEN == 0#1) : Bool))) ) : SailM
+                            Bool )
+                          if (w__28 : Bool)
+                          then
+                            (do
+                              let w__30 ← (( do
+                                (pure ((← do
+                                      (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool
+                                )
+                              if (w__30 : Bool)
+                              then sailThrow ((Error_Undefined ()))
+                              else
+                                (do
+                                  (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                          else
+                            (do
+                              let w__32 ← (( do
+                                (pure ((← do
+                                      (HaveEL EL3)) && ((__CPTR_EL3_TAM == 1#1) : Bool))) ) : SailM
+                                Bool )
+                              if (w__32 : Bool)
+                              then
+                                (do
+                                  let w__34 ← (( do
+                                    (pure ((← do
+                                          (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM
+                                    Bool )
+                                  if (w__34 : Bool)
+                                  then sailThrow ((Error_Undefined ()))
+                                  else
+                                    (do
+                                      (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                              else
+                                (do
+                                  let w__35 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM
+                                    (Vector (BitVec 64) 16) )
+                                  let w__36 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                                  writeReg AMEVCNTVOFF1_EL2 (vectorUpdate w__35 12 w__36))))))
+              else
+                (do
+                  if ((__PSTATE_EL == EL3) : Bool)
+                  then
+                    (do
+                      let w__37 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM (Vector (BitVec 64) 16)
+                        )
+                      let w__38 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      writeReg AMEVCNTVOFF1_EL2 (vectorUpdate w__37 12 w__38))
+                  else (pure (()))))))
+
+
+/-- Type quantifiers: t : Int -/
+def AMEVCNTVOFF1_EL2_SysRegWrite_21fc3e4e66b7bf2e (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
+  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
+  let w__3 ← (( do readReg CPTR_EL3 ) : SailM (BitVec 64) )
+  let __CPTR_EL3_TAM : (BitVec 1) := (_get_CPTR_EL3_Type_TAM w__3)
+  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+  let __SCR_EL3_AMVOFFEN : (BitVec 1) := (_get_SCR_EL3_Type_AMVOFFEN w__4)
+  let w__5 ← (( do (IsG1ActivityMonitorOffsetImplemented 4) ) : SailM Bool )
+  if ((! w__5) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
+    (do
+      if ((__PSTATE_EL == EL0) : Bool)
+      then sailThrow ((Error_Undefined ()))
+      else
+        (do
+          if ((__PSTATE_EL == EL1) : Bool)
+          then
+            (do
+              let w__9 ← (( do
+                if ((← do
+                     (EL2Enabled ())) : Bool)
+                then
+                  (do
+                    let w__7 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                    let w__8 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                    (pure (((((_get_HCR_EL2_Type_NV2 w__7) +++ (_get_HCR_EL2_Type_NV w__8)) == 0b11#2) : Bool))))
+                else (pure false) ) : SailM Bool )
+              if (w__9 : Bool)
+              then
+                (do
+                  let w__10 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  (NVMem_set ((BitVec.toNat 0xA80#12) +i (8 *i 4)) w__10))
+              else
+                (do
+                  let w__12 ← (( do
+                    (pure ((← do
+                          (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
+                  if (w__12 : Bool)
+                  then
+                    (do
+                      (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+                  else sailThrow ((Error_Undefined ()))))
+          else
+            (do
+              if ((__PSTATE_EL == EL2) : Bool)
+              then
+                (do
+                  let w__19 ← (( do
+                    (pure ((← do
+                          if ((← do
+                               (pure ((← do
+                                     if ((← do
+                                          (Halted ())) : Bool)
+                                     then
+                                       (do
+                                         (HaveEL EL3))
+                                     else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
+                          then
+                            (do
+                              (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
+                          else (pure false)) && ((__CPTR_EL3_TAM == 1#1) : Bool))) ) : SailM Bool )
+                  if (w__19 : Bool)
+                  then sailThrow ((Error_Undefined ()))
+                  else
+                    (do
+                      let w__26 ← (( do
+                        (pure ((← do
+                              if ((← do
+                                   (pure ((← do
+                                         if ((← do
+                                              (Halted ())) : Bool)
+                                         then
+                                           (do
+                                             (HaveEL EL3))
+                                         else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
+                              then
+                                (do
+                                  (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
+                              else (pure false)) && ((__SCR_EL3_AMVOFFEN == 0#1) : Bool))) ) : SailM
+                        Bool )
+                      if (w__26 : Bool)
+                      then sailThrow ((Error_Undefined ()))
+                      else
+                        (do
+                          let w__28 ← (( do
+                            (pure ((← do
+                                  (HaveEL EL3)) && ((__SCR_EL3_AMVOFFEN == 0#1) : Bool))) ) : SailM
+                            Bool )
+                          if (w__28 : Bool)
+                          then
+                            (do
+                              let w__30 ← (( do
+                                (pure ((← do
+                                      (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool
+                                )
+                              if (w__30 : Bool)
+                              then sailThrow ((Error_Undefined ()))
+                              else
+                                (do
+                                  (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                          else
+                            (do
+                              let w__32 ← (( do
+                                (pure ((← do
+                                      (HaveEL EL3)) && ((__CPTR_EL3_TAM == 1#1) : Bool))) ) : SailM
+                                Bool )
+                              if (w__32 : Bool)
+                              then
+                                (do
+                                  let w__34 ← (( do
+                                    (pure ((← do
+                                          (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM
+                                    Bool )
+                                  if (w__34 : Bool)
+                                  then sailThrow ((Error_Undefined ()))
+                                  else
+                                    (do
+                                      (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                              else
+                                (do
+                                  let w__35 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM
+                                    (Vector (BitVec 64) 16) )
+                                  let w__36 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                                  writeReg AMEVCNTVOFF1_EL2 (vectorUpdate w__35 4 w__36))))))
+              else
+                (do
+                  if ((__PSTATE_EL == EL3) : Bool)
+                  then
+                    (do
+                      let w__37 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM (Vector (BitVec 64) 16)
+                        )
+                      let w__38 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      writeReg AMEVCNTVOFF1_EL2 (vectorUpdate w__37 4 w__38))
+                  else (pure (()))))))
 
 
 end ArmFull.Functions

@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,54 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _get_ICH_AP0R_EL2_Type_P10 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 10 10)
+
+
+def _get_ICH_AP0R_Type_P10 (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 10 10)
+
+
+def _get_ICH_AP1R_EL2_Type_P10 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 10 10)
+
+
+def _get_ICH_AP1R_Type_P10 (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 10 10)
+
+
+def _get_PMCNTENCLR_Type_P10 (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 10 10)
+
+
+def _get_PMCNTENSET_EL0_Type_P10 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 10 10)
+
+
+def _get_PMCNTENSET_Type_P10 (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 10 10)
+
+
+def _get_PMCNTEN_Type_P10 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 10 10)
+
+
+def _get_PMINTENCLR_EL1_Type_P10 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 10 10)
+
+
+def _get_PMINTENCLR_Type_P10 (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 10 10)
+
+
+def _get_PMINTENSET_EL1_Type_P10 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 10 10)
+
+
+def _get_PMINTENSET_Type_P10 (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 10 10)
+
 
 def _get_PMINTEN_Type_P10 (v : (BitVec 64)) : (BitVec 1) :=
   (Sail.BitVec.extractLsb v 10 10)
@@ -854,54 +902,6 @@ def _get_PMINTEN_Type_P13 (v : (BitVec 64)) : (BitVec 1) :=
 
 def _get_PMOVSCLR_EL0_Type_P13 (v : (BitVec 64)) : (BitVec 1) :=
   (Sail.BitVec.extractLsb v 13 13)
-
-
-def _get_PMOVSR_Type_P13 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 13 13)
-
-
-def _get_PMOVSSET_EL0_Type_P13 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 13 13)
-
-
-def _get_PMOVSSET_Type_P13 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 13 13)
-
-
-def _get_PMOVS_Type_P13 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 13 13)
-
-
-def _get_PMSWINC_EL0_Type_P13 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 13 13)
-
-
-def _get_PMSWINC_Type_P13 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 13 13)
-
-
-def _get_PMUACR_EL1_Type_P13 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 13 13)
-
-
-def _get_PMZR_EL0_Type_P13 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 13 13)
-
-
-def _get_SMPRIMAP_EL2_Type_P13 (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 55 52)
-
-
-def _get_SPMACCESSR_EL1_Type_P13 (v : (BitVec 64)) : (BitVec 2) :=
-  (Sail.BitVec.extractLsb v 27 26)
-
-
-def _get_SPMACCESSR_EL2_Type_P13 (v : (BitVec 64)) : (BitVec 2) :=
-  (Sail.BitVec.extractLsb v 27 26)
-
-
-def _get_SPMACCESSR_EL3_Type_P13 (v : (BitVec 64)) : (BitVec 2) :=
-  (Sail.BitVec.extractLsb v 27 26)
 
 
 end ArmFull.Functions

@@ -1,4 +1,4 @@
-/- Copyright (c) 2026 Crocodile Labs Inc.
+module set_option backward.proofsInPublic true @[expose] public section /- Copyright (c) 2026 Crocodile Labs Inc.
 SPDX-License-Identifier: Apache-2.0 -/
 /-!
 # Abstract real numbers for Sail models

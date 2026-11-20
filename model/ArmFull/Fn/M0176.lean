@@ -1,19 +1,21 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0010
-import ArmFull.Fn.M0034
-import ArmFull.Fn.M0043
-import ArmFull.Fn.M0047
-import ArmFull.Fn.M0056
-import ArmFull.Fn.M0059
-import ArmFull.Fn.M0060
-import ArmFull.Fn.M0061
-import ArmFull.Fn.M0092
-import ArmFull.Fn.M0166
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0010
+public import ArmFull.Fn.M0034
+public import ArmFull.Fn.M0042
+public import ArmFull.Fn.M0043
+public import ArmFull.Fn.M0047
+public import ArmFull.Fn.M0054
+public import ArmFull.Fn.M0056
+public import ArmFull.Fn.M0059
+public import ArmFull.Fn.M0060
+public import ArmFull.Fn.M0061
+public import ArmFull.Fn.M0092
+public import ArmFull.Fn.M0170 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -114,6 +116,30 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def __set_HSCTLR (value_name : (BitVec 32)) : SailM Unit := do
+  let r : HSCTLR_Type := value_name
+  let w__0 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 5 w__0 0 (BitVec.slice r 0 5))))
+  let w__1 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 1 w__1 6 (BitVec.slice r 6 1))))
+  let w__2 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+  (HSCTLR_write (Mk_HSCTLR_Type (set_slice 24 w__2 8 (BitVec.slice r 8 24))))
+  let w__3 ← (( do (__IMPDEF_boolean "IMPLEMENTED_ITD") ) : SailM Bool )
+  if ((! (! w__3)) : Bool)
+  then
+    (do
+      let w__4 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+      (HSCTLR_write (_update_HSCTLR_Type_ITD w__4 (_get_HSCTLR_Type_ITD r))))
+  else (pure (()))
+  let w__5 ← (( do (__IMPDEF_boolean "IMPLEMENTED_CP15BEN") ) : SailM Bool )
+  if ((! (! w__5)) : Bool)
+  then
+    (do
+      let w__6 ← (( do (HSCTLR_read ()) ) : SailM (BitVec 32) )
+      (HSCTLR_write (_update_HSCTLR_Type_CP15BEN w__6 (_get_HSCTLR_Type_CP15BEN r))))
+  else (pure (()))
+
 
 def __set_SCTLR_S (value_name : (BitVec 32)) : SailM Unit := do
   let r : SCTLR_Type := value_name

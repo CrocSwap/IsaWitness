@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,62 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _get_EDPRCR_Type_CORENPDRQ (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 0 0)
+
+
+def undefined_DBGPRCR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
+  (undefined_bitvector_at (ℓ.child 0) 32)
+
+
+def Mk_DBGPRCR_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def DBGPRCR_read (_ : Unit) : SailM (BitVec 32) := do
+  let r ← (( do readReg _DBGPRCR ) : SailM DBGPRCR_Type )
+  let w__0 ← (( do readReg DBGPRCR_EL1 ) : SailM (BitVec 64) )
+  let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__0 0 32)) : (BitVec 32))
+  (pure (r))
+
+
+def CTI_SetEventLevel (id : CrossTriggerIn) (level : Signal) : Unit :=
+  ()
+
+
+def SetInterruptRequestLevel (intid : InterruptID) (level : Signal) : SailM Unit := do
+  let w__1 ← (( do
+    if (((BEq.beq level Signal_High) : Bool) : Bool)
+    then
+      (do
+        let w__0 ← (( do readReg __GIC_Active ) : SailM (Option InterruptID) )
+        (pure (((bne w__0 (some intid)) : Bool))))
+    else (pure false) ) : SailM Bool )
+  if (w__1 : Bool)
+  then
+    (do
+      writeReg __GIC_Pending (some intid))
+  else (pure (()))
+
+
+/-- Type quantifiers: k_M : Nat, N : Nat, k_M > N ∧ k_M ≥ 0 ∧ 0 ≤ (N - 1) -/
+def Split (value_name : (BitVec k_M)) (N : Nat) : SailM ((BitVec (k_M - N)) × (BitVec N)) := do
+  ArmFull.assert ((Sail.BitVec.length value_name) >b N) "sail-inputs/03-v8_base.sail:8065.17-8065.18"
+  (pure (((Sail.BitVec.castWidth (Sail.BitVec.extractLsb value_name
+      (Sail.Int.toNatChecked (((Sail.BitVec.length value_name) -i 1))) N)), (Sail.BitVec.castWidth (Sail.BitVec.extractLsb
+      value_name (Sail.Int.toNatChecked ((N -i 1))) 0)))))
+
+
+/-- Type quantifiers: k_round : Bool, shift : Int, value_name : Int -/
+def RShr (value_name : Int) (shift : Int) (round : Bool) : SailM Int := do
+  ArmFull.assert (shift >b 0) "sail-inputs/03-v8_base.sail:8073.20-8073.21"
+  (pure (if (round : Bool)
+    then
+      (Int.shiftr (value_name +i (Int.shiftl 1 (Sail.Int.toNatChecked ((shift -i 1)))))
+        (Sail.Int.toNatChecked (shift)))
+    else (Int.shiftr value_name (Sail.Int.toNatChecked (shift)))))
+
 
 def undefined_GCSCR_EL1_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
   (undefined_bitvector_at (ℓ.child 0) 64)
@@ -828,70 +884,6 @@ def _update_SCTLR_EL1_Type_EnDA (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64)
 
 def _update_SCTLR_EL3_Type_EnDA (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
   (Sail.BitVec.updateSubrange v 27 27 x)
-
-
-def _get_SCTLR_EL1_Type_EnDA (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 27 27)
-
-
-def _get_SCTLR_EL3_Type_EnDA (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 27 27)
-
-
-def _get_SCTLR_EL2_Type_EnDB (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 13 13)
-
-
-def _update_SCTLR_EL2_Type_EnDB (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 13 13 x)
-
-
-def _update_SCTLR_EL1_Type_EnDB (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 13 13 x)
-
-
-def _update_SCTLR_EL3_Type_EnDB (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 13 13 x)
-
-
-def _get_SCTLR_EL1_Type_EnDB (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 13 13)
-
-
-def _get_SCTLR_EL3_Type_EnDB (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 13 13)
-
-
-def _get_SCTLR_EL2_Type_EnIA (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 31 31)
-
-
-def _update_SCTLR_EL2_Type_EnIA (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 31 31 x)
-
-
-def _update_SCTLR_EL1_Type_EnIA (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 31 31 x)
-
-
-def _update_SCTLR_EL3_Type_EnIA (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 31 31 x)
-
-
-def _get_SCTLR_EL1_Type_EnIA (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 31 31)
-
-
-def _get_SCTLR_EL3_Type_EnIA (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 31 31)
-
-
-def _get_SCTLR_EL2_Type_EnIB (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 30 30)
-
-
-def _update_SCTLR_EL2_Type_EnIB (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 30 30 x)
 
 
 end ArmFull.Functions

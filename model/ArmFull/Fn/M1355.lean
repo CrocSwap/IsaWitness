@@ -1,22 +1,16 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0021
-import ArmFull.Fn.M0022
-import ArmFull.Fn.M0023
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0041
-import ArmFull.Fn.M0058
-import ArmFull.Fn.M0100
-import ArmFull.Fn.M0144
-import ArmFull.Fn.M0166
-import ArmFull.Fn.M0181
-import ArmFull.Fn.M0254
-import ArmFull.Fn.M1278
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0019
+public import ArmFull.Fn.M0117
+public import ArmFull.Fn.M0146
+public import ArmFull.Fn.M0198
+public import ArmFull.Fn.M0603
+public import ArmFull.Fn.M1243
+public import ArmFull.Fn.M1244 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -118,629 +112,662 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-/-- Type quantifiers: t : Int -/
-def AMEVCNTVOFF1_EL2_SysRegRead_9ccfe31177eb70bf (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
-  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
-  let w__3 ← (( do readReg CPTR_EL3 ) : SailM (BitVec 64) )
-  let __CPTR_EL3_TAM : (BitVec 1) := (_get_CPTR_EL3_Type_TAM w__3)
-  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_AMVOFFEN : (BitVec 1) := (_get_SCR_EL3_Type_AMVOFFEN w__4)
-  let w__5 ← (( do (IsG1ActivityMonitorOffsetImplemented 3) ) : SailM Bool )
-  if ((! w__5) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_cpyptn_aarch64_instrs_memory_mcpymset_cpy (Rd : (BitVec 5)) (Rn : (BitVec 5)) (op2 : (BitVec 4)) (Rs : (BitVec 5)) (op1 : (BitVec 2)) (sz : (BitVec 2)) : SailM Unit := do
+  let w__0 ← (( do (HaveFeatMOPS ()) ) : SailM Bool )
+  if ((! w__0) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
   else
     (do
-      if ((__PSTATE_EL == EL0) : Bool)
-      then sailThrow ((Error_Undefined ()))
+      if ((sz != 0b00#2) : Bool)
+      then
+        (do
+          (__ArmCertEndOfDecode ())
+          sailThrow ((Error_Undefined ())))
       else
         (do
-          if ((__PSTATE_EL == EL1) : Bool)
+          let d : Int := (BitVec.toNat Rd)
+          let s : Int := (BitVec.toNat Rs)
+          let n : Int := (BitVec.toNat Rn)
+          let options_name : (BitVec 4) := op2
+          let stage ← (( do (undefined_MOPSStage (← occLabel 4068) ()) ) : SailM MOPSStage )
+          let stage ← (( do
+            match op1 with
+            | 0b00 => (pure (MOPSStage_Prologue))
+            | 0b01 => (pure (MOPSStage_Main))
+            | 0b10 => (pure (MOPSStage_Epilogue))
+            | _ => sailThrow ((Error_See "Memory Copy and Memory Set")) ) : SailM MOPSStage )
+          let stage := stage
+          (__ArmCertEndOfDecode ())
+          (CheckMOPSEnabled ())
+          if (((((((s == n) || (s == d)) || (n == d)) || (d == 31)) || (s == 31)) || (n == 31)) : Bool)
           then
             (do
-              let w__9 ← (( do
-                if ((← do
-                     (EL2Enabled ())) : Bool)
-                then
-                  (do
-                    let w__7 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                    let w__8 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                    (pure (((((_get_HCR_EL2_Type_NV2 w__7) +++ (_get_HCR_EL2_Type_NV w__8)) == 0b11#2) : Bool))))
-                else (pure false) ) : SailM Bool )
-              if (w__9 : Bool)
-              then
+              let c ← (( do (ConstrainUnpredictable Unpredictable_MOPSOVERLAP31) ) : SailM
+                Constraint )
+              ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-inputs/15-instrs64.sail:8493.58-8493.59"
+              match c with
+              | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
+              | .Constraint_NOP =>
                 (do
-                  let w__10 ← (( do (NVMem_read ((BitVec.toNat 0xA80#12) +i (8 *i 3))) ) : SailM
-                    (BitVec 64) )
-                  (X_set t 64 w__10))
-              else
-                (do
-                  let w__12 ← (( do
-                    (pure ((← do
-                          (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__12 : Bool)
-                  then
-                    (do
-                      (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
-                  else sailThrow ((Error_Undefined ()))))
-          else
-            (do
-              if ((__PSTATE_EL == EL2) : Bool)
-              then
-                (do
-                  let w__18 ← (( do
-                    (pure ((← do
-                          if ((← do
-                               (pure ((← do
-                                     (pure ((← do
-                                           (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                          then
-                            (do
-                              (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                          else (pure false)) && ((__CPTR_EL3_TAM == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__18 : Bool)
-                  then sailThrow ((Error_Undefined ()))
-                  else
-                    (do
-                      let w__24 ← (( do
-                        (pure ((← do
-                              if ((← do
-                                   (pure ((← do
-                                         (pure ((← do
-                                               (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                              then
-                                (do
-                                  (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                              else (pure false)) && ((__SCR_EL3_AMVOFFEN == 0#1) : Bool))) ) : SailM
-                        Bool )
-                      if (w__24 : Bool)
-                      then sailThrow ((Error_Undefined ()))
-                      else
-                        (do
-                          if (((HaveEL EL3) && (__SCR_EL3_AMVOFFEN == 0#1)) : Bool)
-                          then
-                            (do
-                              let w__26 ← (( do
-                                (pure ((← do
-                                      (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool
-                                )
-                              if (w__26 : Bool)
-                              then sailThrow ((Error_Undefined ()))
-                              else
-                                (do
-                                  (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                          else
-                            (do
-                              if (((HaveEL EL3) && (__CPTR_EL3_TAM == 1#1)) : Bool)
-                              then
-                                (do
-                                  let w__28 ← (( do
-                                    (pure ((← do
-                                          (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM
-                                    Bool )
-                                  if (w__28 : Bool)
-                                  then sailThrow ((Error_Undefined ()))
-                                  else
-                                    (do
-                                      (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                              else
-                                (do
-                                  let w__29 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM
-                                    (Vector (BitVec 64) 16) )
-                                  (X_set t 64 (GetElem?.getElem! w__29 3)))))))
-              else
-                (do
-                  if ((__PSTATE_EL == EL3) : Bool)
-                  then
-                    (do
-                      let w__30 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM (Vector (BitVec 64) 16)
-                        )
-                      (X_set t 64 (GetElem?.getElem! w__30 3)))
-                  else (pure (()))))))
+                  (EndOfInstruction ()))
+              | _ => (pure (())))
+          else (pure (()))
+          (execute_aarch64_instrs_memory_mcpymset_cpy (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (n)) options_name (Sail.Int.toNatChecked (s)) stage)))
 
 
-/-- Type quantifiers: t : Int -/
-def AMEVCNTVOFF1_EL2_SysRegRead_ab60ef2f0cd65aba (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
-  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
-  let w__3 ← (( do readReg CPTR_EL3 ) : SailM (BitVec 64) )
-  let __CPTR_EL3_TAM : (BitVec 1) := (_get_CPTR_EL3_Type_TAM w__3)
-  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_AMVOFFEN : (BitVec 1) := (_get_SCR_EL3_Type_AMVOFFEN w__4)
-  let w__5 ← (( do (IsG1ActivityMonitorOffsetImplemented 9) ) : SailM Bool )
-  if ((! w__5) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_cpyptrn_aarch64_instrs_memory_mcpymset_cpy (Rd : (BitVec 5)) (Rn : (BitVec 5)) (op2 : (BitVec 4)) (Rs : (BitVec 5)) (op1 : (BitVec 2)) (sz : (BitVec 2)) : SailM Unit := do
+  let w__0 ← (( do (HaveFeatMOPS ()) ) : SailM Bool )
+  if ((! w__0) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
   else
     (do
-      if ((__PSTATE_EL == EL0) : Bool)
-      then sailThrow ((Error_Undefined ()))
+      if ((sz != 0b00#2) : Bool)
+      then
+        (do
+          (__ArmCertEndOfDecode ())
+          sailThrow ((Error_Undefined ())))
       else
         (do
-          if ((__PSTATE_EL == EL1) : Bool)
+          let d : Int := (BitVec.toNat Rd)
+          let s : Int := (BitVec.toNat Rs)
+          let n : Int := (BitVec.toNat Rn)
+          let options_name : (BitVec 4) := op2
+          let stage ← (( do (undefined_MOPSStage (← occLabel 4069) ()) ) : SailM MOPSStage )
+          let stage ← (( do
+            match op1 with
+            | 0b00 => (pure (MOPSStage_Prologue))
+            | 0b01 => (pure (MOPSStage_Main))
+            | 0b10 => (pure (MOPSStage_Epilogue))
+            | _ => sailThrow ((Error_See "Memory Copy and Memory Set")) ) : SailM MOPSStage )
+          let stage := stage
+          (__ArmCertEndOfDecode ())
+          (CheckMOPSEnabled ())
+          if (((((((s == n) || (s == d)) || (n == d)) || (d == 31)) || (s == 31)) || (n == 31)) : Bool)
           then
             (do
-              let w__9 ← (( do
-                if ((← do
-                     (EL2Enabled ())) : Bool)
-                then
-                  (do
-                    let w__7 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                    let w__8 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                    (pure (((((_get_HCR_EL2_Type_NV2 w__7) +++ (_get_HCR_EL2_Type_NV w__8)) == 0b11#2) : Bool))))
-                else (pure false) ) : SailM Bool )
-              if (w__9 : Bool)
-              then
+              let c ← (( do (ConstrainUnpredictable Unpredictable_MOPSOVERLAP31) ) : SailM
+                Constraint )
+              ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-inputs/15-instrs64.sail:8550.58-8550.59"
+              match c with
+              | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
+              | .Constraint_NOP =>
                 (do
-                  let w__10 ← (( do (NVMem_read ((BitVec.toNat 0xA80#12) +i (8 *i 9))) ) : SailM
-                    (BitVec 64) )
-                  (X_set t 64 w__10))
-              else
-                (do
-                  let w__12 ← (( do
-                    (pure ((← do
-                          (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__12 : Bool)
-                  then
-                    (do
-                      (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
-                  else sailThrow ((Error_Undefined ()))))
-          else
-            (do
-              if ((__PSTATE_EL == EL2) : Bool)
-              then
-                (do
-                  let w__18 ← (( do
-                    (pure ((← do
-                          if ((← do
-                               (pure ((← do
-                                     (pure ((← do
-                                           (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                          then
-                            (do
-                              (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                          else (pure false)) && ((__CPTR_EL3_TAM == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__18 : Bool)
-                  then sailThrow ((Error_Undefined ()))
-                  else
-                    (do
-                      let w__24 ← (( do
-                        (pure ((← do
-                              if ((← do
-                                   (pure ((← do
-                                         (pure ((← do
-                                               (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                              then
-                                (do
-                                  (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                              else (pure false)) && ((__SCR_EL3_AMVOFFEN == 0#1) : Bool))) ) : SailM
-                        Bool )
-                      if (w__24 : Bool)
-                      then sailThrow ((Error_Undefined ()))
-                      else
-                        (do
-                          if (((HaveEL EL3) && (__SCR_EL3_AMVOFFEN == 0#1)) : Bool)
-                          then
-                            (do
-                              let w__26 ← (( do
-                                (pure ((← do
-                                      (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool
-                                )
-                              if (w__26 : Bool)
-                              then sailThrow ((Error_Undefined ()))
-                              else
-                                (do
-                                  (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                          else
-                            (do
-                              if (((HaveEL EL3) && (__CPTR_EL3_TAM == 1#1)) : Bool)
-                              then
-                                (do
-                                  let w__28 ← (( do
-                                    (pure ((← do
-                                          (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM
-                                    Bool )
-                                  if (w__28 : Bool)
-                                  then sailThrow ((Error_Undefined ()))
-                                  else
-                                    (do
-                                      (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                              else
-                                (do
-                                  let w__29 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM
-                                    (Vector (BitVec 64) 16) )
-                                  (X_set t 64 (GetElem?.getElem! w__29 9)))))))
-              else
-                (do
-                  if ((__PSTATE_EL == EL3) : Bool)
-                  then
-                    (do
-                      let w__30 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM (Vector (BitVec 64) 16)
-                        )
-                      (X_set t 64 (GetElem?.getElem! w__30 9)))
-                  else (pure (()))))))
+                  (EndOfInstruction ()))
+              | _ => (pure (())))
+          else (pure (()))
+          (execute_aarch64_instrs_memory_mcpymset_cpy (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (n)) options_name (Sail.Int.toNatChecked (s)) stage)))
 
 
-/-- Type quantifiers: t : Int -/
-def AMEVCNTVOFF1_EL2_SysRegRead_aba56e69378156c9 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
-  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
-  let w__3 ← (( do readReg CPTR_EL3 ) : SailM (BitVec 64) )
-  let __CPTR_EL3_TAM : (BitVec 1) := (_get_CPTR_EL3_Type_TAM w__3)
-  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_AMVOFFEN : (BitVec 1) := (_get_SCR_EL3_Type_AMVOFFEN w__4)
-  let w__5 ← (( do (IsG1ActivityMonitorOffsetImplemented 6) ) : SailM Bool )
-  if ((! w__5) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_cpyptwn_aarch64_instrs_memory_mcpymset_cpy (Rd : (BitVec 5)) (Rn : (BitVec 5)) (op2 : (BitVec 4)) (Rs : (BitVec 5)) (op1 : (BitVec 2)) (sz : (BitVec 2)) : SailM Unit := do
+  let w__0 ← (( do (HaveFeatMOPS ()) ) : SailM Bool )
+  if ((! w__0) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
   else
     (do
-      if ((__PSTATE_EL == EL0) : Bool)
-      then sailThrow ((Error_Undefined ()))
+      if ((sz != 0b00#2) : Bool)
+      then
+        (do
+          (__ArmCertEndOfDecode ())
+          sailThrow ((Error_Undefined ())))
       else
         (do
-          if ((__PSTATE_EL == EL1) : Bool)
+          let d : Int := (BitVec.toNat Rd)
+          let s : Int := (BitVec.toNat Rs)
+          let n : Int := (BitVec.toNat Rn)
+          let options_name : (BitVec 4) := op2
+          let stage ← (( do (undefined_MOPSStage (← occLabel 4070) ()) ) : SailM MOPSStage )
+          let stage ← (( do
+            match op1 with
+            | 0b00 => (pure (MOPSStage_Prologue))
+            | 0b01 => (pure (MOPSStage_Main))
+            | 0b10 => (pure (MOPSStage_Epilogue))
+            | _ => sailThrow ((Error_See "Memory Copy and Memory Set")) ) : SailM MOPSStage )
+          let stage := stage
+          (__ArmCertEndOfDecode ())
+          (CheckMOPSEnabled ())
+          if (((((((s == n) || (s == d)) || (n == d)) || (d == 31)) || (s == 31)) || (n == 31)) : Bool)
           then
             (do
-              let w__9 ← (( do
-                if ((← do
-                     (EL2Enabled ())) : Bool)
-                then
-                  (do
-                    let w__7 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                    let w__8 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                    (pure (((((_get_HCR_EL2_Type_NV2 w__7) +++ (_get_HCR_EL2_Type_NV w__8)) == 0b11#2) : Bool))))
-                else (pure false) ) : SailM Bool )
-              if (w__9 : Bool)
-              then
+              let c ← (( do (ConstrainUnpredictable Unpredictable_MOPSOVERLAP31) ) : SailM
+                Constraint )
+              ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-inputs/15-instrs64.sail:8607.58-8607.59"
+              match c with
+              | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
+              | .Constraint_NOP =>
                 (do
-                  let w__10 ← (( do (NVMem_read ((BitVec.toNat 0xA80#12) +i (8 *i 6))) ) : SailM
-                    (BitVec 64) )
-                  (X_set t 64 w__10))
-              else
-                (do
-                  let w__12 ← (( do
-                    (pure ((← do
-                          (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__12 : Bool)
-                  then
-                    (do
-                      (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
-                  else sailThrow ((Error_Undefined ()))))
-          else
-            (do
-              if ((__PSTATE_EL == EL2) : Bool)
-              then
-                (do
-                  let w__18 ← (( do
-                    (pure ((← do
-                          if ((← do
-                               (pure ((← do
-                                     (pure ((← do
-                                           (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                          then
-                            (do
-                              (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                          else (pure false)) && ((__CPTR_EL3_TAM == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__18 : Bool)
-                  then sailThrow ((Error_Undefined ()))
-                  else
-                    (do
-                      let w__24 ← (( do
-                        (pure ((← do
-                              if ((← do
-                                   (pure ((← do
-                                         (pure ((← do
-                                               (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                              then
-                                (do
-                                  (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                              else (pure false)) && ((__SCR_EL3_AMVOFFEN == 0#1) : Bool))) ) : SailM
-                        Bool )
-                      if (w__24 : Bool)
-                      then sailThrow ((Error_Undefined ()))
-                      else
-                        (do
-                          if (((HaveEL EL3) && (__SCR_EL3_AMVOFFEN == 0#1)) : Bool)
-                          then
-                            (do
-                              let w__26 ← (( do
-                                (pure ((← do
-                                      (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool
-                                )
-                              if (w__26 : Bool)
-                              then sailThrow ((Error_Undefined ()))
-                              else
-                                (do
-                                  (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                          else
-                            (do
-                              if (((HaveEL EL3) && (__CPTR_EL3_TAM == 1#1)) : Bool)
-                              then
-                                (do
-                                  let w__28 ← (( do
-                                    (pure ((← do
-                                          (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM
-                                    Bool )
-                                  if (w__28 : Bool)
-                                  then sailThrow ((Error_Undefined ()))
-                                  else
-                                    (do
-                                      (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                              else
-                                (do
-                                  let w__29 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM
-                                    (Vector (BitVec 64) 16) )
-                                  (X_set t 64 (GetElem?.getElem! w__29 6)))))))
-              else
-                (do
-                  if ((__PSTATE_EL == EL3) : Bool)
-                  then
-                    (do
-                      let w__30 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM (Vector (BitVec 64) 16)
-                        )
-                      (X_set t 64 (GetElem?.getElem! w__30 6)))
-                  else (pure (()))))))
+                  (EndOfInstruction ()))
+              | _ => (pure (())))
+          else (pure (()))
+          (execute_aarch64_instrs_memory_mcpymset_cpy (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (n)) options_name (Sail.Int.toNatChecked (s)) stage)))
 
 
-/-- Type quantifiers: t : Int -/
-def AMEVCNTVOFF1_EL2_SysRegRead_bc32b16140cabb5b (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
-  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
-  let w__3 ← (( do readReg CPTR_EL3 ) : SailM (BitVec 64) )
-  let __CPTR_EL3_TAM : (BitVec 1) := (_get_CPTR_EL3_Type_TAM w__3)
-  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_AMVOFFEN : (BitVec 1) := (_get_SCR_EL3_Type_AMVOFFEN w__4)
-  let w__5 ← (( do (IsG1ActivityMonitorOffsetImplemented 0) ) : SailM Bool )
-  if ((! w__5) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_cpypwn_aarch64_instrs_memory_mcpymset_cpy (Rd : (BitVec 5)) (Rn : (BitVec 5)) (op2 : (BitVec 4)) (Rs : (BitVec 5)) (op1 : (BitVec 2)) (sz : (BitVec 2)) : SailM Unit := do
+  let w__0 ← (( do (HaveFeatMOPS ()) ) : SailM Bool )
+  if ((! w__0) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
   else
     (do
-      if ((__PSTATE_EL == EL0) : Bool)
-      then sailThrow ((Error_Undefined ()))
+      if ((sz != 0b00#2) : Bool)
+      then
+        (do
+          (__ArmCertEndOfDecode ())
+          sailThrow ((Error_Undefined ())))
       else
         (do
-          if ((__PSTATE_EL == EL1) : Bool)
+          let d : Int := (BitVec.toNat Rd)
+          let s : Int := (BitVec.toNat Rs)
+          let n : Int := (BitVec.toNat Rn)
+          let options_name : (BitVec 4) := op2
+          let stage ← (( do (undefined_MOPSStage (← occLabel 4071) ()) ) : SailM MOPSStage )
+          let stage ← (( do
+            match op1 with
+            | 0b00 => (pure (MOPSStage_Prologue))
+            | 0b01 => (pure (MOPSStage_Main))
+            | 0b10 => (pure (MOPSStage_Epilogue))
+            | _ => sailThrow ((Error_See "Memory Copy and Memory Set")) ) : SailM MOPSStage )
+          let stage := stage
+          (__ArmCertEndOfDecode ())
+          (CheckMOPSEnabled ())
+          if (((((((s == n) || (s == d)) || (n == d)) || (d == 31)) || (s == 31)) || (n == 31)) : Bool)
           then
             (do
-              let w__9 ← (( do
-                if ((← do
-                     (EL2Enabled ())) : Bool)
-                then
-                  (do
-                    let w__7 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                    let w__8 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                    (pure (((((_get_HCR_EL2_Type_NV2 w__7) +++ (_get_HCR_EL2_Type_NV w__8)) == 0b11#2) : Bool))))
-                else (pure false) ) : SailM Bool )
-              if (w__9 : Bool)
-              then
+              let c ← (( do (ConstrainUnpredictable Unpredictable_MOPSOVERLAP31) ) : SailM
+                Constraint )
+              ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-inputs/15-instrs64.sail:8664.58-8664.59"
+              match c with
+              | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
+              | .Constraint_NOP =>
                 (do
-                  let w__10 ← (( do (NVMem_read ((BitVec.toNat 0xA80#12) +i (8 *i 0))) ) : SailM
-                    (BitVec 64) )
-                  (X_set t 64 w__10))
-              else
-                (do
-                  let w__12 ← (( do
-                    (pure ((← do
-                          (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__12 : Bool)
-                  then
-                    (do
-                      (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
-                  else sailThrow ((Error_Undefined ()))))
-          else
-            (do
-              if ((__PSTATE_EL == EL2) : Bool)
-              then
-                (do
-                  let w__18 ← (( do
-                    (pure ((← do
-                          if ((← do
-                               (pure ((← do
-                                     (pure ((← do
-                                           (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                          then
-                            (do
-                              (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                          else (pure false)) && ((__CPTR_EL3_TAM == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__18 : Bool)
-                  then sailThrow ((Error_Undefined ()))
-                  else
-                    (do
-                      let w__24 ← (( do
-                        (pure ((← do
-                              if ((← do
-                                   (pure ((← do
-                                         (pure ((← do
-                                               (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                              then
-                                (do
-                                  (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                              else (pure false)) && ((__SCR_EL3_AMVOFFEN == 0#1) : Bool))) ) : SailM
-                        Bool )
-                      if (w__24 : Bool)
-                      then sailThrow ((Error_Undefined ()))
-                      else
-                        (do
-                          if (((HaveEL EL3) && (__SCR_EL3_AMVOFFEN == 0#1)) : Bool)
-                          then
-                            (do
-                              let w__26 ← (( do
-                                (pure ((← do
-                                      (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool
-                                )
-                              if (w__26 : Bool)
-                              then sailThrow ((Error_Undefined ()))
-                              else
-                                (do
-                                  (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                          else
-                            (do
-                              if (((HaveEL EL3) && (__CPTR_EL3_TAM == 1#1)) : Bool)
-                              then
-                                (do
-                                  let w__28 ← (( do
-                                    (pure ((← do
-                                          (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM
-                                    Bool )
-                                  if (w__28 : Bool)
-                                  then sailThrow ((Error_Undefined ()))
-                                  else
-                                    (do
-                                      (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                              else
-                                (do
-                                  let w__29 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM
-                                    (Vector (BitVec 64) 16) )
-                                  (X_set t 64 (GetElem?.getElem! w__29 0)))))))
-              else
-                (do
-                  if ((__PSTATE_EL == EL3) : Bool)
-                  then
-                    (do
-                      let w__30 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM (Vector (BitVec 64) 16)
-                        )
-                      (X_set t 64 (GetElem?.getElem! w__30 0)))
-                  else (pure (()))))))
+                  (EndOfInstruction ()))
+              | _ => (pure (())))
+          else (pure (()))
+          (execute_aarch64_instrs_memory_mcpymset_cpy (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (n)) options_name (Sail.Int.toNatChecked (s)) stage)))
 
 
-/-- Type quantifiers: t : Int -/
-def AMEVCNTVOFF1_EL2_SysRegRead_f1c1cecc05c57faa (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
-  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
-  let w__3 ← (( do readReg CPTR_EL3 ) : SailM (BitVec 64) )
-  let __CPTR_EL3_TAM : (BitVec 1) := (_get_CPTR_EL3_Type_TAM w__3)
-  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_AMVOFFEN : (BitVec 1) := (_get_SCR_EL3_Type_AMVOFFEN w__4)
-  let w__5 ← (( do (IsG1ActivityMonitorOffsetImplemented 15) ) : SailM Bool )
-  if ((! w__5) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_cpypwt_aarch64_instrs_memory_mcpymset_cpy (Rd : (BitVec 5)) (Rn : (BitVec 5)) (op2 : (BitVec 4)) (Rs : (BitVec 5)) (op1 : (BitVec 2)) (sz : (BitVec 2)) : SailM Unit := do
+  let w__0 ← (( do (HaveFeatMOPS ()) ) : SailM Bool )
+  if ((! w__0) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
   else
     (do
-      if ((__PSTATE_EL == EL0) : Bool)
-      then sailThrow ((Error_Undefined ()))
+      if ((sz != 0b00#2) : Bool)
+      then
+        (do
+          (__ArmCertEndOfDecode ())
+          sailThrow ((Error_Undefined ())))
       else
         (do
-          if ((__PSTATE_EL == EL1) : Bool)
+          let d : Int := (BitVec.toNat Rd)
+          let s : Int := (BitVec.toNat Rs)
+          let n : Int := (BitVec.toNat Rn)
+          let options_name : (BitVec 4) := op2
+          let stage ← (( do (undefined_MOPSStage (← occLabel 4072) ()) ) : SailM MOPSStage )
+          let stage ← (( do
+            match op1 with
+            | 0b00 => (pure (MOPSStage_Prologue))
+            | 0b01 => (pure (MOPSStage_Main))
+            | 0b10 => (pure (MOPSStage_Epilogue))
+            | _ => sailThrow ((Error_See "Memory Copy and Memory Set")) ) : SailM MOPSStage )
+          let stage := stage
+          (__ArmCertEndOfDecode ())
+          (CheckMOPSEnabled ())
+          if (((((((s == n) || (s == d)) || (n == d)) || (d == 31)) || (s == 31)) || (n == 31)) : Bool)
           then
             (do
-              let w__9 ← (( do
-                if ((← do
-                     (EL2Enabled ())) : Bool)
-                then
-                  (do
-                    let w__7 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                    let w__8 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                    (pure (((((_get_HCR_EL2_Type_NV2 w__7) +++ (_get_HCR_EL2_Type_NV w__8)) == 0b11#2) : Bool))))
-                else (pure false) ) : SailM Bool )
-              if (w__9 : Bool)
-              then
+              let c ← (( do (ConstrainUnpredictable Unpredictable_MOPSOVERLAP31) ) : SailM
+                Constraint )
+              ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-inputs/15-instrs64.sail:8721.58-8721.59"
+              match c with
+              | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
+              | .Constraint_NOP =>
                 (do
-                  let w__10 ← (( do (NVMem_read ((BitVec.toNat 0xA80#12) +i (8 *i 15))) ) : SailM
-                    (BitVec 64) )
-                  (X_set t 64 w__10))
-              else
-                (do
-                  let w__12 ← (( do
-                    (pure ((← do
-                          (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__12 : Bool)
-                  then
-                    (do
-                      (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
-                  else sailThrow ((Error_Undefined ()))))
-          else
+                  (EndOfInstruction ()))
+              | _ => (pure (())))
+          else (pure (()))
+          (execute_aarch64_instrs_memory_mcpymset_cpy (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (n)) options_name (Sail.Int.toNatChecked (s)) stage)))
+
+
+def decode_cpypwtn_aarch64_instrs_memory_mcpymset_cpy (Rd : (BitVec 5)) (Rn : (BitVec 5)) (op2 : (BitVec 4)) (Rs : (BitVec 5)) (op1 : (BitVec 2)) (sz : (BitVec 2)) : SailM Unit := do
+  let w__0 ← (( do (HaveFeatMOPS ()) ) : SailM Bool )
+  if ((! w__0) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
+  else
+    (do
+      if ((sz != 0b00#2) : Bool)
+      then
+        (do
+          (__ArmCertEndOfDecode ())
+          sailThrow ((Error_Undefined ())))
+      else
+        (do
+          let d : Int := (BitVec.toNat Rd)
+          let s : Int := (BitVec.toNat Rs)
+          let n : Int := (BitVec.toNat Rn)
+          let options_name : (BitVec 4) := op2
+          let stage ← (( do (undefined_MOPSStage (← occLabel 4073) ()) ) : SailM MOPSStage )
+          let stage ← (( do
+            match op1 with
+            | 0b00 => (pure (MOPSStage_Prologue))
+            | 0b01 => (pure (MOPSStage_Main))
+            | 0b10 => (pure (MOPSStage_Epilogue))
+            | _ => sailThrow ((Error_See "Memory Copy and Memory Set")) ) : SailM MOPSStage )
+          let stage := stage
+          (__ArmCertEndOfDecode ())
+          (CheckMOPSEnabled ())
+          if (((((((s == n) || (s == d)) || (n == d)) || (d == 31)) || (s == 31)) || (n == 31)) : Bool)
+          then
             (do
-              if ((__PSTATE_EL == EL2) : Bool)
-              then
+              let c ← (( do (ConstrainUnpredictable Unpredictable_MOPSOVERLAP31) ) : SailM
+                Constraint )
+              ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-inputs/15-instrs64.sail:8778.58-8778.59"
+              match c with
+              | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
+              | .Constraint_NOP =>
                 (do
-                  let w__18 ← (( do
-                    (pure ((← do
-                          if ((← do
-                               (pure ((← do
-                                     (pure ((← do
-                                           (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                          then
-                            (do
-                              (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                          else (pure false)) && ((__CPTR_EL3_TAM == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__18 : Bool)
-                  then sailThrow ((Error_Undefined ()))
-                  else
-                    (do
-                      let w__24 ← (( do
-                        (pure ((← do
-                              if ((← do
-                                   (pure ((← do
-                                         (pure ((← do
-                                               (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                              then
-                                (do
-                                  (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                              else (pure false)) && ((__SCR_EL3_AMVOFFEN == 0#1) : Bool))) ) : SailM
-                        Bool )
-                      if (w__24 : Bool)
-                      then sailThrow ((Error_Undefined ()))
-                      else
-                        (do
-                          if (((HaveEL EL3) && (__SCR_EL3_AMVOFFEN == 0#1)) : Bool)
-                          then
-                            (do
-                              let w__26 ← (( do
-                                (pure ((← do
-                                      (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool
-                                )
-                              if (w__26 : Bool)
-                              then sailThrow ((Error_Undefined ()))
-                              else
-                                (do
-                                  (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                          else
-                            (do
-                              if (((HaveEL EL3) && (__CPTR_EL3_TAM == 1#1)) : Bool)
-                              then
-                                (do
-                                  let w__28 ← (( do
-                                    (pure ((← do
-                                          (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM
-                                    Bool )
-                                  if (w__28 : Bool)
-                                  then sailThrow ((Error_Undefined ()))
-                                  else
-                                    (do
-                                      (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                              else
-                                (do
-                                  let w__29 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM
-                                    (Vector (BitVec 64) 16) )
-                                  (X_set t 64 (GetElem?.getElem! w__29 15)))))))
-              else
+                  (EndOfInstruction ()))
+              | _ => (pure (())))
+          else (pure (()))
+          (execute_aarch64_instrs_memory_mcpymset_cpy (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (n)) options_name (Sail.Int.toNatChecked (s)) stage)))
+
+
+def decode_cpypwtrn_aarch64_instrs_memory_mcpymset_cpy (Rd : (BitVec 5)) (Rn : (BitVec 5)) (op2 : (BitVec 4)) (Rs : (BitVec 5)) (op1 : (BitVec 2)) (sz : (BitVec 2)) : SailM Unit := do
+  let w__0 ← (( do (HaveFeatMOPS ()) ) : SailM Bool )
+  if ((! w__0) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
+  else
+    (do
+      if ((sz != 0b00#2) : Bool)
+      then
+        (do
+          (__ArmCertEndOfDecode ())
+          sailThrow ((Error_Undefined ())))
+      else
+        (do
+          let d : Int := (BitVec.toNat Rd)
+          let s : Int := (BitVec.toNat Rs)
+          let n : Int := (BitVec.toNat Rn)
+          let options_name : (BitVec 4) := op2
+          let stage ← (( do (undefined_MOPSStage (← occLabel 4074) ()) ) : SailM MOPSStage )
+          let stage ← (( do
+            match op1 with
+            | 0b00 => (pure (MOPSStage_Prologue))
+            | 0b01 => (pure (MOPSStage_Main))
+            | 0b10 => (pure (MOPSStage_Epilogue))
+            | _ => sailThrow ((Error_See "Memory Copy and Memory Set")) ) : SailM MOPSStage )
+          let stage := stage
+          (__ArmCertEndOfDecode ())
+          (CheckMOPSEnabled ())
+          if (((((((s == n) || (s == d)) || (n == d)) || (d == 31)) || (s == 31)) || (n == 31)) : Bool)
+          then
+            (do
+              let c ← (( do (ConstrainUnpredictable Unpredictable_MOPSOVERLAP31) ) : SailM
+                Constraint )
+              ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-inputs/15-instrs64.sail:8835.58-8835.59"
+              match c with
+              | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
+              | .Constraint_NOP =>
                 (do
-                  if ((__PSTATE_EL == EL3) : Bool)
-                  then
-                    (do
-                      let w__30 ← (( do readReg AMEVCNTVOFF1_EL2 ) : SailM (Vector (BitVec 64) 16)
-                        )
-                      (X_set t 64 (GetElem?.getElem! w__30 15)))
-                  else (pure (()))))))
+                  (EndOfInstruction ()))
+              | _ => (pure (())))
+          else (pure (()))
+          (execute_aarch64_instrs_memory_mcpymset_cpy (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (n)) options_name (Sail.Int.toNatChecked (s)) stage)))
+
+
+def decode_cpypwtwn_aarch64_instrs_memory_mcpymset_cpy (Rd : (BitVec 5)) (Rn : (BitVec 5)) (op2 : (BitVec 4)) (Rs : (BitVec 5)) (op1 : (BitVec 2)) (sz : (BitVec 2)) : SailM Unit := do
+  let w__0 ← (( do (HaveFeatMOPS ()) ) : SailM Bool )
+  if ((! w__0) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
+  else
+    (do
+      if ((sz != 0b00#2) : Bool)
+      then
+        (do
+          (__ArmCertEndOfDecode ())
+          sailThrow ((Error_Undefined ())))
+      else
+        (do
+          let d : Int := (BitVec.toNat Rd)
+          let s : Int := (BitVec.toNat Rs)
+          let n : Int := (BitVec.toNat Rn)
+          let options_name : (BitVec 4) := op2
+          let stage ← (( do (undefined_MOPSStage (← occLabel 4075) ()) ) : SailM MOPSStage )
+          let stage ← (( do
+            match op1 with
+            | 0b00 => (pure (MOPSStage_Prologue))
+            | 0b01 => (pure (MOPSStage_Main))
+            | 0b10 => (pure (MOPSStage_Epilogue))
+            | _ => sailThrow ((Error_See "Memory Copy and Memory Set")) ) : SailM MOPSStage )
+          let stage := stage
+          (__ArmCertEndOfDecode ())
+          (CheckMOPSEnabled ())
+          if (((((((s == n) || (s == d)) || (n == d)) || (d == 31)) || (s == 31)) || (n == 31)) : Bool)
+          then
+            (do
+              let c ← (( do (ConstrainUnpredictable Unpredictable_MOPSOVERLAP31) ) : SailM
+                Constraint )
+              ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-inputs/15-instrs64.sail:8892.58-8892.59"
+              match c with
+              | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
+              | .Constraint_NOP =>
+                (do
+                  (EndOfInstruction ()))
+              | _ => (pure (())))
+          else (pure (()))
+          (execute_aarch64_instrs_memory_mcpymset_cpy (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (n)) options_name (Sail.Int.toNatChecked (s)) stage)))
+
+
+def decode_cpyfp_aarch64_instrs_memory_mcpymset_cpyf (Rd : (BitVec 5)) (Rn : (BitVec 5)) (op2 : (BitVec 4)) (Rs : (BitVec 5)) (op1 : (BitVec 2)) (sz : (BitVec 2)) : SailM Unit := do
+  let w__0 ← (( do (HaveFeatMOPS ()) ) : SailM Bool )
+  if ((! w__0) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
+  else
+    (do
+      if ((sz != 0b00#2) : Bool)
+      then
+        (do
+          (__ArmCertEndOfDecode ())
+          sailThrow ((Error_Undefined ())))
+      else
+        (do
+          let d : Int := (BitVec.toNat Rd)
+          let s : Int := (BitVec.toNat Rs)
+          let n : Int := (BitVec.toNat Rn)
+          let options_name : (BitVec 4) := op2
+          let stage ← (( do (undefined_MOPSStage (← occLabel 4079) ()) ) : SailM MOPSStage )
+          let stage ← (( do
+            match op1 with
+            | 0b00 => (pure (MOPSStage_Prologue))
+            | 0b01 => (pure (MOPSStage_Main))
+            | 0b10 => (pure (MOPSStage_Epilogue))
+            | _ => sailThrow ((Error_See "Memory Copy and Memory Set")) ) : SailM MOPSStage )
+          let stage := stage
+          (__ArmCertEndOfDecode ())
+          (CheckMOPSEnabled ())
+          if (((((((s == n) || (s == d)) || (n == d)) || (d == 31)) || (s == 31)) || (n == 31)) : Bool)
+          then
+            (do
+              let c ← (( do (ConstrainUnpredictable Unpredictable_MOPSOVERLAP31) ) : SailM
+                Constraint )
+              ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-inputs/15-instrs64.sail:9092.58-9092.59"
+              match c with
+              | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
+              | .Constraint_NOP =>
+                (do
+                  (EndOfInstruction ()))
+              | _ => (pure (())))
+          else (pure (()))
+          (execute_aarch64_instrs_memory_mcpymset_cpyf (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (n)) options_name (Sail.Int.toNatChecked (s)) stage)))
+
+
+def decode_cpyfpn_aarch64_instrs_memory_mcpymset_cpyf (Rd : (BitVec 5)) (Rn : (BitVec 5)) (op2 : (BitVec 4)) (Rs : (BitVec 5)) (op1 : (BitVec 2)) (sz : (BitVec 2)) : SailM Unit := do
+  let w__0 ← (( do (HaveFeatMOPS ()) ) : SailM Bool )
+  if ((! w__0) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
+  else
+    (do
+      if ((sz != 0b00#2) : Bool)
+      then
+        (do
+          (__ArmCertEndOfDecode ())
+          sailThrow ((Error_Undefined ())))
+      else
+        (do
+          let d : Int := (BitVec.toNat Rd)
+          let s : Int := (BitVec.toNat Rs)
+          let n : Int := (BitVec.toNat Rn)
+          let options_name : (BitVec 4) := op2
+          let stage ← (( do (undefined_MOPSStage (← occLabel 4080) ()) ) : SailM MOPSStage )
+          let stage ← (( do
+            match op1 with
+            | 0b00 => (pure (MOPSStage_Prologue))
+            | 0b01 => (pure (MOPSStage_Main))
+            | 0b10 => (pure (MOPSStage_Epilogue))
+            | _ => sailThrow ((Error_See "Memory Copy and Memory Set")) ) : SailM MOPSStage )
+          let stage := stage
+          (__ArmCertEndOfDecode ())
+          (CheckMOPSEnabled ())
+          if (((((((s == n) || (s == d)) || (n == d)) || (d == 31)) || (s == 31)) || (n == 31)) : Bool)
+          then
+            (do
+              let c ← (( do (ConstrainUnpredictable Unpredictable_MOPSOVERLAP31) ) : SailM
+                Constraint )
+              ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-inputs/15-instrs64.sail:9149.58-9149.59"
+              match c with
+              | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
+              | .Constraint_NOP =>
+                (do
+                  (EndOfInstruction ()))
+              | _ => (pure (())))
+          else (pure (()))
+          (execute_aarch64_instrs_memory_mcpymset_cpyf (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (n)) options_name (Sail.Int.toNatChecked (s)) stage)))
+
+
+def decode_cpyfprn_aarch64_instrs_memory_mcpymset_cpyf (Rd : (BitVec 5)) (Rn : (BitVec 5)) (op2 : (BitVec 4)) (Rs : (BitVec 5)) (op1 : (BitVec 2)) (sz : (BitVec 2)) : SailM Unit := do
+  let w__0 ← (( do (HaveFeatMOPS ()) ) : SailM Bool )
+  if ((! w__0) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
+  else
+    (do
+      if ((sz != 0b00#2) : Bool)
+      then
+        (do
+          (__ArmCertEndOfDecode ())
+          sailThrow ((Error_Undefined ())))
+      else
+        (do
+          let d : Int := (BitVec.toNat Rd)
+          let s : Int := (BitVec.toNat Rs)
+          let n : Int := (BitVec.toNat Rn)
+          let options_name : (BitVec 4) := op2
+          let stage ← (( do (undefined_MOPSStage (← occLabel 4081) ()) ) : SailM MOPSStage )
+          let stage ← (( do
+            match op1 with
+            | 0b00 => (pure (MOPSStage_Prologue))
+            | 0b01 => (pure (MOPSStage_Main))
+            | 0b10 => (pure (MOPSStage_Epilogue))
+            | _ => sailThrow ((Error_See "Memory Copy and Memory Set")) ) : SailM MOPSStage )
+          let stage := stage
+          (__ArmCertEndOfDecode ())
+          (CheckMOPSEnabled ())
+          if (((((((s == n) || (s == d)) || (n == d)) || (d == 31)) || (s == 31)) || (n == 31)) : Bool)
+          then
+            (do
+              let c ← (( do (ConstrainUnpredictable Unpredictable_MOPSOVERLAP31) ) : SailM
+                Constraint )
+              ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-inputs/15-instrs64.sail:9206.58-9206.59"
+              match c with
+              | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
+              | .Constraint_NOP =>
+                (do
+                  (EndOfInstruction ()))
+              | _ => (pure (())))
+          else (pure (()))
+          (execute_aarch64_instrs_memory_mcpymset_cpyf (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (n)) options_name (Sail.Int.toNatChecked (s)) stage)))
+
+
+def decode_cpyfprt_aarch64_instrs_memory_mcpymset_cpyf (Rd : (BitVec 5)) (Rn : (BitVec 5)) (op2 : (BitVec 4)) (Rs : (BitVec 5)) (op1 : (BitVec 2)) (sz : (BitVec 2)) : SailM Unit := do
+  let w__0 ← (( do (HaveFeatMOPS ()) ) : SailM Bool )
+  if ((! w__0) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
+  else
+    (do
+      if ((sz != 0b00#2) : Bool)
+      then
+        (do
+          (__ArmCertEndOfDecode ())
+          sailThrow ((Error_Undefined ())))
+      else
+        (do
+          let d : Int := (BitVec.toNat Rd)
+          let s : Int := (BitVec.toNat Rs)
+          let n : Int := (BitVec.toNat Rn)
+          let options_name : (BitVec 4) := op2
+          let stage ← (( do (undefined_MOPSStage (← occLabel 4082) ()) ) : SailM MOPSStage )
+          let stage ← (( do
+            match op1 with
+            | 0b00 => (pure (MOPSStage_Prologue))
+            | 0b01 => (pure (MOPSStage_Main))
+            | 0b10 => (pure (MOPSStage_Epilogue))
+            | _ => sailThrow ((Error_See "Memory Copy and Memory Set")) ) : SailM MOPSStage )
+          let stage := stage
+          (__ArmCertEndOfDecode ())
+          (CheckMOPSEnabled ())
+          if (((((((s == n) || (s == d)) || (n == d)) || (d == 31)) || (s == 31)) || (n == 31)) : Bool)
+          then
+            (do
+              let c ← (( do (ConstrainUnpredictable Unpredictable_MOPSOVERLAP31) ) : SailM
+                Constraint )
+              ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-inputs/15-instrs64.sail:9263.58-9263.59"
+              match c with
+              | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
+              | .Constraint_NOP =>
+                (do
+                  (EndOfInstruction ()))
+              | _ => (pure (())))
+          else (pure (()))
+          (execute_aarch64_instrs_memory_mcpymset_cpyf (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (n)) options_name (Sail.Int.toNatChecked (s)) stage)))
+
+
+def decode_cpyfprtn_aarch64_instrs_memory_mcpymset_cpyf (Rd : (BitVec 5)) (Rn : (BitVec 5)) (op2 : (BitVec 4)) (Rs : (BitVec 5)) (op1 : (BitVec 2)) (sz : (BitVec 2)) : SailM Unit := do
+  let w__0 ← (( do (HaveFeatMOPS ()) ) : SailM Bool )
+  if ((! w__0) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
+  else
+    (do
+      if ((sz != 0b00#2) : Bool)
+      then
+        (do
+          (__ArmCertEndOfDecode ())
+          sailThrow ((Error_Undefined ())))
+      else
+        (do
+          let d : Int := (BitVec.toNat Rd)
+          let s : Int := (BitVec.toNat Rs)
+          let n : Int := (BitVec.toNat Rn)
+          let options_name : (BitVec 4) := op2
+          let stage ← (( do (undefined_MOPSStage (← occLabel 4083) ()) ) : SailM MOPSStage )
+          let stage ← (( do
+            match op1 with
+            | 0b00 => (pure (MOPSStage_Prologue))
+            | 0b01 => (pure (MOPSStage_Main))
+            | 0b10 => (pure (MOPSStage_Epilogue))
+            | _ => sailThrow ((Error_See "Memory Copy and Memory Set")) ) : SailM MOPSStage )
+          let stage := stage
+          (__ArmCertEndOfDecode ())
+          (CheckMOPSEnabled ())
+          if (((((((s == n) || (s == d)) || (n == d)) || (d == 31)) || (s == 31)) || (n == 31)) : Bool)
+          then
+            (do
+              let c ← (( do (ConstrainUnpredictable Unpredictable_MOPSOVERLAP31) ) : SailM
+                Constraint )
+              ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-inputs/15-instrs64.sail:9320.58-9320.59"
+              match c with
+              | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
+              | .Constraint_NOP =>
+                (do
+                  (EndOfInstruction ()))
+              | _ => (pure (())))
+          else (pure (()))
+          (execute_aarch64_instrs_memory_mcpymset_cpyf (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (n)) options_name (Sail.Int.toNatChecked (s)) stage)))
+
+
+def decode_cpyfprtrn_aarch64_instrs_memory_mcpymset_cpyf (Rd : (BitVec 5)) (Rn : (BitVec 5)) (op2 : (BitVec 4)) (Rs : (BitVec 5)) (op1 : (BitVec 2)) (sz : (BitVec 2)) : SailM Unit := do
+  let w__0 ← (( do (HaveFeatMOPS ()) ) : SailM Bool )
+  if ((! w__0) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
+  else
+    (do
+      if ((sz != 0b00#2) : Bool)
+      then
+        (do
+          (__ArmCertEndOfDecode ())
+          sailThrow ((Error_Undefined ())))
+      else
+        (do
+          let d : Int := (BitVec.toNat Rd)
+          let s : Int := (BitVec.toNat Rs)
+          let n : Int := (BitVec.toNat Rn)
+          let options_name : (BitVec 4) := op2
+          let stage ← (( do (undefined_MOPSStage (← occLabel 4084) ()) ) : SailM MOPSStage )
+          let stage ← (( do
+            match op1 with
+            | 0b00 => (pure (MOPSStage_Prologue))
+            | 0b01 => (pure (MOPSStage_Main))
+            | 0b10 => (pure (MOPSStage_Epilogue))
+            | _ => sailThrow ((Error_See "Memory Copy and Memory Set")) ) : SailM MOPSStage )
+          let stage := stage
+          (__ArmCertEndOfDecode ())
+          (CheckMOPSEnabled ())
+          if (((((((s == n) || (s == d)) || (n == d)) || (d == 31)) || (s == 31)) || (n == 31)) : Bool)
+          then
+            (do
+              let c ← (( do (ConstrainUnpredictable Unpredictable_MOPSOVERLAP31) ) : SailM
+                Constraint )
+              ArmFull.assert ((BEq.beq c Constraint_UNDEF) || (BEq.beq c Constraint_NOP)) "sail-inputs/15-instrs64.sail:9377.58-9377.59"
+              match c with
+              | .Constraint_UNDEF => sailThrow ((Error_Undefined ()))
+              | .Constraint_NOP =>
+                (do
+                  (EndOfInstruction ()))
+              | _ => (pure (())))
+          else (pure (()))
+          (execute_aarch64_instrs_memory_mcpymset_cpyf (Sail.Int.toNatChecked (d))
+            (Sail.Int.toNatChecked (n)) options_name (Sail.Int.toNatChecked (s)) stage)))
 
 
 end ArmFull.Functions

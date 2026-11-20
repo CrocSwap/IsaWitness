@@ -1,22 +1,20 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0023
-import ArmFull.Fn.M0036
-import ArmFull.Fn.M0069
-import ArmFull.Fn.M0086
-import ArmFull.Fn.M0092
-import ArmFull.Fn.M0139
-import ArmFull.Fn.M0140
-import ArmFull.Fn.M0142
-import ArmFull.Fn.M0144
-import ArmFull.Fn.M0146
-import ArmFull.Fn.M0150
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0036
+public import ArmFull.Fn.M0069
+public import ArmFull.Fn.M0086
+public import ArmFull.Fn.M0138
+public import ArmFull.Fn.M0139
+public import ArmFull.Fn.M0140
+public import ArmFull.Fn.M0142
+public import ArmFull.Fn.M0144
+public import ArmFull.Fn.M0146 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -119,7 +117,7 @@ open AccessType
 open ATAccess
 
 /-- Type quantifiers: t : Int -/
-def SCR_EL3_SysRegRead_b8dcdb7a98ef0967 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+def POR_EL3_SysRegRead_dd4204e711df2c15 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
   let __PSTATE_EL : (BitVec 2) := w__0.EL
   if ((__PSTATE_EL == EL0) : Bool)
@@ -137,8 +135,8 @@ def SCR_EL3_SysRegRead_b8dcdb7a98ef0967 (el : (BitVec 2)) (op0 : (BitVec 2)) (op
               if ((__PSTATE_EL == EL3) : Bool)
               then
                 (do
-                  let w__1 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-                  (X_set t 64 (__get_SCR_EL3 w__1)))
+                  let w__1 ← (( do readReg POR_EL3 ) : SailM (BitVec 64) )
+                  (X_set t 64 w__1))
               else (pure (())))))
 
 
@@ -218,7 +216,16 @@ def SCXTNUM_EL3_SysRegRead_ad99c3bb5365f4d5 (el : (BitVec 2)) (op0 : (BitVec 2))
 def SDER32_EL3_SysRegRead_e8c9baf258d1c833 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
   let __PSTATE_EL : (BitVec 2) := w__0.EL
-  if (((! (HaveEL EL3)) || (! (HaveAArch32EL EL1))) : Bool)
+  let w__3 ← (( do
+    if ((← do
+         let w__1 ← (( do (HaveEL EL3) ) : SailM Bool )
+         (pure (((! w__1) : Bool)))) : Bool)
+    then (pure true)
+    else
+      (do
+        let w__2 ← (( do (HaveAArch32EL EL1) ) : SailM Bool )
+        (pure (((! w__2) : Bool)))) ) : SailM Bool )
+  if (w__3 : Bool)
   then sailThrow ((Error_Undefined ()))
   else
     (do
@@ -237,8 +244,8 @@ def SDER32_EL3_SysRegRead_e8c9baf258d1c833 (el : (BitVec 2)) (op0 : (BitVec 2)) 
                   if ((__PSTATE_EL == EL3) : Bool)
                   then
                     (do
-                      let w__1 ← (( do (SDER32_EL3_read ()) ) : SailM (BitVec 64) )
-                      (X_set t 64 (__get_SDER32_EL3 w__1)))
+                      let w__4 ← (( do (SDER32_EL3_read ()) ) : SailM (BitVec 64) )
+                      (X_set t 64 (__get_SDER32_EL3 w__4)))
                   else (pure (()))))))
 
 

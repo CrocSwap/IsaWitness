@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,54 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _update_PMOVSR_Type_P6 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 6 6 x)
+
+
+def _update_PMOVSSET_EL0_Type_P6 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 6 6 x)
+
+
+def _update_PMOVSSET_Type_P6 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 6 6 x)
+
+
+def _update_PMOVS_Type_P6 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 6 6 x)
+
+
+def _update_PMSWINC_EL0_Type_P6 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 6 6 x)
+
+
+def _update_PMSWINC_Type_P6 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 6 6 x)
+
+
+def _update_PMUACR_EL1_Type_P6 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 6 6 x)
+
+
+def _update_PMZR_EL0_Type_P6 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 6 6 x)
+
+
+def _update_SMPRIMAP_EL2_Type_P6 (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 27 24 x)
+
+
+def _update_SPMACCESSR_EL1_Type_P6 (v : (BitVec 64)) (x : (BitVec 2)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 13 12 x)
+
+
+def _update_SPMACCESSR_EL2_Type_P6 (v : (BitVec 64)) (x : (BitVec 2)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 13 12 x)
+
+
+def _update_SPMACCESSR_EL3_Type_P6 (v : (BitVec 64)) (x : (BitVec 2)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 13 12 x)
+
 
 def _get_AMCNTENCLR1_EL0_Type_P6 (v : (BitVec 64)) : (BitVec 1) :=
   (Sail.BitVec.extractLsb v 6 6)
@@ -853,54 +901,6 @@ def _get_AMCNTENCLR1_EL0_Type_P9 (v : (BitVec 64)) : (BitVec 1) :=
 
 
 def _get_AMCNTENCLR1_Type_P9 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 9 9)
-
-
-def _get_AMCNTENSET1_EL0_Type_P9 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 9 9)
-
-
-def _get_AMCNTENSET1_Type_P9 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 9 9)
-
-
-def _get_ICH_AP0R_EL2_Type_P9 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 9 9)
-
-
-def _get_ICH_AP0R_Type_P9 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 9 9)
-
-
-def _get_ICH_AP1R_EL2_Type_P9 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 9 9)
-
-
-def _get_ICH_AP1R_Type_P9 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 9 9)
-
-
-def _get_PMCNTENCLR_Type_P9 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 9 9)
-
-
-def _get_PMCNTENSET_EL0_Type_P9 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 9 9)
-
-
-def _get_PMCNTENSET_Type_P9 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 9 9)
-
-
-def _get_PMCNTEN_Type_P9 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 9 9)
-
-
-def _get_PMINTENCLR_EL1_Type_P9 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 9 9)
-
-
-def _get_PMINTENCLR_Type_P9 (v : (BitVec 32)) : (BitVec 1) :=
   (Sail.BitVec.extractLsb v 9 9)
 
 

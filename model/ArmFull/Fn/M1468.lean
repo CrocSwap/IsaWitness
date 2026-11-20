@@ -1,93 +1,24 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0124
-import ArmFull.Fn.M0166
-import ArmFull.Fn.M1031
-import ArmFull.Fn.M1032
-import ArmFull.Fn.M1033
-import ArmFull.Fn.M1034
-import ArmFull.Fn.M1035
-import ArmFull.Fn.M1036
-import ArmFull.Fn.M1037
-import ArmFull.Fn.M1038
-import ArmFull.Fn.M1039
-import ArmFull.Fn.M1061
-import ArmFull.Fn.M1062
-import ArmFull.Fn.M1063
-import ArmFull.Fn.M1064
-import ArmFull.Fn.M1065
-import ArmFull.Fn.M1066
-import ArmFull.Fn.M1067
-import ArmFull.Fn.M1068
-import ArmFull.Fn.M1069
-import ArmFull.Fn.M1070
-import ArmFull.Fn.M1071
-import ArmFull.Fn.M1172
-import ArmFull.Fn.M1173
-import ArmFull.Fn.M1265
-import ArmFull.Fn.M1266
-import ArmFull.Fn.M1267
-import ArmFull.Fn.M1268
-import ArmFull.Fn.M1269
-import ArmFull.Fn.M1270
-import ArmFull.Fn.M1271
-import ArmFull.Fn.M1272
-import ArmFull.Fn.M1273
-import ArmFull.Fn.M1346
-import ArmFull.Fn.M1347
-import ArmFull.Fn.M1348
-import ArmFull.Fn.M1413
-import ArmFull.Fn.M1414
-import ArmFull.Fn.M1415
-import ArmFull.Fn.M1416
-import ArmFull.Fn.M1417
-import ArmFull.Fn.M1418
-import ArmFull.Fn.M1419
-import ArmFull.Fn.M1420
-import ArmFull.Fn.M1421
-import ArmFull.Fn.M1422
-import ArmFull.Fn.M1423
-import ArmFull.Fn.M1424
-import ArmFull.Fn.M1425
-import ArmFull.Fn.M1426
-import ArmFull.Fn.M1427
-import ArmFull.Fn.M1428
-import ArmFull.Fn.M1429
-import ArmFull.Fn.M1430
-import ArmFull.Fn.M1431
-import ArmFull.Fn.M1432
-import ArmFull.Fn.M1433
-import ArmFull.Fn.M1434
-import ArmFull.Fn.M1435
-import ArmFull.Fn.M1436
-import ArmFull.Fn.M1437
-import ArmFull.Fn.M1438
-import ArmFull.Fn.M1439
-import ArmFull.Fn.M1440
-import ArmFull.Fn.M1441
-import ArmFull.Fn.M1449
-import ArmFull.Fn.M1450
-import ArmFull.Fn.M1451
-import ArmFull.Fn.M1452
-import ArmFull.Fn.M1453
-import ArmFull.Fn.M1454
-import ArmFull.Fn.M1455
-import ArmFull.Fn.M1456
-import ArmFull.Fn.M1457
-import ArmFull.Fn.M1458
-import ArmFull.Fn.M1459
-import ArmFull.Fn.M1460
-import ArmFull.Fn.M1461
-import ArmFull.Fn.M1462
-import ArmFull.Fn.M1463
-import ArmFull.Fn.M1464
-import ArmFull.Fn.M1465
-import ArmFull.Fn.M1466
-import ArmFull.Fn.M1467
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0022
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0049
+public import ArmFull.Fn.M0065
+public import ArmFull.Fn.M0070
+public import ArmFull.Fn.M0074
+public import ArmFull.Fn.M0100
+public import ArmFull.Fn.M0144
+public import ArmFull.Fn.M0146
+public import ArmFull.Fn.M0170
+public import ArmFull.Fn.M0178
+public import ArmFull.Fn.M0181
+public import ArmFull.Fn.M0252
+public import ArmFull.Fn.M1340 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -189,734 +120,619 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-/-- Type quantifiers: pc : Int -/
-def __DecodeA64_LoadStore (pc : Int) (__opcode : (BitVec 32)) : SailM Unit := do
-  let split_c0 ← (( (__DecodeA64_LoadStore__seg0 pc __opcode) ) : SailM Bool )
-  if (split_c0 : Bool)
-  then
-    (do
-      let split_c1 ← (( (__DecodeA64_LoadStore__seg1 pc __opcode) ) : SailM Bool )
-      if (split_c1 : Bool)
-      then
-        (do
-          let split_c2 ← (( (__DecodeA64_LoadStore__seg2 pc __opcode) ) : SailM Bool )
-          if (split_c2 : Bool)
-          then
-            (do
-              let split_c3 ← (( (__DecodeA64_LoadStore__seg3 pc __opcode) ) : SailM Bool )
-              if (split_c3 : Bool)
-              then
-                (do
-                  let split_c4 ← (( (__DecodeA64_LoadStore__seg4 pc __opcode) ) : SailM Bool )
-                  if (split_c4 : Bool)
-                  then
-                    (do
-                      let split_c5 ← (( (__DecodeA64_LoadStore__seg5 pc __opcode) ) : SailM Bool )
-                      if (split_c5 : Bool)
-                      then
-                        (do
-                          let split_c6 ← (( (__DecodeA64_LoadStore__seg6 pc __opcode) ) : SailM
-                            Bool )
-                          if (split_c6 : Bool)
-                          then
-                            (do
-                              let split_c7 ← (( (__DecodeA64_LoadStore__seg7 pc __opcode) ) :
-                                SailM Bool )
-                              if (split_c7 : Bool)
-                              then (__DecodeA64_LoadStore__seg8 pc __opcode)
-                              else (pure ()))
-                          else (pure ()))
-                      else (pure ()))
-                  else (pure ()))
-              else (pure ()))
-          else (pure ()))
-      else (pure ()))
-  else (pure ())
-
-
-/-- Type quantifiers: pc : Int -/
-def __DecodeA64_DataProcFPSIMD (pc : Int) (__opcode : (BitVec 32)) : SailM Unit := do
-  let split_c0 ← (( (__DecodeA64_DataProcFPSIMD__seg0 pc __opcode) ) : SailM Bool )
-  if (split_c0 : Bool)
-  then
-    (do
-      let split_c1 ← (( (__DecodeA64_DataProcFPSIMD__seg1 pc __opcode) ) : SailM Bool )
-      if (split_c1 : Bool)
-      then
-        (do
-          let split_c2 ← (( (__DecodeA64_DataProcFPSIMD__seg2 pc __opcode) ) : SailM Bool )
-          if (split_c2 : Bool)
-          then
-            (do
-              let split_c3 ← (( (__DecodeA64_DataProcFPSIMD__seg3 pc __opcode) ) : SailM Bool )
-              if (split_c3 : Bool)
-              then
-                (do
-                  let split_c4 ← (( (__DecodeA64_DataProcFPSIMD__seg4 pc __opcode) ) : SailM Bool
-                    )
-                  if (split_c4 : Bool)
-                  then
-                    (do
-                      let split_c5 ← (( (__DecodeA64_DataProcFPSIMD__seg5 pc __opcode) ) : SailM
-                        Bool )
-                      if (split_c5 : Bool)
-                      then
-                        (do
-                          let split_c6 ← (( (__DecodeA64_DataProcFPSIMD__seg6 pc __opcode) ) :
-                            SailM Bool )
-                          if (split_c6 : Bool)
-                          then
-                            (do
-                              let split_c7 ← (( (__DecodeA64_DataProcFPSIMD__seg7 pc __opcode) ) :
-                                SailM Bool )
-                              if (split_c7 : Bool)
-                              then
-                                (do
-                                  let split_c8 ← (( (__DecodeA64_DataProcFPSIMD__seg8 pc __opcode)
-                                    ) : SailM Bool )
-                                  if (split_c8 : Bool)
-                                  then
-                                    (do
-                                      let split_c9 ← ((
-                                        (__DecodeA64_DataProcFPSIMD__seg9 pc __opcode) ) : SailM
-                                        Bool )
-                                      if (split_c9 : Bool)
-                                      then
-                                        (do
-                                          let split_c10 ← ((
-                                            (__DecodeA64_DataProcFPSIMD__seg10 pc __opcode) ) :
-                                            SailM Bool )
-                                          if (split_c10 : Bool)
-                                          then
-                                            (do
-                                              let split_c11 ← ((
-                                                (__DecodeA64_DataProcFPSIMD__seg11 pc __opcode) ) :
-                                                SailM Bool )
-                                              if (split_c11 : Bool)
-                                              then
-                                                (do
-                                                  let split_c12 ← ((
-                                                    (__DecodeA64_DataProcFPSIMD__seg12 pc __opcode)
-                                                    ) : SailM Bool )
-                                                  if (split_c12 : Bool)
-                                                  then
-                                                    (do
-                                                      let split_c13 ← ((
-                                                        (__DecodeA64_DataProcFPSIMD__seg13 pc
-                                                          __opcode) ) : SailM Bool )
-                                                      if (split_c13 : Bool)
-                                                      then
-                                                        (do
-                                                          let split_c14 ← ((
-                                                            (__DecodeA64_DataProcFPSIMD__seg14 pc
-                                                              __opcode) ) : SailM Bool )
-                                                          if (split_c14 : Bool)
-                                                          then
-                                                            (__DecodeA64_DataProcFPSIMD__seg15 pc
-                                                              __opcode)
-                                                          else (pure ()))
-                                                      else (pure ()))
-                                                  else (pure ()))
-                                              else (pure ()))
-                                          else (pure ()))
-                                      else (pure ()))
-                                  else (pure ()))
-                              else (pure ()))
-                          else (pure ()))
-                      else (pure ()))
-                  else (pure ()))
-              else (pure ()))
-          else (pure ()))
-      else (pure ()))
-  else (pure ())
-
-
-/-- Type quantifiers: pc : Int -/
-def __DecodeA32_Unconditional (pc : Int) (__opcode : (BitVec 32)) : SailM Unit := do
-  let split_c0 ← (( (__DecodeA32_Unconditional__seg0 pc __opcode) ) : SailM Bool )
-  if (split_c0 : Bool)
-  then
-    (do
-      let split_c1 ← (( (__DecodeA32_Unconditional__seg1 pc __opcode) ) : SailM Bool )
-      if (split_c1 : Bool)
-      then
-        (do
-          let split_c2 ← (( (__DecodeA32_Unconditional__seg2 pc __opcode) ) : SailM Bool )
-          if (split_c2 : Bool)
-          then
-            (do
-              let split_c3 ← (( (__DecodeA32_Unconditional__seg3 pc __opcode) ) : SailM Bool )
-              if (split_c3 : Bool)
-              then
-                (do
-                  let split_c4 ← (( (__DecodeA32_Unconditional__seg4 pc __opcode) ) : SailM Bool )
-                  if (split_c4 : Bool)
-                  then
-                    (do
-                      let split_c5 ← (( (__DecodeA32_Unconditional__seg5 pc __opcode) ) : SailM
-                        Bool )
-                      if (split_c5 : Bool)
-                      then (__DecodeA32_Unconditional__seg6 pc __opcode)
-                      else (pure ()))
-                  else (pure ()))
-              else (pure ()))
-          else (pure ()))
-      else (pure ()))
-  else (pure ())
-
-
-/-- Type quantifiers: pc : Int -/
-def __DecodeA32_DataProMisc (pc : Int) (__opcode : (BitVec 32)) : SailM Unit := do
-  let split_c0 ← (( (__DecodeA32_DataProMisc__seg0 pc __opcode) ) : SailM Bool )
-  if (split_c0 : Bool)
-  then
-    (do
-      let split_c1 ← (( (__DecodeA32_DataProMisc__seg1 pc __opcode) ) : SailM Bool )
-      if (split_c1 : Bool)
-      then
-        (do
-          let split_c2 ← (( (__DecodeA32_DataProMisc__seg2 pc __opcode) ) : SailM Bool )
-          if (split_c2 : Bool)
-          then
-            (do
-              let split_c3 ← (( (__DecodeA32_DataProMisc__seg3 pc __opcode) ) : SailM Bool )
-              if (split_c3 : Bool)
-              then (__DecodeA32_DataProMisc__seg4 pc __opcode)
-              else (pure ()))
-          else (pure ()))
-      else (pure ()))
-  else (pure ())
-
-
-def ExecuteT16 (instr : (BitVec 16)) : SailM Unit := do
-  let w__0 ← (( do readReg _PC ) : SailM (BitVec 64) )
-  (__DecodeT16 (BitVec.toNat w__0) instr)
-
-
 /-- Type quantifiers: t : Int -/
-def AArch64_AutoGen_SysRegRead (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let split_c0 ← (( (AArch64_AutoGen_SysRegRead__seg0 el op0 op1 CRn op2 CRm t) ) : SailM Bool )
-  if (split_c0 : Bool)
-  then
-    (do
-      let split_c1 ← (( (AArch64_AutoGen_SysRegRead__seg1 el op0 op1 CRn op2 CRm t) ) : SailM Bool
-        )
-      if (split_c1 : Bool)
-      then
-        (do
-          let split_c2 ← (( (AArch64_AutoGen_SysRegRead__seg2 el op0 op1 CRn op2 CRm t) ) : SailM
-            Bool )
-          if (split_c2 : Bool)
-          then
-            (do
-              let split_c3 ← (( (AArch64_AutoGen_SysRegRead__seg3 el op0 op1 CRn op2 CRm t) ) :
-                SailM Bool )
-              if (split_c3 : Bool)
-              then
-                (do
-                  let split_c4 ← (( (AArch64_AutoGen_SysRegRead__seg4 el op0 op1 CRn op2 CRm t) )
-                    : SailM Bool )
-                  if (split_c4 : Bool)
-                  then
-                    (do
-                      let split_c5 ← ((
-                        (AArch64_AutoGen_SysRegRead__seg5 el op0 op1 CRn op2 CRm t) ) : SailM Bool )
-                      if (split_c5 : Bool)
-                      then
-                        (do
-                          let split_c6 ← ((
-                            (AArch64_AutoGen_SysRegRead__seg6 el op0 op1 CRn op2 CRm t) ) : SailM
-                            Bool )
-                          if (split_c6 : Bool)
-                          then
-                            (do
-                              let split_c7 ← ((
-                                (AArch64_AutoGen_SysRegRead__seg7 el op0 op1 CRn op2 CRm t) ) :
-                                SailM Bool )
-                              if (split_c7 : Bool)
-                              then
-                                (do
-                                  let split_c8 ← ((
-                                    (AArch64_AutoGen_SysRegRead__seg8 el op0 op1 CRn op2 CRm t) ) :
-                                    SailM Bool )
-                                  if (split_c8 : Bool)
-                                  then (AArch64_AutoGen_SysRegRead__seg9 el op0 op1 CRn op2 CRm t)
-                                  else (pure ()))
-                              else (pure ()))
-                          else (pure ()))
-                      else (pure ()))
-                  else (pure ()))
-              else (pure ()))
-          else (pure ()))
-      else (pure ()))
-  else (pure ())
-
-
-/-- Type quantifiers: t : Int -/
-def AArch64_AutoGen_SysRegWrite (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let split_c0 ← (( (AArch64_AutoGen_SysRegWrite__seg0 el op0 op1 CRn op2 CRm t) ) : SailM Bool )
-  if (split_c0 : Bool)
-  then
-    (do
-      let split_c1 ← (( (AArch64_AutoGen_SysRegWrite__seg1 el op0 op1 CRn op2 CRm t) ) : SailM
-        Bool )
-      if (split_c1 : Bool)
-      then
-        (do
-          let split_c2 ← (( (AArch64_AutoGen_SysRegWrite__seg2 el op0 op1 CRn op2 CRm t) ) : SailM
-            Bool )
-          if (split_c2 : Bool)
-          then
-            (do
-              let split_c3 ← (( (AArch64_AutoGen_SysRegWrite__seg3 el op0 op1 CRn op2 CRm t) ) :
-                SailM Bool )
-              if (split_c3 : Bool)
-              then
-                (do
-                  let split_c4 ← (( (AArch64_AutoGen_SysRegWrite__seg4 el op0 op1 CRn op2 CRm t) )
-                    : SailM Bool )
-                  if (split_c4 : Bool)
-                  then
-                    (do
-                      let split_c5 ← ((
-                        (AArch64_AutoGen_SysRegWrite__seg5 el op0 op1 CRn op2 CRm t) ) : SailM Bool
-                        )
-                      if (split_c5 : Bool)
-                      then
-                        (do
-                          let split_c6 ← ((
-                            (AArch64_AutoGen_SysRegWrite__seg6 el op0 op1 CRn op2 CRm t) ) : SailM
-                            Bool )
-                          if (split_c6 : Bool)
-                          then (AArch64_AutoGen_SysRegWrite__seg7 el op0 op1 CRn op2 CRm t)
-                          else (pure ()))
-                      else (pure ()))
-                  else (pure ()))
-              else (pure ()))
-          else (pure ()))
-      else (pure ()))
-  else (pure ())
-
-
-/-- Type quantifiers: crm : Int, crn : Int, op0 : Int, op1 : Int, op2 : Int, t : Int -/
-def AArch64_SysInstr (op0 : Int) (op1 : Int) (crn : Int) (crm : Int) (op2 : Int) (t : Int) : SailM Unit := do
+def ICH_LR_EL2_SysRegWrite_8e2173d5288ec9f6 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  (AArch64_AutoGen_SysOpsWrite w__0.EL (integer_subrange op0 1 0) (integer_subrange op1 2 0)
-    (integer_subrange crn 3 0) (integer_subrange op2 2 0) (integer_subrange crm 3 0) t)
-
-
-def decode_aarch32_instrs_LDC_i_A1enc_A_txt (cond : (BitVec 4)) (P : (BitVec 1)) (U : (BitVec 1)) (W : (BitVec 1)) (Rn : (BitVec 4)) (imm8 : (BitVec 8)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:3431.29-3431.30"
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "LDC (literal)"))
-      else (pure (()))
-      if ((((P == 0#1) && (U == 0#1)) && (W == 0#1)) : Bool)
-      then sailThrow ((Error_Undefined ()))
-      else (pure (()))
-      let n : Int := (BitVec.toNat Rn)
-      let cp : Nat := 14
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend (imm8 +++ 0b00#2) 32)
-      let index : Bool := (P == 1#1)
-      let add : Bool := (U == 1#1)
-      let wback : Bool := (W == 1#1)
-      (execute_aarch32_instrs_LDC_i_Op_A_txt add cp imm32 index (Sail.Int.toNatChecked (n)) wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDC_i_T1enc_A_txt (P : (BitVec 1)) (U : (BitVec 1)) (W : (BitVec 1)) (Rn : (BitVec 4)) (imm8 : (BitVec 8)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      if ((Rn == 0b1111#4) : Bool)
-      then sailThrow ((Error_See "LDC (literal)"))
-      else (pure (()))
-      if ((((P == 0#1) && (U == 0#1)) && (W == 0#1)) : Bool)
-      then sailThrow ((Error_Undefined ()))
-      else (pure (()))
-      let n : Int := (BitVec.toNat Rn)
-      let cp : Nat := 14
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend (imm8 +++ 0b00#2) 32)
-      let index : Bool := (P == 1#1)
-      let add : Bool := (U == 1#1)
-      let wback : Bool := (W == 1#1)
-      (execute_aarch32_instrs_LDC_i_Op_A_txt add cp imm32 index (Sail.Int.toNatChecked (n)) wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDC_l_A1enc_A_txt (cond : (BitVec 4)) (P : (BitVec 1)) (U : (BitVec 1)) (W : (BitVec 1)) (imm8 : (BitVec 8)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:3507.29-3507.30"
-      if ((((P == 0#1) && (U == 0#1)) && (W == 0#1)) : Bool)
-      then sailThrow ((Error_Undefined ()))
-      else (pure (()))
-      let index : Bool := (P == 1#1)
-      let add : Bool := (U == 1#1)
-      let cp : Nat := 14
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend (imm8 +++ 0b00#2) 32)
-      let w__3 ← (( do
-        if (((W == 1#1) : Bool) : Bool)
-        then (pure true)
-        else
-          (do
-            if (((P == 0#1) : Bool) : Bool)
-            then
-              (do
-                let w__1 ← (( do (CurrentInstrSet ()) ) : SailM InstrSet )
-                (pure (((bne w__1 InstrSet_A32) : Bool))))
-            else (pure false)) ) : SailM Bool )
-      if (w__3 : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDC_l_Op_A_txt add cp imm32 index))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_LDC_l_T1enc_A_txt (P : (BitVec 1)) (U : (BitVec 1)) (W : (BitVec 1)) (imm8 : (BitVec 8)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      if ((((P == 0#1) && (U == 0#1)) && (W == 0#1)) : Bool)
-      then sailThrow ((Error_Undefined ()))
-      else (pure (()))
-      let index : Bool := (P == 1#1)
-      let add : Bool := (U == 1#1)
-      let cp : Nat := 14
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend (imm8 +++ 0b00#2) 32)
-      let w__3 ← (( do
-        if (((W == 1#1) : Bool) : Bool)
-        then (pure true)
-        else
-          (do
-            if (((P == 0#1) : Bool) : Bool)
-            then
-              (do
-                let w__1 ← (( do (CurrentInstrSet ()) ) : SailM InstrSet )
-                (pure (((bne w__1 InstrSet_A32) : Bool))))
-            else (pure false)) ) : SailM Bool )
-      if (w__3 : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_LDC_l_Op_A_txt add cp imm32 index))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_STC_A1enc_A_txt (cond : (BitVec 4)) (P : (BitVec 1)) (U : (BitVec 1)) (W : (BitVec 1)) (Rn : (BitVec 4)) (imm8 : (BitVec 8)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      ArmFull.assert (cond != 0b1111#4) "sail-arm/instrs32.sail:13365.29-13365.30"
-      if ((((P == 0#1) && (U == 0#1)) && (W == 0#1)) : Bool)
-      then sailThrow ((Error_Undefined ()))
-      else (pure (()))
-      let n : Int := (BitVec.toNat Rn)
-      let cp : Nat := 14
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend (imm8 +++ 0b00#2) 32)
-      let index : Bool := (P == 1#1)
-      let add : Bool := (U == 1#1)
-      let wback : Bool := (W == 1#1)
-      let w__3 ← (( do
-        if (((n == 15) : Bool) : Bool)
-        then
-          if (wback : Bool)
-          then (pure true)
-          else
-            (do
-              let w__1 ← (( do (CurrentInstrSet ()) ) : SailM InstrSet )
-              (pure (((bne w__1 InstrSet_A32) : Bool))))
-        else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_STC_Op_A_txt add cp imm32 index (Sail.Int.toNatChecked (n)) wback))
-  else (pure (()))
-
-
-def decode_aarch32_instrs_STC_T1enc_A_txt (P : (BitVec 1)) (U : (BitVec 1)) (W : (BitVec 1)) (Rn : (BitVec 4)) (imm8 : (BitVec 8)) : SailM Unit := do
-  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
-  if (w__0 : Bool)
-  then
-    (do
-      if ((((P == 0#1) && (U == 0#1)) && (W == 0#1)) : Bool)
-      then sailThrow ((Error_Undefined ()))
-      else (pure (()))
-      let n : Int := (BitVec.toNat Rn)
-      let cp : Nat := 14
-      let imm32 : (BitVec 32) := (Sail.BitVec.zeroExtend (imm8 +++ 0b00#2) 32)
-      let index : Bool := (P == 1#1)
-      let add : Bool := (U == 1#1)
-      let wback : Bool := (W == 1#1)
-      let w__3 ← (( do
-        if (((n == 15) : Bool) : Bool)
-        then
-          if (wback : Bool)
-          then (pure true)
-          else
-            (do
-              let w__1 ← (( do (CurrentInstrSet ()) ) : SailM InstrSet )
-              (pure (((bne w__1 InstrSet_A32) : Bool))))
-        else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
-      then sailThrow ((Error_Unpredictable ()))
-      else (pure (()))
-      (execute_aarch32_instrs_STC_Op_A_txt add cp imm32 index (Sail.Int.toNatChecked (n)) wback))
-  else (pure (()))
-
-
-/-- Type quantifiers: k_read : Bool, sys_crm : Nat, sys_crn : Nat, sys_op0 : Nat, sys_op1 : Nat, sys_op2
-  : Nat, t : Nat, t2 : Nat, 0 ≤ t2 ∧
-  t2 ≤ 31 ∧
-  0 ≤ t ∧
-  t ≤ 31 ∧
-  List.elem sys_op2 [0, 1, 2, 3, 4, 5, 6, 7] ∧
-  List.elem sys_op1 [0, 1, 2, 3, 4, 5, 6, 7] ∧
-  List.elem sys_op0 [2, 3] ∧ 0 ≤ sys_crn ∧ sys_crn ≤ 15 ∧ 0 ≤ sys_crm ∧ sys_crm ≤ 15 -/
-def execute_aarch64_instrs_system_register_system_128 (read : Bool) (sys_crm : Nat) (sys_crn : Nat) (sys_op0 : Nat) (sys_op1 : Nat) (sys_op2 : Nat) (t : Nat) (t2 : Nat) : SailM Unit := do
-  if (read : Bool)
-  then
-    (do
-      (AArch64_SysRegRead128 sys_op0 sys_op1 sys_crn sys_crm sys_op2 t t2))
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do readReg ICC_SRE_EL2 ) : SailM (BitVec 64) )
+  let __ICC_SRE_EL2_SRE : (BitVec 1) := (_get_ICC_SRE_EL2_Type_SRE w__2)
+  let w__3 ← (( do readReg ICC_SRE_EL3 ) : SailM (BitVec 64) )
+  let __ICC_SRE_EL3_SRE : (BitVec 1) := (_get_ICC_SRE_EL3_Type_SRE w__3)
+  if ((__PSTATE_EL == EL0) : Bool)
+  then sailThrow ((Error_Undefined ()))
   else
     (do
-      (AArch64_SysRegWrite128 sys_op0 sys_op1 sys_crn sys_crm sys_op2 t t2))
-
-
-/-- Type quantifiers: pc : Int -/
-def __DecodeA64_SVE (pc : Int) (__opcode : (BitVec 32)) : SailM Unit := do
-  let split_c0 ← (( (__DecodeA64_SVE__seg0 pc __opcode) ) : SailM Bool )
-  if (split_c0 : Bool)
-  then
-    (do
-      let split_c1 ← (( (__DecodeA64_SVE__seg1 pc __opcode) ) : SailM Bool )
-      if (split_c1 : Bool)
+      if ((__PSTATE_EL == EL1) : Bool)
       then
         (do
-          let split_c2 ← (( (__DecodeA64_SVE__seg2 pc __opcode) ) : SailM Bool )
-          if (split_c2 : Bool)
+          let w__7 ← (( do
+            if ((← do
+                 (EL2Enabled ())) : Bool)
+            then
+              (do
+                let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                (pure (((((_get_HCR_EL2_Type_NV2 w__5) +++ (_get_HCR_EL2_Type_NV w__6)) == 0b11#2) : Bool))))
+            else (pure false) ) : SailM Bool )
+          if (w__7 : Bool)
           then
             (do
-              let split_c3 ← (( (__DecodeA64_SVE__seg3 pc __opcode) ) : SailM Bool )
-              if (split_c3 : Bool)
+              let w__8 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+              (NVMem_set ((BitVec.toNat 0x400#12) +i (8 *i 0)) w__8))
+          else
+            (do
+              let w__10 ← (( do
+                (pure ((← do
+                      (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
+              if (w__10 : Bool)
               then
                 (do
-                  let split_c4 ← (( (__DecodeA64_SVE__seg4 pc __opcode) ) : SailM Bool )
-                  if (split_c4 : Bool)
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+              else sailThrow ((Error_Undefined ()))))
+      else
+        (do
+          if ((__PSTATE_EL == EL2) : Bool)
+          then
+            (do
+              if ((__ICC_SRE_EL2_SRE == 0#1) : Bool)
+              then
+                (do
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+              else
+                (do
+                  let w__11 ← (( do readReg ICH_LR_EL2 ) : SailM (Vector (BitVec 64) 16) )
+                  let w__12 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  writeReg ICH_LR_EL2 (vectorUpdate w__11 0 (Mk_ICH_LR_EL2_Type w__12))))
+          else
+            (do
+              if ((__PSTATE_EL == EL3) : Bool)
+              then
+                (do
+                  if ((__ICC_SRE_EL3_SRE == 0#1) : Bool)
                   then
                     (do
-                      let split_c5 ← (( (__DecodeA64_SVE__seg5 pc __opcode) ) : SailM Bool )
-                      if (split_c5 : Bool)
-                      then
-                        (do
-                          let split_c6 ← (( (__DecodeA64_SVE__seg6 pc __opcode) ) : SailM Bool )
-                          if (split_c6 : Bool)
+                      (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8)))
+                  else
+                    (do
+                      let w__13 ← (( do readReg ICH_LR_EL2 ) : SailM (Vector (BitVec 64) 16) )
+                      let w__14 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      writeReg ICH_LR_EL2 (vectorUpdate w__13 0 (Mk_ICH_LR_EL2_Type w__14))))
+              else (pure (())))))
+
+
+/-- Type quantifiers: t : Int -/
+def ICH_LR_EL2_SysRegWrite_ada04edc200eb7de (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do readReg ICC_SRE_EL2 ) : SailM (BitVec 64) )
+  let __ICC_SRE_EL2_SRE : (BitVec 1) := (_get_ICC_SRE_EL2_Type_SRE w__2)
+  let w__3 ← (( do readReg ICC_SRE_EL3 ) : SailM (BitVec 64) )
+  let __ICC_SRE_EL3_SRE : (BitVec 1) := (_get_ICC_SRE_EL3_Type_SRE w__3)
+  if ((__PSTATE_EL == EL0) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
+    (do
+      if ((__PSTATE_EL == EL1) : Bool)
+      then
+        (do
+          let w__7 ← (( do
+            if ((← do
+                 (EL2Enabled ())) : Bool)
+            then
+              (do
+                let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                (pure (((((_get_HCR_EL2_Type_NV2 w__5) +++ (_get_HCR_EL2_Type_NV w__6)) == 0b11#2) : Bool))))
+            else (pure false) ) : SailM Bool )
+          if (w__7 : Bool)
+          then
+            (do
+              let w__8 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+              (NVMem_set ((BitVec.toNat 0x400#12) +i (8 *i 12)) w__8))
+          else
+            (do
+              let w__10 ← (( do
+                (pure ((← do
+                      (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
+              if (w__10 : Bool)
+              then
+                (do
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+              else sailThrow ((Error_Undefined ()))))
+      else
+        (do
+          if ((__PSTATE_EL == EL2) : Bool)
+          then
+            (do
+              if ((__ICC_SRE_EL2_SRE == 0#1) : Bool)
+              then
+                (do
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+              else
+                (do
+                  let w__11 ← (( do readReg ICH_LR_EL2 ) : SailM (Vector (BitVec 64) 16) )
+                  let w__12 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  writeReg ICH_LR_EL2 (vectorUpdate w__11 12 (Mk_ICH_LR_EL2_Type w__12))))
+          else
+            (do
+              if ((__PSTATE_EL == EL3) : Bool)
+              then
+                (do
+                  if ((__ICC_SRE_EL3_SRE == 0#1) : Bool)
+                  then
+                    (do
+                      (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8)))
+                  else
+                    (do
+                      let w__13 ← (( do readReg ICH_LR_EL2 ) : SailM (Vector (BitVec 64) 16) )
+                      let w__14 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      writeReg ICH_LR_EL2 (vectorUpdate w__13 12 (Mk_ICH_LR_EL2_Type w__14))))
+              else (pure (())))))
+
+
+/-- Type quantifiers: t : Int -/
+def ICH_LR_EL2_SysRegWrite_af9b8f005bb45cf2 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do readReg ICC_SRE_EL2 ) : SailM (BitVec 64) )
+  let __ICC_SRE_EL2_SRE : (BitVec 1) := (_get_ICC_SRE_EL2_Type_SRE w__2)
+  let w__3 ← (( do readReg ICC_SRE_EL3 ) : SailM (BitVec 64) )
+  let __ICC_SRE_EL3_SRE : (BitVec 1) := (_get_ICC_SRE_EL3_Type_SRE w__3)
+  if ((__PSTATE_EL == EL0) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
+    (do
+      if ((__PSTATE_EL == EL1) : Bool)
+      then
+        (do
+          let w__7 ← (( do
+            if ((← do
+                 (EL2Enabled ())) : Bool)
+            then
+              (do
+                let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                (pure (((((_get_HCR_EL2_Type_NV2 w__5) +++ (_get_HCR_EL2_Type_NV w__6)) == 0b11#2) : Bool))))
+            else (pure false) ) : SailM Bool )
+          if (w__7 : Bool)
+          then
+            (do
+              let w__8 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+              (NVMem_set ((BitVec.toNat 0x400#12) +i (8 *i 15)) w__8))
+          else
+            (do
+              let w__10 ← (( do
+                (pure ((← do
+                      (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
+              if (w__10 : Bool)
+              then
+                (do
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+              else sailThrow ((Error_Undefined ()))))
+      else
+        (do
+          if ((__PSTATE_EL == EL2) : Bool)
+          then
+            (do
+              if ((__ICC_SRE_EL2_SRE == 0#1) : Bool)
+              then
+                (do
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+              else
+                (do
+                  let w__11 ← (( do readReg ICH_LR_EL2 ) : SailM (Vector (BitVec 64) 16) )
+                  let w__12 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  writeReg ICH_LR_EL2 (vectorUpdate w__11 15 (Mk_ICH_LR_EL2_Type w__12))))
+          else
+            (do
+              if ((__PSTATE_EL == EL3) : Bool)
+              then
+                (do
+                  if ((__ICC_SRE_EL3_SRE == 0#1) : Bool)
+                  then
+                    (do
+                      (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8)))
+                  else
+                    (do
+                      let w__13 ← (( do readReg ICH_LR_EL2 ) : SailM (Vector (BitVec 64) 16) )
+                      let w__14 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      writeReg ICH_LR_EL2 (vectorUpdate w__13 15 (Mk_ICH_LR_EL2_Type w__14))))
+              else (pure (())))))
+
+
+/-- Type quantifiers: t : Int -/
+def ICH_LR_EL2_SysRegWrite_ce3f5174c2a18c3b (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do readReg ICC_SRE_EL2 ) : SailM (BitVec 64) )
+  let __ICC_SRE_EL2_SRE : (BitVec 1) := (_get_ICC_SRE_EL2_Type_SRE w__2)
+  let w__3 ← (( do readReg ICC_SRE_EL3 ) : SailM (BitVec 64) )
+  let __ICC_SRE_EL3_SRE : (BitVec 1) := (_get_ICC_SRE_EL3_Type_SRE w__3)
+  if ((__PSTATE_EL == EL0) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
+    (do
+      if ((__PSTATE_EL == EL1) : Bool)
+      then
+        (do
+          let w__7 ← (( do
+            if ((← do
+                 (EL2Enabled ())) : Bool)
+            then
+              (do
+                let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                (pure (((((_get_HCR_EL2_Type_NV2 w__5) +++ (_get_HCR_EL2_Type_NV w__6)) == 0b11#2) : Bool))))
+            else (pure false) ) : SailM Bool )
+          if (w__7 : Bool)
+          then
+            (do
+              let w__8 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+              (NVMem_set ((BitVec.toNat 0x400#12) +i (8 *i 2)) w__8))
+          else
+            (do
+              let w__10 ← (( do
+                (pure ((← do
+                      (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
+              if (w__10 : Bool)
+              then
+                (do
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+              else sailThrow ((Error_Undefined ()))))
+      else
+        (do
+          if ((__PSTATE_EL == EL2) : Bool)
+          then
+            (do
+              if ((__ICC_SRE_EL2_SRE == 0#1) : Bool)
+              then
+                (do
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+              else
+                (do
+                  let w__11 ← (( do readReg ICH_LR_EL2 ) : SailM (Vector (BitVec 64) 16) )
+                  let w__12 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  writeReg ICH_LR_EL2 (vectorUpdate w__11 2 (Mk_ICH_LR_EL2_Type w__12))))
+          else
+            (do
+              if ((__PSTATE_EL == EL3) : Bool)
+              then
+                (do
+                  if ((__ICC_SRE_EL3_SRE == 0#1) : Bool)
+                  then
+                    (do
+                      (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8)))
+                  else
+                    (do
+                      let w__13 ← (( do readReg ICH_LR_EL2 ) : SailM (Vector (BitVec 64) 16) )
+                      let w__14 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      writeReg ICH_LR_EL2 (vectorUpdate w__13 2 (Mk_ICH_LR_EL2_Type w__14))))
+              else (pure (())))))
+
+
+/-- Type quantifiers: t : Int -/
+def ICH_LR_EL2_SysRegWrite_d4cc97ca4abc2b38 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do readReg ICC_SRE_EL2 ) : SailM (BitVec 64) )
+  let __ICC_SRE_EL2_SRE : (BitVec 1) := (_get_ICC_SRE_EL2_Type_SRE w__2)
+  let w__3 ← (( do readReg ICC_SRE_EL3 ) : SailM (BitVec 64) )
+  let __ICC_SRE_EL3_SRE : (BitVec 1) := (_get_ICC_SRE_EL3_Type_SRE w__3)
+  if ((__PSTATE_EL == EL0) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
+    (do
+      if ((__PSTATE_EL == EL1) : Bool)
+      then
+        (do
+          let w__7 ← (( do
+            if ((← do
+                 (EL2Enabled ())) : Bool)
+            then
+              (do
+                let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                (pure (((((_get_HCR_EL2_Type_NV2 w__5) +++ (_get_HCR_EL2_Type_NV w__6)) == 0b11#2) : Bool))))
+            else (pure false) ) : SailM Bool )
+          if (w__7 : Bool)
+          then
+            (do
+              let w__8 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+              (NVMem_set ((BitVec.toNat 0x400#12) +i (8 *i 8)) w__8))
+          else
+            (do
+              let w__10 ← (( do
+                (pure ((← do
+                      (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
+              if (w__10 : Bool)
+              then
+                (do
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+              else sailThrow ((Error_Undefined ()))))
+      else
+        (do
+          if ((__PSTATE_EL == EL2) : Bool)
+          then
+            (do
+              if ((__ICC_SRE_EL2_SRE == 0#1) : Bool)
+              then
+                (do
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+              else
+                (do
+                  let w__11 ← (( do readReg ICH_LR_EL2 ) : SailM (Vector (BitVec 64) 16) )
+                  let w__12 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  writeReg ICH_LR_EL2 (vectorUpdate w__11 8 (Mk_ICH_LR_EL2_Type w__12))))
+          else
+            (do
+              if ((__PSTATE_EL == EL3) : Bool)
+              then
+                (do
+                  if ((__ICC_SRE_EL3_SRE == 0#1) : Bool)
+                  then
+                    (do
+                      (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8)))
+                  else
+                    (do
+                      let w__13 ← (( do readReg ICH_LR_EL2 ) : SailM (Vector (BitVec 64) 16) )
+                      let w__14 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      writeReg ICH_LR_EL2 (vectorUpdate w__13 8 (Mk_ICH_LR_EL2_Type w__14))))
+              else (pure (())))))
+
+
+/-- Type quantifiers: t : Int -/
+def ICH_LR_EL2_SysRegWrite_fd7b4774b600f5ba (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do readReg ICC_SRE_EL2 ) : SailM (BitVec 64) )
+  let __ICC_SRE_EL2_SRE : (BitVec 1) := (_get_ICC_SRE_EL2_Type_SRE w__2)
+  let w__3 ← (( do readReg ICC_SRE_EL3 ) : SailM (BitVec 64) )
+  let __ICC_SRE_EL3_SRE : (BitVec 1) := (_get_ICC_SRE_EL3_Type_SRE w__3)
+  if ((__PSTATE_EL == EL0) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
+    (do
+      if ((__PSTATE_EL == EL1) : Bool)
+      then
+        (do
+          let w__7 ← (( do
+            if ((← do
+                 (EL2Enabled ())) : Bool)
+            then
+              (do
+                let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                (pure (((((_get_HCR_EL2_Type_NV2 w__5) +++ (_get_HCR_EL2_Type_NV w__6)) == 0b11#2) : Bool))))
+            else (pure false) ) : SailM Bool )
+          if (w__7 : Bool)
+          then
+            (do
+              let w__8 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+              (NVMem_set ((BitVec.toNat 0x400#12) +i (8 *i 10)) w__8))
+          else
+            (do
+              let w__10 ← (( do
+                (pure ((← do
+                      (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
+              if (w__10 : Bool)
+              then
+                (do
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+              else sailThrow ((Error_Undefined ()))))
+      else
+        (do
+          if ((__PSTATE_EL == EL2) : Bool)
+          then
+            (do
+              if ((__ICC_SRE_EL2_SRE == 0#1) : Bool)
+              then
+                (do
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+              else
+                (do
+                  let w__11 ← (( do readReg ICH_LR_EL2 ) : SailM (Vector (BitVec 64) 16) )
+                  let w__12 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  writeReg ICH_LR_EL2 (vectorUpdate w__11 10 (Mk_ICH_LR_EL2_Type w__12))))
+          else
+            (do
+              if ((__PSTATE_EL == EL3) : Bool)
+              then
+                (do
+                  if ((__ICC_SRE_EL3_SRE == 0#1) : Bool)
+                  then
+                    (do
+                      (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8)))
+                  else
+                    (do
+                      let w__13 ← (( do readReg ICH_LR_EL2 ) : SailM (Vector (BitVec 64) 16) )
+                      let w__14 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      writeReg ICH_LR_EL2 (vectorUpdate w__13 10 (Mk_ICH_LR_EL2_Type w__14))))
+              else (pure (())))))
+
+
+/-- Type quantifiers: t : Int -/
+def ICH_VMCR_EL2_SysRegWrite_dff88313df61ad5f (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do readReg ICC_SRE_EL2 ) : SailM (BitVec 64) )
+  let __ICC_SRE_EL2_SRE : (BitVec 1) := (_get_ICC_SRE_EL2_Type_SRE w__2)
+  let w__3 ← (( do readReg ICC_SRE_EL3 ) : SailM (BitVec 64) )
+  let __ICC_SRE_EL3_SRE : (BitVec 1) := (_get_ICC_SRE_EL3_Type_SRE w__3)
+  if ((__PSTATE_EL == EL0) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
+    (do
+      if ((__PSTATE_EL == EL1) : Bool)
+      then
+        (do
+          let w__7 ← (( do
+            if ((← do
+                 (EL2Enabled ())) : Bool)
+            then
+              (do
+                let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                (pure (((((_get_HCR_EL2_Type_NV2 w__5) +++ (_get_HCR_EL2_Type_NV w__6)) == 0b11#2) : Bool))))
+            else (pure false) ) : SailM Bool )
+          if (w__7 : Bool)
+          then
+            (do
+              let w__8 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+              (NVMem_set (BitVec.toNat 0x4C8#12) w__8))
+          else
+            (do
+              let w__10 ← (( do
+                (pure ((← do
+                      (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
+              if (w__10 : Bool)
+              then
+                (do
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+              else sailThrow ((Error_Undefined ()))))
+      else
+        (do
+          if ((__PSTATE_EL == EL2) : Bool)
+          then
+            (do
+              if ((__ICC_SRE_EL2_SRE == 0#1) : Bool)
+              then
+                (do
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+              else
+                (do
+                  let w__11 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                  writeReg ICH_VMCR_EL2 (Mk_ICH_VMCR_EL2_Type w__11)))
+          else
+            (do
+              if ((__PSTATE_EL == EL3) : Bool)
+              then
+                (do
+                  if ((__ICC_SRE_EL3_SRE == 0#1) : Bool)
+                  then
+                    (do
+                      (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8)))
+                  else
+                    (do
+                      let w__12 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      writeReg ICH_VMCR_EL2 (Mk_ICH_VMCR_EL2_Type w__12)))
+              else (pure (())))))
+
+
+/-- Type quantifiers: t : Int -/
+def MAIR2_EL1_SysRegWrite_e1a1cf3df97e5908 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_E2H : (BitVec 1) := (_get_HCR_EL2_Type_E2H w__2)
+  let w__3 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
+  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__3)
+  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+  let __SCR_EL3_AIEn : (BitVec 1) := (_get_SCR_EL3_Type_AIEn w__4)
+  if ((__PSTATE_EL == EL0) : Bool)
+  then sailThrow ((Error_Undefined ()))
+  else
+    (do
+      if ((__PSTATE_EL == EL1) : Bool)
+      then
+        (do
+          let w__9 ← (( do
+            if ((← do
+                 (EL2Enabled ())) : Bool)
+            then
+              (do
+                let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                let w__7 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                let w__8 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                (pure (((((_get_HCR_EL2_Type_NV2 w__6) +++ ((_get_HCR_EL2_Type_NV1 w__7) +++ (_get_HCR_EL2_Type_NV
+                          w__8))) == 0b101#3) : Bool))))
+            else (pure false) ) : SailM Bool )
+          if (w__9 : Bool)
+          then
+            (do
+              let w__10 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+              (NVMem_set (BitVec.toNat 0x280#12) w__10))
+          else
+            (do
+              let w__12 ← (( do
+                (pure ((← do
+                      (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
+              if (w__12 : Bool)
+              then
+                (do
+                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
+              else sailThrow ((Error_Undefined ()))))
+      else
+        (do
+          if ((__PSTATE_EL == EL2) : Bool)
+          then
+            (do
+              if ((__HCR_EL2_E2H == 1#1) : Bool)
+              then
+                (do
+                  let w__19 ← (( do
+                    (pure ((← do
+                          if ((← do
+                               (pure ((← do
+                                     if ((← do
+                                          (Halted ())) : Bool)
+                                     then
+                                       (do
+                                         (HaveEL EL3))
+                                     else (pure false)) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
                           then
                             (do
-                              let split_c7 ← (( (__DecodeA64_SVE__seg7 pc __opcode) ) : SailM Bool
-                                )
-                              if (split_c7 : Bool)
-                              then
-                                (do
-                                  let split_c8 ← (( (__DecodeA64_SVE__seg8 pc __opcode) ) : SailM
-                                    Bool )
-                                  if (split_c8 : Bool)
-                                  then
-                                    (do
-                                      let split_c9 ← (( (__DecodeA64_SVE__seg9 pc __opcode) ) :
-                                        SailM Bool )
-                                      if (split_c9 : Bool)
-                                      then
-                                        (do
-                                          let split_c10 ← (( (__DecodeA64_SVE__seg10 pc __opcode)
-                                            ) : SailM Bool )
-                                          if (split_c10 : Bool)
-                                          then
-                                            (do
-                                              let split_c11 ← ((
-                                                (__DecodeA64_SVE__seg11 pc __opcode) ) : SailM Bool
-                                                )
-                                              if (split_c11 : Bool)
-                                              then
-                                                (do
-                                                  let split_c12 ← ((
-                                                    (__DecodeA64_SVE__seg12 pc __opcode) ) : SailM
-                                                    Bool )
-                                                  if (split_c12 : Bool)
-                                                  then
-                                                    (do
-                                                      let split_c13 ← ((
-                                                        (__DecodeA64_SVE__seg13 pc __opcode) ) :
-                                                        SailM Bool )
-                                                      if (split_c13 : Bool)
-                                                      then
-                                                        (do
-                                                          let split_c14 ← ((
-                                                            (__DecodeA64_SVE__seg14 pc __opcode) ) :
-                                                            SailM Bool )
-                                                          if (split_c14 : Bool)
-                                                          then
-                                                            (do
-                                                              let split_c15 ← ((
-                                                                (__DecodeA64_SVE__seg15 pc __opcode)
-                                                                ) : SailM Bool )
-                                                              if (split_c15 : Bool)
-                                                              then
-                                                                (do
-                                                                  let split_c16 ← ((
-                                                                    (__DecodeA64_SVE__seg16 pc
-                                                                      __opcode) ) : SailM Bool )
-                                                                  if (split_c16 : Bool)
-                                                                  then
-                                                                    (do
-                                                                      let split_c17 ← ((
-                                                                        (__DecodeA64_SVE__seg17 pc
-                                                                          __opcode) ) : SailM Bool )
-                                                                      if (split_c17 : Bool)
-                                                                      then
-                                                                        (do
-                                                                          let split_c18 ← ((
-                                                                            (__DecodeA64_SVE__seg18
-                                                                              pc __opcode) ) : SailM
-                                                                            Bool )
-                                                                          if (split_c18 : Bool)
-                                                                          then
-                                                                            (do
-                                                                              let split_c19 ← ((
-                                                                                (__DecodeA64_SVE__seg19
-                                                                                  pc __opcode) ) :
-                                                                                SailM Bool )
-                                                                              if (split_c19 : Bool)
-                                                                              then
-                                                                                (do
-                                                                                  let split_c20 ← ((
-                                                                                    (__DecodeA64_SVE__seg20
-                                                                                      pc __opcode) )
-                                                                                    : SailM Bool )
-                                                                                  if (split_c20 : Bool)
-                                                                                  then
-                                                                                    (do
-                                                                                      let split_c21 ← ((
-                                                                                        (__DecodeA64_SVE__seg21
-                                                                                          pc
-                                                                                          __opcode)
-                                                                                        ) : SailM
-                                                                                        Bool )
-                                                                                      if (split_c21 : Bool)
-                                                                                      then
-                                                                                        (do
-                                                                                          let split_c22 ← ((
-                                                                                            (__DecodeA64_SVE__seg22
-                                                                                              pc
-                                                                                              __opcode)
-                                                                                            ) :
-                                                                                            SailM
-                                                                                            Bool )
-                                                                                          if (split_c22 : Bool)
-                                                                                          then
-                                                                                            (do
-                                                                                              let split_c23 ← ((
-                                                                                                (__DecodeA64_SVE__seg23
-                                                                                                  pc
-                                                                                                  __opcode)
-                                                                                                ) :
-                                                                                                SailM
-                                                                                                Bool
-                                                                                                )
-                                                                                              if (split_c23 : Bool)
-                                                                                              then
-                                                                                                (do
-                                                                                                  let split_c24 ← ((
-                                                                                                    (__DecodeA64_SVE__seg24
-                                                                                                      pc
-                                                                                                      __opcode)
-                                                                                                    )
-                                                                                                    :
-                                                                                                    SailM
-                                                                                                    Bool
-                                                                                                    )
-                                                                                                  if (split_c24 : Bool)
-                                                                                                  then
-                                                                                                    (do
-                                                                                                      let split_c25 ← ((
-                                                                                                        (__DecodeA64_SVE__seg25
-                                                                                                          pc
-                                                                                                          __opcode)
-                                                                                                        )
-                                                                                                        :
-                                                                                                        SailM
-                                                                                                        Bool
-                                                                                                        )
-                                                                                                      if (split_c25 : Bool)
-                                                                                                      then
-                                                                                                        (do
-                                                                                                          let split_c26 ← ((
-                                                                                                            (__DecodeA64_SVE__seg26
-                                                                                                              pc
-                                                                                                              __opcode)
-                                                                                                            )
-                                                                                                            :
-                                                                                                            SailM
-                                                                                                            Bool
-                                                                                                            )
-                                                                                                          if (split_c26 : Bool)
-                                                                                                          then
-                                                                                                            (do
-                                                                                                              let split_c27 ← ((
-                                                                                                                (__DecodeA64_SVE__seg27
-                                                                                                                  pc
-                                                                                                                  __opcode)
-                                                                                                                )
-                                                                                                                :
-                                                                                                                SailM
-                                                                                                                Bool
-                                                                                                                )
-                                                                                                              if (split_c27 : Bool)
-                                                                                                              then
-                                                                                                                (__DecodeA64_SVE__seg28
-                                                                                                                  pc
-                                                                                                                  __opcode)
-                                                                                                              else
-                                                                                                                (pure ()))
-                                                                                                          else
-                                                                                                            (pure ()))
-                                                                                                      else
-                                                                                                        (pure ()))
-                                                                                                  else
-                                                                                                    (pure ()))
-                                                                                              else
-                                                                                                (pure ()))
-                                                                                          else
-                                                                                            (pure ()))
-                                                                                      else (pure ()))
-                                                                                  else (pure ()))
-                                                                              else (pure ()))
-                                                                          else (pure ()))
-                                                                      else (pure ()))
-                                                                  else (pure ()))
-                                                              else (pure ()))
-                                                          else (pure ()))
-                                                      else (pure ()))
-                                                  else (pure ()))
-                                              else (pure ()))
-                                          else (pure ()))
-                                      else (pure ()))
-                                  else (pure ()))
-                              else (pure ()))
-                          else (pure ()))
-                      else (pure ()))
-                  else (pure ()))
-              else (pure ()))
-          else (pure ()))
-      else (pure ()))
-  else (pure ())
+                              (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
+                          else (pure false)) && ((__SCR_EL3_AIEn == 0#1) : Bool))) ) : SailM Bool )
+                  if (w__19 : Bool)
+                  then sailThrow ((Error_Undefined ()))
+                  else
+                    (do
+                      let w__21 ← (( do
+                        (pure ((← do
+                              (HaveEL EL3)) && ((__SCR_EL3_AIEn == 0#1) : Bool))) ) : SailM Bool )
+                      if (w__21 : Bool)
+                      then
+                        (do
+                          let w__23 ← (( do
+                            (pure ((← do
+                                  (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
+                          if (w__23 : Bool)
+                          then sailThrow ((Error_Undefined ()))
+                          else
+                            (do
+                              (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
+                      else
+                        (do
+                          let w__24 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                          writeReg MAIR2_EL1 (Mk_MAIR2_EL1_Type w__24))))
+              else sailThrow ((Error_Undefined ())))
+          else
+            (do
+              if ((__PSTATE_EL == EL3) : Bool)
+              then
+                (do
+                  let w__28 ← (( do
+                    (pure ((← do
+                          if ((← do
+                               (EL2Enabled ())) : Bool)
+                          then
+                            (do
+                              let w__26 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
+                              (pure (((! w__26) : Bool))))
+                          else (pure false)) && ((__HCR_EL2_E2H == 1#1) : Bool))) ) : SailM Bool )
+                  if (w__28 : Bool)
+                  then
+                    (do
+                      let w__29 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+                      writeReg MAIR2_EL1 (Mk_MAIR2_EL1_Type w__29))
+                  else sailThrow ((Error_Undefined ())))
+              else (pure (())))))
 
 
 end ArmFull.Functions

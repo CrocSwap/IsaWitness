@@ -1,30 +1,29 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0022
-import ArmFull.Fn.M0023
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0042
-import ArmFull.Fn.M0046
-import ArmFull.Fn.M0047
-import ArmFull.Fn.M0087
-import ArmFull.Fn.M0115
-import ArmFull.Fn.M0144
-import ArmFull.Fn.M0145
-import ArmFull.Fn.M0154
-import ArmFull.Fn.M0166
-import ArmFull.Fn.M0167
-import ArmFull.Fn.M0179
-import ArmFull.Fn.M0181
-import ArmFull.Fn.M0197
-import ArmFull.Fn.M0203
-import ArmFull.Fn.M0248
-import ArmFull.Fn.M0249
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0022
+public import ArmFull.Fn.M0023
+public import ArmFull.Fn.M0044
+public import ArmFull.Fn.M0051
+public import ArmFull.Fn.M0059
+public import ArmFull.Fn.M0087
+public import ArmFull.Fn.M0121
+public import ArmFull.Fn.M0144
+public import ArmFull.Fn.M0145
+public import ArmFull.Fn.M0151
+public import ArmFull.Fn.M0152
+public import ArmFull.Fn.M0167
+public import ArmFull.Fn.M0173
+public import ArmFull.Fn.M0178
+public import ArmFull.Fn.M0181
+public import ArmFull.Fn.M0190
+public import ArmFull.Fn.M0211
+public import ArmFull.Fn.M0246 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -126,673 +125,624 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-def AArch32_TakeDataAbortException (vaddress : (BitVec 32)) (fault : FaultRecord) : SailM Unit := do
-  let except ← (( do (undefined_ExceptionRecord (← occLabel 858) ()) ) : SailM ExceptionRecord )
-  let route_to_monitor ← (( do
-    if ((← do
-         if (((HaveEL EL3) : Bool) : Bool)
-         then
-           (do
-             let w__0 ← (( do (EffectiveEA ()) ) : SailM (BitVec 1) )
-             (pure (((w__0 == 1#1) : Bool))))
-         else (pure false)) : Bool)
-    then
-      (do
-        (IsExternalAbort__1 fault))
-    else (pure false) ) : SailM Bool )
-  let route_to_hyp ← (( do
-    if ((← do
-         if ((← do
-              (EL2Enabled ())) : Bool)
-         then
-           (do
-             if ((← do
-                  let w__4 ← (( do readReg PSTATE ) : SailM ProcState )
-                  (pure (((w__4.EL == EL0) : Bool)))) : Bool)
-             then (pure true)
-             else
-               (do
-                 let w__5 ← (( do readReg PSTATE ) : SailM ProcState )
-                 (pure (((w__5.EL == EL1) : Bool)))))
-         else (pure false)) : Bool)
-    then
-      (do
-        if ((← do
-             if ((← do
-                  if ((← do
-                       let w__8 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-                       (pure ((((_get_HCR_Type_TGE w__8) == 1#1) : Bool)))) : Bool)
-                  then (pure true)
-                  else
-                    (do
-                      if ((← do
-                           if ((← do
-                                (HaveRASExt ())) : Bool)
-                           then
-                             (do
-                               let w__10 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-                               (pure ((((_get_HCR2_Type_TEA w__10) == 1#1) : Bool))))
-                           else (pure false)) : Bool)
-                      then
-                        (do
-                          (IsExternalAbort__1 fault))
-                      else (pure false))) : Bool)
-             then (pure true)
-             else
-               (do
-                 if ((← do
-                      (IsDebugException fault)) : Bool)
-                 then
-                   (do
-                     let w__16 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
-                     (pure ((((_get_HDCR_Type_TDE w__16) == 1#1) : Bool))))
-                 else (pure false))) : Bool)
-        then (pure true)
-        else
-          (do
-            (IsSecondStage fault)))
-    else (pure false) ) : SailM Bool )
-  let preferred_exception_return ← (( do (ThisInstrAddr 32) ) : SailM (BitVec 32) )
-  let vect_offset : Int := (BitVec.toNat 0x10#8)
-  let lr_offset : Nat := 8
-  let w__21 ← (( do (IsDebugException fault) ) : SailM Bool )
-  if (w__21 : Bool)
-  then
-    (do
-      let w__22 ← (( do (DBGDSCRext_read ()) ) : SailM (BitVec 32) )
-      (DBGDSCRext_write (_update_DBGDSCRext_Type_MOE w__22 fault.debugmoe)))
-  else (pure (()))
-  if (route_to_monitor : Bool)
-  then
-    (do
-      (AArch32_ReportDataAbort route_to_monitor fault vaddress)
-      (AArch32_EnterMonitorMode preferred_exception_return lr_offset vect_offset))
-  else
-    (do
-      let w__24 ← (( do
-        (pure ((← do
-              let w__23 ← (( do readReg PSTATE ) : SailM ProcState )
-              (pure (((w__23.EL == EL2) : Bool)))) || route_to_hyp)) ) : SailM Bool )
-      if (w__24 : Bool)
-      then
-        (do
-          let except ← (( do (AArch32_AbortSyndrome Exception_DataAbort fault vaddress EL2) ) :
-            SailM ExceptionRecord )
-          let w__25 ← (( do readReg PSTATE ) : SailM ProcState )
-          if ((w__25.EL == EL2) : Bool)
-          then
-            (do
-              (AArch32_EnterHypMode except preferred_exception_return vect_offset))
-          else
-            (do
-              (AArch32_EnterHypMode except preferred_exception_return (BitVec.toNat 0x14#8))))
-      else
-        (do
-          (AArch32_ReportDataAbort route_to_monitor fault vaddress)
-          (AArch32_EnterMode M32_Abort preferred_exception_return lr_offset vect_offset)))
-
-
-def AArch32_TakePrefetchAbortException (vaddress : (BitVec 32)) (fault : FaultRecord) : SailM Unit := do
-  let route_to_monitor ← (( do
-    if ((← do
-         if (((HaveEL EL3) : Bool) : Bool)
-         then
-           (do
-             let w__0 ← (( do (EffectiveEA ()) ) : SailM (BitVec 1) )
-             (pure (((w__0 == 1#1) : Bool))))
-         else (pure false)) : Bool)
-    then
-      (do
-        (IsExternalAbort__1 fault))
-    else (pure false) ) : SailM Bool )
-  let route_to_hyp ← (( do
-    if ((← do
-         if ((← do
-              (EL2Enabled ())) : Bool)
-         then
-           (do
-             if ((← do
-                  let w__4 ← (( do readReg PSTATE ) : SailM ProcState )
-                  (pure (((w__4.EL == EL0) : Bool)))) : Bool)
-             then (pure true)
-             else
-               (do
-                 let w__5 ← (( do readReg PSTATE ) : SailM ProcState )
-                 (pure (((w__5.EL == EL1) : Bool)))))
-         else (pure false)) : Bool)
-    then
-      (do
-        if ((← do
-             if ((← do
-                  if ((← do
-                       let w__8 ← (( do (HCR_read ()) ) : SailM (BitVec 32) )
-                       (pure ((((_get_HCR_Type_TGE w__8) == 1#1) : Bool)))) : Bool)
-                  then (pure true)
-                  else
-                    (do
-                      if ((← do
-                           if ((← do
-                                (HaveRASExt ())) : Bool)
-                           then
-                             (do
-                               let w__10 ← (( do (HCR2_read ()) ) : SailM (BitVec 32) )
-                               (pure ((((_get_HCR2_Type_TEA w__10) == 1#1) : Bool))))
-                           else (pure false)) : Bool)
-                      then
-                        (do
-                          (IsExternalAbort__1 fault))
-                      else (pure false))) : Bool)
-             then (pure true)
-             else
-               (do
-                 if ((← do
-                      (IsDebugException fault)) : Bool)
-                 then
-                   (do
-                     let w__16 ← (( do (HDCR_read ()) ) : SailM (BitVec 32) )
-                     (pure ((((_get_HDCR_Type_TDE w__16) == 1#1) : Bool))))
-                 else (pure false))) : Bool)
-        then (pure true)
-        else
-          (do
-            (IsSecondStage fault)))
-    else (pure false) ) : SailM Bool )
-  let except ← (( do (undefined_ExceptionRecord (← occLabel 859) ()) ) : SailM ExceptionRecord )
-  let preferred_exception_return ← (( do (ThisInstrAddr 32) ) : SailM (BitVec 32) )
-  let vect_offset : Int := (BitVec.toNat 0x0C#8)
-  let lr_offset : Nat := 4
-  let w__21 ← (( do (IsDebugException fault) ) : SailM Bool )
-  if (w__21 : Bool)
-  then
-    (do
-      let w__22 ← (( do (DBGDSCRext_read ()) ) : SailM (BitVec 32) )
-      (DBGDSCRext_write (_update_DBGDSCRext_Type_MOE w__22 fault.debugmoe)))
-  else (pure (()))
-  if (route_to_monitor : Bool)
-  then
-    (do
-      (AArch32_ReportPrefetchAbort route_to_monitor fault vaddress)
-      (AArch32_EnterMonitorMode preferred_exception_return lr_offset vect_offset))
-  else
-    (do
-      let w__24 ← (( do
-        (pure ((← do
-              let w__23 ← (( do readReg PSTATE ) : SailM ProcState )
-              (pure (((w__23.EL == EL2) : Bool)))) || route_to_hyp)) ) : SailM Bool )
-      if (w__24 : Bool)
-      then
-        (do
-          let except ← (( do
-            if ((BEq.beq fault.statuscode Fault_Alignment) : Bool)
-            then
-              (do
-                let w__25 ← (( do (ExceptionSyndrome Exception_PCAlignment) ) : SailM
-                  ExceptionRecord )
-                let except := (w__25 : ExceptionRecord)
-                let w__26 ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
-                let except := ({ except with vaddress := w__26 } : ExceptionRecord)
-                (pure (except)))
-            else
-              (do
-                (AArch32_AbortSyndrome Exception_InstructionAbort fault vaddress EL2)) ) : SailM
-            ExceptionRecord )
-          let w__28 ← (( do readReg PSTATE ) : SailM ProcState )
-          if ((w__28.EL == EL2) : Bool)
-          then
-            (do
-              (AArch32_EnterHypMode except preferred_exception_return vect_offset))
-          else
-            (do
-              (AArch32_EnterHypMode except preferred_exception_return (BitVec.toNat 0x14#8))))
-      else
-        (do
-          (AArch32_ReportPrefetchAbort route_to_monitor fault vaddress)
-          (AArch32_EnterMode M32_Abort preferred_exception_return lr_offset vect_offset)))
-
-
-def AArch64_BreakpointException (fault : FaultRecord) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  ArmFull.assert (w__0.EL != EL3) "sail-arm/v8_base.sail:14835.27-14835.28"
+def AArch64_AdvSIMDFPAccessTrap (target_el : (BitVec 2)) : SailM Unit := do
+  let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
+  let except ← (( do (undefined_ExceptionRecord (← occLabel 1709) ()) ) : SailM ExceptionRecord
+    )
+  let vect_offset : Int := (BitVec.toNat 0x0#4)
   let route_to_el2 ← (( do
     if ((← do
-         if ((← do
-              if ((← do
-                   let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-                   (pure (((w__1.EL == EL0) : Bool)))) : Bool)
-              then (pure true)
-              else
-                (do
-                  let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
-                  (pure (((w__2.EL == EL1) : Bool))))) : Bool)
+         if (((target_el == EL1) : Bool) : Bool)
          then
            (do
              (EL2Enabled ()))
          else (pure false)) : Bool)
     then
       (do
-        if ((← do
-             let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-             (pure ((((_get_HCR_EL2_Type_TGE w__6) == 1#1) : Bool)))) : Bool)
-        then (pure true)
-        else
-          (do
-            let w__7 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
-            (pure ((((_get_MDCR_EL2_Type_TDE w__7) == 1#1) : Bool)))))
+        let w__2 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+        (pure ((((_get_HCR_EL2_Type_TGE w__2) == 1#1) : Bool))))
     else (pure false) ) : SailM Bool )
-  let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
-  let vect_offset : Int := (BitVec.toNat 0x0#4)
-  let w__10 ← (( do
-    (pure ((← do
-          let w__9 ← (( do readReg PSTATE ) : SailM ProcState )
-          (pure (((w__9.EL == EL2) : Bool)))) || route_to_el2)) ) : SailM Bool )
-  let target_el : (BitVec 2) :=
-    if (w__10 : Bool)
-    then EL2
-    else EL1
-  let vaddress ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
-  let except ← (( do (AArch64_AbortSyndrome Exception_Breakpoint fault vaddress target_el) ) :
-    SailM ExceptionRecord )
-  (AArch64_TakeException target_el except preferred_exception_return vect_offset)
-
-
-def AArch64_DataAbort (vaddress : (BitVec 64)) (fault : FaultRecord) : SailM Unit := do
-  let route_to_el2 ← (( do (undefined_bool_at (← occLabel 871) ()) ) : SailM Bool )
-  let target_el ← (( do (undefined_bitvector_at (← occLabel 872) 2) ) : SailM (BitVec 2) )
-  let w__0 ← (( do (IsExternalAbort__1 fault) ) : SailM Bool )
-  let target_el ← (( do
-    if (w__0 : Bool)
-    then
-      (do
-        (AArch64_SyncExternalAbortTarget fault))
-    else
-      (do
-        let route_to_el2 ← (( do
-          if ((← do
-               if ((← do
-                    (EL2Enabled ())) : Bool)
-               then
-                 (do
-                   if ((← do
-                        let w__3 ← (( do readReg PSTATE ) : SailM ProcState )
-                        (pure (((w__3.EL == EL0) : Bool)))) : Bool)
-                   then (pure true)
-                   else
-                     (do
-                       let w__4 ← (( do readReg PSTATE ) : SailM ProcState )
-                       (pure (((w__4.EL == EL1) : Bool)))))
-               else (pure false)) : Bool)
-          then
-            (do
-              if ((← do
-                   if ((← do
-                        if ((← do
-                             let w__7 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                             (pure ((((_get_HCR_EL2_Type_TGE w__7) == 1#1) : Bool)))) : Bool)
-                        then (pure true)
-                        else
-                          (do
-                            if ((← do
-                                 (pure ((← do
-                                       (HaveRME ())) && ((BEq.beq fault.gpcf.gpf GPCF_Fail) : Bool)))) : Bool)
-                            then
-                              (do
-                                let w__10 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                                (pure ((((_get_HCR_EL2_Type_GPF w__10) == 1#1) : Bool))))
-                            else (pure false))) : Bool)
-                   then (pure true)
-                   else
-                     (do
-                       (pure ((← do
-                             (HaveNV2Ext ())) && ((BEq.beq fault.access.acctype AccessType_NV2) : Bool))))) : Bool)
-              then (pure true)
-              else
-                (do
-                  (IsSecondStage fault)))
-          else (pure false) ) : SailM Bool )
-        let w__18 ← (( do readReg PSTATE ) : SailM ProcState )
-        if ((w__18.EL == EL3) : Bool)
-        then (pure (EL3))
-        else
-          (do
-            let w__20 ← (( do
-              (pure ((← do
-                    let w__19 ← (( do readReg PSTATE ) : SailM ProcState )
-                    (pure (((w__19.EL == EL2) : Bool)))) || route_to_el2)) ) : SailM Bool )
-            let target_el : (BitVec 2) :=
-              if (w__20 : Bool)
-              then EL2
-              else EL1
-            (pure (target_el)))) ) : SailM (BitVec 2) )
-  let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
-  let vect_offset ← (( do (undefined_int_at (← occLabel 873) ()) ) : SailM Int )
-  let w__23 ← (( do
-    if ((← do
-         (IsExternalAbort__1 fault)) : Bool)
-    then
-      (do
-        (AArch64_RouteToSErrorOffset target_el))
-    else (pure false) ) : SailM Bool )
-  let vect_offset : Int :=
-    if (w__23 : Bool)
-    then (BitVec.toNat 0x180#12)
-    else (BitVec.toNat 0x0#4)
-  let vect_offset : Int := vect_offset
-  let except ← (( do (undefined_ExceptionRecord (← occLabel 874) ()) ) : SailM ExceptionRecord )
-  let w__25 ← (( do
-    (pure ((← do
-          (HaveNV2Ext ())) && ((BEq.beq fault.access.acctype AccessType_NV2) : Bool))) ) : SailM
-    Bool )
-  let except ← (( do
-    if (w__25 : Bool)
-    then
-      (do
-        (AArch64_AbortSyndrome Exception_NV2DataAbort fault vaddress target_el))
-    else
-      (do
-        (AArch64_AbortSyndrome Exception_DataAbort fault vaddress target_el)) ) : SailM
-    ExceptionRecord )
-  (take_exception (some fault))
-  (AArch64_TakeException target_el except preferred_exception_return vect_offset)
-
-
-def AArch64_InstructionAbort (vaddress : (BitVec 64)) (fault : FaultRecord) : SailM Unit := do
-  let route_to_el2 ← (( do (undefined_bool_at (← occLabel 875) ()) ) : SailM Bool )
-  let w__0 ← (( do (HaveDoubleFaultExt ()) ) : SailM Bool )
-  if (w__0 : Bool)
+  if (route_to_el2 : Bool)
   then
     (do
-      ArmFull.assert (bne fault.statuscode Fault_AsyncExternal) "sail-arm/v8_base.sail:15017.54-15017.55")
-  else (pure (()))
-  let target_el ← (( do (undefined_bitvector_at (← occLabel 876) 2) ) : SailM (BitVec 2) )
-  let w__1 ← (( do (IsExternalAbort__1 fault) ) : SailM Bool )
-  let target_el ← (( do
-    if (w__1 : Bool)
-    then
-      (do
-        (AArch64_SyncExternalAbortTarget fault))
-    else
-      (do
-        let route_to_el2 ← (( do
-          if ((← do
-               if ((← do
-                    (EL2Enabled ())) : Bool)
-               then
-                 (do
-                   if ((← do
-                        let w__4 ← (( do readReg PSTATE ) : SailM ProcState )
-                        (pure (((w__4.EL == EL0) : Bool)))) : Bool)
-                   then (pure true)
-                   else
-                     (do
-                       let w__5 ← (( do readReg PSTATE ) : SailM ProcState )
-                       (pure (((w__5.EL == EL1) : Bool)))))
-               else (pure false)) : Bool)
-          then
-            (do
-              if ((← do
-                   if ((← do
-                        let w__8 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                        (pure ((((_get_HCR_EL2_Type_TGE w__8) == 1#1) : Bool)))) : Bool)
-                   then (pure true)
-                   else
-                     (do
-                       if ((← do
-                            (pure ((← do
-                                  (HaveRME ())) && ((BEq.beq fault.gpcf.gpf GPCF_Fail) : Bool)))) : Bool)
-                       then
-                         (do
-                           let w__11 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                           (pure ((((_get_HCR_EL2_Type_GPF w__11) == 1#1) : Bool))))
-                       else (pure false))) : Bool)
-              then (pure true)
-              else
-                (do
-                  (IsSecondStage fault)))
-          else (pure false) ) : SailM Bool )
-        let w__16 ← (( do readReg PSTATE ) : SailM ProcState )
-        if ((w__16.EL == EL3) : Bool)
-        then (pure (EL3))
-        else
-          (do
-            let w__18 ← (( do
-              (pure ((← do
-                    let w__17 ← (( do readReg PSTATE ) : SailM ProcState )
-                    (pure (((w__17.EL == EL2) : Bool)))) || route_to_el2)) ) : SailM Bool )
-            let target_el : (BitVec 2) :=
-              if (w__18 : Bool)
-              then EL2
-              else EL1
-            (pure (target_el)))) ) : SailM (BitVec 2) )
-  let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
-  let vect_offset ← (( do (undefined_int_at (← occLabel 877) ()) ) : SailM Int )
-  let w__21 ← (( do
+      let except ← (( do (ExceptionSyndrome Exception_Uncategorized) ) : SailM ExceptionRecord )
+      (AArch64_TakeException EL2 except preferred_exception_return vect_offset))
+  else
+    (do
+      let w__3 ← (( do (ExceptionSyndrome Exception_AdvSIMDFPAccessTrap) ) : SailM ExceptionRecord
+        )
+      let except : ExceptionRecord := (w__3 : ExceptionRecord)
+      let w__4 ← (( do (ConditionSyndrome ()) ) : SailM (BitVec 5) )
+      let except :=
+        ({ except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 24 20 w__4) } : ExceptionRecord)
+      (AArch64_TakeException target_el except preferred_exception_return vect_offset))
+
+
+def SVEAccessTrap (target_el : (BitVec 2)) : SailM Unit := do
+  let w__3 ← (( do
     if ((← do
-         (IsExternalAbort__1 fault)) : Bool)
+         (pure ((← do
+               let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+               (pure ((((BitVec.toNat target_el) ≥b (BitVec.toNat w__0.EL)) : Bool)))) && ((target_el != EL0) : Bool)))) : Bool)
     then
       (do
-        (AArch64_RouteToSErrorOffset target_el))
+        (HaveEL target_el))
     else (pure false) ) : SailM Bool )
-  let vect_offset : Int :=
-    if (w__21 : Bool)
-    then (BitVec.toNat 0x180#12)
-    else (BitVec.toNat 0x0#4)
-  let vect_offset : Int := vect_offset
-  let except ← (( do (AArch64_AbortSyndrome Exception_InstructionAbort fault vaddress target_el) )
-    : SailM ExceptionRecord )
-  (take_exception (some fault))
-  (AArch64_TakeException target_el except preferred_exception_return vect_offset)
-
-
-def AArch64_VectorCatchException (fault : FaultRecord) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  ArmFull.assert (w__0.EL != EL2) "sail-arm/v8_base.sail:15048.27-15048.28"
-  let w__5 ← (( do
-    if ((← do
-         (EL2Enabled ())) : Bool)
-    then
-      (do
-        if ((← do
-             let w__2 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-             (pure ((((_get_HCR_EL2_Type_TGE w__2) == 1#1) : Bool)))) : Bool)
-        then (pure true)
-        else
-          (do
-            let w__3 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
-            (pure ((((_get_MDCR_EL2_Type_TDE w__3) == 1#1) : Bool)))))
-    else (pure false) ) : SailM Bool )
-  ArmFull.assert w__5 "sail-arm/v8_base.sail:15049.70-15049.71"
-  let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
-  let vect_offset : Int := (BitVec.toNat 0x0#4)
-  let vaddress ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
-  let except ← (( do (AArch64_AbortSyndrome Exception_VectorCatch fault vaddress EL2) ) : SailM
-    ExceptionRecord )
-  (AArch64_TakeException EL2 except preferred_exception_return vect_offset)
-
-
-def AArch64_WatchpointException (vaddress : (BitVec 64)) (fault : FaultRecord) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  ArmFull.assert (w__0.EL != EL3) "sail-arm/v8_base.sail:15060.27-15060.28"
+  ArmFull.assert w__3 "sail-inputs/03-v8_base.sail:29245.86-29245.87"
   let route_to_el2 ← (( do
     if ((← do
-         if ((← do
-              if ((← do
-                   let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-                   (pure (((w__1.EL == EL0) : Bool)))) : Bool)
-              then (pure true)
-              else
-                (do
-                  let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
-                  (pure (((w__2.EL == EL1) : Bool))))) : Bool)
+         if (((target_el == EL1) : Bool) : Bool)
          then
            (do
              (EL2Enabled ()))
          else (pure false)) : Bool)
     then
       (do
-        if ((← do
-             let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-             (pure ((((_get_HCR_EL2_Type_TGE w__6) == 1#1) : Bool)))) : Bool)
-        then (pure true)
-        else
-          (do
-            let w__7 ← (( do readReg MDCR_EL2 ) : SailM (BitVec 64) )
-            (pure ((((_get_MDCR_EL2_Type_TDE w__7) == 1#1) : Bool)))))
+        let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+        (pure ((((_get_HCR_EL2_Type_TGE w__6) == 1#1) : Bool))))
     else (pure false) ) : SailM Bool )
+  let except ← (( do (ExceptionSyndrome Exception_SVEAccessTrap) ) : SailM ExceptionRecord )
   let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
   let vect_offset : Int := (BitVec.toNat 0x0#4)
-  let w__10 ← (( do
-    (pure ((← do
-          let w__9 ← (( do readReg PSTATE ) : SailM ProcState )
-          (pure (((w__9.EL == EL2) : Bool)))) || route_to_el2)) ) : SailM Bool )
+  if (route_to_el2 : Bool)
+  then
+    (do
+      (AArch64_TakeException EL2 except preferred_exception_return vect_offset))
+  else
+    (do
+      (AArch64_TakeException target_el except preferred_exception_return vect_offset))
+
+
+def SMEAccessTrap (etype : SMEExceptionType) (target_el_in : (BitVec 2)) : SailM Unit := do
+  let target_el : (BitVec 2) := target_el_in
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  ArmFull.assert ((BitVec.toNat target_el) ≥b (BitVec.toNat w__0.EL)) "sail-inputs/03-v8_base.sail:29361.45-29361.46"
   let target_el : (BitVec 2) :=
-    if (w__10 : Bool)
-    then EL2
-    else EL1
-  let except ← (( do (undefined_ExceptionRecord (← occLabel 878) ()) ) : SailM ExceptionRecord )
-  let w__12 ← (( do
-    (pure ((← do
-          (HaveNV2Ext ())) && ((BEq.beq fault.access.acctype AccessType_NV2) : Bool))) ) : SailM
-    Bool )
-  let except ← (( do
-    if (w__12 : Bool)
+    if ((target_el == EL0) : Bool)
+    then EL1
+    else target_el
+  let route_to_el2 ← (( do
+    if ((← do
+         if ((← do
+              (pure ((← do
+                    let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
+                    (pure (((w__1.EL == EL0) : Bool)))) && ((target_el == EL1) : Bool)))) : Bool)
+         then
+           (do
+             (EL2Enabled ()))
+         else (pure false)) : Bool)
     then
       (do
-        (AArch64_AbortSyndrome Exception_NV2Watchpoint fault vaddress target_el))
+        let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+        (pure ((((_get_HCR_EL2_Type_TGE w__5) == 1#1) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let except ← (( do (ExceptionSyndrome Exception_SMEAccessTrap) ) : SailM ExceptionRecord )
+  let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
+  let vect_offset : Int := (BitVec.toNat 0x0#4)
+  let except : ExceptionRecord :=
+    match etype with
+    | .SMEExceptionType_AccessTrap =>
+      { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 2 0 0b000#3) }
+    | .SMEExceptionType_Streaming =>
+      { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 2 0 0b001#3) }
+    | .SMEExceptionType_NotStreaming =>
+      { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 2 0 0b010#3) }
+    | .SMEExceptionType_InactiveZA =>
+      { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 2 0 0b011#3) }
+    | .SMEExceptionType_InaccessibleZT0 =>
+      { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 2 0 0b100#3) }
+  if (route_to_el2 : Bool)
+  then
+    (do
+      (AArch64_TakeException EL2 except preferred_exception_return vect_offset))
+  else
+    (do
+      (AArch64_TakeException target_el except preferred_exception_return vect_offset))
+
+
+def GCSDataCheckException (gcsinst_type : GCSInstruction) : SailM Unit := do
+  let target_el ← (( do (undefined_bitvector_at (← occLabel 1760) 2) ) : SailM (BitVec 2) )
+  let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
+  let vect_offset : Int := (BitVec.toNat 0x0#4)
+  let rn_unknown : Bool := false
+  let is_ret : Bool := false
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let target_el ← (( do
+    if ((w__0.EL == EL0) : Bool)
+    then
+      (do
+        let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+        let w__2 : (BitVec 2) :=
+          if (((_get_HCR_EL2_Type_TGE w__1) == 0#1) : Bool)
+          then EL1
+          else EL2
+        (pure ((w__2 : (BitVec 2)))))
     else
       (do
-        (AArch64_AbortSyndrome Exception_Watchpoint fault vaddress target_el)) ) : SailM
-    ExceptionRecord )
-  (AArch64_TakeException target_el except preferred_exception_return vect_offset)
-
-
-def TakeGPCException (vaddress : (BitVec 64)) (fault : FaultRecord) : SailM Unit := do
-  let w__0 ← (( do (HaveRME ()) ) : SailM Bool )
-  ArmFull.assert w__0 "sail-arm/v8_base.sail:15144.20-15144.21"
-  let w__1 ← (( do (HaveAtomicExt ()) ) : SailM Bool )
-  ArmFull.assert w__1 "sail-arm/v8_base.sail:15145.26-15145.27"
-  let w__2 ← (( do (HaveAccessFlagUpdateExt ()) ) : SailM Bool )
-  ArmFull.assert w__2 "sail-arm/v8_base.sail:15146.36-15146.37"
-  let w__3 ← (( do (HaveDirtyBitModifierExt ()) ) : SailM Bool )
-  ArmFull.assert w__3 "sail-arm/v8_base.sail:15147.36-15147.37"
-  let w__4 ← (( do (HaveDoubleFaultExt ()) ) : SailM Bool )
-  ArmFull.assert w__4 "sail-arm/v8_base.sail:15148.31-15148.32"
-  let except ← (( do (undefined_ExceptionRecord (← occLabel 881) ()) ) : SailM ExceptionRecord )
-  let except : ExceptionRecord := { except with exceptype := Exception_GPC }
-  let except : ExceptionRecord := { except with vaddress := (Sail.BitVec.zeroExtend vaddress 64) }
-  let except : ExceptionRecord := { except with paddress := fault.paddress }
-  let except : ExceptionRecord := { except with pavalid := true }
-  let w__5 ← (( do (IPAValid fault) ) : SailM Bool )
-  let except : ExceptionRecord :=
-    if (w__5 : Bool)
-    then
-      (let except : ExceptionRecord := { except with ipavalid := true }
-      let except : ExceptionRecord :=
-        { except with NS := if ((BEq.beq fault.ipaddress.paspace PAS_NonSecure) : Bool)
-          then 1#1
-          else 0#1 }
-      { except with ipaddress := fault.ipaddress.address })
-    else { except with ipavalid := false }
-  let except : ExceptionRecord :=
-    if ((BEq.beq fault.access.acctype AccessType_GCS) : Bool)
-    then { except with syndrome2 := (BitVec.update except.syndrome2 8 (Bit 1#1)) }
-    else except
-  let except : ExceptionRecord :=
-    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 24 22 (Zeros (n := 3))) }
-  let except : ExceptionRecord :=
-    { except with syndrome := (BitVec.update except.syndrome 21
-        (Bit
-          (if (fault.gpcfs2walk : Bool)
-          then 1#1
-          else 0#1))) }
-  let except : ExceptionRecord :=
-    if ((BEq.beq fault.access.acctype AccessType_IFETCH) : Bool)
-    then { except with syndrome := (BitVec.update except.syndrome 20 (Bit 1#1)) }
-    else { except with syndrome := (BitVec.update except.syndrome 20 (Bit 0#1)) }
-  let w__6 ← (( do (EncodeGPCSC fault.gpcf) ) : SailM (BitVec 6) )
-  let except :=
-    ({ except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 19 14 w__6) } : ExceptionRecord)
-  let w__8 ← (( do
-    (pure ((← do
-          (HaveNV2Ext ())) && ((BEq.beq fault.access.acctype AccessType_NV2) : Bool))) ) : SailM
-    Bool )
-  let except : ExceptionRecord :=
-    if (w__8 : Bool)
-    then { except with syndrome := (BitVec.update except.syndrome 13 (Bit 1#1)) }
-    else { except with syndrome := (BitVec.update except.syndrome 13 (Bit 0#1)) }
-  let except : ExceptionRecord :=
-    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 12 11 0b00#2) }
-  let except : ExceptionRecord :=
-    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 10 9 0b00#2) }
-  let except : ExceptionRecord :=
-    if (((BEq.beq fault.access.acctype AccessType_DC) || ((BEq.beq fault.access.acctype
-             AccessType_IC) || (BEq.beq fault.access.acctype AccessType_AT))) : Bool)
-    then { except with syndrome := (BitVec.update except.syndrome 8 (Bit 1#1)) }
-    else { except with syndrome := (BitVec.update except.syndrome 8 (Bit 0#1)) }
-  let except : ExceptionRecord :=
-    { except with syndrome := (BitVec.update except.syndrome 7
-        (Bit
-          (if (fault.s2fs1walk : Bool)
-          then 1#1
-          else 0#1))) }
-  let except ← (( do
-    if (((BEq.beq fault.access.acctype AccessType_DC) || ((BEq.beq fault.access.acctype
-             AccessType_IC) || (BEq.beq fault.access.acctype AccessType_AT))) : Bool)
-    then
+        let w__3 ← (( do readReg PSTATE ) : SailM ProcState )
+        let target_el := (w__3.EL : (BitVec 2))
+        (pure (target_el))) ) : SailM (BitVec 2) )
+  let except ← (( do (ExceptionSyndrome Exception_GCSFail) ) : SailM ExceptionRecord )
+  let (except, is_ret, rn_unknown) : (ExceptionRecord × Bool × Bool) :=
+    match gcsinst_type with
+    | .GCSInstType_PRET =>
       (let except : ExceptionRecord :=
-        { except with syndrome := (BitVec.update except.syndrome 6 (Bit 1#1)) }
-      (pure (except)))
+        { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 4 0 0b00000#5) }
+      let is_ret : Bool := true
+      (except, is_ret, rn_unknown))
+    | .GCSInstType_POPM =>
+      (let except : ExceptionRecord :=
+        { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 4 0 0b00001#5) }
+      (except, is_ret, rn_unknown))
+    | .GCSInstType_PRETAA =>
+      (let except : ExceptionRecord :=
+        { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 4 0 0b00010#5) }
+      let is_ret : Bool := true
+      (except, is_ret, rn_unknown))
+    | .GCSInstType_PRETAB =>
+      (let except : ExceptionRecord :=
+        { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 4 0 0b00011#5) }
+      let is_ret : Bool := true
+      (except, is_ret, rn_unknown))
+    | .GCSInstType_SS1 =>
+      (let except : ExceptionRecord :=
+        { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 4 0 0b00100#5) }
+      (except, is_ret, rn_unknown))
+    | .GCSInstType_SS2 =>
+      (let except : ExceptionRecord :=
+        { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 4 0 0b00101#5) }
+      let rn_unknown : Bool := true
+      (except, is_ret, rn_unknown))
+    | .GCSInstType_POPCX =>
+      (let rn_unknown : Bool := true
+      let except : ExceptionRecord :=
+        { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 4 0 0b01000#5) }
+      (except, is_ret, rn_unknown))
+    | .GCSInstType_POPX =>
+      (let except : ExceptionRecord :=
+        { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 4 0 0b01001#5) }
+      (except, is_ret, rn_unknown))
+  let except ← (( do
+    if ((rn_unknown == true) : Bool)
+    then
+      (do
+        let w__4 ← (( do (__UNKNOWN_bits 5) ) : SailM (BitVec 5) )
+        let except :=
+          ({ except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 9 5 w__4) } : ExceptionRecord)
+        (pure (except)))
     else
       (do
-        if (((BEq.beq fault.statuscode Fault_HWUpdateAccessFlag) || (BEq.beq fault.statuscode
-               Fault_Exclusive)) : Bool)
+        if ((is_ret == true) : Bool)
         then
           (do
-            let w__9 ← (( do (__UNKNOWN_bit ()) ) : SailM (BitVec 1) )
+            let w__5 ← (( do (ThisInstr ()) ) : SailM (BitVec 32) )
             let except :=
-              ({ except with syndrome := (BitVec.update except.syndrome 6 (Bit w__9)) } : ExceptionRecord)
+              ({ except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 9 5
+                  (Sail.BitVec.extractLsb w__5 9 5)) } : ExceptionRecord)
             (pure (except)))
         else
           (do
-            let w__11 ← (( do
-              if ((fault.access.atomicop : Bool) : Bool)
-              then
-                (do
-                  (IsExternalAbort__1 fault))
-              else (pure false) ) : SailM Bool )
-            if (w__11 : Bool)
-            then
-              (do
-                let w__12 ← (( do (__UNKNOWN_bit ()) ) : SailM (BitVec 1) )
-                let except :=
-                  ({ except with syndrome := (BitVec.update except.syndrome 6 (Bit w__12)) } : ExceptionRecord)
-                (pure (except)))
-            else
-              (let except : ExceptionRecord :=
-                { except with syndrome := (BitVec.update except.syndrome 6
-                    (Bit
-                      (if (fault.write : Bool)
-                      then 1#1
-                      else 0#1))) }
-              (pure (except))))) ) : SailM ExceptionRecord )
-  let w__13 ← (( do (EncodeLDFSC fault.statuscode fault.level) ) : SailM (BitVec 6) )
-  let except :=
-    ({ except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 5 0 w__13) } : ExceptionRecord)
+            let w__6 ← (( do (ThisInstr ()) ) : SailM (BitVec 32) )
+            let except :=
+              ({ except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 9 5
+                  (Sail.BitVec.extractLsb w__6 4 0)) } : ExceptionRecord)
+            (pure (except)))) ) : SailM ExceptionRecord )
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 24 10 (Zeros (n := 15))) }
+  let w__7 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
+  let except := ({ except with vaddress := w__7 } : ExceptionRecord)
+  (AArch64_TakeException target_el except preferred_exception_return vect_offset)
+
+
+def EXLOCKException (_ : Unit) : SailM Unit := do
   let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
-  let target_el : (BitVec 2) := EL3
-  let vect_offset ← (( do (undefined_int_at (← occLabel 882) ()) ) : SailM Int )
-  let w__16 ← (( do
-    if ((← do
-         (IsExternalAbort__1 fault)) : Bool)
+  let vect_offset : Int := (BitVec.toNat 0x0#4)
+  let except ← (( do (ExceptionSyndrome Exception_GCSFail) ) : SailM ExceptionRecord )
+  let except : ExceptionRecord :=
+    { except with syndrome := (BitVec.update except.syndrome 24 (Bit (Zeros (n := 1)))) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 23 20 0b0001#4) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 19 0 (Zeros (n := 20))) }
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  (AArch64_TakeException w__0.EL except preferred_exception_return vect_offset)
+
+
+def GCSSTRTrapException (target_el : (BitVec 2)) : SailM Unit := do
+  let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
+  let vect_offset : Int := (BitVec.toNat 0x0#4)
+  let except ← (( do (ExceptionSyndrome Exception_GCSFail) ) : SailM ExceptionRecord )
+  let except : ExceptionRecord :=
+    { except with syndrome := (BitVec.update except.syndrome 24 (Bit (Zeros (n := 1)))) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 23 20 0b0010#4) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 19 15 (Zeros (n := 5))) }
+  let w__0 ← (( do (ThisInstr ()) ) : SailM (BitVec 32) )
+  let except :=
+    ({ except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 14 10
+        (Sail.BitVec.extractLsb w__0 9 5)) } : ExceptionRecord)
+  let w__1 ← (( do (ThisInstr ()) ) : SailM (BitVec 32) )
+  let except :=
+    ({ except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 9 5
+        (Sail.BitVec.extractLsb w__1 4 0)) } : ExceptionRecord)
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 4 0 (Zeros (n := 5))) }
+  (AArch64_TakeException target_el except preferred_exception_return vect_offset)
+
+
+/-- Type quantifiers: destreg : Int, k_from_epilogue : Bool, k_option_a_name : Bool, sizereg : Int, srcreg
+  : Int, k_wrong_option : Bool -/
+def MismatchedMemCpyException (option_a_name : Bool) (destreg : Int) (srcreg : Int) (sizereg : Int) (wrong_option : Bool) (from_epilogue : Bool) (options_name : (BitVec 4)) : SailM Unit := do
+  let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
+  let vect_offset : Int := (BitVec.toNat 0x0#4)
+  let target_el ← (( do (MismatchedCpySetTargetEL ()) ) : SailM (BitVec 2) )
+  let except ← (( do (ExceptionSyndrome Exception_MemCpyMemSet) ) : SailM ExceptionRecord )
+  let except : ExceptionRecord :=
+    { except with syndrome := (BitVec.update except.syndrome 24 (Bit 0#1)) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (BitVec.update except.syndrome 23 (Bit 0#1)) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 22 19 options_name) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (BitVec.update except.syndrome 18
+        (Bit
+          (if (from_epilogue : Bool)
+          then 1#1
+          else 0#1))) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (BitVec.update except.syndrome 17
+        (Bit
+          (if (wrong_option : Bool)
+          then 1#1
+          else 0#1))) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (BitVec.update except.syndrome 16
+        (Bit
+          (if (option_a_name : Bool)
+          then 1#1
+          else 0#1))) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 14 10
+        (integer_subrange destreg 4 0)) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 9 5
+        (integer_subrange srcreg 4 0)) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 4 0
+        (integer_subrange sizereg 4 0)) }
+  (AArch64_TakeException target_el except preferred_exception_return vect_offset)
+
+
+/-- Type quantifiers: datareg : Int, destreg : Int, k_from_epilogue : Bool, k_is_SETG : Bool, k_option_a_name
+  : Bool, sizereg : Int, k_wrong_option : Bool -/
+def MismatchedMemSetException (option_a_name : Bool) (destreg : Int) (datareg : Int) (sizereg : Int) (wrong_option : Bool) (from_epilogue : Bool) (options_name : (BitVec 2)) (is_SETG : Bool) : SailM Unit := do
+  let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
+  let vect_offset : Int := (BitVec.toNat 0x0#4)
+  let target_el ← (( do (MismatchedCpySetTargetEL ()) ) : SailM (BitVec 2) )
+  let except ← (( do (ExceptionSyndrome Exception_MemCpyMemSet) ) : SailM ExceptionRecord )
+  let except : ExceptionRecord :=
+    { except with syndrome := (BitVec.update except.syndrome 24 (Bit 1#1)) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (BitVec.update except.syndrome 23
+        (Bit
+          (if (is_SETG : Bool)
+          then 1#1
+          else 0#1))) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 20 19 options_name) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (BitVec.update except.syndrome 18
+        (Bit
+          (if (from_epilogue : Bool)
+          then 1#1
+          else 0#1))) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (BitVec.update except.syndrome 17
+        (Bit
+          (if (wrong_option : Bool)
+          then 1#1
+          else 0#1))) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (BitVec.update except.syndrome 16
+        (Bit
+          (if (option_a_name : Bool)
+          then 1#1
+          else 0#1))) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 14 10
+        (integer_subrange destreg 4 0)) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 9 5
+        (integer_subrange datareg 4 0)) }
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 4 0
+        (integer_subrange sizereg 4 0)) }
+  (AArch64_TakeException target_el except preferred_exception_return vect_offset)
+
+
+/-- Type quantifiers: dreg : Int -/
+def TransactionStartTrap (dreg : Int) : SailM Unit := do
+  let targetEL ← (( do (undefined_bitvector_at (← occLabel 1937) 2) ) : SailM (BitVec 2) )
+  let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
+  let vect_offset : Int := (BitVec.toNat 0x0#4)
+  let except ← (( do (ExceptionSyndrome Exception_TSTARTAccessTrap) ) : SailM ExceptionRecord )
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 9 5
+        (integer_subrange dreg 4 0)) }
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let targetEL ← (( do
+    if (((BitVec.toNat w__0.EL) >b (BitVec.toNat EL1)) : Bool)
     then
       (do
-        (AArch64_RouteToSErrorOffset target_el))
+        let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
+        let targetEL := (w__1.EL : (BitVec 2))
+        (pure (targetEL)))
+    else
+      (do
+        let w__4 ← (( do
+          if ((← do
+               (EL2Enabled ())) : Bool)
+          then
+            (do
+              let w__3 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+              (pure ((((_get_HCR_EL2_Type_TGE w__3) == 1#1) : Bool))))
+          else (pure false) ) : SailM Bool )
+        let targetEL : (BitVec 2) :=
+          if (w__4 : Bool)
+          then EL2
+          else EL1
+        (pure (targetEL))) ) : SailM (BitVec 2) )
+  (AArch64_TakeException targetEL except preferred_exception_return vect_offset)
+
+
+def AArch64_CallSecureMonitor (immediate : (BitVec 16)) : SailM Unit := do
+  let w__2 ← (( do
+    if ((← do
+         (HaveEL EL3)) : Bool)
+    then
+      (do
+        let w__1 ← (( do (ELUsingAArch32 EL3) ) : SailM Bool )
+        (pure (((! w__1) : Bool))))
     else (pure false) ) : SailM Bool )
-  let vect_offset : Int :=
-    if (w__16 : Bool)
-    then (BitVec.toNat 0x180#12)
-    else (BitVec.toNat 0x0#4)
-  let vect_offset : Int := vect_offset
+  ArmFull.assert w__2 "sail-inputs/03-v8_base.sail:33577.54-33577.55"
+  let w__3 ← (( do (UsingAArch32 ()) ) : SailM Bool )
+  if (w__3 : Bool)
+  then
+    (do
+      (AArch32_ITAdvance ()))
+  else (pure (()))
+  (SSAdvance ())
+  let preferred_exception_return ← (( do (NextInstrAddr 64) ) : SailM (BitVec 64) )
+  let vect_offset : Int := (BitVec.toNat 0x0#4)
+  let except ← (( do (ExceptionSyndrome Exception_MonitorCall) ) : SailM ExceptionRecord )
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 15 0 immediate) }
+  (AArch64_TakeException EL3 except preferred_exception_return vect_offset)
+
+
+def AArch64_CallHypervisor (immediate : (BitVec 16)) : SailM Unit := do
+  let w__0 ← (( do (HaveEL EL2) ) : SailM Bool )
+  ArmFull.assert w__0 "sail-inputs/03-v8_base.sail:33592.22-33592.23"
+  let w__1 ← (( do (UsingAArch32 ()) ) : SailM Bool )
+  if (w__1 : Bool)
+  then
+    (do
+      (AArch32_ITAdvance ()))
+  else (pure (()))
+  (SSAdvance ())
+  let preferred_exception_return ← (( do (NextInstrAddr 64) ) : SailM (BitVec 64) )
+  let vect_offset : Int := (BitVec.toNat 0x0#4)
+  let except ← (( do (ExceptionSyndrome Exception_HypervisorCall) ) : SailM ExceptionRecord )
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 15 0 immediate) }
+  let w__2 ← (( do readReg PSTATE ) : SailM ProcState )
+  if ((w__2.EL == EL3) : Bool)
+  then
+    (do
+      (AArch64_TakeException EL3 except preferred_exception_return vect_offset))
+  else
+    (do
+      (AArch64_TakeException EL2 except preferred_exception_return vect_offset))
+
+
+def AArch64_CallSupervisor (immediate_in : (BitVec 16)) : SailM Unit := do
+  let immediate : (BitVec 16) := immediate_in
+  let w__0 ← (( do (UsingAArch32 ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      (AArch32_ITAdvance ()))
+  else (pure (()))
+  (SSAdvance ())
+  let route_to_el2 ← (( do
+    if ((← do
+         if ((← do
+              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
+              (pure (((w__1.EL == EL0) : Bool)))) : Bool)
+         then
+           (do
+             (EL2Enabled ()))
+         else (pure false)) : Bool)
+    then
+      (do
+        let w__4 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+        (pure ((((_get_HCR_EL2_Type_TGE w__4) == 1#1) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let preferred_exception_return ← (( do (NextInstrAddr 64) ) : SailM (BitVec 64) )
+  let vect_offset : Int := (BitVec.toNat 0x0#4)
+  let except ← (( do (ExceptionSyndrome Exception_SupervisorCall) ) : SailM ExceptionRecord )
+  let except : ExceptionRecord :=
+    { except with syndrome := (Sail.BitVec.updateSubrange except.syndrome 15 0 immediate) }
+  let w__5 ← (( do readReg PSTATE ) : SailM ProcState )
+  if (((BitVec.toNat w__5.EL) >b (BitVec.toNat EL1)) : Bool)
+  then
+    (do
+      let w__6 ← (( do readReg PSTATE ) : SailM ProcState )
+      (AArch64_TakeException w__6.EL except preferred_exception_return vect_offset))
+  else
+    (do
+      if (route_to_el2 : Bool)
+      then
+        (do
+          (AArch64_TakeException EL2 except preferred_exception_return vect_offset))
+      else
+        (do
+          (AArch64_TakeException EL1 except preferred_exception_return vect_offset)))
+
+
+def AArch64_UndefinedFault (_ : Unit) : SailM Unit := do
+  let route_to_el2 ← (( do
+    if ((← do
+         if ((← do
+              let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+              (pure (((w__0.EL == EL0) : Bool)))) : Bool)
+         then
+           (do
+             (EL2Enabled ()))
+         else (pure false)) : Bool)
+    then
+      (do
+        let w__3 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+        (pure ((((_get_HCR_EL2_Type_TGE w__3) == 1#1) : Bool))))
+    else (pure false) ) : SailM Bool )
+  let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
+  let vect_offset : Int := (BitVec.toNat 0x0#4)
+  let except ← (( do (ExceptionSyndrome Exception_Uncategorized) ) : SailM ExceptionRecord )
+  let w__4 ← (( do readReg PSTATE ) : SailM ProcState )
+  if (((BitVec.toNat w__4.EL) >b (BitVec.toNat EL1)) : Bool)
+  then
+    (do
+      let w__5 ← (( do readReg PSTATE ) : SailM ProcState )
+      (AArch64_TakeException w__5.EL except preferred_exception_return vect_offset))
+  else
+    (do
+      if (route_to_el2 : Bool)
+      then
+        (do
+          (AArch64_TakeException EL2 except preferred_exception_return vect_offset))
+      else
+        (do
+          (AArch64_TakeException EL1 except preferred_exception_return vect_offset)))
+
+
+def AArch64_CheckIllegalState (_ : Unit) : SailM Unit := do
+  let except ← (( do (undefined_ExceptionRecord (.site 2402) ()) ) : SailM ExceptionRecord )
+  let route_to_el2 ← (( do (undefined_bool_at (.site 2403) ()) ) : SailM Bool )
+  let vect_offset ← (( do (undefined_int_at (.site 2404) ()) ) : SailM Int )
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  if ((w__0.IL == 1#1) : Bool)
+  then
+    (do
+      let route_to_el2 ← (( do
+        if ((← do
+             if ((← do
+                  let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
+                  (pure (((w__1.EL == EL0) : Bool)))) : Bool)
+             then
+               (do
+                 (EL2Enabled ()))
+             else (pure false)) : Bool)
+        then
+          (do
+            let w__4 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+            (pure ((((_get_HCR_EL2_Type_TGE w__4) == 1#1) : Bool))))
+        else (pure false) ) : SailM Bool )
+      let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
+      let vect_offset : Int := (BitVec.toNat 0x0#4)
+      let except ← (( do (ExceptionSyndrome Exception_IllegalState) ) : SailM ExceptionRecord )
+      let w__5 ← (( do readReg PSTATE ) : SailM ProcState )
+      if (((BitVec.toNat w__5.EL) >b (BitVec.toNat EL1)) : Bool)
+      then
+        (do
+          let w__6 ← (( do readReg PSTATE ) : SailM ProcState )
+          (AArch64_TakeException w__6.EL except preferred_exception_return vect_offset))
+      else
+        (do
+          if (route_to_el2 : Bool)
+          then
+            (do
+              (AArch64_TakeException EL2 except preferred_exception_return vect_offset))
+          else
+            (do
+              (AArch64_TakeException EL1 except preferred_exception_return vect_offset))))
+  else (pure (()))
+
+
+def LDST64BTrap (target_el : (BitVec 2)) (iss : (BitVec 25)) : SailM Unit := do
+  let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
+  let vect_offset : Int := (BitVec.toNat 0x0#4)
+  let except ← (( do (ExceptionSyndrome Exception_LDST64BTrap) ) : SailM ExceptionRecord )
+  let except : ExceptionRecord := { except with syndrome := iss }
   (AArch64_TakeException target_el except preferred_exception_return vect_offset)
+
+
+/-- Type quantifiers: k_eret_with_pac : Bool, k_pac_uses_key_a : Bool -/
+def AArch64_CheckForERetTrap (eret_with_pac : Bool) (pac_uses_key_a : Bool) : SailM Unit := do
+  let vect_offset ← (( do (undefined_int_at (← occLabel 2408) ()) ) : SailM Int )
+  let route_to_el2 : Bool := false
+  let route_to_el2 ← (( do
+    if ((← do
+         if ((← do
+              let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+              (pure (((w__0.EL == EL1) : Bool)))) : Bool)
+         then
+           (do
+             (EL2Enabled ()))
+         else (pure false)) : Bool)
+    then
+      (do
+        if ((← do
+             if ((← do
+                  (HaveNVExt ())) : Bool)
+             then
+               (do
+                 let w__4 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+                 (pure ((((_get_HCR_EL2_Type_NV w__4) == 1#1) : Bool))))
+             else (pure false)) : Bool)
+        then (pure true)
+        else
+          (do
+            if ((← do
+                 if ((← do
+                      (HaveFGTExt ())) : Bool)
+                 then
+                   (do
+                     if ((← do
+                          let w__7 ← (( do (HaveEL EL3) ) : SailM Bool )
+                          (pure (((! w__7) : Bool)))) : Bool)
+                     then (pure true)
+                     else
+                       (do
+                         let w__8 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+                         (pure ((((_get_SCR_EL3_Type_FGTEn w__8) == 1#1) : Bool)))))
+                 else (pure false)) : Bool)
+            then
+              (do
+                let w__11 ← (( do readReg HFGITR_EL2 ) : SailM (BitVec 64) )
+                (pure ((((_get_HFGITR_EL2_Type_ERET w__11) == 1#1) : Bool))))
+            else (pure false)))
+    else (pure false) ) : SailM Bool )
+  if (route_to_el2 : Bool)
+  then
+    (do
+      let preferred_exception_return ← (( do (ThisInstrAddr 64) ) : SailM (BitVec 64) )
+      let vect_offset : Int := (BitVec.toNat 0x0#4)
+      let except ← (( do (ExceptionSyndrome Exception_ERetTrap) ) : SailM ExceptionRecord )
+      let except : ExceptionRecord :=
+        if ((! eret_with_pac) : Bool)
+        then
+          (let except : ExceptionRecord :=
+            { except with syndrome := (BitVec.update except.syndrome 1 (Bit 0#1)) }
+          { except with syndrome := (BitVec.update except.syndrome 0 (Bit 0#1)) })
+        else
+          (let except : ExceptionRecord :=
+            { except with syndrome := (BitVec.update except.syndrome 1 (Bit 1#1)) }
+          if (pac_uses_key_a : Bool)
+          then { except with syndrome := (BitVec.update except.syndrome 0 (Bit 0#1)) }
+          else { except with syndrome := (BitVec.update except.syndrome 0 (Bit 1#1)) })
+      (AArch64_TakeException EL2 except preferred_exception_return vect_offset))
+  else (pure (()))
 
 
 end ArmFull.Functions

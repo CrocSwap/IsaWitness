@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -104,6 +104,54 @@ open ArchVersion
 open AccessType
 open ATAccess
 
+def _get_PAR_EL1_Type_DirtyBit (v : (BitVec 128)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 15 15)
+
+
+def _get_PMBSR_EL1_Type_MSS (v : (BitVec 64)) : (BitVec 16) :=
+  (Sail.BitVec.extractLsb v 15 0)
+
+
+def _update_PMBSR_EL1_Type_MSS (v : (BitVec 64)) (x : (BitVec 16)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 15 0 x)
+
+
+def _get_PMBSR_EL1_Type_Overlay (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 38 38)
+
+
+def _update_PMBSR_EL1_Type_Overlay (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 38 38 x)
+
+
+def _update_PAR_EL1_Type_Overlay (v : (BitVec 128)) (x : (BitVec 1)) : (BitVec 128) :=
+  (Sail.BitVec.updateSubrange v 14 14 x)
+
+
+def _get_PAR_EL1_Type_Overlay (v : (BitVec 128)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 14 14)
+
+
+def _get_PMBSR_EL1_Type_S (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 17 17)
+
+
+def _update_PMBSR_EL1_Type_S (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 17 17 x)
+
+
+def _update_DBGVCR32_EL2_Type_S (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 2 2 x)
+
+
+def _update_DBGVCR_Type_S (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 2 2 x)
+
+
+def _update_PAR_EL1_Type_S (v : (BitVec 128)) (x : (BitVec 1)) : (BitVec 128) :=
+  (Sail.BitVec.updateSubrange v 9 9 x)
+
+
 def _update_TTBR0_Type_S (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
   (Sail.BitVec.updateSubrange v 1 1 x)
 
@@ -146,7 +194,7 @@ def Hint_Branch (hint : BranchType) : SailM Unit := do
 
 /-- Type quantifiers: x : Int -/
 def FloorPow2 (x : Int) : SailM Nat := do
-  ArmFull.assert (x ≥b 0) "sail-arm/v8_base.sail:6832.17-6832.18"
+  ArmFull.assert (x ≥b 0) "sail-inputs/03-v8_base.sail:6832.17-6832.18"
   let n : Int := 1
   if ((x == 0) : Bool)
   then (pure (0))
@@ -158,8 +206,14 @@ def FloorPow2 (x : Int) : SailM Nat := do
         (pure loop_vars) ) : SailM Int )
       let n : Int := n
       let r : Nat := (Sail.Int.toNatChecked ((2 ^i (n -i 1))))
-      ArmFull.assert (r ≥b 0) "sail-arm/v8_base.sail:6842.17-6842.18"
+      ArmFull.assert (r ≥b 0) "sail-inputs/03-v8_base.sail:6842.17-6842.18"
       (pure (r)))
+
+
+/-- Type quantifiers: vl : Int -/
+def __ArmCertRequireVectorLength (vl : Int) : SailM Int := do
+  ArmFull.assert ((vl == 128) || ((vl == 256) || ((vl == 512) || ((vl == 1024) || (vl == 2048))))) "sail-inputs/03-v8_base.sail:6870.70-6870.71"
+  (pure (vl))
 
 
 def undefined_ZCR_EL1_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
@@ -839,62 +893,6 @@ def _update_EDPRCR_Type_CORENPDRQ (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 3
 
 def _get_DBGPRCR_Type_CORENPDRQ (v : (BitVec 32)) : (BitVec 1) :=
   (Sail.BitVec.extractLsb v 0 0)
-
-
-def _get_EDPRCR_Type_CORENPDRQ (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 0 0)
-
-
-def undefined_DBGPRCR_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def Mk_DBGPRCR_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def DBGPRCR_read (_ : Unit) : SailM (BitVec 32) := do
-  let r ← (( do readReg _DBGPRCR ) : SailM DBGPRCR_Type )
-  let w__0 ← (( do readReg DBGPRCR_EL1 ) : SailM (BitVec 64) )
-  let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__0 0 32)) : (BitVec 32))
-  (pure (r))
-
-
-def CTI_SetEventLevel (id : CrossTriggerIn) (level : Signal) : Unit :=
-  ()
-
-
-def SetInterruptRequestLevel (intid : InterruptID) (level : Signal) : SailM Unit := do
-  let w__1 ← (( do
-    if (((BEq.beq level Signal_High) : Bool) : Bool)
-    then
-      (do
-        let w__0 ← (( do readReg __GIC_Active ) : SailM (Option InterruptID) )
-        (pure (((bne w__0 (some intid)) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1 : Bool)
-  then
-    (do
-      writeReg __GIC_Pending (some intid))
-  else (pure (()))
-
-
-/-- Type quantifiers: k_M : Nat, N : Nat, k_M > N ∧ k_M ≥ 0 ∧ 0 ≤ (N - 1) -/
-def Split (value_name : (BitVec k_M)) (N : Nat) : SailM ((BitVec (k_M - N)) × (BitVec N)) := do
-  ArmFull.assert ((Sail.BitVec.length value_name) >b N) "sail-arm/v8_base.sail:8058.17-8058.18"
-  (pure (((Sail.BitVec.castWidth (Sail.BitVec.extractLsb value_name
-      (Sail.Int.toNatChecked (((Sail.BitVec.length value_name) -i 1))) N)), (Sail.BitVec.castWidth (Sail.BitVec.extractLsb
-      value_name (Sail.Int.toNatChecked ((N -i 1))) 0)))))
-
-
-/-- Type quantifiers: k_round : Bool, shift : Int, value_name : Int -/
-def RShr (value_name : Int) (shift : Int) (round : Bool) : SailM Int := do
-  ArmFull.assert (shift >b 0) "sail-arm/v8_base.sail:8066.20-8066.21"
-  (pure (if (round : Bool)
-    then
-      (Int.shiftr (value_name +i (Int.shiftl 1 (Sail.Int.toNatChecked ((shift -i 1)))))
-        (Sail.Int.toNatChecked (shift)))
-    else (Int.shiftr value_name (Sail.Int.toNatChecked (shift)))))
 
 
 end ArmFull.Functions

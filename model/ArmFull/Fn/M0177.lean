@@ -1,21 +1,25 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0034
-import ArmFull.Fn.M0042
-import ArmFull.Fn.M0043
-import ArmFull.Fn.M0058
-import ArmFull.Fn.M0080
-import ArmFull.Fn.M0092
-import ArmFull.Fn.M0123
-import ArmFull.Fn.M0144
-import ArmFull.Fn.M0146
-import ArmFull.Fn.M0166
-import ArmFull.Fn.M0169
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0034
+public import ArmFull.Fn.M0042
+public import ArmFull.Fn.M0043
+public import ArmFull.Fn.M0058
+public import ArmFull.Fn.M0080
+public import ArmFull.Fn.M0092
+public import ArmFull.Fn.M0124
+public import ArmFull.Fn.M0143
+public import ArmFull.Fn.M0144
+public import ArmFull.Fn.M0145
+public import ArmFull.Fn.M0146
+public import ArmFull.Fn.M0167
+public import ArmFull.Fn.M0170
+public import ArmFull.Fn.M0172 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -251,21 +255,21 @@ def AMEVTYPER1_EL0_SysRegWrite_017c244c296ed80f (el : (BitVec 2)) (op0 : (BitVec
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      let w__3 ← (( do
+      let w__4 ← (( do
         if ((← do
              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-             (pure (((IsHighestEL w__1.EL) : Bool)))) : Bool)
+             (IsHighestEL w__1.EL)) : Bool)
         then
           (do
-            let w__2 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
-            (pure (((! w__2) : Bool))))
+            let w__3 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
+            (pure (((! w__3) : Bool))))
         else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
+      if (w__4 : Bool)
       then
         (do
-          let w__4 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
-          let w__5 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-          writeReg AMEVTYPER1_EL0 (vectorUpdate w__4 5 (Mk_AMEVTYPER1_EL0_Type w__5)))
+          let w__5 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+          let w__6 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+          writeReg AMEVTYPER1_EL0 (vectorUpdate w__5 5 (Mk_AMEVTYPER1_EL0_Type w__6)))
       else sailThrow ((Error_Undefined ())))
 
 
@@ -276,21 +280,21 @@ def AMEVTYPER1_EL0_SysRegWrite_15f530ac1097257c (el : (BitVec 2)) (op0 : (BitVec
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      let w__3 ← (( do
+      let w__4 ← (( do
         if ((← do
              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-             (pure (((IsHighestEL w__1.EL) : Bool)))) : Bool)
+             (IsHighestEL w__1.EL)) : Bool)
         then
           (do
-            let w__2 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
-            (pure (((! w__2) : Bool))))
+            let w__3 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
+            (pure (((! w__3) : Bool))))
         else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
+      if (w__4 : Bool)
       then
         (do
-          let w__4 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
-          let w__5 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-          writeReg AMEVTYPER1_EL0 (vectorUpdate w__4 13 (Mk_AMEVTYPER1_EL0_Type w__5)))
+          let w__5 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+          let w__6 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+          writeReg AMEVTYPER1_EL0 (vectorUpdate w__5 13 (Mk_AMEVTYPER1_EL0_Type w__6)))
       else sailThrow ((Error_Undefined ())))
 
 
@@ -301,21 +305,21 @@ def AMEVTYPER1_EL0_SysRegWrite_3a4a4f972b395f75 (el : (BitVec 2)) (op0 : (BitVec
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      let w__3 ← (( do
+      let w__4 ← (( do
         if ((← do
              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-             (pure (((IsHighestEL w__1.EL) : Bool)))) : Bool)
+             (IsHighestEL w__1.EL)) : Bool)
         then
           (do
-            let w__2 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
-            (pure (((! w__2) : Bool))))
+            let w__3 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
+            (pure (((! w__3) : Bool))))
         else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
+      if (w__4 : Bool)
       then
         (do
-          let w__4 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
-          let w__5 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-          writeReg AMEVTYPER1_EL0 (vectorUpdate w__4 12 (Mk_AMEVTYPER1_EL0_Type w__5)))
+          let w__5 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+          let w__6 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+          writeReg AMEVTYPER1_EL0 (vectorUpdate w__5 12 (Mk_AMEVTYPER1_EL0_Type w__6)))
       else sailThrow ((Error_Undefined ())))
 
 
@@ -326,21 +330,21 @@ def AMEVTYPER1_EL0_SysRegWrite_622d8153064a03a6 (el : (BitVec 2)) (op0 : (BitVec
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      let w__3 ← (( do
+      let w__4 ← (( do
         if ((← do
              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-             (pure (((IsHighestEL w__1.EL) : Bool)))) : Bool)
+             (IsHighestEL w__1.EL)) : Bool)
         then
           (do
-            let w__2 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
-            (pure (((! w__2) : Bool))))
+            let w__3 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
+            (pure (((! w__3) : Bool))))
         else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
+      if (w__4 : Bool)
       then
         (do
-          let w__4 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
-          let w__5 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-          writeReg AMEVTYPER1_EL0 (vectorUpdate w__4 2 (Mk_AMEVTYPER1_EL0_Type w__5)))
+          let w__5 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+          let w__6 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+          writeReg AMEVTYPER1_EL0 (vectorUpdate w__5 2 (Mk_AMEVTYPER1_EL0_Type w__6)))
       else sailThrow ((Error_Undefined ())))
 
 
@@ -351,21 +355,21 @@ def AMEVTYPER1_EL0_SysRegWrite_6269036dfbd59a24 (el : (BitVec 2)) (op0 : (BitVec
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      let w__3 ← (( do
+      let w__4 ← (( do
         if ((← do
              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-             (pure (((IsHighestEL w__1.EL) : Bool)))) : Bool)
+             (IsHighestEL w__1.EL)) : Bool)
         then
           (do
-            let w__2 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
-            (pure (((! w__2) : Bool))))
+            let w__3 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
+            (pure (((! w__3) : Bool))))
         else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
+      if (w__4 : Bool)
       then
         (do
-          let w__4 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
-          let w__5 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-          writeReg AMEVTYPER1_EL0 (vectorUpdate w__4 9 (Mk_AMEVTYPER1_EL0_Type w__5)))
+          let w__5 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+          let w__6 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+          writeReg AMEVTYPER1_EL0 (vectorUpdate w__5 9 (Mk_AMEVTYPER1_EL0_Type w__6)))
       else sailThrow ((Error_Undefined ())))
 
 
@@ -376,21 +380,21 @@ def AMEVTYPER1_EL0_SysRegWrite_7e132038a6af9b7c (el : (BitVec 2)) (op0 : (BitVec
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      let w__3 ← (( do
+      let w__4 ← (( do
         if ((← do
              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-             (pure (((IsHighestEL w__1.EL) : Bool)))) : Bool)
+             (IsHighestEL w__1.EL)) : Bool)
         then
           (do
-            let w__2 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
-            (pure (((! w__2) : Bool))))
+            let w__3 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
+            (pure (((! w__3) : Bool))))
         else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
+      if (w__4 : Bool)
       then
         (do
-          let w__4 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
-          let w__5 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-          writeReg AMEVTYPER1_EL0 (vectorUpdate w__4 8 (Mk_AMEVTYPER1_EL0_Type w__5)))
+          let w__5 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+          let w__6 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+          writeReg AMEVTYPER1_EL0 (vectorUpdate w__5 8 (Mk_AMEVTYPER1_EL0_Type w__6)))
       else sailThrow ((Error_Undefined ())))
 
 
@@ -401,21 +405,21 @@ def AMEVTYPER1_EL0_SysRegWrite_85fbd4e6563d2700 (el : (BitVec 2)) (op0 : (BitVec
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      let w__3 ← (( do
+      let w__4 ← (( do
         if ((← do
              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-             (pure (((IsHighestEL w__1.EL) : Bool)))) : Bool)
+             (IsHighestEL w__1.EL)) : Bool)
         then
           (do
-            let w__2 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
-            (pure (((! w__2) : Bool))))
+            let w__3 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
+            (pure (((! w__3) : Bool))))
         else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
+      if (w__4 : Bool)
       then
         (do
-          let w__4 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
-          let w__5 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-          writeReg AMEVTYPER1_EL0 (vectorUpdate w__4 15 (Mk_AMEVTYPER1_EL0_Type w__5)))
+          let w__5 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+          let w__6 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+          writeReg AMEVTYPER1_EL0 (vectorUpdate w__5 15 (Mk_AMEVTYPER1_EL0_Type w__6)))
       else sailThrow ((Error_Undefined ())))
 
 
@@ -426,21 +430,21 @@ def AMEVTYPER1_EL0_SysRegWrite_8b9bd86620491fc7 (el : (BitVec 2)) (op0 : (BitVec
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      let w__3 ← (( do
+      let w__4 ← (( do
         if ((← do
              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-             (pure (((IsHighestEL w__1.EL) : Bool)))) : Bool)
+             (IsHighestEL w__1.EL)) : Bool)
         then
           (do
-            let w__2 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
-            (pure (((! w__2) : Bool))))
+            let w__3 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
+            (pure (((! w__3) : Bool))))
         else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
+      if (w__4 : Bool)
       then
         (do
-          let w__4 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
-          let w__5 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-          writeReg AMEVTYPER1_EL0 (vectorUpdate w__4 11 (Mk_AMEVTYPER1_EL0_Type w__5)))
+          let w__5 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+          let w__6 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+          writeReg AMEVTYPER1_EL0 (vectorUpdate w__5 11 (Mk_AMEVTYPER1_EL0_Type w__6)))
       else sailThrow ((Error_Undefined ())))
 
 
@@ -451,21 +455,21 @@ def AMEVTYPER1_EL0_SysRegWrite_a9e61442f4e1c8cd (el : (BitVec 2)) (op0 : (BitVec
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      let w__3 ← (( do
+      let w__4 ← (( do
         if ((← do
              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-             (pure (((IsHighestEL w__1.EL) : Bool)))) : Bool)
+             (IsHighestEL w__1.EL)) : Bool)
         then
           (do
-            let w__2 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
-            (pure (((! w__2) : Bool))))
+            let w__3 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
+            (pure (((! w__3) : Bool))))
         else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
+      if (w__4 : Bool)
       then
         (do
-          let w__4 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
-          let w__5 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-          writeReg AMEVTYPER1_EL0 (vectorUpdate w__4 6 (Mk_AMEVTYPER1_EL0_Type w__5)))
+          let w__5 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+          let w__6 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+          writeReg AMEVTYPER1_EL0 (vectorUpdate w__5 6 (Mk_AMEVTYPER1_EL0_Type w__6)))
       else sailThrow ((Error_Undefined ())))
 
 
@@ -476,21 +480,21 @@ def AMEVTYPER1_EL0_SysRegWrite_bc02f6fe6d8b784f (el : (BitVec 2)) (op0 : (BitVec
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      let w__3 ← (( do
+      let w__4 ← (( do
         if ((← do
              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-             (pure (((IsHighestEL w__1.EL) : Bool)))) : Bool)
+             (IsHighestEL w__1.EL)) : Bool)
         then
           (do
-            let w__2 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
-            (pure (((! w__2) : Bool))))
+            let w__3 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
+            (pure (((! w__3) : Bool))))
         else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
+      if (w__4 : Bool)
       then
         (do
-          let w__4 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
-          let w__5 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-          writeReg AMEVTYPER1_EL0 (vectorUpdate w__4 7 (Mk_AMEVTYPER1_EL0_Type w__5)))
+          let w__5 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+          let w__6 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+          writeReg AMEVTYPER1_EL0 (vectorUpdate w__5 7 (Mk_AMEVTYPER1_EL0_Type w__6)))
       else sailThrow ((Error_Undefined ())))
 
 
@@ -501,21 +505,21 @@ def AMEVTYPER1_EL0_SysRegWrite_be5c5b889ae5d0cb (el : (BitVec 2)) (op0 : (BitVec
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      let w__3 ← (( do
+      let w__4 ← (( do
         if ((← do
              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-             (pure (((IsHighestEL w__1.EL) : Bool)))) : Bool)
+             (IsHighestEL w__1.EL)) : Bool)
         then
           (do
-            let w__2 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
-            (pure (((! w__2) : Bool))))
+            let w__3 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
+            (pure (((! w__3) : Bool))))
         else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
+      if (w__4 : Bool)
       then
         (do
-          let w__4 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
-          let w__5 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-          writeReg AMEVTYPER1_EL0 (vectorUpdate w__4 1 (Mk_AMEVTYPER1_EL0_Type w__5)))
+          let w__5 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+          let w__6 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+          writeReg AMEVTYPER1_EL0 (vectorUpdate w__5 1 (Mk_AMEVTYPER1_EL0_Type w__6)))
       else sailThrow ((Error_Undefined ())))
 
 
@@ -526,21 +530,21 @@ def AMEVTYPER1_EL0_SysRegWrite_c43b886db277fa04 (el : (BitVec 2)) (op0 : (BitVec
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      let w__3 ← (( do
+      let w__4 ← (( do
         if ((← do
              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-             (pure (((IsHighestEL w__1.EL) : Bool)))) : Bool)
+             (IsHighestEL w__1.EL)) : Bool)
         then
           (do
-            let w__2 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
-            (pure (((! w__2) : Bool))))
+            let w__3 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
+            (pure (((! w__3) : Bool))))
         else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
+      if (w__4 : Bool)
       then
         (do
-          let w__4 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
-          let w__5 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-          writeReg AMEVTYPER1_EL0 (vectorUpdate w__4 0 (Mk_AMEVTYPER1_EL0_Type w__5)))
+          let w__5 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+          let w__6 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+          writeReg AMEVTYPER1_EL0 (vectorUpdate w__5 0 (Mk_AMEVTYPER1_EL0_Type w__6)))
       else sailThrow ((Error_Undefined ())))
 
 
@@ -551,21 +555,21 @@ def AMEVTYPER1_EL0_SysRegWrite_e549f9ca48c70852 (el : (BitVec 2)) (op0 : (BitVec
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      let w__3 ← (( do
+      let w__4 ← (( do
         if ((← do
              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-             (pure (((IsHighestEL w__1.EL) : Bool)))) : Bool)
+             (IsHighestEL w__1.EL)) : Bool)
         then
           (do
-            let w__2 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
-            (pure (((! w__2) : Bool))))
+            let w__3 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
+            (pure (((! w__3) : Bool))))
         else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
+      if (w__4 : Bool)
       then
         (do
-          let w__4 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
-          let w__5 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-          writeReg AMEVTYPER1_EL0 (vectorUpdate w__4 14 (Mk_AMEVTYPER1_EL0_Type w__5)))
+          let w__5 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+          let w__6 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+          writeReg AMEVTYPER1_EL0 (vectorUpdate w__5 14 (Mk_AMEVTYPER1_EL0_Type w__6)))
       else sailThrow ((Error_Undefined ())))
 
 
@@ -576,21 +580,21 @@ def AMEVTYPER1_EL0_SysRegWrite_ed2615d4120abbd7 (el : (BitVec 2)) (op0 : (BitVec
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      let w__3 ← (( do
+      let w__4 ← (( do
         if ((← do
              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-             (pure (((IsHighestEL w__1.EL) : Bool)))) : Bool)
+             (IsHighestEL w__1.EL)) : Bool)
         then
           (do
-            let w__2 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
-            (pure (((! w__2) : Bool))))
+            let w__3 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
+            (pure (((! w__3) : Bool))))
         else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
+      if (w__4 : Bool)
       then
         (do
-          let w__4 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
-          let w__5 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-          writeReg AMEVTYPER1_EL0 (vectorUpdate w__4 3 (Mk_AMEVTYPER1_EL0_Type w__5)))
+          let w__5 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+          let w__6 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+          writeReg AMEVTYPER1_EL0 (vectorUpdate w__5 3 (Mk_AMEVTYPER1_EL0_Type w__6)))
       else sailThrow ((Error_Undefined ())))
 
 
@@ -601,21 +605,21 @@ def AMEVTYPER1_EL0_SysRegWrite_f55a7574a9b217fe (el : (BitVec 2)) (op0 : (BitVec
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      let w__3 ← (( do
+      let w__4 ← (( do
         if ((← do
              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-             (pure (((IsHighestEL w__1.EL) : Bool)))) : Bool)
+             (IsHighestEL w__1.EL)) : Bool)
         then
           (do
-            let w__2 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
-            (pure (((! w__2) : Bool))))
+            let w__3 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
+            (pure (((! w__3) : Bool))))
         else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
+      if (w__4 : Bool)
       then
         (do
-          let w__4 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
-          let w__5 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-          writeReg AMEVTYPER1_EL0 (vectorUpdate w__4 4 (Mk_AMEVTYPER1_EL0_Type w__5)))
+          let w__5 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+          let w__6 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+          writeReg AMEVTYPER1_EL0 (vectorUpdate w__5 4 (Mk_AMEVTYPER1_EL0_Type w__6)))
       else sailThrow ((Error_Undefined ())))
 
 
@@ -626,21 +630,21 @@ def AMEVTYPER1_EL0_SysRegWrite_f744e58350c3c492 (el : (BitVec 2)) (op0 : (BitVec
   then sailThrow ((Error_Undefined ()))
   else
     (do
-      let w__3 ← (( do
+      let w__4 ← (( do
         if ((← do
              let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
-             (pure (((IsHighestEL w__1.EL) : Bool)))) : Bool)
+             (IsHighestEL w__1.EL)) : Bool)
         then
           (do
-            let w__2 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
-            (pure (((! w__2) : Bool))))
+            let w__3 ← (( do (__IMPDEF_boolean "AMEVCNTR1_EL0[m] is fixed") ) : SailM Bool )
+            (pure (((! w__3) : Bool))))
         else (pure false) ) : SailM Bool )
-      if (w__3 : Bool)
+      if (w__4 : Bool)
       then
         (do
-          let w__4 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
-          let w__5 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
-          writeReg AMEVTYPER1_EL0 (vectorUpdate w__4 10 (Mk_AMEVTYPER1_EL0_Type w__5)))
+          let w__5 ← (( do readReg AMEVTYPER1_EL0 ) : SailM (Vector (BitVec 64) 16) )
+          let w__6 ← (( do (X_read t 64) ) : SailM (BitVec 64) )
+          writeReg AMEVTYPER1_EL0 (vectorUpdate w__5 10 (Mk_AMEVTYPER1_EL0_Type w__6)))
       else sailThrow ((Error_Undefined ())))
 
 
@@ -690,73 +694,62 @@ def JOSCR_SysRegWrite32_88e20b8662c98b9c (el : (BitVec 2)) (coproc : (BitVec 4))
           else ()))))
 
 
-def decode_add_addsub_shift_aarch64_instrs_integer_arithmetic_add_sub_shiftedreg (Rd : (BitVec 5)) (Rn : (BitVec 5)) (imm6 : (BitVec 6)) (Rm : (BitVec 5)) (shift : (BitVec 2)) (S : (BitVec 1)) (op : (BitVec 1)) (sf : (BitVec 1)) : SailM Unit := do
-  let d : Int := (BitVec.toNat Rd)
-  let n : Int := (BitVec.toNat Rn)
-  let m : Int := (BitVec.toNat Rm)
-  let datasize : Int :=
-    if ((sf == 1#1) : Bool)
-    then 64
-    else 32
-  let sub_op : Bool := (op == 1#1)
-  let setflags : Bool := (S == 1#1)
-  if ((shift == 0b11#2) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_aarch32_instrs_SB_T1enc_A_txt (_ : Unit) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let w__1 ← (( do (InITBlock ()) ) : SailM Bool )
+      if (w__1 : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_SB_Op_A_txt ()))
   else (pure (()))
-  if (((sf == 0#1) && ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access imm6 5)])) == 1#1)) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else (pure (()))
-  let shift_type ← (( do (DecodeShift shift) ) : SailM ShiftType )
-  let shift_amount : Int := (BitVec.toNat imm6)
-  (execute_aarch64_instrs_integer_arithmetic_add_sub_shiftedreg (Sail.Int.toNatChecked (d))
-    (Sail.Int.toNatChecked (datasize)) (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))
-    setflags (Sail.Int.toNatChecked (shift_amount)) shift_type sub_op)
 
 
-def decode_adds_addsub_shift_aarch64_instrs_integer_arithmetic_add_sub_shiftedreg (Rd : (BitVec 5)) (Rn : (BitVec 5)) (imm6 : (BitVec 6)) (Rm : (BitVec 5)) (shift : (BitVec 2)) (S : (BitVec 1)) (op : (BitVec 1)) (sf : (BitVec 1)) : SailM Unit := do
-  let d : Int := (BitVec.toNat Rd)
-  let n : Int := (BitVec.toNat Rn)
-  let m : Int := (BitVec.toNat Rm)
-  let datasize : Int :=
-    if ((sf == 1#1) : Bool)
-    then 64
-    else 32
-  let sub_op : Bool := (op == 1#1)
-  let setflags : Bool := (S == 1#1)
-  if ((shift == 0b11#2) : Bool)
+def decode_aarch32_instrs_SETPAN_T1enc_A_txt (imm1 : (BitVec 1)) : SailM Unit := do
+  let w__0 ← (( do (InITBlock ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then sailThrow ((Error_Unpredictable ()))
+  else (pure (()))
+  let w__1 ← (( do (HavePANExt ()) ) : SailM Bool )
+  if ((! w__1) : Bool)
   then sailThrow ((Error_Undefined ()))
   else (pure (()))
-  if (((sf == 0#1) && ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access imm6 5)])) == 1#1)) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else (pure (()))
-  let shift_type ← (( do (DecodeShift shift) ) : SailM ShiftType )
-  let shift_amount : Int := (BitVec.toNat imm6)
-  (execute_aarch64_instrs_integer_arithmetic_add_sub_shiftedreg (Sail.Int.toNatChecked (d))
-    (Sail.Int.toNatChecked (datasize)) (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))
-    setflags (Sail.Int.toNatChecked (shift_amount)) shift_type sub_op)
+  let value_name : (BitVec 1) := imm1
+  (execute_aarch32_instrs_SETPAN_Op_A_txt value_name)
 
 
-def decode_sub_addsub_shift_aarch64_instrs_integer_arithmetic_add_sub_shiftedreg (Rd : (BitVec 5)) (Rn : (BitVec 5)) (imm6 : (BitVec 6)) (Rm : (BitVec 5)) (shift : (BitVec 2)) (S : (BitVec 1)) (op : (BitVec 1)) (sf : (BitVec 1)) : SailM Unit := do
-  let d : Int := (BitVec.toNat Rd)
-  let n : Int := (BitVec.toNat Rn)
-  let m : Int := (BitVec.toNat Rm)
-  let datasize : Int :=
-    if ((sf == 1#1) : Bool)
-    then 64
-    else 32
-  let sub_op : Bool := (op == 1#1)
-  let setflags : Bool := (S == 1#1)
-  if ((shift == 0b11#2) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_aarch32_instrs_TSB_T1enc_A_txt (_ : Unit) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let w__1 ← (( do (HaveSelfHostedTrace ()) ) : SailM Bool )
+      if ((! w__1) : Bool)
+      then
+        (do
+          (EndOfInstruction ()))
+      else (pure (()))
+      let w__2 ← (( do (InITBlock ()) ) : SailM Bool )
+      if (w__2 : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (pure ((execute_aarch32_instrs_TSB_Op_A_txt ()))))
   else (pure (()))
-  if (((sf == 0#1) && ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access imm6 5)])) == 1#1)) : Bool)
-  then sailThrow ((Error_Undefined ()))
+
+
+def decode_aarch32_instrs_CSDB_T1enc_A_txt (_ : Unit) : SailM Unit := do
+  let w__0 ← (( do (ConditionPassed ()) ) : SailM Bool )
+  if (w__0 : Bool)
+  then
+    (do
+      let w__1 ← (( do (InITBlock ()) ) : SailM Bool )
+      if (w__1 : Bool)
+      then sailThrow ((Error_Unpredictable ()))
+      else (pure (()))
+      (execute_aarch32_instrs_CSDB_Op_A_txt ()))
   else (pure (()))
-  let shift_type ← (( do (DecodeShift shift) ) : SailM ShiftType )
-  let shift_amount : Int := (BitVec.toNat imm6)
-  (execute_aarch64_instrs_integer_arithmetic_add_sub_shiftedreg (Sail.Int.toNatChecked (d))
-    (Sail.Int.toNatChecked (datasize)) (Sail.Int.toNatChecked (m)) (Sail.Int.toNatChecked (n))
-    setflags (Sail.Int.toNatChecked (shift_amount)) shift_type sub_op)
 
 
 end ArmFull.Functions

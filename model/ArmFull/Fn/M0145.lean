@@ -1,24 +1,18 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0015
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0023
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0045
-import ArmFull.Fn.M0046
-import ArmFull.Fn.M0047
-import ArmFull.Fn.M0087
-import ArmFull.Fn.M0092
-import ArmFull.Fn.M0097
-import ArmFull.Fn.M0100
-import ArmFull.Fn.M0113
-import ArmFull.Fn.M0114
-import ArmFull.Fn.M0115
-import ArmFull.Fn.M0116
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0015
+public import ArmFull.Fn.M0046
+public import ArmFull.Fn.M0047
+public import ArmFull.Fn.M0087
+public import ArmFull.Fn.M0092
+public import ArmFull.Fn.M0097
+public import ArmFull.Fn.M0114
+public import ArmFull.Fn.M0115
+public import ArmFull.Fn.M0116 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -119,51 +113,6 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
-
-def EL3SDDUndef (_ : Unit) : SailM Bool := do
-  if ((← do
-       (Halted ())) : Bool)
-  then
-    (do
-      let w__1 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-      (pure ((((_get_EDSCR_Type_SDD w__1) == 1#1) : Bool))))
-  else (pure false)
-
-
-def HaveFeatHCX (_ : Unit) : SailM Bool := do
-  (IsFeatureImplemented FEAT_HCX)
-
-
-def HaveMTE4Ext (_ : Unit) : SailM Bool := do
-  (IsFeatureImplemented FEAT_MTE4)
-
-
-def MPAM1_EL1_read (_ : Unit) : SailM (BitVec 64) := do
-  let r ← (( do readReg _MPAM1_EL1 ) : SailM MPAM1_EL1_Type )
-  if ((HaveEL EL3) : Bool)
-  then
-    (do
-      let w__0 ← (( do (MPAM3_EL3_read ()) ) : SailM (BitVec 64) )
-      let r := ((BitVec.update r 63 (Bit (BitVec.slice w__0 63 1))) : (BitVec 64))
-      (pure (r)))
-  else
-    (do
-      let w__1 ← (( do readReg MPAM2_EL2 ) : SailM (BitVec 64) )
-      let r := ((BitVec.update r 63 (Bit (BitVec.slice w__1 63 1))) : (BitVec 64))
-      (pure (r)))
-
-
-def DefaultMPAMinfo (partidspace : PARTIDspaceType) : SailM MPAMinfo := do
-  let DefaultInfo ← (( do (undefined_MPAMinfo (← occLabel 746) ()) ) : SailM MPAMinfo )
-  let DefaultInfo : MPAMinfo := { DefaultInfo with mpam_sp := partidspace }
-  let DefaultInfo : MPAMinfo := { DefaultInfo with partid := DefaultPARTID }
-  let DefaultInfo : MPAMinfo := { DefaultInfo with pmg := DefaultPMG }
-  (pure (DefaultInfo))
-
-
-def HaveMPAMv0p1Ext (_ : Unit) : SailM Bool := do
-  (IsFeatureImplemented FEAT_MPAMv0p1)
-
 
 def HaveMPAMv1p1Ext (_ : Unit) : SailM Bool := do
   (IsFeatureImplemented FEAT_MPAMv1p1)
@@ -289,7 +238,7 @@ def SHA256hash (x_in : (BitVec 128)) (y_in : (BitVec 128)) (w : (BitVec 128)) (p
 def UnsignedRecipEstimate (operand : (BitVec k_N)) : SailM (BitVec k_N) := do
   let estimate ← (( do (undefined_int_at (← occLabel 812) ()) ) : SailM Int )
   let increasedprecision_name ← (( do (undefined_bool_at (← occLabel 813) ()) ) : SailM Bool )
-  ArmFull.assert ((Sail.BitVec.length operand) == 32) "sail-arm/v8_base.sail:13084.19-13084.20"
+  ArmFull.assert ((Sail.BitVec.length operand) == 32) "sail-inputs/03-v8_base.sail:13097.19-13097.20"
   let result ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 814)
       (Sail.BitVec.length operand))) ) : SailM (BitVec k_N) )
@@ -319,7 +268,7 @@ def RecipSqrtEstimate (a_in : Int) (increasedprecision_name : Bool) : SailM Int 
     if ((! increasedprecision_name) : Bool)
     then
       (do
-        ArmFull.assert ((128 ≤b a) && (a <b 512)) "sail-arm/v8_base.sail:13104.33-13104.34"
+        ArmFull.assert ((128 ≤b a) && (a <b 512)) "sail-inputs/03-v8_base.sail:13117.33-13117.34"
         let a : Int :=
           if ((a <b 256) : Bool)
           then ((a *i 2) +i 1)
@@ -334,11 +283,11 @@ def RecipSqrtEstimate (a_in : Int) (increasedprecision_name : Bool) : SailM Int 
           (pure loop_vars) ) : SailM Int )
         let b : Int := b
         let r : Int := (fdiv_int (b +i 1) 2)
-        ArmFull.assert ((256 ≤b r) && (r <b 512)) "sail-arm/v8_base.sail:13118.33-13118.34"
+        ArmFull.assert ((256 ≤b r) && (r <b 512)) "sail-inputs/03-v8_base.sail:13131.33-13131.34"
         (pure (r)))
     else
       (do
-        ArmFull.assert ((1024 ≤b a) && (a <b 4096)) "sail-arm/v8_base.sail:13120.35-13120.36"
+        ArmFull.assert ((1024 ≤b a) && (a <b 4096)) "sail-inputs/03-v8_base.sail:13133.35-13133.36"
         let real_val ← (( do (undefined_real_at (← occLabel 817) ()) ) : SailM real )
         let real_val : real :=
           if ((a <b 2048) : Bool)
@@ -371,7 +320,7 @@ def RecipSqrtEstimate (a_in : Int) (increasedprecision_name : Bool) : SailM Int 
           else int_val
         let int_val : Int := int_val
         let r : Int := int_val
-        ArmFull.assert ((4096 ≤b r) && (r <b 8192)) "sail-arm/v8_base.sail:13147.35-13147.36"
+        ArmFull.assert ((4096 ≤b r) && (r <b 8192)) "sail-inputs/03-v8_base.sail:13160.35-13160.36"
         (pure (r))) ) : SailM Int )
   let r : Int := r
   (pure (r))
@@ -387,11 +336,11 @@ def SatQ (i : Int) (N : Nat) (is_unsigned : Bool) : SailM ((BitVec N) × Bool) :
     if (is_unsigned : Bool)
     then
       (do
-        ArmFull.assert (0 ≤b (N -i 1)) "sail-arm/v8_base.sail:13218.38-13218.39"
+        ArmFull.assert (0 ≤b (N -i 1)) "sail-inputs/03-v8_base.sail:13231.38-13231.39"
         ((fun (x0, x1) => ((Sail.BitVec.castWidth x0), x1)) <$> (UnsignedSatQ i N)))
     else
       (do
-        ArmFull.assert (0 ≤b (N -i 1)) "sail-arm/v8_base.sail:13221.38-13221.39"
+        ArmFull.assert (0 ≤b (N -i 1)) "sail-inputs/03-v8_base.sail:13234.38-13234.39"
         ((fun (x0, x1) => ((Sail.BitVec.castWidth x0), x1)) <$> (SignedSatQ i N))) ) : SailM
     ((BitVec N) × Bool) )
   let (tup__0, tup__1) := (w__2 : ((BitVec N) × Bool))
@@ -557,7 +506,7 @@ def HaveFeatSCTLR2 (_ : Unit) : SailM Bool := do
 
 
 def EncodeGPCSC (gpcf : GPCFRecord) : SailM (BitVec 6) := do
-  ArmFull.assert ((gpcf.level == 0) || (gpcf.level == 1)) "sail-arm/v8_base.sail:15103.44-15103.45"
+  ArmFull.assert ((gpcf.level == 0) || (gpcf.level == 1)) "sail-inputs/03-v8_base.sail:15116.44-15116.45"
   match gpcf.gpf with
   | .GPCF_AddressSize =>
     (pure ((0b00000#5 +++ (BitVec.setWidth 1 (BitVec.join1 [(integer_access gpcf.level 0)])))))
@@ -592,7 +541,7 @@ def GPCNoFault (_ : Unit) : SailM GPCFRecord := do
 
 /-- Type quantifiers: N : Nat, List.elem N [16, 32, 64] -/
 def FPInfinity (sign : (BitVec 1)) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-arm/v8_base.sail:15378.38-15378.39"
+  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-inputs/03-v8_base.sail:15391.38-15391.39"
   let E : Nat :=
     if ((N == 16) : Bool)
     then 5
@@ -609,7 +558,7 @@ def FPInfinity (sign : (BitVec 1)) (N : Nat) : SailM (BitVec N) := do
 
 /-- Type quantifiers: N : Nat, List.elem N [16, 32, 64] -/
 def FPMaxNormal (sign : (BitVec 1)) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-arm/v8_base.sail:15389.38-15389.39"
+  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-inputs/03-v8_base.sail:15402.38-15402.39"
   let E : Nat :=
     if ((N == 16) : Bool)
     then 5
@@ -644,8 +593,8 @@ def FPRoundingMode (fpcr : (BitVec 64)) : SailM FPRounding := do
 /-- Type quantifiers: M : Nat, k_N : Nat, List.elem k_N [16, 32, 64] ∧ List.elem M [16, 32, 64] -/
 def FPConvertNaN (op : (BitVec k_N)) (M : Nat) : SailM (BitVec M) := do
   ArmFull.assert (((Sail.BitVec.length op) == 16) || (((Sail.BitVec.length op) == 32) || ((Sail.BitVec.length
-          op) == 64))) "sail-arm/v8_base.sail:16429.41-16429.42"
-  ArmFull.assert ((M == 16) || ((M == 32) || (M == 64))) "sail-arm/v8_base.sail:16430.38-16430.39"
+          op) == 64))) "sail-inputs/03-v8_base.sail:16442.41-16442.42"
+  ArmFull.assert ((M == 16) || ((M == 32) || (M == 64))) "sail-inputs/03-v8_base.sail:16443.38-16443.39"
   let result ← (( do
     ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 963)
       (Sail.Int.toNatChecked (M)))) ) : SailM (BitVec M) )
@@ -675,7 +624,7 @@ def FPConvertNaN (op : (BitVec k_N)) (M : Nat) : SailM (BitVec M) := do
 
 /-- Type quantifiers: N : Nat, List.elem N [16, 32, 64] -/
 def FPOnePointFive (sign : (BitVec 1)) (N : Nat) : SailM (BitVec N) := do
-  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-arm/v8_base.sail:17244.38-17244.39"
+  ArmFull.assert ((N == 16) || ((N == 32) || (N == 64))) "sail-inputs/03-v8_base.sail:17257.38-17257.39"
   let E : Nat :=
     if ((N == 16) : Bool)
     then 5
@@ -791,6 +740,58 @@ def Havev8p4Debug (_ : Unit) : SailM Bool := do
 
 def HaveStage2MemAttrControl (_ : Unit) : SailM Bool := do
   (IsFeatureImplemented FEAT_S2FWB)
+
+
+def HaveIDSExt (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_IDST)
+
+
+def HaveFrintExt (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_FRINTTS)
+
+
+def HaveE0PDExt (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_E0PD)
+
+
+def HaveGTGExt (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_GTG)
+
+
+def HaveSBExt (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_SB)
+
+
+def HaveMTEAsyncExt (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_MTE4)
+
+
+def HaveMTEPermExt (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_MTE_PERM)
+
+
+def HaveDGHExt (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_DGH)
+
+
+def HaveBF16Ext (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_BF16)
+
+
+def HaveEBF16 (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_EBF16)
+
+
+def HaveAArch32BF16Ext (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_AA32BF16)
+
+
+def HaveFGTExt (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_FGT)
+
+
+def HaveInt8MatMulExt (_ : Unit) : SailM Bool := do
+  (IsFeatureImplemented FEAT_I8MM)
 
 
 end ArmFull.Functions

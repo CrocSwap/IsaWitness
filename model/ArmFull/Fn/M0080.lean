@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,98 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _update_ID_AA64SMFR0_EL1_Type_F16F16 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 42 42 x)
+
+
+def _get_ID_AA64SMFR0_EL1_Type_F16F32 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 35 35)
+
+
+def _update_ID_AA64SMFR0_EL1_Type_F16F32 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 35 35 x)
+
+
+def _get_ID_AA64SMFR0_EL1_Type_F32F32 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 32 32)
+
+
+def _update_ID_AA64SMFR0_EL1_Type_F32F32 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 32 32 x)
+
+
+def _get_ID_AA64SMFR0_EL1_Type_F64F64 (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 48 48)
+
+
+def _update_ID_AA64SMFR0_EL1_Type_F64F64 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 48 48 x)
+
+
+def _get_ID_AA64SMFR0_EL1_Type_I16I32 (v : (BitVec 64)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 47 44)
+
+
+def _update_ID_AA64SMFR0_EL1_Type_I16I32 (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 47 44 x)
+
+
+def _get_ID_AA64SMFR0_EL1_Type_I16I64 (v : (BitVec 64)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 55 52)
+
+
+def _update_ID_AA64SMFR0_EL1_Type_I16I64 (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 55 52 x)
+
+
+def _get_ID_AA64SMFR0_EL1_Type_I8I32 (v : (BitVec 64)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 39 36)
+
+
+def _update_ID_AA64SMFR0_EL1_Type_I8I32 (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 39 36 x)
+
+
+def _get_ID_AA64SMFR0_EL1_Type_SMEver (v : (BitVec 64)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 59 56)
+
+
+def _update_ID_AA64SMFR0_EL1_Type_SMEver (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 59 56 x)
+
+
+def Mk_GMID_EL1_Type (v : (BitVec 64)) : (BitVec 64) :=
+  v
+
+
+def undefined_AMEVCNTR1_EL0_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
+  (undefined_bitvector_at (ℓ.child 0) 64)
+
+
+def Mk_AMEVCNTR1_EL0_Type (v : (BitVec 64)) : (BitVec 64) :=
+  v
+
+
+def _get_AMEVCNTR1_EL0_Type_ACNT (v : (BitVec 64)) : (BitVec 64) :=
+  (Sail.BitVec.extractLsb v 63 0)
+
+
+def _update_AMEVCNTR1_EL0_Type_ACNT (v : (BitVec 64)) (x : (BitVec 64)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 63 0 x)
+
+
+def _update_AMEVCNTR0_EL0_Type_ACNT (v : (BitVec 64)) (x : (BitVec 64)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 63 0 x)
+
+
+def _update_AMEVCNTR0_Type_ACNT (v : (BitVec 64)) (x : (BitVec 64)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 63 0 x)
+
+
+def _update_AMEVCNTR1_Type_ACNT (v : (BitVec 64)) (x : (BitVec 64)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 63 0 x)
+
 
 def _get_AMEVCNTR0_EL0_Type_ACNT (v : (BitVec 64)) : (BitVec 64) :=
   (Sail.BitVec.extractLsb v 63 0)
@@ -804,98 +896,6 @@ def _get_GITS_CBASER_Type_Size (v : (BitVec 64)) : (BitVec 8) :=
 
 def Mk_EDPFR_Type (v : (BitVec 64)) : (BitVec 64) :=
   v
-
-
-def Mk_GICR_CLRLPIR_Type (v : (BitVec 64)) : (BitVec 64) :=
-  v
-
-
-def Mk_GICR_INVALLR_Type (v : (BitVec 64)) : (BitVec 64) :=
-  v
-
-
-def _get_GICR_INVALLR_Type_vPEID (v : (BitVec 64)) : (BitVec 16) :=
-  (Sail.BitVec.extractLsb v 47 32)
-
-
-def _update_GICR_INVALLR_Type_vPEID (v : (BitVec 64)) (x : (BitVec 16)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 47 32 x)
-
-
-def _update_GICR_INVLPIR_Type_vPEID (v : (BitVec 64)) (x : (BitVec 16)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 47 32 x)
-
-
-def _update_GICR_VPENDBASER_Type_vPEID (v : (BitVec 64)) (x : (BitVec 16)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 15 0 x)
-
-
-def _update_GICR_VSGIR_Type_vPEID (v : (BitVec 32)) (x : (BitVec 16)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 15 0 x)
-
-
-def _update_GITS_SGIR_Type_vPEID (v : (BitVec 64)) (x : (BitVec 16)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 47 32 x)
-
-
-def _get_GICR_INVLPIR_Type_vPEID (v : (BitVec 64)) : (BitVec 16) :=
-  (Sail.BitVec.extractLsb v 47 32)
-
-
-def _get_GICR_VPENDBASER_Type_vPEID (v : (BitVec 64)) : (BitVec 16) :=
-  (Sail.BitVec.extractLsb v 15 0)
-
-
-def _get_GICR_VSGIR_Type_vPEID (v : (BitVec 32)) : (BitVec 16) :=
-  (Sail.BitVec.extractLsb v 15 0)
-
-
-def _get_GITS_SGIR_Type_vPEID (v : (BitVec 64)) : (BitVec 16) :=
-  (Sail.BitVec.extractLsb v 47 32)
-
-
-def Mk_EDHSR_Type (v : (BitVec 64)) : (BitVec 64) :=
-  v
-
-
-def _get_EDHSR_Type_FnP (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 15 15)
-
-
-def _update_EDHSR_Type_FnP (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 15 15 x)
-
-
-def _get_EDHSR_Type_VNCR (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 13 13)
-
-
-def _update_EDHSR_Type_VNCR (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 13 13 x)
-
-
-def _get_EDHSR_Type_WPF (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 16 16)
-
-
-def _update_EDHSR_Type_WPF (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 16 16 x)
-
-
-def _get_EDHSR_Type_WPT (v : (BitVec 64)) : (BitVec 6) :=
-  (Sail.BitVec.extractLsb v 23 18)
-
-
-def _update_EDHSR_Type_WPT (v : (BitVec 64)) (x : (BitVec 6)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 23 18 x)
-
-
-def _get_EDHSR_Type_WPTV (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 17 17)
-
-
-def _update_EDHSR_Type_WPTV (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 17 17 x)
 
 
 end ArmFull.Functions

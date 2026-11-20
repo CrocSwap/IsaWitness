@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,79 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _update_DBGWCR_Type_PAC (v : (BitVec 32)) (x : (BitVec 2)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 2 1 x)
+
+
+def _get_DBGWCR_Type_PAC (v : (BitVec 32)) : (BitVec 2) :=
+  (Sail.BitVec.extractLsb v 2 1)
+
+
+def _get_DBGWCR_EL1_Type_WT (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 20 20)
+
+
+def _update_DBGWCR_EL1_Type_WT (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 20 20 x)
+
+
+def _update_DBGWCR_Type_WT (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 20 20 x)
+
+
+def _update_PMCFGR_Type_WT (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 18 18 x)
+
+
+def _get_DBGWCR_Type_WT (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 20 20)
+
+
+def _get_PMCFGR_Type_WT (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 18 18)
+
+
+def undefined_DBGWVR_EL1_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
+  (undefined_bitvector_at (ℓ.child 0) 64)
+
+
+def Mk_DBGWVR_EL1_Type (v : (BitVec 64)) : (BitVec 64) :=
+  v
+
+
+def gic_readonly (offset : (BitVec 16)) : Unit :=
+  (prerr_bits "[GIC] Write to RO offset: " offset)
+
+
+/-- Type quantifiers: n : Nat, n > 0 -/
+def __WriteUART (offset : (BitVec 16)) (n : Nat) (data : (BitVec (8 * n))) : Unit :=
+  match offset with
+  | 0x0000 => (putchar (BitVec.toNat (Sail.BitVec.extractLsb data 7 0)))
+  | _ =>
+    (let _ : Unit := (prerr_bits "[UART] Unknown write offset: " offset)
+    (prerr_bits "[UART] Unknown write data: " data))
+
+
+def undefined_POR_EL1_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
+  (undefined_bitvector_at (ℓ.child 0) 64)
+
+
+def Mk_POR_EL1_Type (v : (BitVec 64)) : (BitVec 64) :=
+  v
+
+
+def undefined_POR_EL2_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
+  (undefined_bitvector_at (ℓ.child 0) 64)
+
+
+def Mk_POR_EL2_Type (v : (BitVec 64)) : (BitVec 64) :=
+  v
+
+
+def undefined_POR_EL3_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 64) := do
+  (undefined_bitvector_at (ℓ.child 0) 64)
+
 
 def Mk_POR_EL3_Type (v : (BitVec 64)) : (BitVec 64) :=
   v
@@ -235,12 +308,12 @@ def AArch64_IASize (txsz : (BitVec 6)) : Int :=
 
 /-- Type quantifiers: k_N : Nat, List.elem k_N [64, 128] -/
 def AArch64_S1AMECFault (walkparams : S1TTWParams) (paspace : PASpace) (regime : Regime) (descriptor : (BitVec k_N)) : SailM Bool := do
-  ArmFull.assert (((Sail.BitVec.length descriptor) == 64) || ((Sail.BitVec.length descriptor) == 128)) "sail-arm/v8_base.sail:25140.31-25140.32"
+  ArmFull.assert (((Sail.BitVec.length descriptor) == 64) || ((Sail.BitVec.length descriptor) == 128)) "sail-inputs/03-v8_base.sail:25150.31-25150.32"
   let descriptor_amec ← (( do
     if ((walkparams.d128 == 1#1) : Bool)
     then
       (do
-        ArmFull.assert (103 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25142.35-25142.36"
+        ArmFull.assert (103 <b (Sail.BitVec.length descriptor)) "sail-inputs/03-v8_base.sail:25152.35-25152.36"
         (pure ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 103)])))))
     else (pure ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 63)])))) ) : SailM
     (BitVec 1) )
@@ -257,7 +330,7 @@ def AArch64_ContiguousBit (tgx : TGx) (d128 : (BitVec 1)) (level : Int) (descrip
       then (pure (0#1))
       else
         (do
-          ArmFull.assert (111 <b (Sail.BitVec.length descriptor)) "sail-arm/v8_base.sail:25301.39-25301.40"
+          ArmFull.assert (111 <b (Sail.BitVec.length descriptor)) "sail-inputs/03-v8_base.sail:25311.39-25311.40"
           (pure ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access descriptor 111)]))))))
   else
     (pure (if (((BEq.beq tgx TGx_64KB) && (level == 1)) : Bool)
@@ -460,17 +533,17 @@ def IsExclusiveLocal (paddress : FullAddress) (processorid : Int) (size : Int) :
 
 /-- Type quantifiers: k_N : Nat, e : Int, esize : Int, k_N ≥ 0 -/
 def ActivePredicateElement (pred : (BitVec k_N)) (e : Int) (esize : Int) : SailM Bool := do
-  ArmFull.assert ((esize == 8) || ((esize == 16) || ((esize == 32) || ((esize == 64) || (esize == 128))))) "sail-arm/v8_base.sail:29766.78-29766.79"
+  ArmFull.assert ((esize == 8) || ((esize == 16) || ((esize == 32) || ((esize == 64) || (esize == 128))))) "sail-inputs/03-v8_base.sail:29776.78-29776.79"
   let n : Int := (e *i (Int.ediv (Sail.Int.toNatChecked (esize)) 8))
-  ArmFull.assert ((n ≥b 0) && (n <b (Sail.BitVec.length pred))) "sail-arm/v8_base.sail:29768.26-29768.27"
+  ArmFull.assert ((n ≥b 0) && (n <b (Sail.BitVec.length pred))) "sail-inputs/03-v8_base.sail:29778.26-29778.27"
   (pure (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access pred (Sail.Int.toNatChecked (n)))])) == 1#1)))
 
 
 /-- Type quantifiers: k_N : Nat, e : Int, esize : Int, k_N ≥ 0 -/
 def PredicateElement (pred : (BitVec k_N)) (e : Int) (esize : Int) : SailM (BitVec 1) := do
-  ArmFull.assert ((esize == 8) || ((esize == 16) || ((esize == 32) || ((esize == 64) || (esize == 128))))) "sail-arm/v8_base.sail:29776.78-29776.79"
+  ArmFull.assert ((esize == 8) || ((esize == 16) || ((esize == 32) || ((esize == 64) || (esize == 128))))) "sail-inputs/03-v8_base.sail:29786.78-29786.79"
   let n : Int := (e *i (Int.ediv (Sail.Int.toNatChecked (esize)) 8))
-  ArmFull.assert ((n ≥b 0) && (n <b (Sail.BitVec.length pred))) "sail-arm/v8_base.sail:29778.26-29778.27"
+  ArmFull.assert ((n ≥b 0) && (n <b (Sail.BitVec.length pred))) "sail-inputs/03-v8_base.sail:29788.26-29788.27"
   (pure ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access pred (Sail.Int.toNatChecked (n)))]))))
 
 
@@ -527,7 +600,7 @@ def ShiftSat (shift : Int) (esize : Int) : Int :=
 
 /-- Type quantifiers: width : Nat, width = 512 -/
 def ZT0_read (width : Nat) : SailM (BitVec width) := do
-  ArmFull.assert (width == 512) "sail-arm/v8_base.sail:31298.23-31298.24"
+  ArmFull.assert (width == 512) "sail-inputs/03-v8_base.sail:31308.23-31308.24"
   let w__0 ← (( do readReg _ZT0 ) : SailM (BitVec 512) )
   (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb w__0 (Sail.Int.toNatChecked ((width -i 1)))
       0))))
@@ -535,7 +608,7 @@ def ZT0_read (width : Nat) : SailM (BitVec width) := do
 
 /-- Type quantifiers: width : Nat, width = 512 -/
 def ZT0_set (width : Nat) (value_name : (BitVec width)) : SailM Unit := do
-  ArmFull.assert (width == 512) "sail-arm/v8_base.sail:31305.23-31305.24"
+  ArmFull.assert (width == 512) "sail-inputs/03-v8_base.sail:31315.23-31315.24"
   let w__0 ← (( do readReg _ZT0 ) : SailM (BitVec 512) )
   writeReg _ZT0 (Sail.BitVec.castWidth (m := 512) (Sail.BitVec.updateSubrange w__0
     (Sail.Int.toNatChecked ((width -i 1))) 0 (Sail.BitVec.castWidth value_name)))
@@ -781,82 +854,6 @@ def _update_HFGITR_EL2_Type_ICIVAU (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 
 
 def _get_HFGITR_EL2_Type_SVC_EL0 (v : (BitVec 64)) : (BitVec 1) :=
   (Sail.BitVec.extractLsb v 52 52)
-
-
-def _update_HFGITR_EL2_Type_SVC_EL0 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 52 52 x)
-
-
-def _get_HFGITR_EL2_Type_SVC_EL1 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 53 53)
-
-
-def _update_HFGITR_EL2_Type_SVC_EL1 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 53 53 x)
-
-
-def _get_HFGITR_EL2_Type_TLBIASIDE1 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 44 44)
-
-
-def _update_HFGITR_EL2_Type_TLBIASIDE1 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 44 44 x)
-
-
-def _get_HFGITR_EL2_Type_TLBIASIDE1IS (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 30 30)
-
-
-def _update_HFGITR_EL2_Type_TLBIASIDE1IS (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 30 30 x)
-
-
-def _get_HFGITR_EL2_Type_TLBIASIDE1OS (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 20 20)
-
-
-def _update_HFGITR_EL2_Type_TLBIASIDE1OS (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 20 20 x)
-
-
-def _get_HFGITR_EL2_Type_TLBIRVAAE1 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 39 39)
-
-
-def _update_HFGITR_EL2_Type_TLBIRVAAE1 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 39 39 x)
-
-
-def _get_HFGITR_EL2_Type_TLBIRVAAE1IS (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 35 35)
-
-
-def _update_HFGITR_EL2_Type_TLBIRVAAE1IS (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 35 35 x)
-
-
-def _get_HFGITR_EL2_Type_TLBIRVAAE1OS (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 25 25)
-
-
-def _update_HFGITR_EL2_Type_TLBIRVAAE1OS (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 25 25 x)
-
-
-def _get_HFGITR_EL2_Type_TLBIRVAALE1 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 41 41)
-
-
-def _update_HFGITR_EL2_Type_TLBIRVAALE1 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 41 41 x)
-
-
-def _get_HFGITR_EL2_Type_TLBIRVAALE1IS (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 37 37)
-
-
-def _update_HFGITR_EL2_Type_TLBIRVAALE1IS (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 37 37 x)
 
 
 end ArmFull.Functions

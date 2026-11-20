@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,70 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _get_VDISR_Type_AET (v : (BitVec 32)) : (BitVec 2) :=
+  (Sail.BitVec.extractLsb v 15 14)
+
+
+def _get_VSESR_EL2_Type_AET (v : (BitVec 64)) : (BitVec 2) :=
+  (Sail.BitVec.extractLsb v 15 14)
+
+
+def _get_DFSR_Type_CM (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 13 13)
+
+
+def _update_DFSR_Type_CM (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 13 13 x)
+
+
+def _update_EDHSR_Type_CM (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 8 8 x)
+
+
+def _get_EDHSR_Type_CM (v : (BitVec 64)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 8 8)
+
+
+def _get_DFSR_Type_Domain (v : (BitVec 32)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 7 4)
+
+
+def _update_DFSR_Type_Domain (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 4 x)
+
+
+def _get_DFSR_Type_ExT (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 12 12)
+
+
+def _update_DFSR_Type_ExT (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 12 12 x)
+
+
+def _update_DISR_Type_ExT (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 12 12 x)
+
+
+def _update_IFSR32_EL2_Type_ExT (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 12 12 x)
+
+
+def _update_IFSR_Type_ExT (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 12 12 x)
+
+
+def _update_VDFSR_Type_ExT (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 12 12 x)
+
+
+def _update_VDISR_EL2_Type_ExT (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 12 12 x)
+
+
+def _update_VDISR_Type_ExT (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 12 12 x)
+
 
 def _update_VSESR_EL2_Type_ExT (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
   (Sail.BitVec.updateSubrange v 12 12 x)
@@ -481,7 +545,7 @@ def HCR2_read (_ : Unit) : SailM (BitVec 32) := do
 
 
 def IsDebugException (fault : FaultRecord) : SailM Bool := do
-  ArmFull.assert (bne fault.statuscode Fault_None) "sail-arm/v8_base.sail:14522.41-14522.42"
+  ArmFull.assert (bne fault.statuscode Fault_None) "sail-inputs/03-v8_base.sail:14535.41-14535.42"
   (pure ((BEq.beq fault.statuscode Fault_Debug)))
 
 
@@ -822,73 +886,6 @@ def _update_FPEXC32_EL2_Type_TFV (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64
 
 def _update_FPEXC_Type_TFV (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
   (Sail.BitVec.updateSubrange v 26 26 x)
-
-
-def _get_FPEXC_Type_TFV (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 26 26)
-
-
-def _get_FPEXC32_EL2_Type_UFF (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 3 3)
-
-
-def _update_FPEXC32_EL2_Type_UFF (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 3 3 x)
-
-
-def _update_FPEXC_Type_UFF (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 3 3 x)
-
-
-def _get_FPEXC_Type_UFF (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 3 3)
-
-
-def _get_FPEXC32_EL2_Type_VECITR (v : (BitVec 64)) : (BitVec 3) :=
-  (Sail.BitVec.extractLsb v 10 8)
-
-
-def _update_FPEXC32_EL2_Type_VECITR (v : (BitVec 64)) (x : (BitVec 3)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 10 8 x)
-
-
-def _update_FPEXC_Type_VECITR (v : (BitVec 32)) (x : (BitVec 3)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 10 8 x)
-
-
-def _get_FPEXC_Type_VECITR (v : (BitVec 32)) : (BitVec 3) :=
-  (Sail.BitVec.extractLsb v 10 8)
-
-
-def _get_FPEXC32_EL2_Type_VV (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 27 27)
-
-
-def _update_FPEXC32_EL2_Type_VV (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 27 27 x)
-
-
-def _update_FPEXC_Type_VV (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 27 27 x)
-
-
-def _get_FPEXC_Type_VV (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 27 27)
-
-
-def undefined_FPEXC_Type (ℓ : ChoiceLabel) (_ : Unit) : SailM (BitVec 32) := do
-  (undefined_bitvector_at (ℓ.child 0) 32)
-
-
-def Mk_FPEXC_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def FPEXC_read (_ : Unit) : SailM (BitVec 32) := do
-  let r ← (( do readReg _FPEXC ) : SailM FPEXC_Type )
-  let w__0 ← (( do readReg FPEXC32_EL2 ) : SailM (BitVec 64) )
-  let r := ((Sail.BitVec.updateSubrange r 31 0 (BitVec.slice w__0 0 32)) : (BitVec 32))
-  (pure (r))
 
 
 end ArmFull.Functions

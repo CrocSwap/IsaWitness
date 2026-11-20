@@ -1,0 +1,10 @@
+{
+  "schema": "isawitness-canonical-source-v2",
+  "model_revision": "v9",
+  "proof_commit": "83c8f981a6f3c6186784275044845c1ed643cbc1",
+  "modules": {
+    "ArmFull": 1560,
+    "Sail": 11
+  },
+  "source_manifest_sha256": "c61f8e71be34a623cd4911f04943390444793e91cdfb0691e77393065aab96b7"
+}

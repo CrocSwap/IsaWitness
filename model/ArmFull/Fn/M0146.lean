@@ -1,22 +1,20 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0017
-import ArmFull.Fn.M0023
-import ArmFull.Fn.M0036
-import ArmFull.Fn.M0043
-import ArmFull.Fn.M0049
-import ArmFull.Fn.M0087
-import ArmFull.Fn.M0092
-import ArmFull.Fn.M0097
-import ArmFull.Fn.M0117
-import ArmFull.Fn.M0118
-import ArmFull.Fn.M0119
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0017
+public import ArmFull.Fn.M0049
+public import ArmFull.Fn.M0051
+public import ArmFull.Fn.M0087
+public import ArmFull.Fn.M0092
+public import ArmFull.Fn.M0097
+public import ArmFull.Fn.M0098
+public import ArmFull.Fn.M0117
+public import ArmFull.Fn.M0118
+public import ArmFull.Fn.M0119 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -117,58 +115,6 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
-
-def HaveIDSExt (_ : Unit) : SailM Bool := do
-  (IsFeatureImplemented FEAT_IDST)
-
-
-def HaveFrintExt (_ : Unit) : SailM Bool := do
-  (IsFeatureImplemented FEAT_FRINTTS)
-
-
-def HaveE0PDExt (_ : Unit) : SailM Bool := do
-  (IsFeatureImplemented FEAT_E0PD)
-
-
-def HaveGTGExt (_ : Unit) : SailM Bool := do
-  (IsFeatureImplemented FEAT_GTG)
-
-
-def HaveSBExt (_ : Unit) : SailM Bool := do
-  (IsFeatureImplemented FEAT_SB)
-
-
-def HaveMTEAsyncExt (_ : Unit) : SailM Bool := do
-  (IsFeatureImplemented FEAT_MTE4)
-
-
-def HaveMTEPermExt (_ : Unit) : SailM Bool := do
-  (IsFeatureImplemented FEAT_MTE_PERM)
-
-
-def HaveDGHExt (_ : Unit) : SailM Bool := do
-  (IsFeatureImplemented FEAT_DGH)
-
-
-def HaveBF16Ext (_ : Unit) : SailM Bool := do
-  (IsFeatureImplemented FEAT_BF16)
-
-
-def HaveEBF16 (_ : Unit) : SailM Bool := do
-  (IsFeatureImplemented FEAT_EBF16)
-
-
-def HaveAArch32BF16Ext (_ : Unit) : SailM Bool := do
-  (IsFeatureImplemented FEAT_AA32BF16)
-
-
-def HaveFGTExt (_ : Unit) : SailM Bool := do
-  (IsFeatureImplemented FEAT_FGT)
-
-
-def HaveInt8MatMulExt (_ : Unit) : SailM Bool := do
-  (IsFeatureImplemented FEAT_I8MM)
-
 
 def HaveAArch32Int8MatMulExt (_ : Unit) : SailM Bool := do
   (IsFeatureImplemented FEAT_AA32I8MM)
@@ -395,7 +341,7 @@ def GPTLevel0Index (pa : (BitVec 56)) : SailM Int := do
   then (pure (0))
   else
     (do
-      ArmFull.assert ((0 ≤b l0sz) && ((pps -i 1) <b 56)) "sail-arm/v8_base.sail:19758.51-19758.52"
+      ArmFull.assert ((0 ≤b l0sz) && ((pps -i 1) <b 56)) "sail-inputs/03-v8_base.sail:19771.51-19771.52"
       (pure ((BitVec.toNat
           (Sail.BitVec.extractLsb pa (Sail.Int.toNatChecked ((pps -i 1)))
             (Sail.Int.toNatChecked (l0sz)))))))
@@ -408,15 +354,15 @@ def GPTLevel1Index (pa : (BitVec 56)) : SailM Int := do
   match w__1 with
   | .PGS_4KB =>
     (do
-      ArmFull.assert ((16 ≤b (l0sz -i 1)) && ((l0sz -i 1) <b 56)) "sail-arm/v8_base.sail:19768.63-19768.64"
+      ArmFull.assert ((16 ≤b (l0sz -i 1)) && ((l0sz -i 1) <b 56)) "sail-inputs/03-v8_base.sail:19781.63-19781.64"
       (pure ((BitVec.toNat (Sail.BitVec.extractLsb pa (Sail.Int.toNatChecked ((l0sz -i 1))) 16)))))
   | .PGS_16KB =>
     (do
-      ArmFull.assert ((18 ≤b (l0sz -i 1)) && ((l0sz -i 1) <b 56)) "sail-arm/v8_base.sail:19772.63-19772.64"
+      ArmFull.assert ((18 ≤b (l0sz -i 1)) && ((l0sz -i 1) <b 56)) "sail-inputs/03-v8_base.sail:19785.63-19785.64"
       (pure ((BitVec.toNat (Sail.BitVec.extractLsb pa (Sail.Int.toNatChecked ((l0sz -i 1))) 18)))))
   | .PGS_64KB =>
     (do
-      ArmFull.assert ((20 ≤b (l0sz -i 1)) && ((l0sz -i 1) <b 56)) "sail-arm/v8_base.sail:19776.63-19776.64"
+      ArmFull.assert ((20 ≤b (l0sz -i 1)) && ((l0sz -i 1) <b 56)) "sail-inputs/03-v8_base.sail:19789.63-19789.64"
       (pure ((BitVec.toNat (Sail.BitVec.extractLsb pa (Sail.Int.toNatChecked ((l0sz -i 1))) 20)))))
 
 
@@ -444,8 +390,8 @@ def StageOA (ia : (BitVec 64)) (d128 : (BitVec 1)) (tgx : TGx) (walkstate : TTWS
   let csize : Int := csize
   let ia_msb : Int := (tsize +i csize)
   let oa : FullAddress := { oa with paspace := walkstate.baseaddress.paspace }
-  ArmFull.assert ((0 ≤b ia_msb) && (ia_msb ≤b 55)) "sail-arm/v8_base.sail:20052.53-20052.54"
-  ArmFull.assert (0 ≤b (ia_msb -i 1)) "sail-arm/v8_base.sail:20053.39-20053.40"
+  ArmFull.assert ((0 ≤b ia_msb) && (ia_msb ≤b 55)) "sail-inputs/03-v8_base.sail:20065.53-20065.54"
+  ArmFull.assert (0 ≤b (ia_msb -i 1)) "sail-inputs/03-v8_base.sail:20066.39-20066.40"
   let oa : FullAddress :=
     { oa with address := (Sail.BitVec.castWidth (m := 56) ((Sail.BitVec.extractLsb
           walkstate.baseaddress.address 55 (Sail.Int.toNatChecked (ia_msb))) +++ (Sail.BitVec.extractLsb
@@ -577,8 +523,8 @@ def ComputePACIMPDEF (data : (BitVec 64)) (modifier : (BitVec 64)) (key0 : (BitV
 
 /-- Type quantifiers: n : Int, width : Nat, List.elem width [8, 16, 32, 64] -/
 def X_read (n : Int) (width : Nat) : SailM (BitVec width) := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-arm/v8_base.sail:22319.27-22319.28"
-  ArmFull.assert ((width == 8) || ((width == 16) || ((width == 32) || (width == 64)))) "sail-arm/v8_base.sail:22320.63-22320.64"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-inputs/03-v8_base.sail:22332.27-22332.28"
+  ArmFull.assert ((width == 8) || ((width == 16) || ((width == 32) || (width == 64)))) "sail-inputs/03-v8_base.sail:22333.63-22333.64"
   if ((n != 31) : Bool)
   then
     (do
@@ -588,60 +534,9 @@ def X_read (n : Int) (width : Nat) : SailM (BitVec width) := do
   else (pure ((Sail.BitVec.castWidth (Zeros (n := width)))))
 
 
-def AArch64_ResetSpecialRegisters (_ : Unit) : SailM Unit := do
-  let w__0 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
-  writeReg SP_EL0 w__0
-  let w__1 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
-  writeReg SP_EL1 w__1
-  let w__2 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
-  writeReg SPSR_EL1 (Mk_SPSR_EL1_Type w__2)
-  let w__3 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
-  writeReg ELR_EL1 w__3
-  if ((HaveEL EL2) : Bool)
-  then
-    (do
-      let w__4 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
-      writeReg SP_EL2 w__4
-      let w__5 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
-      writeReg SPSR_EL2 (Mk_SPSR_EL2_Type w__5)
-      let w__6 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
-      writeReg ELR_EL2 w__6)
-  else (pure (()))
-  if ((HaveEL EL3) : Bool)
-  then
-    (do
-      let w__7 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
-      writeReg SP_EL3 w__7
-      let w__8 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
-      writeReg SPSR_EL3 (Mk_SPSR_EL3_Type w__8)
-      let w__9 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
-      writeReg ELR_EL3 w__9)
-  else (pure (()))
-  if ((HaveAArch32EL EL1) : Bool)
-  then
-    (do
-      let w__10 ← (( do readReg SPSR_fiq ) : SailM (BitVec 64) )
-      let w__11 ← (( do (__UNKNOWN_bits 32) ) : SailM (BitVec 32) )
-      writeReg SPSR_fiq (Sail.BitVec.updateSubrange w__10 31 0 w__11)
-      let w__12 ← (( do readReg SPSR_irq ) : SailM (BitVec 64) )
-      let w__13 ← (( do (__UNKNOWN_bits 32) ) : SailM (BitVec 32) )
-      writeReg SPSR_irq (Sail.BitVec.updateSubrange w__12 31 0 w__13)
-      let w__14 ← (( do readReg SPSR_abt ) : SailM (BitVec 64) )
-      let w__15 ← (( do (__UNKNOWN_bits 32) ) : SailM (BitVec 32) )
-      writeReg SPSR_abt (Sail.BitVec.updateSubrange w__14 31 0 w__15)
-      let w__16 ← (( do readReg SPSR_und ) : SailM (BitVec 64) )
-      let w__17 ← (( do (__UNKNOWN_bits 32) ) : SailM (BitVec 32) )
-      writeReg SPSR_und (Sail.BitVec.updateSubrange w__16 31 0 w__17))
-  else (pure (()))
-  let w__18 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
-  writeReg DLR_EL0 w__18
-  let w__19 ← (( do (__UNKNOWN_bits 64) ) : SailM (BitVec 64) )
-  writeReg DSPSR_EL0 (Mk_DSPSR_EL0_Type w__19)
-
-
 def ELR_read__1 (_ : Unit) : SailM (BitVec 64) := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  ArmFull.assert (w__0.EL != EL0) "sail-arm/v8_base.sail:22444.27-22444.28"
+  ArmFull.assert (w__0.EL != EL0) "sail-inputs/03-v8_base.sail:22457.27-22457.28"
   let w__1 ← (( do readReg PSTATE ) : SailM ProcState )
   (ELR_read w__1.EL)
 
@@ -874,6 +769,31 @@ def AArch64_S1OverlayPermissions (regime : Regime) (walkstate : TTWState) (accde
   let s1overlay_perms : S1AccessControls := { s1overlay_perms with ow := w }
   let s1overlay_perms : S1AccessControls := { s1overlay_perms with ox := x }
   (pure (s1overlay_perms))
+
+
+def AArch64_S1DisabledOutputMECID (walkparams : S1TTWParams) (regime : Regime) (paspace : PASpace) : SailM (BitVec 16) := do
+  if ((walkparams.emec == 0#1) : Bool)
+  then (pure (DEFAULT_MECID))
+  else
+    (do
+      if ((! ((BEq.beq regime Regime_EL2) || ((BEq.beq regime Regime_EL20) || (BEq.beq regime
+                 Regime_EL10)))) : Bool)
+      then (pure (DEFAULT_MECID))
+      else
+        (do
+          if ((bne paspace PAS_Realm) : Bool)
+          then (pure (DEFAULT_MECID))
+          else
+            (do
+              if ((BEq.beq regime Regime_EL10) : Bool)
+              then
+                (do
+                  let w__0 ← (( do readReg VMECID_P_EL2 ) : SailM (BitVec 64) )
+                  (pure ((_get_VMECID_P_EL2_Type_MECID w__0))))
+              else
+                (do
+                  let w__1 ← (( do readReg MECID_P0_EL2 ) : SailM (BitVec 64) )
+                  (pure ((_get_MECID_P0_EL2_Type_MECID w__1)))))))
 
 
 end ArmFull.Functions

@@ -2,7 +2,7 @@
   "schema": "armcert-vendored-gate-source-v1",
   "origin": "First-party lean-buildtools",
   "commit": "8f6ad8efb8c1931952257b483563b4f7d247d990",
-  "scope": "Gate and source-policy/context implementation only; profiler, monitor plugin, native RSS code and development tests omitted.",
+  "scope": "Gate and source-policy/context implementation, plus the two deriving helpers imported by canonical model and runtime sources.",
   "license": "Copied Apache-2.0 license; release license decision pending.",
   "files": [
     {
@@ -72,9 +72,20 @@
     },
     {
       "path": "lakefile.lean",
-      "sha256": "0043f13f5b51972bf72456ad29a93ee0e41e3295ddb1b5ff73769556ca59f628",
+      "sha256": "c25f1af47a97479ba2f461f4e46b88c1676df35100cd42ef3089a91a8de0861a",
       "upstream_sha256": "6eca8e16f803a5fca18c68ed2ae7e5d9bb21eb75603f94be72d47ab0f4426e44",
-      "change": "Omit profiling/report commands, RSS/C target and BuildMonitor library; gate/source-scan/context scripts unchanged"
+      "change": "Keep gate/source-scan/context scripts; register the canonical deriving helper library."
+    },
+    {
+      "path": "ArmCert/BuildTools/ExposedHashable.lean",
+      "sha256": "5360209ef5b264e19a5d096b417d68cb4a38071e510090e588c981b2904718bc",
+      "change": "Exact canonical deriving helper source"
+    },
+    {
+      "path": "ArmCert/BuildTools/ExposedRepr.lean",
+      "sha256": "b6affa64f472bc78d2087b03cf1e48612e885f635d1dd869430e3105fd6dd449",
+      "change": "Exact canonical deriving helper source"
     }
-  ]
+  ],
+  "canonical_deriving_commit": "83c8f981a6f3c6186784275044845c1ed643cbc1"
 }

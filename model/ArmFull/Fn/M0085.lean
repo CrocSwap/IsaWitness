@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,102 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _update_GICD_TYPER_Type_SecurityExtn (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 10 10 x)
+
+
+def _get_GICD_TYPER_Type_num_LPIs (v : (BitVec 32)) : (BitVec 5) :=
+  (Sail.BitVec.extractLsb v 15 11)
+
+
+def _update_GICD_TYPER_Type_num_LPIs (v : (BitVec 32)) (x : (BitVec 5)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 15 11 x)
+
+
+def Mk_CTICIDR0_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def _get_CTICIDR0_Type_PRMBL_0 (v : (BitVec 32)) : (BitVec 8) :=
+  (Sail.BitVec.extractLsb v 7 0)
+
+
+def _update_CTICIDR0_Type_PRMBL_0 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 0 x)
+
+
+def _update_AMCIDR0_Type_PRMBL_0 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 0 x)
+
+
+def _update_EDCIDR0_Type_PRMBL_0 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 0 x)
+
+
+def _update_PMCIDR0_Type_PRMBL_0 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 0 x)
+
+
+def _get_AMCIDR0_Type_PRMBL_0 (v : (BitVec 32)) : (BitVec 8) :=
+  (Sail.BitVec.extractLsb v 7 0)
+
+
+def _get_EDCIDR0_Type_PRMBL_0 (v : (BitVec 32)) : (BitVec 8) :=
+  (Sail.BitVec.extractLsb v 7 0)
+
+
+def _get_PMCIDR0_Type_PRMBL_0 (v : (BitVec 32)) : (BitVec 8) :=
+  (Sail.BitVec.extractLsb v 7 0)
+
+
+def Mk_GICC_HPPIR_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_GICD_CLRSPI_NSR_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def Mk_CTIITCTRL_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def _get_CTIITCTRL_Type_IME (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 0 0)
+
+
+def _update_CTIITCTRL_Type_IME (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 0 0 x)
+
+
+def _update_EDITCTRL_Type_IME (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 0 0 x)
+
+
+def _update_PMITCTRL_Type_IME (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 0 0 x)
+
+
+def _get_EDITCTRL_Type_IME (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 0 0)
+
+
+def _get_PMITCTRL_Type_IME (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 0 0)
+
+
+def Mk_GITS_STATUSR_Type (v : (BitVec 32)) : (BitVec 32) :=
+  v
+
+
+def _get_GITS_STATUSR_Type_Overflow (v : (BitVec 32)) : (BitVec 1) :=
+  (Sail.BitVec.extractLsb v 5 5)
+
+
+def _update_GITS_STATUSR_Type_Overflow (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 5 5 x)
+
 
 def _get_GITS_STATUSR_Type_Syndrome (v : (BitVec 32)) : (BitVec 4) :=
   (Sail.BitVec.extractLsb v 9 6)
@@ -806,102 +902,6 @@ def _get_GICR_ISENABLER0_Type_Set_enable_bit7 (v : (BitVec 32)) : (BitVec 1) :=
 
 def _update_GICR_ISENABLER0_Type_Set_enable_bit7 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
   (Sail.BitVec.updateSubrange v 7 7 x)
-
-
-def _get_GICR_ISENABLER0_Type_Set_enable_bit8 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 8 8)
-
-
-def _update_GICR_ISENABLER0_Type_Set_enable_bit8 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 8 8 x)
-
-
-def _get_GICR_ISENABLER0_Type_Set_enable_bit9 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 9 9)
-
-
-def _update_GICR_ISENABLER0_Type_Set_enable_bit9 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 9 9 x)
-
-
-def Mk_CTICIDR2_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def _get_CTICIDR2_Type_PRMBL_2 (v : (BitVec 32)) : (BitVec 8) :=
-  (Sail.BitVec.extractLsb v 7 0)
-
-
-def _update_CTICIDR2_Type_PRMBL_2 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 7 0 x)
-
-
-def _update_AMCIDR2_Type_PRMBL_2 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 7 0 x)
-
-
-def _update_EDCIDR2_Type_PRMBL_2 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 7 0 x)
-
-
-def _update_PMCIDR2_Type_PRMBL_2 (v : (BitVec 32)) (x : (BitVec 8)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 7 0 x)
-
-
-def _get_AMCIDR2_Type_PRMBL_2 (v : (BitVec 32)) : (BitVec 8) :=
-  (Sail.BitVec.extractLsb v 7 0)
-
-
-def _get_EDCIDR2_Type_PRMBL_2 (v : (BitVec 32)) : (BitVec 8) :=
-  (Sail.BitVec.extractLsb v 7 0)
-
-
-def _get_PMCIDR2_Type_PRMBL_2 (v : (BitVec 32)) : (BitVec 8) :=
-  (Sail.BitVec.extractLsb v 7 0)
-
-
-def Mk_EDRCR_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def _get_EDRCR_Type_CBRRQ (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 4 4)
-
-
-def _update_EDRCR_Type_CBRRQ (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 4 4 x)
-
-
-def _get_EDRCR_Type_CSE (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 2 2)
-
-
-def _update_EDRCR_Type_CSE (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 2 2 x)
-
-
-def _get_EDRCR_Type_CSPA (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 3 3)
-
-
-def _update_EDRCR_Type_CSPA (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 3 3 x)
-
-
-def Mk_GICV_PMR_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def Mk_EDDEVID_Type (v : (BitVec 32)) : (BitVec 32) :=
-  v
-
-
-def _get_EDDEVID_Type_DebugPower (v : (BitVec 32)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 7 4)
-
-
-def _update_EDDEVID_Type_DebugPower (v : (BitVec 32)) (x : (BitVec 4)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 7 4 x)
 
 
 end ArmFull.Functions

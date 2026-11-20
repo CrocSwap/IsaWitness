@@ -1,25 +1,12 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0022
-import ArmFull.Fn.M0023
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0072
-import ArmFull.Fn.M0073
-import ArmFull.Fn.M0092
-import ArmFull.Fn.M0100
-import ArmFull.Fn.M0139
-import ArmFull.Fn.M0140
-import ArmFull.Fn.M0144
-import ArmFull.Fn.M0166
-import ArmFull.Fn.M0178
-import ArmFull.Fn.M0181
-import ArmFull.Fn.M0254
-import ArmFull.Fn.M1278
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0603
+public import ArmFull.Fn.M1244
+public import ArmFull.Fn.M1245 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -121,662 +108,644 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-/-- Type quantifiers: t : Int -/
-def FAR_EL2_SysRegRead_7a873e0d64ef42a5 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_TRVM : (BitVec 1) := (_get_HCR_EL2_Type_TRVM w__1)
-  let w__2 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_FGTEn : (BitVec 1) := (_get_SCR_EL3_Type_FGTEn w__2)
-  let w__3 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
-  let __HFGRTR_EL2_FAR_EL1 : (BitVec 1) := (_get_HFGRTR_EL2_Type_FAR_EL1 w__3)
-  let w__4 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_E2H : (BitVec 1) := (_get_HCR_EL2_Type_E2H w__4)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_st3_advsimd_sngl_aarch64_instrs_memory_vector_single_no_wb (Rt : (BitVec 5)) (Rn : (BitVec 5)) (size : (BitVec 2)) (S : (BitVec 1)) (opcode : (BitVec 3)) (o2 : (BitVec 1)) (R : (BitVec 1)) (L : (BitVec 1)) (Q : (BitVec 1)) : SailM Unit := do
+  let t : Int := (BitVec.toNat Rt)
+  let n : Int := (BitVec.toNat Rn)
+  let m ← (( do (__UNKNOWN_integer ()) ) : SailM Int )
+  let wback : Bool := false
+  let nontemporal : Bool := false
+  let tagchecked : Bool := (wback || (n != 31))
+  let init_scale : Int := (BitVec.toNat (Sail.BitVec.extractLsb opcode 2 1))
+  let scale : Int := init_scale
+  let selem : Int :=
+    ((BitVec.toNat ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access opcode 0)])) +++ R)) +i 1)
+  let replicate : Bool := false
+  let index ← (( do (undefined_int_at (← occLabel 4358) ()) ) : SailM Int )
+  let (index, replicate, scale) ← (( do
+    match scale with
+    | 3 =>
+      (do
+        let (replicate, scale) ← (( do
+          if (((L == 0#1) || (S == 1#1)) : Bool)
+          then
+            (do
+              (__ArmCertEndOfDecode ())
+              sailThrow ((Error_Undefined ())))
+          else
+            (let scale : Int := (BitVec.toNat size)
+            let replicate : Bool := true
+            (pure ((replicate, scale)))) ) : SailM (Bool × Int) )
+        (pure ((index, replicate, scale))))
+    | 0 =>
+      (let index : Int := (BitVec.toNat ((Q +++ S) +++ size))
+      (pure ((index, replicate, scale))))
+    | 1 =>
+      (do
+        let index ← (( do
+          if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access size 0)])) == 1#1) : Bool)
+          then
+            (do
+              (__ArmCertEndOfDecode ())
+              sailThrow ((Error_Undefined ())))
+          else
+            (let index : Int :=
+              (BitVec.toNat
+                ((Q +++ S) +++ (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access size 1)]))))
+            (pure (index))) ) : SailM Int )
+        (pure ((index, replicate, scale))))
+    | 2 =>
+      (do
+        let (index, scale) ← (( do
+          if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access size 1)])) == 1#1) : Bool)
+          then
+            (do
+              (__ArmCertEndOfDecode ())
+              sailThrow ((Error_Undefined ())))
+          else
+            (do
+              if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access size 0)])) == 0#1) : Bool)
+              then
+                (let index : Int := (BitVec.toNat (Q +++ S))
+                (pure ((index, scale))))
+              else
+                (do
+                  if ((S == 1#1) : Bool)
+                  then
+                    (do
+                      (__ArmCertEndOfDecode ())
+                      sailThrow ((Error_Undefined ())))
+                  else
+                    (let index : Int := (BitVec.toNat Q)
+                    let scale : Int := 3
+                    (pure ((index, scale)))))) ) : SailM (Int × Int) )
+        (pure ((index, replicate, scale))))
+    | _ => (pure ((index, replicate, scale))) ) : SailM (Int × Bool × Int) )
+  let scale : Int := scale
+  let index : Int := index
+  let memop : MemOp :=
+    if ((L == 1#1) : Bool)
+    then MemOp_LOAD
+    else MemOp_STORE
+  let datasize : Int :=
+    if ((Q == 1#1) : Bool)
+    then 128
+    else 64
+  let esize : Int := (_shl_int_general 8 scale)
+  ArmFull.assert ((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-inputs/15-instrs64.sail:24279.48-24279.49"
+  (__ArmCertEndOfDecode ())
+  (execute_aarch64_instrs_memory_vector_single_no_wb (Sail.Int.toNatChecked (datasize))
+    (Sail.Int.toNatChecked (esize)) index m memop (Sail.Int.toNatChecked (n)) nontemporal replicate
+    (Sail.Int.toNatChecked (selem)) (Sail.Int.toNatChecked (t)) tagchecked wback)
+
+
+def decode_st3_advsimd_sngl_aarch64_instrs_memory_vector_single_post_inc (Rt : (BitVec 5)) (Rn : (BitVec 5)) (size : (BitVec 2)) (S : (BitVec 1)) (opcode : (BitVec 3)) (Rm : (BitVec 5)) (R : (BitVec 1)) (L : (BitVec 1)) (Q : (BitVec 1)) : SailM Unit := do
+  let t : Int := (BitVec.toNat Rt)
+  let n : Int := (BitVec.toNat Rn)
+  let m : Int := (BitVec.toNat Rm)
+  let wback : Bool := true
+  let nontemporal : Bool := false
+  let tagchecked : Bool := (wback || (n != 31))
+  let init_scale : Int := (BitVec.toNat (Sail.BitVec.extractLsb opcode 2 1))
+  let scale : Int := init_scale
+  let selem : Int :=
+    ((BitVec.toNat ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access opcode 0)])) +++ R)) +i 1)
+  let replicate : Bool := false
+  let index ← (( do (undefined_int_at (← occLabel 4359) ()) ) : SailM Int )
+  let (index, replicate, scale) ← (( do
+    match scale with
+    | 3 =>
+      (do
+        let (replicate, scale) ← (( do
+          if (((L == 0#1) || (S == 1#1)) : Bool)
+          then
+            (do
+              (__ArmCertEndOfDecode ())
+              sailThrow ((Error_Undefined ())))
+          else
+            (let scale : Int := (BitVec.toNat size)
+            let replicate : Bool := true
+            (pure ((replicate, scale)))) ) : SailM (Bool × Int) )
+        (pure ((index, replicate, scale))))
+    | 0 =>
+      (let index : Int := (BitVec.toNat ((Q +++ S) +++ size))
+      (pure ((index, replicate, scale))))
+    | 1 =>
+      (do
+        let index ← (( do
+          if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access size 0)])) == 1#1) : Bool)
+          then
+            (do
+              (__ArmCertEndOfDecode ())
+              sailThrow ((Error_Undefined ())))
+          else
+            (let index : Int :=
+              (BitVec.toNat
+                ((Q +++ S) +++ (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access size 1)]))))
+            (pure (index))) ) : SailM Int )
+        (pure ((index, replicate, scale))))
+    | 2 =>
+      (do
+        let (index, scale) ← (( do
+          if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access size 1)])) == 1#1) : Bool)
+          then
+            (do
+              (__ArmCertEndOfDecode ())
+              sailThrow ((Error_Undefined ())))
+          else
+            (do
+              if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access size 0)])) == 0#1) : Bool)
+              then
+                (let index : Int := (BitVec.toNat (Q +++ S))
+                (pure ((index, scale))))
+              else
+                (do
+                  if ((S == 1#1) : Bool)
+                  then
+                    (do
+                      (__ArmCertEndOfDecode ())
+                      sailThrow ((Error_Undefined ())))
+                  else
+                    (let index : Int := (BitVec.toNat Q)
+                    let scale : Int := 3
+                    (pure ((index, scale)))))) ) : SailM (Int × Int) )
+        (pure ((index, replicate, scale))))
+    | _ => (pure ((index, replicate, scale))) ) : SailM (Int × Bool × Int) )
+  let scale : Int := scale
+  let index : Int := index
+  let memop : MemOp :=
+    if ((L == 1#1) : Bool)
+    then MemOp_LOAD
+    else MemOp_STORE
+  let datasize : Int :=
+    if ((Q == 1#1) : Bool)
+    then 128
+    else 64
+  let esize : Int := (_shl_int_general 8 scale)
+  ArmFull.assert ((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-inputs/15-instrs64.sail:24349.48-24349.49"
+  (__ArmCertEndOfDecode ())
+  (execute_aarch64_instrs_memory_vector_single_no_wb (Sail.Int.toNatChecked (datasize))
+    (Sail.Int.toNatChecked (esize)) index m memop (Sail.Int.toNatChecked (n)) nontemporal replicate
+    (Sail.Int.toNatChecked (selem)) (Sail.Int.toNatChecked (t)) tagchecked wback)
+
+
+def decode_st4_advsimd_sngl_aarch64_instrs_memory_vector_single_no_wb (Rt : (BitVec 5)) (Rn : (BitVec 5)) (size : (BitVec 2)) (S : (BitVec 1)) (opcode : (BitVec 3)) (o2 : (BitVec 1)) (R : (BitVec 1)) (L : (BitVec 1)) (Q : (BitVec 1)) : SailM Unit := do
+  let t : Int := (BitVec.toNat Rt)
+  let n : Int := (BitVec.toNat Rn)
+  let m ← (( do (__UNKNOWN_integer ()) ) : SailM Int )
+  let wback : Bool := false
+  let nontemporal : Bool := false
+  let tagchecked : Bool := (wback || (n != 31))
+  let init_scale : Int := (BitVec.toNat (Sail.BitVec.extractLsb opcode 2 1))
+  let scale : Int := init_scale
+  let selem : Int :=
+    ((BitVec.toNat ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access opcode 0)])) +++ R)) +i 1)
+  let replicate : Bool := false
+  let index ← (( do (undefined_int_at (← occLabel 4360) ()) ) : SailM Int )
+  let (index, replicate, scale) ← (( do
+    match scale with
+    | 3 =>
+      (do
+        let (replicate, scale) ← (( do
+          if (((L == 0#1) || (S == 1#1)) : Bool)
+          then
+            (do
+              (__ArmCertEndOfDecode ())
+              sailThrow ((Error_Undefined ())))
+          else
+            (let scale : Int := (BitVec.toNat size)
+            let replicate : Bool := true
+            (pure ((replicate, scale)))) ) : SailM (Bool × Int) )
+        (pure ((index, replicate, scale))))
+    | 0 =>
+      (let index : Int := (BitVec.toNat ((Q +++ S) +++ size))
+      (pure ((index, replicate, scale))))
+    | 1 =>
+      (do
+        let index ← (( do
+          if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access size 0)])) == 1#1) : Bool)
+          then
+            (do
+              (__ArmCertEndOfDecode ())
+              sailThrow ((Error_Undefined ())))
+          else
+            (let index : Int :=
+              (BitVec.toNat
+                ((Q +++ S) +++ (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access size 1)]))))
+            (pure (index))) ) : SailM Int )
+        (pure ((index, replicate, scale))))
+    | 2 =>
+      (do
+        let (index, scale) ← (( do
+          if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access size 1)])) == 1#1) : Bool)
+          then
+            (do
+              (__ArmCertEndOfDecode ())
+              sailThrow ((Error_Undefined ())))
+          else
+            (do
+              if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access size 0)])) == 0#1) : Bool)
+              then
+                (let index : Int := (BitVec.toNat (Q +++ S))
+                (pure ((index, scale))))
+              else
+                (do
+                  if ((S == 1#1) : Bool)
+                  then
+                    (do
+                      (__ArmCertEndOfDecode ())
+                      sailThrow ((Error_Undefined ())))
+                  else
+                    (let index : Int := (BitVec.toNat Q)
+                    let scale : Int := 3
+                    (pure ((index, scale)))))) ) : SailM (Int × Int) )
+        (pure ((index, replicate, scale))))
+    | _ => (pure ((index, replicate, scale))) ) : SailM (Int × Bool × Int) )
+  let scale : Int := scale
+  let index : Int := index
+  let memop : MemOp :=
+    if ((L == 1#1) : Bool)
+    then MemOp_LOAD
+    else MemOp_STORE
+  let datasize : Int :=
+    if ((Q == 1#1) : Bool)
+    then 128
+    else 64
+  let esize : Int := (_shl_int_general 8 scale)
+  ArmFull.assert ((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-inputs/15-instrs64.sail:24419.48-24419.49"
+  (__ArmCertEndOfDecode ())
+  (execute_aarch64_instrs_memory_vector_single_no_wb (Sail.Int.toNatChecked (datasize))
+    (Sail.Int.toNatChecked (esize)) index m memop (Sail.Int.toNatChecked (n)) nontemporal replicate
+    (Sail.Int.toNatChecked (selem)) (Sail.Int.toNatChecked (t)) tagchecked wback)
+
+
+def decode_st4_advsimd_sngl_aarch64_instrs_memory_vector_single_post_inc (Rt : (BitVec 5)) (Rn : (BitVec 5)) (size : (BitVec 2)) (S : (BitVec 1)) (opcode : (BitVec 3)) (Rm : (BitVec 5)) (R : (BitVec 1)) (L : (BitVec 1)) (Q : (BitVec 1)) : SailM Unit := do
+  let t : Int := (BitVec.toNat Rt)
+  let n : Int := (BitVec.toNat Rn)
+  let m : Int := (BitVec.toNat Rm)
+  let wback : Bool := true
+  let nontemporal : Bool := false
+  let tagchecked : Bool := (wback || (n != 31))
+  let init_scale : Int := (BitVec.toNat (Sail.BitVec.extractLsb opcode 2 1))
+  let scale : Int := init_scale
+  let selem : Int :=
+    ((BitVec.toNat ((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access opcode 0)])) +++ R)) +i 1)
+  let replicate : Bool := false
+  let index ← (( do (undefined_int_at (← occLabel 4361) ()) ) : SailM Int )
+  let (index, replicate, scale) ← (( do
+    match scale with
+    | 3 =>
+      (do
+        let (replicate, scale) ← (( do
+          if (((L == 0#1) || (S == 1#1)) : Bool)
+          then
+            (do
+              (__ArmCertEndOfDecode ())
+              sailThrow ((Error_Undefined ())))
+          else
+            (let scale : Int := (BitVec.toNat size)
+            let replicate : Bool := true
+            (pure ((replicate, scale)))) ) : SailM (Bool × Int) )
+        (pure ((index, replicate, scale))))
+    | 0 =>
+      (let index : Int := (BitVec.toNat ((Q +++ S) +++ size))
+      (pure ((index, replicate, scale))))
+    | 1 =>
+      (do
+        let index ← (( do
+          if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access size 0)])) == 1#1) : Bool)
+          then
+            (do
+              (__ArmCertEndOfDecode ())
+              sailThrow ((Error_Undefined ())))
+          else
+            (let index : Int :=
+              (BitVec.toNat
+                ((Q +++ S) +++ (BitVec.setWidth 1 (BitVec.join1 [(BitVec.access size 1)]))))
+            (pure (index))) ) : SailM Int )
+        (pure ((index, replicate, scale))))
+    | 2 =>
+      (do
+        let (index, scale) ← (( do
+          if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access size 1)])) == 1#1) : Bool)
+          then
+            (do
+              (__ArmCertEndOfDecode ())
+              sailThrow ((Error_Undefined ())))
+          else
+            (do
+              if (((BitVec.setWidth 1 (BitVec.join1 [(BitVec.access size 0)])) == 0#1) : Bool)
+              then
+                (let index : Int := (BitVec.toNat (Q +++ S))
+                (pure ((index, scale))))
+              else
+                (do
+                  if ((S == 1#1) : Bool)
+                  then
+                    (do
+                      (__ArmCertEndOfDecode ())
+                      sailThrow ((Error_Undefined ())))
+                  else
+                    (let index : Int := (BitVec.toNat Q)
+                    let scale : Int := 3
+                    (pure ((index, scale)))))) ) : SailM (Int × Int) )
+        (pure ((index, replicate, scale))))
+    | _ => (pure ((index, replicate, scale))) ) : SailM (Int × Bool × Int) )
+  let scale : Int := scale
+  let index : Int := index
+  let memop : MemOp :=
+    if ((L == 1#1) : Bool)
+    then MemOp_LOAD
+    else MemOp_STORE
+  let datasize : Int :=
+    if ((Q == 1#1) : Bool)
+    then 128
+    else 64
+  let esize : Int := (_shl_int_general 8 scale)
+  ArmFull.assert ((((esize == 8) || (esize == 16)) || (esize == 32)) || (esize == 64)) "sail-inputs/15-instrs64.sail:24489.48-24489.49"
+  (__ArmCertEndOfDecode ())
+  (execute_aarch64_instrs_memory_vector_single_no_wb (Sail.Int.toNatChecked (datasize))
+    (Sail.Int.toNatChecked (esize)) index m memop (Sail.Int.toNatChecked (n)) nontemporal replicate
+    (Sail.Int.toNatChecked (selem)) (Sail.Int.toNatChecked (t)) tagchecked wback)
+
+
+def decode_ld1_advsimd_mult_aarch64_instrs_memory_vector_multiple_no_wb (Rt : (BitVec 5)) (Rn : (BitVec 5)) (size : (BitVec 2)) (opcode : (BitVec 4)) (L : (BitVec 1)) (Q : (BitVec 1)) : SailM Unit := do
+  let t : Int := (BitVec.toNat Rt)
+  let n : Int := (BitVec.toNat Rn)
+  let m ← (( do (__UNKNOWN_integer ()) ) : SailM Int )
+  let wback : Bool := false
+  let nontemporal : Bool := false
+  let tagchecked : Bool := (wback || (n != 31))
+  let memop : MemOp :=
+    if ((L == 1#1) : Bool)
+    then MemOp_LOAD
+    else MemOp_STORE
+  let datasize : Int :=
+    if ((Q == 1#1) : Bool)
+    then 128
+    else 64
+  let esize : Int := (Int.shiftl 8 (BitVec.toNat size))
+  let elements : Int :=
+    (Int.ediv (Sail.Int.toNatChecked (datasize)) (Sail.Int.toNatChecked (esize)))
+  let rpt : Int := 1
+  let selem : Int := 1
+  let (rpt, selem) ← (( do
+    match opcode with
+    | 0b0000 =>
+      (let rpt : Int := 1
+      let selem : Int := 4
+      (pure ((rpt, selem))))
+    | 0b0010 =>
+      (let rpt : Int := 4
+      let selem : Int := 1
+      (pure ((rpt, selem))))
+    | 0b0100 =>
+      (let rpt : Int := 1
+      let selem : Int := 3
+      (pure ((rpt, selem))))
+    | 0b0110 =>
+      (let rpt : Int := 3
+      let selem : Int := 1
+      (pure ((rpt, selem))))
+    | 0b0111 =>
+      (let rpt : Int := 1
+      let selem : Int := 1
+      (pure ((rpt, selem))))
+    | 0b1000 =>
+      (let rpt : Int := 1
+      let selem : Int := 2
+      (pure ((rpt, selem))))
+    | 0b1010 =>
+      (let rpt : Int := 2
+      let selem : Int := 1
+      (pure ((rpt, selem))))
+    | _ =>
+      (do
+        (__ArmCertEndOfDecode ())
+        sailThrow ((Error_Undefined ()))) ) : SailM (Int × Int) )
+  let selem : Int := selem
+  let rpt : Int := rpt
+  if ((((size +++ Q) == 0b110#3) && (selem != 1)) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
   else
     (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__6 ← (( do
-            (pure ((← do
-                  (EL2Enabled ())) && ((__HCR_EL2_TRVM == 1#1) : Bool))) ) : SailM Bool )
-          if (w__6 : Bool)
-          then
-            (do
-              (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
-          else
-            (do
-              let w__11 ← (( do
-                (pure ((← do
-                      (pure ((← do
-                            if ((← do
-                                 (EL2Enabled ())) : Bool)
-                            then
-                              (do
-                                (IsFeatureImplemented FEAT_FGT))
-                            else (pure false)) && (((! (HaveEL EL3)) || (__SCR_EL3_FGTEn == 1#1)) : Bool)))) && ((__HFGRTR_EL2_FAR_EL1 == 1#1) : Bool)))
-                ) : SailM Bool )
-              if (w__11 : Bool)
-              then
-                (do
-                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
-              else
-                (do
-                  let w__16 ← (( do
-                    if ((← do
-                         (EL2Enabled ())) : Bool)
-                    then
-                      (do
-                        let w__13 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                        let w__14 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                        let w__15 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                        (pure (((((_get_HCR_EL2_Type_NV2 w__13) +++ ((_get_HCR_EL2_Type_NV1 w__14) +++ (_get_HCR_EL2_Type_NV
-                                  w__15))) == 0b111#3) : Bool))))
-                    else (pure false) ) : SailM Bool )
-                  if (w__16 : Bool)
-                  then
-                    (do
-                      let w__17 ← (( do (NVMem_read (BitVec.toNat 0x220#12)) ) : SailM (BitVec 64)
-                        )
-                      (X_set t 64 w__17))
-                  else
-                    (do
-                      let w__18 ← (( do readReg FAR_EL1 ) : SailM (BitVec 64) )
-                      (X_set t 64 w__18)))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              if ((__HCR_EL2_E2H == 1#1) : Bool)
-              then
-                (do
-                  let w__19 ← (( do readReg FAR_EL2 ) : SailM (BitVec 64) )
-                  (X_set t 64 w__19))
-              else
-                (do
-                  let w__20 ← (( do readReg FAR_EL1 ) : SailM (BitVec 64) )
-                  (X_set t 64 w__20)))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  let w__21 ← (( do readReg FAR_EL1 ) : SailM (BitVec 64) )
-                  (X_set t 64 w__21))
-              else (pure (())))))
+      (__ArmCertEndOfDecode ())
+      (execute_aarch64_instrs_memory_vector_multiple_no_wb (Sail.Int.toNatChecked (datasize))
+        elements (Sail.Int.toNatChecked (esize)) m memop (Sail.Int.toNatChecked (n)) nontemporal
+        (Sail.Int.toNatChecked (rpt)) (Sail.Int.toNatChecked (selem)) (Sail.Int.toNatChecked (t))
+        tagchecked wback))
 
 
-/-- Type quantifiers: t : Int -/
-def GCSCR_EL1_SysRegRead_a1c1abc2b55fb304 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
-  let w__2 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_E2H : (BitVec 1) := (_get_HCR_EL2_Type_E2H w__2)
-  let w__3 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__3)
-  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_GCSEn : (BitVec 1) := (_get_SCR_EL3_Type_GCSEn w__4)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_ld1_advsimd_mult_aarch64_instrs_memory_vector_multiple_post_inc (Rt : (BitVec 5)) (Rn : (BitVec 5)) (size : (BitVec 2)) (opcode : (BitVec 4)) (Rm : (BitVec 5)) (L : (BitVec 1)) (Q : (BitVec 1)) : SailM Unit := do
+  let t : Int := (BitVec.toNat Rt)
+  let n : Int := (BitVec.toNat Rn)
+  let m : Int := (BitVec.toNat Rm)
+  let wback : Bool := true
+  let nontemporal : Bool := false
+  let tagchecked : Bool := (wback || (n != 31))
+  let memop : MemOp :=
+    if ((L == 1#1) : Bool)
+    then MemOp_LOAD
+    else MemOp_STORE
+  let datasize : Int :=
+    if ((Q == 1#1) : Bool)
+    then 128
+    else 64
+  let esize : Int := (Int.shiftl 8 (BitVec.toNat size))
+  let elements : Int :=
+    (Int.ediv (Sail.Int.toNatChecked (datasize)) (Sail.Int.toNatChecked (esize)))
+  let rpt : Int := 1
+  let selem : Int := 1
+  let (rpt, selem) ← (( do
+    match opcode with
+    | 0b0000 =>
+      (let rpt : Int := 1
+      let selem : Int := 4
+      (pure ((rpt, selem))))
+    | 0b0010 =>
+      (let rpt : Int := 4
+      let selem : Int := 1
+      (pure ((rpt, selem))))
+    | 0b0100 =>
+      (let rpt : Int := 1
+      let selem : Int := 3
+      (pure ((rpt, selem))))
+    | 0b0110 =>
+      (let rpt : Int := 3
+      let selem : Int := 1
+      (pure ((rpt, selem))))
+    | 0b0111 =>
+      (let rpt : Int := 1
+      let selem : Int := 1
+      (pure ((rpt, selem))))
+    | 0b1000 =>
+      (let rpt : Int := 1
+      let selem : Int := 2
+      (pure ((rpt, selem))))
+    | 0b1010 =>
+      (let rpt : Int := 2
+      let selem : Int := 1
+      (pure ((rpt, selem))))
+    | _ =>
+      (do
+        (__ArmCertEndOfDecode ())
+        sailThrow ((Error_Undefined ()))) ) : SailM (Int × Int) )
+  let selem : Int := selem
+  let rpt : Int := rpt
+  if ((((size +++ Q) == 0b110#3) && (selem != 1)) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
   else
     (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__9 ← (( do
-            if ((← do
-                 (EL2Enabled ())) : Bool)
-            then
-              (do
-                let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                let w__7 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                let w__8 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                (pure (((((_get_HCR_EL2_Type_NV2 w__6) +++ ((_get_HCR_EL2_Type_NV1 w__7) +++ (_get_HCR_EL2_Type_NV
-                          w__8))) == 0b101#3) : Bool))))
-            else (pure false) ) : SailM Bool )
-          if (w__9 : Bool)
-          then
-            (do
-              let w__10 ← (( do (NVMem_read (BitVec.toNat 0x8D0#12)) ) : SailM (BitVec 64) )
-              (X_set t 64 w__10))
-          else
-            (do
-              let w__12 ← (( do
-                (pure ((← do
-                      (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
-              if (w__12 : Bool)
-              then
-                (do
-                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
-              else sailThrow ((Error_Undefined ()))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              if ((__HCR_EL2_E2H == 1#1) : Bool)
-              then
-                (do
-                  let w__18 ← (( do
-                    (pure ((← do
-                          if ((← do
-                               (pure ((← do
-                                     (pure ((← do
-                                           (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                          then
-                            (do
-                              (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                          else (pure false)) && ((__SCR_EL3_GCSEn == 0#1) : Bool))) ) : SailM Bool )
-                  if (w__18 : Bool)
-                  then sailThrow ((Error_Undefined ()))
-                  else
-                    (do
-                      if (((HaveEL EL3) && (__SCR_EL3_GCSEn == 0#1)) : Bool)
-                      then
-                        (do
-                          let w__20 ← (( do
-                            (pure ((← do
-                                  (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
-                          if (w__20 : Bool)
-                          then sailThrow ((Error_Undefined ()))
-                          else
-                            (do
-                              (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                      else
-                        (do
-                          let w__21 ← (( do readReg GCSCR_EL1 ) : SailM (BitVec 64) )
-                          (X_set t 64 (__get_GCSCR_EL1 w__21)))))
-              else sailThrow ((Error_Undefined ())))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  let w__25 ← (( do
-                    (pure ((← do
-                          if ((← do
-                               (EL2Enabled ())) : Bool)
-                          then
-                            (do
-                              let w__23 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                              (pure (((! w__23) : Bool))))
-                          else (pure false)) && ((__HCR_EL2_E2H == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__25 : Bool)
-                  then
-                    (do
-                      let w__26 ← (( do readReg GCSCR_EL1 ) : SailM (BitVec 64) )
-                      (X_set t 64 (__get_GCSCR_EL1 w__26)))
-                  else sailThrow ((Error_Undefined ())))
-              else (pure (())))))
+      (__ArmCertEndOfDecode ())
+      (execute_aarch64_instrs_memory_vector_multiple_no_wb (Sail.Int.toNatChecked (datasize))
+        elements (Sail.Int.toNatChecked (esize)) m memop (Sail.Int.toNatChecked (n)) nontemporal
+        (Sail.Int.toNatChecked (rpt)) (Sail.Int.toNatChecked (selem)) (Sail.Int.toNatChecked (t))
+        tagchecked wback))
 
 
-/-- Type quantifiers: t : Int -/
-def GCSCR_EL1_SysRegRead_c10918a3ea4a2f5c (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__1)
-  let w__2 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_GCSEn : (BitVec 1) := (_get_SCR_EL3_Type_GCSEn w__2)
-  let w__3 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_FGTEn : (BitVec 1) := (_get_SCR_EL3_Type_FGTEn w__3)
-  let w__4 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
-  let __HFGRTR_EL2_nGCS_EL1 : (BitVec 1) := (_get_HFGRTR_EL2_Type_nGCS_EL1 w__4)
-  let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_E2H : (BitVec 1) := (_get_HCR_EL2_Type_E2H w__5)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_ld2_advsimd_mult_aarch64_instrs_memory_vector_multiple_no_wb (Rt : (BitVec 5)) (Rn : (BitVec 5)) (size : (BitVec 2)) (opcode : (BitVec 4)) (L : (BitVec 1)) (Q : (BitVec 1)) : SailM Unit := do
+  let t : Int := (BitVec.toNat Rt)
+  let n : Int := (BitVec.toNat Rn)
+  let m ← (( do (__UNKNOWN_integer ()) ) : SailM Int )
+  let wback : Bool := false
+  let nontemporal : Bool := false
+  let tagchecked : Bool := (wback || (n != 31))
+  let memop : MemOp :=
+    if ((L == 1#1) : Bool)
+    then MemOp_LOAD
+    else MemOp_STORE
+  let datasize : Int :=
+    if ((Q == 1#1) : Bool)
+    then 128
+    else 64
+  let esize : Int := (Int.shiftl 8 (BitVec.toNat size))
+  let elements : Int :=
+    (Int.ediv (Sail.Int.toNatChecked (datasize)) (Sail.Int.toNatChecked (esize)))
+  let rpt : Int := 1
+  let selem : Int := 1
+  let (rpt, selem) ← (( do
+    match opcode with
+    | 0b0000 =>
+      (let rpt : Int := 1
+      let selem : Int := 4
+      (pure ((rpt, selem))))
+    | 0b0010 =>
+      (let rpt : Int := 4
+      let selem : Int := 1
+      (pure ((rpt, selem))))
+    | 0b0100 =>
+      (let rpt : Int := 1
+      let selem : Int := 3
+      (pure ((rpt, selem))))
+    | 0b0110 =>
+      (let rpt : Int := 3
+      let selem : Int := 1
+      (pure ((rpt, selem))))
+    | 0b0111 =>
+      (let rpt : Int := 1
+      let selem : Int := 1
+      (pure ((rpt, selem))))
+    | 0b1000 =>
+      (let rpt : Int := 1
+      let selem : Int := 2
+      (pure ((rpt, selem))))
+    | 0b1010 =>
+      (let rpt : Int := 2
+      let selem : Int := 1
+      (pure ((rpt, selem))))
+    | _ =>
+      (do
+        (__ArmCertEndOfDecode ())
+        sailThrow ((Error_Undefined ()))) ) : SailM (Int × Int) )
+  let selem : Int := selem
+  let rpt : Int := rpt
+  if ((((size +++ Q) == 0b110#3) && (selem != 1)) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
   else
     (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__11 ← (( do
-            (pure ((← do
-                  if ((← do
-                       (pure ((← do
-                             (pure ((← do
-                                   (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                  then
-                    (do
-                      (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                  else (pure false)) && ((__SCR_EL3_GCSEn == 0#1) : Bool))) ) : SailM Bool )
-          if (w__11 : Bool)
-          then sailThrow ((Error_Undefined ()))
-          else
-            (do
-              let w__16 ← (( do
-                (pure ((← do
-                      (pure ((← do
-                            if ((← do
-                                 (EL2Enabled ())) : Bool)
-                            then
-                              (do
-                                (IsFeatureImplemented FEAT_FGT))
-                            else (pure false)) && (((! (HaveEL EL3)) || (__SCR_EL3_FGTEn == 1#1)) : Bool)))) && ((__HFGRTR_EL2_nGCS_EL1 == 0#1) : Bool)))
-                ) : SailM Bool )
-              if (w__16 : Bool)
-              then
-                (do
-                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
-              else
-                (do
-                  if (((HaveEL EL3) && (__SCR_EL3_GCSEn == 0#1)) : Bool)
-                  then
-                    (do
-                      let w__18 ← (( do
-                        (pure ((← do
-                              (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
-                      if (w__18 : Bool)
-                      then sailThrow ((Error_Undefined ()))
-                      else
-                        (do
-                          (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                  else
-                    (do
-                      let w__23 ← (( do
-                        if ((← do
-                             (EL2Enabled ())) : Bool)
-                        then
-                          (do
-                            let w__20 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                            let w__21 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                            let w__22 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                            (pure (((((_get_HCR_EL2_Type_NV2 w__20) +++ ((_get_HCR_EL2_Type_NV1
-                                      w__21) +++ (_get_HCR_EL2_Type_NV w__22))) == 0b111#3) : Bool))))
-                        else (pure false) ) : SailM Bool )
-                      if (w__23 : Bool)
-                      then
-                        (do
-                          let w__24 ← (( do (NVMem_read (BitVec.toNat 0x8D0#12)) ) : SailM
-                            (BitVec 64) )
-                          (X_set t 64 w__24))
-                      else
-                        (do
-                          let w__25 ← (( do readReg GCSCR_EL1 ) : SailM (BitVec 64) )
-                          (X_set t 64 (__get_GCSCR_EL1 w__25)))))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              let w__31 ← (( do
-                (pure ((← do
-                      if ((← do
-                           (pure ((← do
-                                 (pure ((← do
-                                       (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                      then
-                        (do
-                          (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                      else (pure false)) && ((__SCR_EL3_GCSEn == 0#1) : Bool))) ) : SailM Bool )
-              if (w__31 : Bool)
-              then sailThrow ((Error_Undefined ()))
-              else
-                (do
-                  if (((HaveEL EL3) && (__SCR_EL3_GCSEn == 0#1)) : Bool)
-                  then
-                    (do
-                      let w__33 ← (( do
-                        (pure ((← do
-                              (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
-                      if (w__33 : Bool)
-                      then sailThrow ((Error_Undefined ()))
-                      else
-                        (do
-                          (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                  else
-                    (do
-                      if ((__HCR_EL2_E2H == 1#1) : Bool)
-                      then
-                        (do
-                          let w__34 ← (( do readReg GCSCR_EL2 ) : SailM (BitVec 64) )
-                          (X_set t 64 (__get_GCSCR_EL2 w__34)))
-                      else
-                        (do
-                          let w__35 ← (( do readReg GCSCR_EL1 ) : SailM (BitVec 64) )
-                          (X_set t 64 (__get_GCSCR_EL1 w__35))))))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  let w__36 ← (( do readReg GCSCR_EL1 ) : SailM (BitVec 64) )
-                  (X_set t 64 (__get_GCSCR_EL1 w__36)))
-              else (pure (())))))
+      (__ArmCertEndOfDecode ())
+      (execute_aarch64_instrs_memory_vector_multiple_no_wb (Sail.Int.toNatChecked (datasize))
+        elements (Sail.Int.toNatChecked (esize)) m memop (Sail.Int.toNatChecked (n)) nontemporal
+        (Sail.Int.toNatChecked (rpt)) (Sail.Int.toNatChecked (selem)) (Sail.Int.toNatChecked (t))
+        tagchecked wback))
 
 
-/-- Type quantifiers: t : Int -/
-def GCSPR_EL1_SysRegRead_474789c62224c972 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
-  let w__2 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_E2H : (BitVec 1) := (_get_HCR_EL2_Type_E2H w__2)
-  let w__3 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__3)
-  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_GCSEn : (BitVec 1) := (_get_SCR_EL3_Type_GCSEn w__4)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
+def decode_ld2_advsimd_mult_aarch64_instrs_memory_vector_multiple_post_inc (Rt : (BitVec 5)) (Rn : (BitVec 5)) (size : (BitVec 2)) (opcode : (BitVec 4)) (Rm : (BitVec 5)) (L : (BitVec 1)) (Q : (BitVec 1)) : SailM Unit := do
+  let t : Int := (BitVec.toNat Rt)
+  let n : Int := (BitVec.toNat Rn)
+  let m : Int := (BitVec.toNat Rm)
+  let wback : Bool := true
+  let nontemporal : Bool := false
+  let tagchecked : Bool := (wback || (n != 31))
+  let memop : MemOp :=
+    if ((L == 1#1) : Bool)
+    then MemOp_LOAD
+    else MemOp_STORE
+  let datasize : Int :=
+    if ((Q == 1#1) : Bool)
+    then 128
+    else 64
+  let esize : Int := (Int.shiftl 8 (BitVec.toNat size))
+  let elements : Int :=
+    (Int.ediv (Sail.Int.toNatChecked (datasize)) (Sail.Int.toNatChecked (esize)))
+  let rpt : Int := 1
+  let selem : Int := 1
+  let (rpt, selem) ← (( do
+    match opcode with
+    | 0b0000 =>
+      (let rpt : Int := 1
+      let selem : Int := 4
+      (pure ((rpt, selem))))
+    | 0b0010 =>
+      (let rpt : Int := 4
+      let selem : Int := 1
+      (pure ((rpt, selem))))
+    | 0b0100 =>
+      (let rpt : Int := 1
+      let selem : Int := 3
+      (pure ((rpt, selem))))
+    | 0b0110 =>
+      (let rpt : Int := 3
+      let selem : Int := 1
+      (pure ((rpt, selem))))
+    | 0b0111 =>
+      (let rpt : Int := 1
+      let selem : Int := 1
+      (pure ((rpt, selem))))
+    | 0b1000 =>
+      (let rpt : Int := 1
+      let selem : Int := 2
+      (pure ((rpt, selem))))
+    | 0b1010 =>
+      (let rpt : Int := 2
+      let selem : Int := 1
+      (pure ((rpt, selem))))
+    | _ =>
+      (do
+        (__ArmCertEndOfDecode ())
+        sailThrow ((Error_Undefined ()))) ) : SailM (Int × Int) )
+  let selem : Int := selem
+  let rpt : Int := rpt
+  if ((((size +++ Q) == 0b110#3) && (selem != 1)) : Bool)
+  then
+    (do
+      (__ArmCertEndOfDecode ())
+      sailThrow ((Error_Undefined ())))
   else
     (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__9 ← (( do
-            if ((← do
-                 (EL2Enabled ())) : Bool)
-            then
-              (do
-                let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                let w__7 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                let w__8 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                (pure (((((_get_HCR_EL2_Type_NV2 w__6) +++ ((_get_HCR_EL2_Type_NV1 w__7) +++ (_get_HCR_EL2_Type_NV
-                          w__8))) == 0b101#3) : Bool))))
-            else (pure false) ) : SailM Bool )
-          if (w__9 : Bool)
-          then
-            (do
-              let w__10 ← (( do (NVMem_read (BitVec.toNat 0x8C0#12)) ) : SailM (BitVec 64) )
-              (X_set t 64 w__10))
-          else
-            (do
-              let w__12 ← (( do
-                (pure ((← do
-                      (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
-              if (w__12 : Bool)
-              then
-                (do
-                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
-              else sailThrow ((Error_Undefined ()))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              if ((__HCR_EL2_E2H == 1#1) : Bool)
-              then
-                (do
-                  let w__18 ← (( do
-                    (pure ((← do
-                          if ((← do
-                               (pure ((← do
-                                     (pure ((← do
-                                           (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                          then
-                            (do
-                              (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                          else (pure false)) && ((__SCR_EL3_GCSEn == 0#1) : Bool))) ) : SailM Bool )
-                  if (w__18 : Bool)
-                  then sailThrow ((Error_Undefined ()))
-                  else
-                    (do
-                      if (((HaveEL EL3) && (__SCR_EL3_GCSEn == 0#1)) : Bool)
-                      then
-                        (do
-                          let w__20 ← (( do
-                            (pure ((← do
-                                  (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
-                          if (w__20 : Bool)
-                          then sailThrow ((Error_Undefined ()))
-                          else
-                            (do
-                              (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                      else
-                        (do
-                          let w__21 ← (( do readReg GCSPR_EL1 ) : SailM (BitVec 64) )
-                          (X_set t 64 (__get_GCSPR_EL1 w__21)))))
-              else sailThrow ((Error_Undefined ())))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  let w__25 ← (( do
-                    (pure ((← do
-                          if ((← do
-                               (EL2Enabled ())) : Bool)
-                          then
-                            (do
-                              let w__23 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                              (pure (((! w__23) : Bool))))
-                          else (pure false)) && ((__HCR_EL2_E2H == 1#1) : Bool))) ) : SailM Bool )
-                  if (w__25 : Bool)
-                  then
-                    (do
-                      let w__26 ← (( do readReg GCSPR_EL1 ) : SailM (BitVec 64) )
-                      (X_set t 64 (__get_GCSPR_EL1 w__26)))
-                  else sailThrow ((Error_Undefined ())))
-              else (pure (())))))
-
-
-/-- Type quantifiers: t : Int -/
-def GCSPR_EL1_SysRegRead_efbe68095a628d64 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__1)
-  let w__2 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_GCSEn : (BitVec 1) := (_get_SCR_EL3_Type_GCSEn w__2)
-  let w__3 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_FGTEn : (BitVec 1) := (_get_SCR_EL3_Type_FGTEn w__3)
-  let w__4 ← (( do readReg HFGRTR_EL2 ) : SailM (BitVec 64) )
-  let __HFGRTR_EL2_nGCS_EL1 : (BitVec 1) := (_get_HFGRTR_EL2_Type_nGCS_EL1 w__4)
-  let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_E2H : (BitVec 1) := (_get_HCR_EL2_Type_E2H w__5)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else
-    (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__11 ← (( do
-            (pure ((← do
-                  if ((← do
-                       (pure ((← do
-                             (pure ((← do
-                                   (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                  then
-                    (do
-                      (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                  else (pure false)) && ((__SCR_EL3_GCSEn == 0#1) : Bool))) ) : SailM Bool )
-          if (w__11 : Bool)
-          then sailThrow ((Error_Undefined ()))
-          else
-            (do
-              let w__16 ← (( do
-                (pure ((← do
-                      (pure ((← do
-                            if ((← do
-                                 (EL2Enabled ())) : Bool)
-                            then
-                              (do
-                                (IsFeatureImplemented FEAT_FGT))
-                            else (pure false)) && (((! (HaveEL EL3)) || (__SCR_EL3_FGTEn == 1#1)) : Bool)))) && ((__HFGRTR_EL2_nGCS_EL1 == 0#1) : Bool)))
-                ) : SailM Bool )
-              if (w__16 : Bool)
-              then
-                (do
-                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
-              else
-                (do
-                  if (((HaveEL EL3) && (__SCR_EL3_GCSEn == 0#1)) : Bool)
-                  then
-                    (do
-                      let w__18 ← (( do
-                        (pure ((← do
-                              (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
-                      if (w__18 : Bool)
-                      then sailThrow ((Error_Undefined ()))
-                      else
-                        (do
-                          (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                  else
-                    (do
-                      let w__23 ← (( do
-                        if ((← do
-                             (EL2Enabled ())) : Bool)
-                        then
-                          (do
-                            let w__20 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                            let w__21 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                            let w__22 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                            (pure (((((_get_HCR_EL2_Type_NV2 w__20) +++ ((_get_HCR_EL2_Type_NV1
-                                      w__21) +++ (_get_HCR_EL2_Type_NV w__22))) == 0b111#3) : Bool))))
-                        else (pure false) ) : SailM Bool )
-                      if (w__23 : Bool)
-                      then
-                        (do
-                          let w__24 ← (( do (NVMem_read (BitVec.toNat 0x8C0#12)) ) : SailM
-                            (BitVec 64) )
-                          (X_set t 64 w__24))
-                      else
-                        (do
-                          let w__25 ← (( do readReg GCSPR_EL1 ) : SailM (BitVec 64) )
-                          (X_set t 64 (__get_GCSPR_EL1 w__25)))))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              let w__31 ← (( do
-                (pure ((← do
-                      if ((← do
-                           (pure ((← do
-                                 (pure ((← do
-                                       (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                      then
-                        (do
-                          (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                      else (pure false)) && ((__SCR_EL3_GCSEn == 0#1) : Bool))) ) : SailM Bool )
-              if (w__31 : Bool)
-              then sailThrow ((Error_Undefined ()))
-              else
-                (do
-                  if (((HaveEL EL3) && (__SCR_EL3_GCSEn == 0#1)) : Bool)
-                  then
-                    (do
-                      let w__33 ← (( do
-                        (pure ((← do
-                              (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
-                      if (w__33 : Bool)
-                      then sailThrow ((Error_Undefined ()))
-                      else
-                        (do
-                          (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                  else
-                    (do
-                      if ((__HCR_EL2_E2H == 1#1) : Bool)
-                      then
-                        (do
-                          let w__34 ← (( do readReg GCSPR_EL2 ) : SailM (BitVec 64) )
-                          (X_set t 64 (__get_GCSPR_EL2 w__34)))
-                      else
-                        (do
-                          let w__35 ← (( do readReg GCSPR_EL1 ) : SailM (BitVec 64) )
-                          (X_set t 64 (__get_GCSPR_EL1 w__35))))))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  let w__36 ← (( do readReg GCSPR_EL1 ) : SailM (BitVec 64) )
-                  (X_set t 64 (__get_GCSPR_EL1 w__36)))
-              else (pure (())))))
-
-
-/-- Type quantifiers: t : Int -/
-def HAFGRTR_EL2_SysRegRead_b9d391a626b7035e (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
-  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
-  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
-  let w__3 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_FGTEn : (BitVec 1) := (_get_SCR_EL3_Type_FGTEn w__3)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else
-    (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__7 ← (( do
-            if ((← do
-                 (EL2Enabled ())) : Bool)
-            then
-              (do
-                let w__5 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                let w__6 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
-                (pure (((((_get_HCR_EL2_Type_NV2 w__5) +++ (_get_HCR_EL2_Type_NV w__6)) == 0b11#2) : Bool))))
-            else (pure false) ) : SailM Bool )
-          if (w__7 : Bool)
-          then
-            (do
-              let w__8 ← (( do (NVMem_read (BitVec.toNat 0x1E8#12)) ) : SailM (BitVec 64) )
-              (X_set t 64 w__8))
-          else
-            (do
-              let w__10 ← (( do
-                (pure ((← do
-                      (EL2Enabled ())) && ((__HCR_EL2_NV == 1#1) : Bool))) ) : SailM Bool )
-              if (w__10 : Bool)
-              then
-                (do
-                  (AArch64_SystemAccessTrap EL2 (BitVec.toNat 0x18#8)))
-              else sailThrow ((Error_Undefined ()))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              let w__16 ← (( do
-                (pure ((← do
-                      if ((← do
-                           (pure ((← do
-                                 (pure ((← do
-                                       (Halted ())) && ((HaveEL EL3) : Bool)))) && ((__EDSCR_SDD == 1#1) : Bool)))) : Bool)
-                      then
-                        (do
-                          (__IMPDEF_boolean "EL3 trap priority when SDD == '1'"))
-                      else (pure false)) && ((__SCR_EL3_FGTEn == 0#1) : Bool))) ) : SailM Bool )
-              if (w__16 : Bool)
-              then sailThrow ((Error_Undefined ()))
-              else
-                (do
-                  if (((HaveEL EL3) && (__SCR_EL3_FGTEn == 0#1)) : Bool)
-                  then
-                    (do
-                      let w__18 ← (( do
-                        (pure ((← do
-                              (Halted ())) && ((__EDSCR_SDD == 1#1) : Bool))) ) : SailM Bool )
-                      if (w__18 : Bool)
-                      then sailThrow ((Error_Undefined ()))
-                      else
-                        (do
-                          (AArch64_SystemAccessTrap EL3 (BitVec.toNat 0x18#8))))
-                  else
-                    (do
-                      let w__19 ← (( do readReg HAFGRTR_EL2 ) : SailM (BitVec 64) )
-                      (X_set t 64 (__get_HAFGRTR_EL2 w__19)))))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  let w__20 ← (( do readReg HAFGRTR_EL2 ) : SailM (BitVec 64) )
-                  (X_set t 64 (__get_HAFGRTR_EL2 w__20)))
-              else (pure (())))))
+      (__ArmCertEndOfDecode ())
+      (execute_aarch64_instrs_memory_vector_multiple_no_wb (Sail.Int.toNatChecked (datasize))
+        elements (Sail.Int.toNatChecked (esize)) m memop (Sail.Int.toNatChecked (n)) nontemporal
+        (Sail.Int.toNatChecked (rpt)) (Sail.Int.toNatChecked (selem)) (Sail.Int.toNatChecked (t))
+        tagchecked wback))
 
 
 end ArmFull.Functions

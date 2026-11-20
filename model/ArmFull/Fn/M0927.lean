@@ -1,19 +1,13 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0022
-import ArmFull.Fn.M0054
-import ArmFull.Fn.M0059
-import ArmFull.Fn.M0178
-import ArmFull.Fn.M0181
-import ArmFull.Fn.M0202
-import ArmFull.Fn.M0254
-import ArmFull.Fn.M0260
-import ArmFull.Fn.M0852
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0051
+public import ArmFull.Fn.M0217
+public import ArmFull.Fn.M0226
+public import ArmFull.Fn.M0866 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -115,648 +109,648 @@ open ArchVersion
 open AccessType
 open ATAccess
 
-/-- Type quantifiers: t : Int -/
-def ATS12NSOPR_SysRegWrite32_29b73e1bf71ad72e (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T7 : (BitVec 1) := (_get_HSTR_EL2_Type_T7 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T7 : (BitVec 1) := (_get_HSTR_Type_T7 w__2)
-  let w__3 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_NS : (BitVec 1) := (_get_SCR_EL3_Type_NS w__3)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else
+/-- Type quantifiers: VL : Nat, a : Nat, b : Nat, da : Nat, dim_dim_esize : Nat, esize : Nat, m :
+  Nat, n : Nat, k_op1_unsigned : Bool, k_op2_unsigned : Bool, k_sub_op : Bool, 0 ≤ n ∧
+  n ≤ 31 ∧
+  0 ≤ m ∧
+  m ≤ 31 ∧
+  esize = 32 ∧
+  List.elem da [0, 1, 2, 3] ∧
+  List.elem b [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem a [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  (is_VL VL) ∧ dim_dim_esize = (VL / esize * (VL / esize * esize)) -/
+def execute_UMOPS_ZA_PP_ZZ_32 (VL : Nat) (dim_dim_esize : Nat) (a : Nat) (b : Nat) (da : Nat) (esize : Nat) (m : Nat) (n : Nat) (op1_unsigned : Bool) (op2_unsigned : Bool) (sub_op : Bool) : SailM Unit := do
+  (CheckStreamingSVEAndZAEnabled ())
+  let VL : Nat := VL
+  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
+  let dim : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask1 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read a PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let mask2 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read b PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read n VL)) ) : SailM (BitVec VL) )
+  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read m VL)) ) : SailM (BitVec VL) )
+  let operand3 ← (( do ((Sail.BitVec.castWidth ) <$> (ZAtile_read VL da esize dim_dim_esize)) ) :
+    SailM (BitVec dim_dim_esize) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 7005)
+      (Sail.Int.toNatChecked (dim_dim_esize)))) ) : SailM (BitVec dim_dim_esize) )
+  let prod ← (( do (undefined_int_at (← occLabel 7006) ()) ) : SailM Int )
+  let (prod, result) ← (( do
+    let loop_row_lower : Nat := 0
+    let loop_row_upper : Int := (dim -i 1)
     (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__7 ← (( do
-            (pure ((← do
-                  if ((← do
-                       (EL2Enabled ())) : Bool)
-                  then
-                    (do
-                      let w__5 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                      (pure (((! w__5) : Bool))))
-                  else (pure false)) && ((__HSTR_EL2_T7 == 1#1) : Bool))) ) : SailM Bool )
-          if (w__7 : Bool)
-          then
-            (do
-              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-          else
-            (do
-              let w__11 ← (( do
-                (pure ((← do
-                      if ((← do
-                           (EL2Enabled ())) : Bool)
-                      then
-                        (do
-                          (ELUsingAArch32 EL2))
-                      else (pure false)) && ((__HSTR_T7 == 1#1) : Bool))) ) : SailM Bool )
-              if (w__11 : Bool)
-              then
-                (do
-                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
-              else
-                (do
-                  let w__15 ← (( do
-                    if ((← do
-                         let w__12 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                         (pure (((! w__12) : Bool)))) : Bool)
-                    then
-                      (do
-                        let w__13 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-                        let w__14 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-                        (pure (((((_get_SCR_EL3_Type_NS w__13) +++ (_get_SCR_EL3_Type_EEL2 w__14)) == 0b01#2) : Bool))))
-                    else (pure false) ) : SailM Bool )
-                  if (w__15 : Bool)
-                  then
-                    (do
-                      (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-                  else
-                    (do
-                      let w__17 ← (( do
-                        (pure ((← do
-                              let w__16 ← (( do (ELUsingAArch32 EL3) ) : SailM Bool )
-                              (pure (((! w__16) : Bool)))) && ((__SCR_EL3_NS == 0#1) : Bool))) ) :
-                        SailM Bool )
-                      if (w__17 : Bool)
-                      then
-                        (do
-                          (AArch64_AArch32SystemAccessTrap EL3 (BitVec.toNat 0x03#8)))
-                      else sailThrow ((Error_Undefined ()))))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              let w__18 ← (( do (R_read t) ) : SailM (BitVec 32) )
-              (AArch32_AT w__18 TranslationStage_12 EL1 ATAccess_Read))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  let w__19 ← (( do (R_read t) ) : SailM (BitVec 32) )
-                  (AArch32_AT w__19 TranslationStage_12 EL1 ATAccess_Read))
-              else (pure (())))))
+      let mut loop_vars := (prod, result)
+      for row in [loop_row_lower:loop_row_upper:1]i do
+        let (prod, result) := loop_vars
+        loop_vars ← do
+          let loop_col_lower : Nat := 0
+          let loop_col_upper : Int := (dim -i 1)
+          (do
+            let mut loop_vars_1 := (prod, result)
+            for col in [loop_col_lower:loop_col_upper:1]i do
+              let (prod, result) := loop_vars_1
+              loop_vars_1 ← do
+                let sum ← (( do
+                  ((Sail.BitVec.castWidth ) <$> (Elem_read operand3 ((row *i dim) +i col) esize)) )
+                  : SailM (BitVec esize) )
+                let (prod, sum) ← (( do
+                  let loop_k_lower : Nat := 0
+                  let loop_k_upper : Nat := 3
+                  (do
+                    let mut loop_vars_2 := (prod, sum)
+                    for k in [loop_k_lower:loop_k_upper:1]i do
+                      let (prod, sum) := loop_vars_2
+                      loop_vars_2 ← do
+                        let w__2 ← (( do
+                          if ((← do
+                               (ActivePredicateElement mask1 ((4 *i row) +i k) (Int.ediv esize 4))) : Bool)
+                          then
+                            (do
+                              (ActivePredicateElement mask2 ((4 *i col) +i k) (Int.ediv esize 4)))
+                          else (pure false) ) : SailM Bool )
+                        if (w__2 : Bool)
+                        then
+                          (do
+                            let w__3 ← (( do
+                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 ((4 *i row) +i k)
+                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
+                              (BitVec (esize / 4)) )
+                            let w__4 ← (( do (asl_Int w__3 op1_unsigned) ) : SailM Int )
+                            let w__5 ← (( do
+                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 ((4 *i col) +i k)
+                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
+                              (BitVec (esize / 4)) )
+                            let w__6 ← (( do (asl_Int w__5 op2_unsigned) ) : SailM Int )
+                            let prod : Int := ((w__4 *i w__6) : Int)
+                            let prod : Int :=
+                              if (sub_op : Bool)
+                              then (Neg.neg prod)
+                              else prod
+                            let sum : (BitVec esize) := (BitVec.addInt sum prod)
+                            (pure ((prod, sum))))
+                        else (pure ((prod, sum)))
+                    (pure loop_vars_2)) ) : SailM (Int × (BitVec esize)) )
+                let w__7 ← (( do
+                  (Elem_set result ((row *i dim) +i col) esize (Sail.BitVec.castWidth sum)) ) :
+                  SailM (BitVec dim_dim_esize) )
+                let result := (w__7 : (BitVec dim_dim_esize))
+                (pure ((prod, result)))
+            (pure loop_vars_1))
+      (pure loop_vars)) ) : SailM (Int × (BitVec dim_dim_esize)) )
+  (ZAtile_set VL da esize dim_dim_esize (Sail.BitVec.castWidth result))
 
 
-/-- Type quantifiers: t : Int -/
-def ATS12NSOPW_SysRegWrite32_ed16ee3eca6aefe5 (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T7 : (BitVec 1) := (_get_HSTR_EL2_Type_T7 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T7 : (BitVec 1) := (_get_HSTR_Type_T7 w__2)
-  let w__3 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_NS : (BitVec 1) := (_get_SCR_EL3_Type_NS w__3)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else
+/-- Type quantifiers: VL : Nat, a : Nat, b : Nat, da : Nat, dim_dim_esize : Nat, esize : Nat, m :
+  Nat, n : Nat, k_op1_unsigned : Bool, k_op2_unsigned : Bool, k_sub_op : Bool, 0 ≤ n ∧
+  n ≤ 31 ∧
+  0 ≤ m ∧
+  m ≤ 31 ∧
+  esize = 64 ∧
+  List.elem da [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem b [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem a [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  (is_VL VL) ∧ dim_dim_esize = (VL / esize * (VL / esize * esize)) -/
+def execute_SMOPA_ZA_PP_ZZ_64 (VL : Nat) (dim_dim_esize : Nat) (a : Nat) (b : Nat) (da : Nat) (esize : Nat) (m : Nat) (n : Nat) (op1_unsigned : Bool) (op2_unsigned : Bool) (sub_op : Bool) : SailM Unit := do
+  (CheckStreamingSVEAndZAEnabled ())
+  let VL : Nat := VL
+  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
+  let dim : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask1 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read a PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let mask2 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read b PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read n VL)) ) : SailM (BitVec VL) )
+  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read m VL)) ) : SailM (BitVec VL) )
+  let operand3 ← (( do ((Sail.BitVec.castWidth ) <$> (ZAtile_read VL da esize dim_dim_esize)) ) :
+    SailM (BitVec dim_dim_esize) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 7007)
+      (Sail.Int.toNatChecked (dim_dim_esize)))) ) : SailM (BitVec dim_dim_esize) )
+  let prod ← (( do (undefined_int_at (← occLabel 7008) ()) ) : SailM Int )
+  let (prod, result) ← (( do
+    let loop_row_lower : Nat := 0
+    let loop_row_upper : Int := (dim -i 1)
     (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__7 ← (( do
-            (pure ((← do
-                  if ((← do
-                       (EL2Enabled ())) : Bool)
-                  then
-                    (do
-                      let w__5 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                      (pure (((! w__5) : Bool))))
-                  else (pure false)) && ((__HSTR_EL2_T7 == 1#1) : Bool))) ) : SailM Bool )
-          if (w__7 : Bool)
-          then
-            (do
-              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-          else
-            (do
-              let w__11 ← (( do
-                (pure ((← do
-                      if ((← do
-                           (EL2Enabled ())) : Bool)
-                      then
-                        (do
-                          (ELUsingAArch32 EL2))
-                      else (pure false)) && ((__HSTR_T7 == 1#1) : Bool))) ) : SailM Bool )
-              if (w__11 : Bool)
-              then
-                (do
-                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
-              else
-                (do
-                  let w__15 ← (( do
-                    if ((← do
-                         let w__12 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                         (pure (((! w__12) : Bool)))) : Bool)
-                    then
-                      (do
-                        let w__13 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-                        let w__14 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-                        (pure (((((_get_SCR_EL3_Type_NS w__13) +++ (_get_SCR_EL3_Type_EEL2 w__14)) == 0b01#2) : Bool))))
-                    else (pure false) ) : SailM Bool )
-                  if (w__15 : Bool)
-                  then
-                    (do
-                      (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-                  else
-                    (do
-                      let w__17 ← (( do
-                        (pure ((← do
-                              let w__16 ← (( do (ELUsingAArch32 EL3) ) : SailM Bool )
-                              (pure (((! w__16) : Bool)))) && ((__SCR_EL3_NS == 0#1) : Bool))) ) :
-                        SailM Bool )
-                      if (w__17 : Bool)
-                      then
-                        (do
-                          (AArch64_AArch32SystemAccessTrap EL3 (BitVec.toNat 0x03#8)))
-                      else sailThrow ((Error_Undefined ()))))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              let w__18 ← (( do (R_read t) ) : SailM (BitVec 32) )
-              (AArch32_AT w__18 TranslationStage_12 EL1 ATAccess_Write))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  let w__19 ← (( do (R_read t) ) : SailM (BitVec 32) )
-                  (AArch32_AT w__19 TranslationStage_12 EL1 ATAccess_Write))
-              else (pure (())))))
+      let mut loop_vars := (prod, result)
+      for row in [loop_row_lower:loop_row_upper:1]i do
+        let (prod, result) := loop_vars
+        loop_vars ← do
+          let loop_col_lower : Nat := 0
+          let loop_col_upper : Int := (dim -i 1)
+          (do
+            let mut loop_vars_1 := (prod, result)
+            for col in [loop_col_lower:loop_col_upper:1]i do
+              let (prod, result) := loop_vars_1
+              loop_vars_1 ← do
+                let sum ← (( do
+                  ((Sail.BitVec.castWidth ) <$> (Elem_read operand3 ((row *i dim) +i col) esize)) )
+                  : SailM (BitVec esize) )
+                let (prod, sum) ← (( do
+                  let loop_k_lower : Nat := 0
+                  let loop_k_upper : Nat := 3
+                  (do
+                    let mut loop_vars_2 := (prod, sum)
+                    for k in [loop_k_lower:loop_k_upper:1]i do
+                      let (prod, sum) := loop_vars_2
+                      loop_vars_2 ← do
+                        let w__2 ← (( do
+                          if ((← do
+                               (ActivePredicateElement mask1 ((4 *i row) +i k) (Int.ediv esize 4))) : Bool)
+                          then
+                            (do
+                              (ActivePredicateElement mask2 ((4 *i col) +i k) (Int.ediv esize 4)))
+                          else (pure false) ) : SailM Bool )
+                        if (w__2 : Bool)
+                        then
+                          (do
+                            let w__3 ← (( do
+                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 ((4 *i row) +i k)
+                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
+                              (BitVec (esize / 4)) )
+                            let w__4 ← (( do (asl_Int w__3 op1_unsigned) ) : SailM Int )
+                            let w__5 ← (( do
+                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 ((4 *i col) +i k)
+                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
+                              (BitVec (esize / 4)) )
+                            let w__6 ← (( do (asl_Int w__5 op2_unsigned) ) : SailM Int )
+                            let prod : Int := ((w__4 *i w__6) : Int)
+                            let prod : Int :=
+                              if (sub_op : Bool)
+                              then (Neg.neg prod)
+                              else prod
+                            let sum : (BitVec esize) := (BitVec.addInt sum prod)
+                            (pure ((prod, sum))))
+                        else (pure ((prod, sum)))
+                    (pure loop_vars_2)) ) : SailM (Int × (BitVec esize)) )
+                let w__7 ← (( do
+                  (Elem_set result ((row *i dim) +i col) esize (Sail.BitVec.castWidth sum)) ) :
+                  SailM (BitVec dim_dim_esize) )
+                let result := (w__7 : (BitVec dim_dim_esize))
+                (pure ((prod, result)))
+            (pure loop_vars_1))
+      (pure loop_vars)) ) : SailM (Int × (BitVec dim_dim_esize)) )
+  (ZAtile_set VL da esize dim_dim_esize (Sail.BitVec.castWidth result))
 
 
-/-- Type quantifiers: t : Int -/
-def ATS12NSOUR_SysRegWrite32_c89f9455fa8ec3dc (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T7 : (BitVec 1) := (_get_HSTR_EL2_Type_T7 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T7 : (BitVec 1) := (_get_HSTR_Type_T7 w__2)
-  let w__3 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_NS : (BitVec 1) := (_get_SCR_EL3_Type_NS w__3)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else
+/-- Type quantifiers: VL : Nat, a : Nat, b : Nat, da : Nat, dim_dim_esize : Nat, esize : Nat, m :
+  Nat, n : Nat, k_op1_unsigned : Bool, k_op2_unsigned : Bool, k_sub_op : Bool, 0 ≤ n ∧
+  n ≤ 31 ∧
+  0 ≤ m ∧
+  m ≤ 31 ∧
+  esize = 64 ∧
+  List.elem da [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem b [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem a [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  (is_VL VL) ∧ dim_dim_esize = (VL / esize * (VL / esize * esize)) -/
+def execute_SUMOPA_ZA_PP_ZZ_64 (VL : Nat) (dim_dim_esize : Nat) (a : Nat) (b : Nat) (da : Nat) (esize : Nat) (m : Nat) (n : Nat) (op1_unsigned : Bool) (op2_unsigned : Bool) (sub_op : Bool) : SailM Unit := do
+  (CheckStreamingSVEAndZAEnabled ())
+  let VL : Nat := VL
+  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
+  let dim : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask1 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read a PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let mask2 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read b PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read n VL)) ) : SailM (BitVec VL) )
+  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read m VL)) ) : SailM (BitVec VL) )
+  let operand3 ← (( do ((Sail.BitVec.castWidth ) <$> (ZAtile_read VL da esize dim_dim_esize)) ) :
+    SailM (BitVec dim_dim_esize) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 7009)
+      (Sail.Int.toNatChecked (dim_dim_esize)))) ) : SailM (BitVec dim_dim_esize) )
+  let prod ← (( do (undefined_int_at (← occLabel 7010) ()) ) : SailM Int )
+  let (prod, result) ← (( do
+    let loop_row_lower : Nat := 0
+    let loop_row_upper : Int := (dim -i 1)
     (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__7 ← (( do
-            (pure ((← do
-                  if ((← do
-                       (EL2Enabled ())) : Bool)
-                  then
-                    (do
-                      let w__5 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                      (pure (((! w__5) : Bool))))
-                  else (pure false)) && ((__HSTR_EL2_T7 == 1#1) : Bool))) ) : SailM Bool )
-          if (w__7 : Bool)
-          then
-            (do
-              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-          else
-            (do
-              let w__11 ← (( do
-                (pure ((← do
-                      if ((← do
-                           (EL2Enabled ())) : Bool)
-                      then
-                        (do
-                          (ELUsingAArch32 EL2))
-                      else (pure false)) && ((__HSTR_T7 == 1#1) : Bool))) ) : SailM Bool )
-              if (w__11 : Bool)
-              then
-                (do
-                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
-              else
-                (do
-                  let w__15 ← (( do
-                    if ((← do
-                         let w__12 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                         (pure (((! w__12) : Bool)))) : Bool)
-                    then
-                      (do
-                        let w__13 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-                        let w__14 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-                        (pure (((((_get_SCR_EL3_Type_NS w__13) +++ (_get_SCR_EL3_Type_EEL2 w__14)) == 0b01#2) : Bool))))
-                    else (pure false) ) : SailM Bool )
-                  if (w__15 : Bool)
-                  then
-                    (do
-                      (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-                  else
-                    (do
-                      let w__17 ← (( do
-                        (pure ((← do
-                              let w__16 ← (( do (ELUsingAArch32 EL3) ) : SailM Bool )
-                              (pure (((! w__16) : Bool)))) && ((__SCR_EL3_NS == 0#1) : Bool))) ) :
-                        SailM Bool )
-                      if (w__17 : Bool)
-                      then
-                        (do
-                          (AArch64_AArch32SystemAccessTrap EL3 (BitVec.toNat 0x03#8)))
-                      else sailThrow ((Error_Undefined ()))))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              let w__18 ← (( do (R_read t) ) : SailM (BitVec 32) )
-              (AArch32_AT w__18 TranslationStage_12 EL0 ATAccess_Read))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  let w__19 ← (( do (R_read t) ) : SailM (BitVec 32) )
-                  (AArch32_AT w__19 TranslationStage_12 EL0 ATAccess_Read))
-              else (pure (())))))
+      let mut loop_vars := (prod, result)
+      for row in [loop_row_lower:loop_row_upper:1]i do
+        let (prod, result) := loop_vars
+        loop_vars ← do
+          let loop_col_lower : Nat := 0
+          let loop_col_upper : Int := (dim -i 1)
+          (do
+            let mut loop_vars_1 := (prod, result)
+            for col in [loop_col_lower:loop_col_upper:1]i do
+              let (prod, result) := loop_vars_1
+              loop_vars_1 ← do
+                let sum ← (( do
+                  ((Sail.BitVec.castWidth ) <$> (Elem_read operand3 ((row *i dim) +i col) esize)) )
+                  : SailM (BitVec esize) )
+                let (prod, sum) ← (( do
+                  let loop_k_lower : Nat := 0
+                  let loop_k_upper : Nat := 3
+                  (do
+                    let mut loop_vars_2 := (prod, sum)
+                    for k in [loop_k_lower:loop_k_upper:1]i do
+                      let (prod, sum) := loop_vars_2
+                      loop_vars_2 ← do
+                        let w__2 ← (( do
+                          if ((← do
+                               (ActivePredicateElement mask1 ((4 *i row) +i k) (Int.ediv esize 4))) : Bool)
+                          then
+                            (do
+                              (ActivePredicateElement mask2 ((4 *i col) +i k) (Int.ediv esize 4)))
+                          else (pure false) ) : SailM Bool )
+                        if (w__2 : Bool)
+                        then
+                          (do
+                            let w__3 ← (( do
+                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 ((4 *i row) +i k)
+                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
+                              (BitVec (esize / 4)) )
+                            let w__4 ← (( do (asl_Int w__3 op1_unsigned) ) : SailM Int )
+                            let w__5 ← (( do
+                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 ((4 *i col) +i k)
+                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
+                              (BitVec (esize / 4)) )
+                            let w__6 ← (( do (asl_Int w__5 op2_unsigned) ) : SailM Int )
+                            let prod : Int := ((w__4 *i w__6) : Int)
+                            let prod : Int :=
+                              if (sub_op : Bool)
+                              then (Neg.neg prod)
+                              else prod
+                            let sum : (BitVec esize) := (BitVec.addInt sum prod)
+                            (pure ((prod, sum))))
+                        else (pure ((prod, sum)))
+                    (pure loop_vars_2)) ) : SailM (Int × (BitVec esize)) )
+                let w__7 ← (( do
+                  (Elem_set result ((row *i dim) +i col) esize (Sail.BitVec.castWidth sum)) ) :
+                  SailM (BitVec dim_dim_esize) )
+                let result := (w__7 : (BitVec dim_dim_esize))
+                (pure ((prod, result)))
+            (pure loop_vars_1))
+      (pure loop_vars)) ) : SailM (Int × (BitVec dim_dim_esize)) )
+  (ZAtile_set VL da esize dim_dim_esize (Sail.BitVec.castWidth result))
 
 
-/-- Type quantifiers: t : Int -/
-def ATS12NSOUW_SysRegWrite32_67f712d7e127f198 (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T7 : (BitVec 1) := (_get_HSTR_EL2_Type_T7 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T7 : (BitVec 1) := (_get_HSTR_Type_T7 w__2)
-  let w__3 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-  let __SCR_EL3_NS : (BitVec 1) := (_get_SCR_EL3_Type_NS w__3)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else
+/-- Type quantifiers: VL : Nat, a : Nat, b : Nat, da : Nat, dim_dim_esize : Nat, esize : Nat, m :
+  Nat, n : Nat, k_op1_unsigned : Bool, k_op2_unsigned : Bool, k_sub_op : Bool, 0 ≤ n ∧
+  n ≤ 31 ∧
+  0 ≤ m ∧
+  m ≤ 31 ∧
+  esize = 64 ∧
+  List.elem da [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem b [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem a [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  (is_VL VL) ∧ dim_dim_esize = (VL / esize * (VL / esize * esize)) -/
+def execute_USMOPA_ZA_PP_ZZ_64 (VL : Nat) (dim_dim_esize : Nat) (a : Nat) (b : Nat) (da : Nat) (esize : Nat) (m : Nat) (n : Nat) (op1_unsigned : Bool) (op2_unsigned : Bool) (sub_op : Bool) : SailM Unit := do
+  (CheckStreamingSVEAndZAEnabled ())
+  let VL : Nat := VL
+  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
+  let dim : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask1 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read a PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let mask2 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read b PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read n VL)) ) : SailM (BitVec VL) )
+  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read m VL)) ) : SailM (BitVec VL) )
+  let operand3 ← (( do ((Sail.BitVec.castWidth ) <$> (ZAtile_read VL da esize dim_dim_esize)) ) :
+    SailM (BitVec dim_dim_esize) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 7011)
+      (Sail.Int.toNatChecked (dim_dim_esize)))) ) : SailM (BitVec dim_dim_esize) )
+  let prod ← (( do (undefined_int_at (← occLabel 7012) ()) ) : SailM Int )
+  let (prod, result) ← (( do
+    let loop_row_lower : Nat := 0
+    let loop_row_upper : Int := (dim -i 1)
     (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__7 ← (( do
-            (pure ((← do
-                  if ((← do
-                       (EL2Enabled ())) : Bool)
-                  then
-                    (do
-                      let w__5 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                      (pure (((! w__5) : Bool))))
-                  else (pure false)) && ((__HSTR_EL2_T7 == 1#1) : Bool))) ) : SailM Bool )
-          if (w__7 : Bool)
-          then
-            (do
-              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-          else
-            (do
-              let w__11 ← (( do
-                (pure ((← do
-                      if ((← do
-                           (EL2Enabled ())) : Bool)
-                      then
-                        (do
-                          (ELUsingAArch32 EL2))
-                      else (pure false)) && ((__HSTR_T7 == 1#1) : Bool))) ) : SailM Bool )
-              if (w__11 : Bool)
-              then
-                (do
-                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
-              else
-                (do
-                  let w__15 ← (( do
-                    if ((← do
-                         let w__12 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                         (pure (((! w__12) : Bool)))) : Bool)
-                    then
-                      (do
-                        let w__13 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-                        let w__14 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
-                        (pure (((((_get_SCR_EL3_Type_NS w__13) +++ (_get_SCR_EL3_Type_EEL2 w__14)) == 0b01#2) : Bool))))
-                    else (pure false) ) : SailM Bool )
-                  if (w__15 : Bool)
-                  then
-                    (do
-                      (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-                  else
-                    (do
-                      let w__17 ← (( do
-                        (pure ((← do
-                              let w__16 ← (( do (ELUsingAArch32 EL3) ) : SailM Bool )
-                              (pure (((! w__16) : Bool)))) && ((__SCR_EL3_NS == 0#1) : Bool))) ) :
-                        SailM Bool )
-                      if (w__17 : Bool)
-                      then
-                        (do
-                          (AArch64_AArch32SystemAccessTrap EL3 (BitVec.toNat 0x03#8)))
-                      else sailThrow ((Error_Undefined ()))))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              let w__18 ← (( do (R_read t) ) : SailM (BitVec 32) )
-              (AArch32_AT w__18 TranslationStage_12 EL0 ATAccess_Write))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  let w__19 ← (( do (R_read t) ) : SailM (BitVec 32) )
-                  (AArch32_AT w__19 TranslationStage_12 EL0 ATAccess_Write))
-              else (pure (())))))
+      let mut loop_vars := (prod, result)
+      for row in [loop_row_lower:loop_row_upper:1]i do
+        let (prod, result) := loop_vars
+        loop_vars ← do
+          let loop_col_lower : Nat := 0
+          let loop_col_upper : Int := (dim -i 1)
+          (do
+            let mut loop_vars_1 := (prod, result)
+            for col in [loop_col_lower:loop_col_upper:1]i do
+              let (prod, result) := loop_vars_1
+              loop_vars_1 ← do
+                let sum ← (( do
+                  ((Sail.BitVec.castWidth ) <$> (Elem_read operand3 ((row *i dim) +i col) esize)) )
+                  : SailM (BitVec esize) )
+                let (prod, sum) ← (( do
+                  let loop_k_lower : Nat := 0
+                  let loop_k_upper : Nat := 3
+                  (do
+                    let mut loop_vars_2 := (prod, sum)
+                    for k in [loop_k_lower:loop_k_upper:1]i do
+                      let (prod, sum) := loop_vars_2
+                      loop_vars_2 ← do
+                        let w__2 ← (( do
+                          if ((← do
+                               (ActivePredicateElement mask1 ((4 *i row) +i k) (Int.ediv esize 4))) : Bool)
+                          then
+                            (do
+                              (ActivePredicateElement mask2 ((4 *i col) +i k) (Int.ediv esize 4)))
+                          else (pure false) ) : SailM Bool )
+                        if (w__2 : Bool)
+                        then
+                          (do
+                            let w__3 ← (( do
+                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 ((4 *i row) +i k)
+                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
+                              (BitVec (esize / 4)) )
+                            let w__4 ← (( do (asl_Int w__3 op1_unsigned) ) : SailM Int )
+                            let w__5 ← (( do
+                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 ((4 *i col) +i k)
+                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
+                              (BitVec (esize / 4)) )
+                            let w__6 ← (( do (asl_Int w__5 op2_unsigned) ) : SailM Int )
+                            let prod : Int := ((w__4 *i w__6) : Int)
+                            let prod : Int :=
+                              if (sub_op : Bool)
+                              then (Neg.neg prod)
+                              else prod
+                            let sum : (BitVec esize) := (BitVec.addInt sum prod)
+                            (pure ((prod, sum))))
+                        else (pure ((prod, sum)))
+                    (pure loop_vars_2)) ) : SailM (Int × (BitVec esize)) )
+                let w__7 ← (( do
+                  (Elem_set result ((row *i dim) +i col) esize (Sail.BitVec.castWidth sum)) ) :
+                  SailM (BitVec dim_dim_esize) )
+                let result := (w__7 : (BitVec dim_dim_esize))
+                (pure ((prod, result)))
+            (pure loop_vars_1))
+      (pure loop_vars)) ) : SailM (Int × (BitVec dim_dim_esize)) )
+  (ZAtile_set VL da esize dim_dim_esize (Sail.BitVec.castWidth result))
 
 
-/-- Type quantifiers: t : Int -/
-def ATS1CPRP_SysRegWrite32_42119243d95c582f (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T7 : (BitVec 1) := (_get_HSTR_EL2_Type_T7 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T7 : (BitVec 1) := (_get_HSTR_Type_T7 w__2)
-  let w__3 ← (( do readReg SCR ) : SailM (BitVec 32) )
-  let __SCR_NS : (BitVec 1) := (_get_SCR_Type_NS w__3)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else
+/-- Type quantifiers: VL : Nat, a : Nat, b : Nat, da : Nat, dim_dim_esize : Nat, esize : Nat, m :
+  Nat, n : Nat, k_op1_unsigned : Bool, k_op2_unsigned : Bool, k_sub_op : Bool, 0 ≤ n ∧
+  n ≤ 31 ∧
+  0 ≤ m ∧
+  m ≤ 31 ∧
+  esize = 64 ∧
+  List.elem da [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem b [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem a [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  (is_VL VL) ∧ dim_dim_esize = (VL / esize * (VL / esize * esize)) -/
+def execute_UMOPA_ZA_PP_ZZ_64 (VL : Nat) (dim_dim_esize : Nat) (a : Nat) (b : Nat) (da : Nat) (esize : Nat) (m : Nat) (n : Nat) (op1_unsigned : Bool) (op2_unsigned : Bool) (sub_op : Bool) : SailM Unit := do
+  (CheckStreamingSVEAndZAEnabled ())
+  let VL : Nat := VL
+  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
+  let dim : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask1 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read a PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let mask2 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read b PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read n VL)) ) : SailM (BitVec VL) )
+  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read m VL)) ) : SailM (BitVec VL) )
+  let operand3 ← (( do ((Sail.BitVec.castWidth ) <$> (ZAtile_read VL da esize dim_dim_esize)) ) :
+    SailM (BitVec dim_dim_esize) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 7013)
+      (Sail.Int.toNatChecked (dim_dim_esize)))) ) : SailM (BitVec dim_dim_esize) )
+  let prod ← (( do (undefined_int_at (← occLabel 7014) ()) ) : SailM Int )
+  let (prod, result) ← (( do
+    let loop_row_lower : Nat := 0
+    let loop_row_upper : Int := (dim -i 1)
     (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__7 ← (( do
-            (pure ((← do
-                  if ((← do
-                       (EL2Enabled ())) : Bool)
-                  then
-                    (do
-                      let w__5 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                      (pure (((! w__5) : Bool))))
-                  else (pure false)) && ((__HSTR_EL2_T7 == 1#1) : Bool))) ) : SailM Bool )
-          if (w__7 : Bool)
-          then
-            (do
-              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-          else
-            (do
-              let w__11 ← (( do
-                (pure ((← do
-                      if ((← do
-                           (EL2Enabled ())) : Bool)
-                      then
-                        (do
-                          (ELUsingAArch32 EL2))
-                      else (pure false)) && ((__HSTR_T7 == 1#1) : Bool))) ) : SailM Bool )
-              if (w__11 : Bool)
-              then
-                (do
-                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
-              else
-                (do
-                  let w__12 ← (( do (R_read t) ) : SailM (BitVec 32) )
-                  (AArch32_AT w__12 TranslationStage_1 EL1 ATAccess_ReadPAN))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              let w__13 ← (( do (R_read t) ) : SailM (BitVec 32) )
-              (AArch32_AT w__13 TranslationStage_1 EL1 ATAccess_ReadPAN))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  if ((__SCR_NS == 0#1) : Bool)
-                  then
-                    (do
-                      let w__14 ← (( do (R_read t) ) : SailM (BitVec 32) )
-                      (AArch32_AT w__14 TranslationStage_1 EL3 ATAccess_ReadPAN))
-                  else
-                    (do
-                      let w__15 ← (( do (R_read t) ) : SailM (BitVec 32) )
-                      (AArch32_AT w__15 TranslationStage_1 EL1 ATAccess_ReadPAN)))
-              else (pure (())))))
+      let mut loop_vars := (prod, result)
+      for row in [loop_row_lower:loop_row_upper:1]i do
+        let (prod, result) := loop_vars
+        loop_vars ← do
+          let loop_col_lower : Nat := 0
+          let loop_col_upper : Int := (dim -i 1)
+          (do
+            let mut loop_vars_1 := (prod, result)
+            for col in [loop_col_lower:loop_col_upper:1]i do
+              let (prod, result) := loop_vars_1
+              loop_vars_1 ← do
+                let sum ← (( do
+                  ((Sail.BitVec.castWidth ) <$> (Elem_read operand3 ((row *i dim) +i col) esize)) )
+                  : SailM (BitVec esize) )
+                let (prod, sum) ← (( do
+                  let loop_k_lower : Nat := 0
+                  let loop_k_upper : Nat := 3
+                  (do
+                    let mut loop_vars_2 := (prod, sum)
+                    for k in [loop_k_lower:loop_k_upper:1]i do
+                      let (prod, sum) := loop_vars_2
+                      loop_vars_2 ← do
+                        let w__2 ← (( do
+                          if ((← do
+                               (ActivePredicateElement mask1 ((4 *i row) +i k) (Int.ediv esize 4))) : Bool)
+                          then
+                            (do
+                              (ActivePredicateElement mask2 ((4 *i col) +i k) (Int.ediv esize 4)))
+                          else (pure false) ) : SailM Bool )
+                        if (w__2 : Bool)
+                        then
+                          (do
+                            let w__3 ← (( do
+                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 ((4 *i row) +i k)
+                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
+                              (BitVec (esize / 4)) )
+                            let w__4 ← (( do (asl_Int w__3 op1_unsigned) ) : SailM Int )
+                            let w__5 ← (( do
+                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 ((4 *i col) +i k)
+                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
+                              (BitVec (esize / 4)) )
+                            let w__6 ← (( do (asl_Int w__5 op2_unsigned) ) : SailM Int )
+                            let prod : Int := ((w__4 *i w__6) : Int)
+                            let prod : Int :=
+                              if (sub_op : Bool)
+                              then (Neg.neg prod)
+                              else prod
+                            let sum : (BitVec esize) := (BitVec.addInt sum prod)
+                            (pure ((prod, sum))))
+                        else (pure ((prod, sum)))
+                    (pure loop_vars_2)) ) : SailM (Int × (BitVec esize)) )
+                let w__7 ← (( do
+                  (Elem_set result ((row *i dim) +i col) esize (Sail.BitVec.castWidth sum)) ) :
+                  SailM (BitVec dim_dim_esize) )
+                let result := (w__7 : (BitVec dim_dim_esize))
+                (pure ((prod, result)))
+            (pure loop_vars_1))
+      (pure loop_vars)) ) : SailM (Int × (BitVec dim_dim_esize)) )
+  (ZAtile_set VL da esize dim_dim_esize (Sail.BitVec.castWidth result))
 
 
-/-- Type quantifiers: t : Int -/
-def ATS1CPR_SysRegWrite32_810a4a7e2785c9d5 (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T7 : (BitVec 1) := (_get_HSTR_EL2_Type_T7 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T7 : (BitVec 1) := (_get_HSTR_Type_T7 w__2)
-  let w__3 ← (( do readReg SCR ) : SailM (BitVec 32) )
-  let __SCR_NS : (BitVec 1) := (_get_SCR_Type_NS w__3)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else
+/-- Type quantifiers: VL : Nat, a : Nat, b : Nat, da : Nat, dim_dim_esize : Nat, esize : Nat, m :
+  Nat, n : Nat, k_op1_unsigned : Bool, k_op2_unsigned : Bool, k_sub_op : Bool, 0 ≤ n ∧
+  n ≤ 31 ∧
+  0 ≤ m ∧
+  m ≤ 31 ∧
+  esize = 64 ∧
+  List.elem da [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem b [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem a [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  (is_VL VL) ∧ dim_dim_esize = (VL / esize * (VL / esize * esize)) -/
+def execute_SMOPS_ZA_PP_ZZ_64 (VL : Nat) (dim_dim_esize : Nat) (a : Nat) (b : Nat) (da : Nat) (esize : Nat) (m : Nat) (n : Nat) (op1_unsigned : Bool) (op2_unsigned : Bool) (sub_op : Bool) : SailM Unit := do
+  (CheckStreamingSVEAndZAEnabled ())
+  let VL : Nat := VL
+  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
+  let dim : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask1 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read a PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let mask2 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read b PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read n VL)) ) : SailM (BitVec VL) )
+  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read m VL)) ) : SailM (BitVec VL) )
+  let operand3 ← (( do ((Sail.BitVec.castWidth ) <$> (ZAtile_read VL da esize dim_dim_esize)) ) :
+    SailM (BitVec dim_dim_esize) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 7015)
+      (Sail.Int.toNatChecked (dim_dim_esize)))) ) : SailM (BitVec dim_dim_esize) )
+  let prod ← (( do (undefined_int_at (← occLabel 7016) ()) ) : SailM Int )
+  let (prod, result) ← (( do
+    let loop_row_lower : Nat := 0
+    let loop_row_upper : Int := (dim -i 1)
     (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__7 ← (( do
-            (pure ((← do
-                  if ((← do
-                       (EL2Enabled ())) : Bool)
-                  then
-                    (do
-                      let w__5 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                      (pure (((! w__5) : Bool))))
-                  else (pure false)) && ((__HSTR_EL2_T7 == 1#1) : Bool))) ) : SailM Bool )
-          if (w__7 : Bool)
-          then
-            (do
-              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-          else
-            (do
-              let w__11 ← (( do
-                (pure ((← do
-                      if ((← do
-                           (EL2Enabled ())) : Bool)
-                      then
-                        (do
-                          (ELUsingAArch32 EL2))
-                      else (pure false)) && ((__HSTR_T7 == 1#1) : Bool))) ) : SailM Bool )
-              if (w__11 : Bool)
-              then
-                (do
-                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
-              else
-                (do
-                  let w__12 ← (( do (R_read t) ) : SailM (BitVec 32) )
-                  (AArch32_AT w__12 TranslationStage_1 EL1 ATAccess_Read))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              let w__13 ← (( do (R_read t) ) : SailM (BitVec 32) )
-              (AArch32_AT w__13 TranslationStage_1 EL1 ATAccess_Read))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  if ((__SCR_NS == 0#1) : Bool)
-                  then
-                    (do
-                      let w__14 ← (( do (R_read t) ) : SailM (BitVec 32) )
-                      (AArch32_AT w__14 TranslationStage_1 EL3 ATAccess_Read))
-                  else
-                    (do
-                      let w__15 ← (( do (R_read t) ) : SailM (BitVec 32) )
-                      (AArch32_AT w__15 TranslationStage_1 EL1 ATAccess_Read)))
-              else (pure (())))))
+      let mut loop_vars := (prod, result)
+      for row in [loop_row_lower:loop_row_upper:1]i do
+        let (prod, result) := loop_vars
+        loop_vars ← do
+          let loop_col_lower : Nat := 0
+          let loop_col_upper : Int := (dim -i 1)
+          (do
+            let mut loop_vars_1 := (prod, result)
+            for col in [loop_col_lower:loop_col_upper:1]i do
+              let (prod, result) := loop_vars_1
+              loop_vars_1 ← do
+                let sum ← (( do
+                  ((Sail.BitVec.castWidth ) <$> (Elem_read operand3 ((row *i dim) +i col) esize)) )
+                  : SailM (BitVec esize) )
+                let (prod, sum) ← (( do
+                  let loop_k_lower : Nat := 0
+                  let loop_k_upper : Nat := 3
+                  (do
+                    let mut loop_vars_2 := (prod, sum)
+                    for k in [loop_k_lower:loop_k_upper:1]i do
+                      let (prod, sum) := loop_vars_2
+                      loop_vars_2 ← do
+                        let w__2 ← (( do
+                          if ((← do
+                               (ActivePredicateElement mask1 ((4 *i row) +i k) (Int.ediv esize 4))) : Bool)
+                          then
+                            (do
+                              (ActivePredicateElement mask2 ((4 *i col) +i k) (Int.ediv esize 4)))
+                          else (pure false) ) : SailM Bool )
+                        if (w__2 : Bool)
+                        then
+                          (do
+                            let w__3 ← (( do
+                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 ((4 *i row) +i k)
+                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
+                              (BitVec (esize / 4)) )
+                            let w__4 ← (( do (asl_Int w__3 op1_unsigned) ) : SailM Int )
+                            let w__5 ← (( do
+                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 ((4 *i col) +i k)
+                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
+                              (BitVec (esize / 4)) )
+                            let w__6 ← (( do (asl_Int w__5 op2_unsigned) ) : SailM Int )
+                            let prod : Int := ((w__4 *i w__6) : Int)
+                            let prod : Int :=
+                              if (sub_op : Bool)
+                              then (Neg.neg prod)
+                              else prod
+                            let sum : (BitVec esize) := (BitVec.addInt sum prod)
+                            (pure ((prod, sum))))
+                        else (pure ((prod, sum)))
+                    (pure loop_vars_2)) ) : SailM (Int × (BitVec esize)) )
+                let w__7 ← (( do
+                  (Elem_set result ((row *i dim) +i col) esize (Sail.BitVec.castWidth sum)) ) :
+                  SailM (BitVec dim_dim_esize) )
+                let result := (w__7 : (BitVec dim_dim_esize))
+                (pure ((prod, result)))
+            (pure loop_vars_1))
+      (pure loop_vars)) ) : SailM (Int × (BitVec dim_dim_esize)) )
+  (ZAtile_set VL da esize dim_dim_esize (Sail.BitVec.castWidth result))
 
 
-/-- Type quantifiers: t : Int -/
-def ATS1CPWP_SysRegWrite32_9f529f7ec0bf0000 (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T7 : (BitVec 1) := (_get_HSTR_EL2_Type_T7 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T7 : (BitVec 1) := (_get_HSTR_Type_T7 w__2)
-  let w__3 ← (( do readReg SCR ) : SailM (BitVec 32) )
-  let __SCR_NS : (BitVec 1) := (_get_SCR_Type_NS w__3)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else
+/-- Type quantifiers: VL : Nat, a : Nat, b : Nat, da : Nat, dim_dim_esize : Nat, esize : Nat, m :
+  Nat, n : Nat, k_op1_unsigned : Bool, k_op2_unsigned : Bool, k_sub_op : Bool, 0 ≤ n ∧
+  n ≤ 31 ∧
+  0 ≤ m ∧
+  m ≤ 31 ∧
+  esize = 64 ∧
+  List.elem da [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem b [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  List.elem a [0, 1, 2, 3, 4, 5, 6, 7] ∧
+  (is_VL VL) ∧ dim_dim_esize = (VL / esize * (VL / esize * esize)) -/
+def execute_SUMOPS_ZA_PP_ZZ_64 (VL : Nat) (dim_dim_esize : Nat) (a : Nat) (b : Nat) (da : Nat) (esize : Nat) (m : Nat) (n : Nat) (op1_unsigned : Bool) (op2_unsigned : Bool) (sub_op : Bool) : SailM Unit := do
+  (CheckStreamingSVEAndZAEnabled ())
+  let VL : Nat := VL
+  let PL : Nat := (Sail.Int.toNatChecked ((Int.ediv VL 8)))
+  let dim : Nat := (Sail.Int.toNatChecked ((Int.ediv VL esize)))
+  let mask1 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read a PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let mask2 ← (( do ((Sail.BitVec.castWidth ) <$> (P_read b PL)) ) : SailM
+    (BitVec (Sail.Int.toNatChecked PL)) )
+  let operand1 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read n VL)) ) : SailM (BitVec VL) )
+  let operand2 ← (( do ((Sail.BitVec.castWidth ) <$> (Z_read m VL)) ) : SailM (BitVec VL) )
+  let operand3 ← (( do ((Sail.BitVec.castWidth ) <$> (ZAtile_read VL da esize dim_dim_esize)) ) :
+    SailM (BitVec dim_dim_esize) )
+  let result ← (( do
+    ((Sail.BitVec.castWidth ) <$> (undefined_bitvector_at (← occLabel 7017)
+      (Sail.Int.toNatChecked (dim_dim_esize)))) ) : SailM (BitVec dim_dim_esize) )
+  let prod ← (( do (undefined_int_at (← occLabel 7018) ()) ) : SailM Int )
+  let (prod, result) ← (( do
+    let loop_row_lower : Nat := 0
+    let loop_row_upper : Int := (dim -i 1)
     (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__7 ← (( do
-            (pure ((← do
-                  if ((← do
-                       (EL2Enabled ())) : Bool)
-                  then
-                    (do
-                      let w__5 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                      (pure (((! w__5) : Bool))))
-                  else (pure false)) && ((__HSTR_EL2_T7 == 1#1) : Bool))) ) : SailM Bool )
-          if (w__7 : Bool)
-          then
-            (do
-              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-          else
-            (do
-              let w__11 ← (( do
-                (pure ((← do
-                      if ((← do
-                           (EL2Enabled ())) : Bool)
-                      then
-                        (do
-                          (ELUsingAArch32 EL2))
-                      else (pure false)) && ((__HSTR_T7 == 1#1) : Bool))) ) : SailM Bool )
-              if (w__11 : Bool)
-              then
-                (do
-                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
-              else
-                (do
-                  let w__12 ← (( do (R_read t) ) : SailM (BitVec 32) )
-                  (AArch32_AT w__12 TranslationStage_1 EL1 ATAccess_WritePAN))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              let w__13 ← (( do (R_read t) ) : SailM (BitVec 32) )
-              (AArch32_AT w__13 TranslationStage_1 EL1 ATAccess_WritePAN))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  if ((__SCR_NS == 0#1) : Bool)
-                  then
-                    (do
-                      let w__14 ← (( do (R_read t) ) : SailM (BitVec 32) )
-                      (AArch32_AT w__14 TranslationStage_1 EL3 ATAccess_WritePAN))
-                  else
-                    (do
-                      let w__15 ← (( do (R_read t) ) : SailM (BitVec 32) )
-                      (AArch32_AT w__15 TranslationStage_1 EL1 ATAccess_WritePAN)))
-              else (pure (())))))
-
-
-/-- Type quantifiers: t : Int -/
-def ATS1CPW_SysRegWrite32_c343c707514145e0 (el : (BitVec 2)) (coproc : (BitVec 4)) (opc1 : (BitVec 3)) (CRn : (BitVec 4)) (opc2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
-  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
-  let __PSTATE_EL : (BitVec 2) := w__0.EL
-  let w__1 ← (( do readReg HSTR_EL2 ) : SailM (BitVec 64) )
-  let __HSTR_EL2_T7 : (BitVec 1) := (_get_HSTR_EL2_Type_T7 w__1)
-  let w__2 ← (( do (HSTR_read ()) ) : SailM (BitVec 32) )
-  let __HSTR_T7 : (BitVec 1) := (_get_HSTR_Type_T7 w__2)
-  let w__3 ← (( do readReg SCR ) : SailM (BitVec 32) )
-  let __SCR_NS : (BitVec 1) := (_get_SCR_Type_NS w__3)
-  if ((__PSTATE_EL == EL0) : Bool)
-  then sailThrow ((Error_Undefined ()))
-  else
-    (do
-      if ((__PSTATE_EL == EL1) : Bool)
-      then
-        (do
-          let w__7 ← (( do
-            (pure ((← do
-                  if ((← do
-                       (EL2Enabled ())) : Bool)
-                  then
-                    (do
-                      let w__5 ← (( do (ELUsingAArch32 EL2) ) : SailM Bool )
-                      (pure (((! w__5) : Bool))))
-                  else (pure false)) && ((__HSTR_EL2_T7 == 1#1) : Bool))) ) : SailM Bool )
-          if (w__7 : Bool)
-          then
-            (do
-              (AArch64_AArch32SystemAccessTrap EL2 (BitVec.toNat 0x03#8)))
-          else
-            (do
-              let w__11 ← (( do
-                (pure ((← do
-                      if ((← do
-                           (EL2Enabled ())) : Bool)
-                      then
-                        (do
-                          (ELUsingAArch32 EL2))
-                      else (pure false)) && ((__HSTR_T7 == 1#1) : Bool))) ) : SailM Bool )
-              if (w__11 : Bool)
-              then
-                (do
-                  (AArch32_TakeHypTrapException (BitVec.toNat 0x03#8)))
-              else
-                (do
-                  let w__12 ← (( do (R_read t) ) : SailM (BitVec 32) )
-                  (AArch32_AT w__12 TranslationStage_1 EL1 ATAccess_Write))))
-      else
-        (do
-          if ((__PSTATE_EL == EL2) : Bool)
-          then
-            (do
-              let w__13 ← (( do (R_read t) ) : SailM (BitVec 32) )
-              (AArch32_AT w__13 TranslationStage_1 EL1 ATAccess_Write))
-          else
-            (do
-              if ((__PSTATE_EL == EL3) : Bool)
-              then
-                (do
-                  if ((__SCR_NS == 0#1) : Bool)
-                  then
-                    (do
-                      let w__14 ← (( do (R_read t) ) : SailM (BitVec 32) )
-                      (AArch32_AT w__14 TranslationStage_1 EL3 ATAccess_Write))
-                  else
-                    (do
-                      let w__15 ← (( do (R_read t) ) : SailM (BitVec 32) )
-                      (AArch32_AT w__15 TranslationStage_1 EL1 ATAccess_Write)))
-              else (pure (())))))
+      let mut loop_vars := (prod, result)
+      for row in [loop_row_lower:loop_row_upper:1]i do
+        let (prod, result) := loop_vars
+        loop_vars ← do
+          let loop_col_lower : Nat := 0
+          let loop_col_upper : Int := (dim -i 1)
+          (do
+            let mut loop_vars_1 := (prod, result)
+            for col in [loop_col_lower:loop_col_upper:1]i do
+              let (prod, result) := loop_vars_1
+              loop_vars_1 ← do
+                let sum ← (( do
+                  ((Sail.BitVec.castWidth ) <$> (Elem_read operand3 ((row *i dim) +i col) esize)) )
+                  : SailM (BitVec esize) )
+                let (prod, sum) ← (( do
+                  let loop_k_lower : Nat := 0
+                  let loop_k_upper : Nat := 3
+                  (do
+                    let mut loop_vars_2 := (prod, sum)
+                    for k in [loop_k_lower:loop_k_upper:1]i do
+                      let (prod, sum) := loop_vars_2
+                      loop_vars_2 ← do
+                        let w__2 ← (( do
+                          if ((← do
+                               (ActivePredicateElement mask1 ((4 *i row) +i k) (Int.ediv esize 4))) : Bool)
+                          then
+                            (do
+                              (ActivePredicateElement mask2 ((4 *i col) +i k) (Int.ediv esize 4)))
+                          else (pure false) ) : SailM Bool )
+                        if (w__2 : Bool)
+                        then
+                          (do
+                            let w__3 ← (( do
+                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand1 ((4 *i row) +i k)
+                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
+                              (BitVec (esize / 4)) )
+                            let w__4 ← (( do (asl_Int w__3 op1_unsigned) ) : SailM Int )
+                            let w__5 ← (( do
+                              ((Sail.BitVec.castWidth ) <$> (Elem_read operand2 ((4 *i col) +i k)
+                                (Sail.Int.toNatChecked ((Int.ediv esize 4))))) ) : SailM
+                              (BitVec (esize / 4)) )
+                            let w__6 ← (( do (asl_Int w__5 op2_unsigned) ) : SailM Int )
+                            let prod : Int := ((w__4 *i w__6) : Int)
+                            let prod : Int :=
+                              if (sub_op : Bool)
+                              then (Neg.neg prod)
+                              else prod
+                            let sum : (BitVec esize) := (BitVec.addInt sum prod)
+                            (pure ((prod, sum))))
+                        else (pure ((prod, sum)))
+                    (pure loop_vars_2)) ) : SailM (Int × (BitVec esize)) )
+                let w__7 ← (( do
+                  (Elem_set result ((row *i dim) +i col) esize (Sail.BitVec.castWidth sum)) ) :
+                  SailM (BitVec dim_dim_esize) )
+                let result := (w__7 : (BitVec dim_dim_esize))
+                (pure ((prod, result)))
+            (pure loop_vars_1))
+      (pure loop_vars)) ) : SailM (Int × (BitVec dim_dim_esize)) )
+  (ZAtile_set VL da esize dim_dim_esize (Sail.BitVec.castWidth result))
 
 
 end ArmFull.Functions

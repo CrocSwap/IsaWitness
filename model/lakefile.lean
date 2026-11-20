@@ -7,12 +7,10 @@ package ArmFull where
 require «lean-buildtools» from "../vendor/lean-buildtools"
 require «lean-sail» from "../vendor/lean-sail"
 
-/-- Materialize the pinned, patched lean-sail runtime after `lake update`, so Git
-consumers need no manual bootstrap. IsaWitness distributes only the first-party
-package configuration, patches and AbstractReal files; the upstream sources are
-fetched from the pinned commit and every file is SHA256-checked against
-vendor/lean-sail/UPSTREAM.json. Idempotent: a complete, verified payload is left
-untouched. Set ISAWITNESS_LEAN_SAIL_SOURCE to use a local mirror. -/
+/-- Materialize the pinned lean-sail runtime after `lake update` for Git
+consumers. The fetcher verifies the upstream tree, source-coordinate edits and
+the canonical v9 output against vendor/lean-sail/UPSTREAM.json. Set
+ISAWITNESS_LEAN_SAIL_SOURCE to use a local mirror. -/
 post_update pkg do
   let fetcher := pkg.dir / ".." / "scripts" / "fetch-lean-sail"
   let src? ← IO.getEnv "ISAWITNESS_LEAN_SAIL_SOURCE"
@@ -1554,6 +1552,85 @@ lean_lib ArmSpec06 where
     .one `ArmFull.Fn.M1473,
     .one `ArmFull.Fn.M1474,
     .one `ArmFull.Fn.M1475,
+    .one `ArmFull.Fn.M1476,
+    .one `ArmFull.Fn.M1477,
+    .one `ArmFull.Fn.M1478,
+    .one `ArmFull.Fn.M1479,
+    .one `ArmFull.Fn.M1480,
+    .one `ArmFull.Fn.M1481,
+    .one `ArmFull.Fn.M1482,
+    .one `ArmFull.Fn.M1483,
+    .one `ArmFull.Fn.M1484,
+    .one `ArmFull.Fn.M1485,
+    .one `ArmFull.Fn.M1486,
+    .one `ArmFull.Fn.M1487,
+    .one `ArmFull.Fn.M1488,
+    .one `ArmFull.Fn.M1489,
+    .one `ArmFull.Fn.M1490,
+    .one `ArmFull.Fn.M1491,
+    .one `ArmFull.Fn.M1492,
+    .one `ArmFull.Fn.M1493,
+    .one `ArmFull.Fn.M1494,
+    .one `ArmFull.Fn.M1495,
+    .one `ArmFull.Fn.M1496,
+    .one `ArmFull.Fn.M1497,
+    .one `ArmFull.Fn.M1498,
+    .one `ArmFull.Fn.M1499,
+    .one `ArmFull.Fn.M1500,
+    .one `ArmFull.Fn.M1501,
+    .one `ArmFull.Fn.M1502,
+    .one `ArmFull.Fn.M1503,
+    .one `ArmFull.Fn.M1504,
+    .one `ArmFull.Fn.M1505,
+    .one `ArmFull.Fn.M1506,
+    .one `ArmFull.Fn.M1507,
+    .one `ArmFull.Fn.M1508,
+    .one `ArmFull.Fn.M1509,
+    .one `ArmFull.Fn.M1510,
+    .one `ArmFull.Fn.M1511,
+    .one `ArmFull.Fn.M1512,
+    .one `ArmFull.Fn.M1513,
+    .one `ArmFull.Fn.M1514,
+    .one `ArmFull.Fn.M1515,
+    .one `ArmFull.Fn.M1516,
+    .one `ArmFull.Fn.M1517,
+    .one `ArmFull.Fn.M1518,
+    .one `ArmFull.Fn.M1519,
+    .one `ArmFull.Fn.M1520,
+    .one `ArmFull.Fn.M1521,
+    .one `ArmFull.Fn.M1522,
+    .one `ArmFull.Fn.M1523,
+    .one `ArmFull.Fn.M1524,
+    .one `ArmFull.Fn.M1525,
+    .one `ArmFull.Fn.M1526,
+    .one `ArmFull.Fn.M1527,
+    .one `ArmFull.Fn.M1528,
+    .one `ArmFull.Fn.M1529,
+    .one `ArmFull.Fn.M1530,
+    .one `ArmFull.Fn.M1531,
+    .one `ArmFull.Fn.M1532,
+    .one `ArmFull.Fn.M1533,
+    .one `ArmFull.Fn.M1534,
+    .one `ArmFull.Fn.M1535,
+    .one `ArmFull.Fn.M1536,
+    .one `ArmFull.Fn.M1537,
+    .one `ArmFull.Fn.M1538,
+    .one `ArmFull.Fn.M1539,
+    .one `ArmFull.Fn.M1540,
+    .one `ArmFull.Fn.M1541,
+    .one `ArmFull.Fn.M1542,
+    .one `ArmFull.Fn.M1543,
+    .one `ArmFull.Fn.M1544,
+    .one `ArmFull.Fn.M1545,
+    .one `ArmFull.Fn.M1546,
+    .one `ArmFull.Fn.M1547,
+    .one `ArmFull.Fn.M1548,
+    .one `ArmFull.Fn.M1549,
+    .one `ArmFull.Fn.M1550,
+    .one `ArmFull.Fn.M1551,
+    .one `ArmFull.Fn.M1552,
+    .one `ArmFull.Fn.M1553,
+    .one `ArmFull.Fn.M1554,
     .one `ArmFull
   ]
   leanOptions := #[⟨`weak.linter.style.nameCheck, false⟩]

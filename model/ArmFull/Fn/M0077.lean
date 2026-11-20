@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,98 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def _update_DBGAUTHSTATUS_EL1_Type_SNID (v : (BitVec 64)) (x : (BitVec 2)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 7 6 x)
+
+
+def _update_DBGAUTHSTATUS_Type_SNID (v : (BitVec 32)) (x : (BitVec 2)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 6 x)
+
+
+def _update_PMAUTHSTATUS_Type_SNID (v : (BitVec 32)) (x : (BitVec 2)) : (BitVec 32) :=
+  (Sail.BitVec.updateSubrange v 7 6 x)
+
+
+def _get_DBGAUTHSTATUS_Type_SNID (v : (BitVec 32)) : (BitVec 2) :=
+  (Sail.BitVec.extractLsb v 7 6)
+
+
+def _get_PMAUTHSTATUS_Type_SNID (v : (BitVec 32)) : (BitVec 2) :=
+  (Sail.BitVec.extractLsb v 7 6)
+
+
+def Mk_ICC_SRE_EL3_Type (v : (BitVec 64)) : (BitVec 64) :=
+  v
+
+
+def Mk_ID_MMFR3_EL1_Type (v : (BitVec 64)) : (BitVec 64) :=
+  v
+
+
+def _get_ID_MMFR3_EL1_Type_BPMaint (v : (BitVec 64)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 11 8)
+
+
+def _update_ID_MMFR3_EL1_Type_BPMaint (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 11 8 x)
+
+
+def _get_ID_MMFR3_Type_BPMaint (v : (BitVec 32)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 11 8)
+
+
+def _get_ID_MMFR3_EL1_Type_CMaintSW (v : (BitVec 64)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 7 4)
+
+
+def _update_ID_MMFR3_EL1_Type_CMaintSW (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 7 4 x)
+
+
+def _get_ID_MMFR3_Type_CMaintSW (v : (BitVec 32)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 7 4)
+
+
+def _get_ID_MMFR3_EL1_Type_CMaintVA (v : (BitVec 64)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 3 0)
+
+
+def _update_ID_MMFR3_EL1_Type_CMaintVA (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 3 0 x)
+
+
+def _get_ID_MMFR3_Type_CMaintVA (v : (BitVec 32)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 3 0)
+
+
+def _get_ID_MMFR3_EL1_Type_CMemSz (v : (BitVec 64)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 27 24)
+
+
+def _update_ID_MMFR3_EL1_Type_CMemSz (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 27 24 x)
+
+
+def _get_ID_MMFR3_Type_CMemSz (v : (BitVec 32)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 27 24)
+
+
+def _get_ID_MMFR3_EL1_Type_CohWalk (v : (BitVec 64)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 23 20)
+
+
+def _update_ID_MMFR3_EL1_Type_CohWalk (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
+  (Sail.BitVec.updateSubrange v 23 20 x)
+
+
+def _get_ID_MMFR3_Type_CohWalk (v : (BitVec 32)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 23 20)
+
+
+def _get_ID_MMFR3_EL1_Type_MaintBcst (v : (BitVec 64)) : (BitVec 4) :=
+  (Sail.BitVec.extractLsb v 15 12)
+
 
 def _update_ID_MMFR3_EL1_Type_MaintBcst (v : (BitVec 64)) (x : (BitVec 4)) : (BitVec 64) :=
   (Sail.BitVec.updateSubrange v 15 12 x)
@@ -810,98 +902,6 @@ def _get_PMCEID1_Type_ID26 (v : (BitVec 32)) : (BitVec 1) :=
 
 def _get_PMCEID1_EL0_Type_ID27 (v : (BitVec 64)) : (BitVec 1) :=
   (Sail.BitVec.extractLsb v 27 27)
-
-
-def _update_PMCEID1_EL0_Type_ID27 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 27 27 x)
-
-
-def _update_PMCEID0_EL0_Type_ID27 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 27 27 x)
-
-
-def _update_PMCEID0_Type_ID27 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 27 27 x)
-
-
-def _update_PMCEID1_Type_ID27 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 27 27 x)
-
-
-def _get_PMCEID0_EL0_Type_ID27 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 27 27)
-
-
-def _get_PMCEID0_Type_ID27 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 27 27)
-
-
-def _get_PMCEID1_Type_ID27 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 27 27)
-
-
-def _get_PMCEID1_EL0_Type_ID28 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 28 28)
-
-
-def _update_PMCEID1_EL0_Type_ID28 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 28 28 x)
-
-
-def _update_PMCEID0_EL0_Type_ID28 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 28 28 x)
-
-
-def _update_PMCEID0_Type_ID28 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 28 28 x)
-
-
-def _update_PMCEID1_Type_ID28 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 28 28 x)
-
-
-def _get_PMCEID0_EL0_Type_ID28 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 28 28)
-
-
-def _get_PMCEID0_Type_ID28 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 28 28)
-
-
-def _get_PMCEID1_Type_ID28 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 28 28)
-
-
-def _get_PMCEID1_EL0_Type_ID29 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 29 29)
-
-
-def _update_PMCEID1_EL0_Type_ID29 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 29 29 x)
-
-
-def _update_PMCEID0_EL0_Type_ID29 (v : (BitVec 64)) (x : (BitVec 1)) : (BitVec 64) :=
-  (Sail.BitVec.updateSubrange v 29 29 x)
-
-
-def _update_PMCEID0_Type_ID29 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 29 29 x)
-
-
-def _update_PMCEID1_Type_ID29 (v : (BitVec 32)) (x : (BitVec 1)) : (BitVec 32) :=
-  (Sail.BitVec.updateSubrange v 29 29 x)
-
-
-def _get_PMCEID0_EL0_Type_ID29 (v : (BitVec 64)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 29 29)
-
-
-def _get_PMCEID0_Type_ID29 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 29 29)
-
-
-def _get_PMCEID1_Type_ID29 (v : (BitVec 32)) : (BitVec 1) :=
-  (Sail.BitVec.extractLsb v 29 29)
 
 
 end ArmFull.Functions

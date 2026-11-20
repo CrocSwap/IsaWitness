@@ -1,15 +1,15 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0009
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0044
-import ArmFull.Fn.M0049
-import ArmFull.Fn.M0050
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0009
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0044
+public import ArmFull.Fn.M0049
+public import ArmFull.Fn.M0050 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -281,17 +281,17 @@ def TweakCellRot (incell_name : (BitVec 4)) : SailM (BitVec 4) := do
 
 /-- Type quantifiers: n : Int, part : Int, width : Nat, width ≥ 0 -/
 def Vpart_read (n : Int) (part : Int) (width : Nat) : SailM (BitVec width) := do
-  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-arm/v8_base.sail:22343.27-22343.28"
-  ArmFull.assert ((part == 0) || (part == 1)) "sail-arm/v8_base.sail:22344.32-22344.33"
+  ArmFull.assert ((n ≥b 0) && (n ≤b 31)) "sail-inputs/03-v8_base.sail:22356.27-22356.28"
+  ArmFull.assert ((part == 0) || (part == 1)) "sail-inputs/03-v8_base.sail:22357.32-22357.33"
   if ((part == 0) : Bool)
   then
     (do
-      ArmFull.assert (width <b 128) "sail-arm/v8_base.sail:22346.26-22346.27"
-      ArmFull.assert (((((width == 8) || (width == 16)) || (width == 32)) || (width == 64)) || (width == 128)) "sail-arm/v8_base.sail:22347.57-22347.58"
+      ArmFull.assert (width <b 128) "sail-inputs/03-v8_base.sail:22359.26-22359.27"
+      ArmFull.assert (((((width == 8) || (width == 16)) || (width == 32)) || (width == 64)) || (width == 128)) "sail-inputs/03-v8_base.sail:22360.57-22360.58"
       ((Sail.BitVec.castWidth ) <$> (V_read n width)))
   else
     (do
-      ArmFull.assert ((width == 32) || (width == 64)) "sail-arm/v8_base.sail:22350.40-22350.41"
+      ArmFull.assert ((width == 32) || (width == 64)) "sail-inputs/03-v8_base.sail:22363.40-22363.41"
       let vreg ← (( do (V_read n 128) ) : SailM (BitVec 128) )
       (pure ((Sail.BitVec.castWidth (Sail.BitVec.extractLsb vreg
           (Sail.Int.toNatChecked (((width *i 2) -i 1))) width)))))
@@ -369,7 +369,7 @@ def _set_RGSR_EL1_Type_TAG (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 4)) 
 
 def AArch64_NextRandomTagBit (_ : Unit) : SailM (BitVec 1) := do
   let w__0 ← (( do readReg GCR_EL1 ) : SailM (BitVec 64) )
-  ArmFull.assert ((_get_GCR_EL1_Type_RRND w__0) == 0#1) "sail-arm/v8_base.sail:22689.31-22689.32"
+  ArmFull.assert ((_get_GCR_EL1_Type_RRND w__0) == 0#1) "sail-inputs/03-v8_base.sail:22699.31-22699.32"
   let w__1 ← (( do readReg RGSR_EL1 ) : SailM (BitVec 64) )
   let lfsr : (BitVec 16) := (Sail.BitVec.extractLsb (_get_RGSR_EL1_Type_SEED w__1) 15 0)
   let top : (BitVec 1) :=
@@ -461,7 +461,7 @@ def AArch64_ReportTagCheckFault (el : (BitVec 2)) (ttbr : (BitVec 1)) : SailM Un
   if ((questionMark == EL3) : Bool)
   then
     (do
-      ArmFull.assert (ttbr == 0#1) "sail-arm/v8_base.sail:22983.28-22983.29"
+      ArmFull.assert (ttbr == 0#1) "sail-inputs/03-v8_base.sail:22993.28-22993.29"
       let w__0 ← (( do readReg TFSR_EL3 ) : SailM (BitVec 64) )
       writeReg TFSR_EL3 (Sail.BitVec.updateSubrange w__0 0 0 1#1))
   else

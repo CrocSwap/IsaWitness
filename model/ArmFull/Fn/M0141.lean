@@ -1,30 +1,30 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0000
-import ArmFull.Fn.M0017
-import ArmFull.Fn.M0021
-import ArmFull.Fn.M0022
-import ArmFull.Fn.M0023
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0035
-import ArmFull.Fn.M0038
-import ArmFull.Fn.M0041
-import ArmFull.Fn.M0042
-import ArmFull.Fn.M0046
-import ArmFull.Fn.M0047
-import ArmFull.Fn.M0048
-import ArmFull.Fn.M0049
-import ArmFull.Fn.M0050
-import ArmFull.Fn.M0052
-import ArmFull.Fn.M0055
-import ArmFull.Fn.M0056
-import ArmFull.Fn.M0058
-import ArmFull.Fn.M0063
-import ArmFull.Fn.M0081
-import ArmFull.Fn.M0082
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0000
+public import ArmFull.Fn.M0017
+public import ArmFull.Fn.M0021
+public import ArmFull.Fn.M0022
+public import ArmFull.Fn.M0023
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0035
+public import ArmFull.Fn.M0038
+public import ArmFull.Fn.M0041
+public import ArmFull.Fn.M0042
+public import ArmFull.Fn.M0046
+public import ArmFull.Fn.M0047
+public import ArmFull.Fn.M0048
+public import ArmFull.Fn.M0049
+public import ArmFull.Fn.M0050
+public import ArmFull.Fn.M0052
+public import ArmFull.Fn.M0055
+public import ArmFull.Fn.M0056
+public import ArmFull.Fn.M0058
+public import ArmFull.Fn.M0063
+public import ArmFull.Fn.M0082
+public import ArmFull.Fn.M0083 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -125,91 +125,6 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
-
-def __get_DBGVCR (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : DBGVCR_Type := value_name
-  (Mk_DBGVCR_Type (tmp &&& (Complement.complement 0x21FF2321#32)))
-
-
-def __get_ICV_BPR1 (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : ICV_BPR1_Type := value_name
-  (Mk_ICV_BPR1_Type (tmp &&& (Complement.complement 0xFFFFFFF8#32)))
-
-
-def __get_ICC_RPR (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : ICC_RPR_Type := value_name
-  (Mk_ICC_RPR_Type (tmp &&& (Complement.complement 0xFFFFFF00#32)))
-
-
-def __get_ICC_MSRE (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : ICC_MSRE_Type := value_name
-  (Mk_ICC_MSRE_Type (tmp &&& (Complement.complement 0xFFFFFFF0#32)))
-
-
-def __get_PMMIR (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : PMMIR_Type := value_name
-  (Mk_PMMIR_Type (tmp &&& (Complement.complement 0xF0000000#32)))
-
-
-def __get_VMPIDR (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : VMPIDR_Type := value_name
-  (Mk_VMPIDR_Type ((tmp &&& (Complement.complement 0x3E000000#32)) ||| 0x80000000#32))
-
-
-def __get_ICC_IGRPEN1 (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : ICC_IGRPEN1_Type := value_name
-  (Mk_ICC_IGRPEN1_Type (tmp &&& (Complement.complement 0xFFFFFFFE#32)))
-
-
-def __get_ICC_IGRPEN1_NS (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : ICC_IGRPEN1_Type := value_name
-  (Mk_ICC_IGRPEN1_Type (tmp &&& (Complement.complement 0xFFFFFFFE#32)))
-
-
-def __get_ICC_IGRPEN1_S (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : ICC_IGRPEN1_Type := value_name
-  (Mk_ICC_IGRPEN1_Type (tmp &&& (Complement.complement 0xFFFFFFFE#32)))
-
-
-def __get_HSTR (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : HSTR_Type := value_name
-  (Mk_HSTR_Type (tmp &&& (Complement.complement 0xFFFF4010#32)))
-
-
-def __get_ICC_MCTLR (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : ICC_MCTLR_Type := value_name
-  (Mk_ICC_MCTLR_Type (tmp &&& (Complement.complement 0xFFF10080#32)))
-
-
-def __get_PMSELR (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : PMSELR_Type := value_name
-  (Mk_PMSELR_Type (tmp &&& (Complement.complement 0xFFFFFFE0#32)))
-
-
-def __get_DBGCLAIMSET (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : DBGCLAIMSET_Type := value_name
-  (Mk_DBGCLAIMSET_Type (tmp &&& (Complement.complement 0xFFFFFF00#32)))
-
-
-def __get_ICC_IGRPEN0 (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : ICC_IGRPEN0_Type := value_name
-  (Mk_ICC_IGRPEN0_Type (tmp &&& (Complement.complement 0xFFFFFFFE#32)))
-
-
-def __get_ICC_CTLR (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : ICC_CTLR_Type := value_name
-  (Mk_ICC_CTLR_Type (tmp &&& (Complement.complement 0xFFF300BC#32)))
-
-
-def __get_ICC_CTLR_NS (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : ICC_CTLR_Type := value_name
-  (Mk_ICC_CTLR_Type (tmp &&& (Complement.complement 0xFFF300BC#32)))
-
-
-def __get_ICC_CTLR_S (value_name : (BitVec 32)) : (BitVec 32) :=
-  let tmp : ICC_CTLR_Type := value_name
-  (Mk_ICC_CTLR_Type (tmp &&& (Complement.complement 0xFFF300BC#32)))
-
 
 def __get_SCR (value_name : (BitVec 32)) : (BitVec 32) :=
   let tmp : SCR_Type := value_name
@@ -610,7 +525,7 @@ def ZeroUnsignedSatQ (i : Int) (N : Nat) (M : Nat) : SailM ((BitVec M) × Bool) 
     if ((N >b 0) : Bool)
     then
       (do
-        ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b M)) "sail-arm/v8_base.sail:57129.54-57129.55"
+        ArmFull.assert ((0 ≤b (N -i 1)) && ((N -i 1) <b M)) "sail-inputs/03-v8_base.sail:57139.54-57139.55"
         let fullresult : (BitVec M) :=
           (Sail.BitVec.updateSubrange fullresult (Sail.Int.toNatChecked ((N -i 1))) 0
             (Sail.BitVec.castWidth (integer_subrange result (N -i 1) 0)))
@@ -653,7 +568,7 @@ def CPYSizeChoice (toaddress : (BitVec 64)) (fromaddress : (BitVec 64)) (cpysize
     if ((remaining <b N) : Bool)
     then remaining
     else N
-  ArmFull.assert (limit ≥b 1) "armcert/armcert_c27.sail:377.21-377.22"
+  ArmFull.assert (limit ≥b 1) "sail-inputs/26-armcert_c27.sail:377.21-377.22"
   (undefined_range_at (← occLabel 2864) 1 limit)
 
 
@@ -735,9 +650,9 @@ def SETPreSizeChoice (toaddress : (BitVec 64)) (setsize : (BitVec 64)) (IsSETGP 
 
 /-- Type quantifiers: AlignSize : Int, remaining : Int -/
 def SETSizeChoice (toaddress : (BitVec 64)) (setsize : (BitVec 64)) (AlignSize : Int) (remaining : Int) : SailM Int := do
-  ArmFull.assert ((AlignSize == 1) || (AlignSize == 16)) "armcert/armcert_c27.sail:386.43-386.44"
+  ArmFull.assert ((AlignSize == 1) || (AlignSize == 16)) "sail-inputs/26-armcert_c27.sail:386.43-386.44"
   let units : Int := (fdiv_int remaining AlignSize)
-  ArmFull.assert (units ≥b 1) "armcert/armcert_c27.sail:388.21-388.22"
+  ArmFull.assert (units ≥b 1) "sail-inputs/26-armcert_c27.sail:388.21-388.22"
   let selected ← (( do
     ((fun n => Sail.Int.toNatChecked n) <$> ((undefined_range_at (← occLabel 2867) 1 units))) ) :
     SailM Nat )
@@ -830,6 +745,81 @@ def AMEVCNTVOFF0_EL2_SysRegRead_8025c4d237ad3c30 (el : (BitVec 2)) (op0 : (BitVe
 
 /-- Type quantifiers: t : Int -/
 def AMEVCNTVOFF0_EL2_SysRegRead_906fb8ee06808f75 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
+  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
+  let w__3 ← (( do readReg CPTR_EL3 ) : SailM (BitVec 64) )
+  let __CPTR_EL3_TAM : (BitVec 1) := (_get_CPTR_EL3_Type_TAM w__3)
+  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+  let __SCR_EL3_AMVOFFEN : (BitVec 1) := (_get_SCR_EL3_Type_AMVOFFEN w__4)
+  sailThrow ((Error_Undefined ()))
+
+
+/-- Type quantifiers: t : Int -/
+def AMEVCNTVOFF0_EL2_SysRegRead_90b97336851e0b89 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
+  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
+  let w__3 ← (( do readReg CPTR_EL3 ) : SailM (BitVec 64) )
+  let __CPTR_EL3_TAM : (BitVec 1) := (_get_CPTR_EL3_Type_TAM w__3)
+  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+  let __SCR_EL3_AMVOFFEN : (BitVec 1) := (_get_SCR_EL3_Type_AMVOFFEN w__4)
+  sailThrow ((Error_Undefined ()))
+
+
+/-- Type quantifiers: t : Int -/
+def AMEVCNTVOFF0_EL2_SysRegRead_9967025452c01cd2 (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
+  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
+  let w__3 ← (( do readReg CPTR_EL3 ) : SailM (BitVec 64) )
+  let __CPTR_EL3_TAM : (BitVec 1) := (_get_CPTR_EL3_Type_TAM w__3)
+  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+  let __SCR_EL3_AMVOFFEN : (BitVec 1) := (_get_SCR_EL3_Type_AMVOFFEN w__4)
+  sailThrow ((Error_Undefined ()))
+
+
+/-- Type quantifiers: t : Int -/
+def AMEVCNTVOFF0_EL2_SysRegRead_9b9b8289286b389f (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
+  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
+  let w__3 ← (( do readReg CPTR_EL3 ) : SailM (BitVec 64) )
+  let __CPTR_EL3_TAM : (BitVec 1) := (_get_CPTR_EL3_Type_TAM w__3)
+  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+  let __SCR_EL3_AMVOFFEN : (BitVec 1) := (_get_SCR_EL3_Type_AMVOFFEN w__4)
+  sailThrow ((Error_Undefined ()))
+
+
+/-- Type quantifiers: t : Int -/
+def AMEVCNTVOFF0_EL2_SysRegRead_9c52ba86b79d6d1b (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
+  let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
+  let __PSTATE_EL : (BitVec 2) := w__0.EL
+  let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )
+  let __HCR_EL2_NV : (BitVec 1) := (_get_HCR_EL2_Type_NV w__1)
+  let w__2 ← (( do (EDSCR_read ()) ) : SailM (BitVec 32) )
+  let __EDSCR_SDD : (BitVec 1) := (_get_EDSCR_Type_SDD w__2)
+  let w__3 ← (( do readReg CPTR_EL3 ) : SailM (BitVec 64) )
+  let __CPTR_EL3_TAM : (BitVec 1) := (_get_CPTR_EL3_Type_TAM w__3)
+  let w__4 ← (( do readReg SCR_EL3 ) : SailM (BitVec 64) )
+  let __SCR_EL3_AMVOFFEN : (BitVec 1) := (_get_SCR_EL3_Type_AMVOFFEN w__4)
+  sailThrow ((Error_Undefined ()))
+
+
+/-- Type quantifiers: t : Int -/
+def AMEVCNTVOFF0_EL2_SysRegRead_bc26fe69d64e9fcd (el : (BitVec 2)) (op0 : (BitVec 2)) (op1 : (BitVec 3)) (CRn : (BitVec 4)) (op2 : (BitVec 3)) (CRm : (BitVec 4)) (t : Int) : SailM Unit := do
   let w__0 ← (( do readReg PSTATE ) : SailM ProcState )
   let __PSTATE_EL : (BitVec 2) := w__0.EL
   let w__1 ← (( do readReg HCR_EL2 ) : SailM (BitVec 64) )

@@ -12,4 +12,5 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4; official tag resolved 2026-11-10
         with:
           persist-credentials: false
+      - run: ./scripts/fetch-lean-sail
       - run: python3 tools/check-model-reproduction.py

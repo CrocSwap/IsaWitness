@@ -1,16 +1,13 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
-import ArmFull.Fn.M0016
-import ArmFull.Fn.M0019
-import ArmFull.Fn.M0023
-import ArmFull.Fn.M0024
-import ArmFull.Fn.M0036
-import ArmFull.Fn.M0039
-import ArmFull.Fn.M0040
-import ArmFull.Fn.M0041
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork
+public import ArmFull.Fn.M0016
+public import ArmFull.Fn.M0024
+public import ArmFull.Fn.M0036
+public import ArmFull.Fn.M0040
+public import ArmFull.Fn.M0041 set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -287,46 +284,6 @@ def _set_TCR2_EL2_Type_PnCH (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1))
   writeRegRef r_ref (_update_TCR2_EL2_Type_PnCH r v)
 
 
-def BRBEMispredictAllowed (_ : Unit) : SailM Bool := do
-  let w__1 ← (( do
-    if (((HaveEL EL2) : Bool) : Bool)
-    then
-      (do
-        let w__0 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-        (pure ((((_get_BRBCR_EL2_Type_MPRED w__0) == 0#1) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1 : Bool)
-  then (pure (false))
-  else
-    (do
-      let w__2 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-      let w__3 : Bool :=
-        if (((_get_BRBCR_EL1_Type_MPRED w__2) == 0#1) : Bool)
-        then false
-        else true
-      (pure (w__3)))
-
-
-def BRBCycleCountingEnabled (_ : Unit) : SailM Bool := do
-  let w__1 ← (( do
-    if (((HaveEL EL2) : Bool) : Bool)
-    then
-      (do
-        let w__0 ← (( do readReg BRBCR_EL2 ) : SailM (BitVec 64) )
-        (pure ((((_get_BRBCR_EL2_Type_CC w__0) == 0#1) : Bool))))
-    else (pure false) ) : SailM Bool )
-  if (w__1 : Bool)
-  then (pure (false))
-  else
-    (do
-      let w__2 ← (( do readReg BRBCR_EL1 ) : SailM (BitVec 64) )
-      let w__3 : Bool :=
-        if (((_get_BRBCR_EL1_Type_CC w__2) == 0#1) : Bool)
-        then false
-        else true
-      (pure (w__3)))
-
-
 /-- Type quantifiers: k_cond : Bool -/
 def FilterBranchRecord (br : BranchType) (cond : Bool) : SailM Bool := SailME.run do
   match br with
@@ -407,7 +364,7 @@ def RBankSelect (mode : (BitVec 5)) (usr : Int) (fiq : Int) (irq : Int) (svc : I
                               then (pure (usr))
                               else
                                 (do
-                                  ArmFull.assert false "Pattern match failure at sail-arm/v8_base.sail:6328.4-6337.5"
+                                  ArmFull.assert false "Pattern match failure at sail-inputs/03-v8_base.sail:6328.4-6337.5"
                                   throw Error.Exit))))))))
 
 
@@ -710,10 +667,6 @@ def CeilPow2 (x : Int) : SailM Nat := do
           (pure ((Sail.Int.toNatChecked ((w__0 *i 2)))))))
 
 
-def MaxImplementedVL (_ : Unit) : Int :=
-  MAX_VL
-
-
 def _set_ZCR_EL1_Type_LEN (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 4)) : SailM Unit := do
   let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
   writeRegRef r_ref (_update_ZCR_EL1_Type_LEN r v)
@@ -832,6 +785,61 @@ def _set_CPACR_EL1_Type_FPEN (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 2)
 def _set_CPTR_EL2_Type_FPEN (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 2)) : SailM Unit := do
   let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
   writeRegRef r_ref (_update_CPTR_EL2_Type_FPEN r v)
+
+
+def _set_CPACR_EL1_Type_SMEN (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 2)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_CPACR_EL1_Type_SMEN r v)
+
+
+def _set_CPTR_EL2_Type_SMEN (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 2)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_CPTR_EL2_Type_SMEN r v)
+
+
+def _set_CPACR_EL1_Type_TTA (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_CPACR_EL1_Type_TTA r v)
+
+
+def _set_CPTR_EL3_Type_TTA (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_CPTR_EL3_Type_TTA r v)
+
+
+def _set_HCPTR_Type_TTA (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
+  writeRegRef r_ref (_update_HCPTR_Type_TTA r v)
+
+
+def _set_CPACR_EL1_Type_ZEN (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 2)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_CPACR_EL1_Type_ZEN r v)
+
+
+def _set_CPTR_EL2_Type_ZEN (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 2)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_CPTR_EL2_Type_ZEN r v)
+
+
+def _set_CPTR_EL2_Type_TAM (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_CPTR_EL2_Type_TAM r v)
+
+
+def _set_CPTR_EL3_Type_TAM (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_CPTR_EL3_Type_TAM r v)
+
+
+def _set_HCPTR_Type_TAM (r_ref : (RegisterRef (BitVec 32))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 32) )
+  writeRegRef r_ref (_update_HCPTR_Type_TAM r v)
+
+
+def _set_CPTR_EL2_Type_TCPAC (r_ref : (RegisterRef (BitVec 64))) (v : (BitVec 1)) : SailM Unit := do
+  let r ← (( do (reg_deref r_ref) ) : SailM (BitVec 64) )
+  writeRegRef r_ref (_update_CPTR_EL2_Type_TCPAC r v)
 
 
 end ArmFull.Functions

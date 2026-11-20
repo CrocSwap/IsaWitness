@@ -1,4 +1,4 @@
-import Sail
+module public import Sail public meta import ArmCert.BuildTools.ExposedRepr set_option backward.proofsInPublic true @[expose] public section
 open PreSail
 
 set_option maxHeartbeats 1_000_000_000

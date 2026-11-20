@@ -1,5 +1,5 @@
-import Sail
-import ArmFull.Defs
+module public import Sail
+public import ArmFull.Defs set_option backward.proofsInPublic true @[expose] public section
 
 /-!
 Fork (`--lean-abstract-reals`, Doug B3): Sail `real` is an abstract carrier. Every generated

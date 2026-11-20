@@ -1,8 +1,8 @@
-import Sail
-import ArmFull.Defs
-import ArmFull.SpecializationV1
-import ArmFull.AbstractReal
-import ArmFull.ArmExtrasFork
+module public import Sail
+public import ArmFull.Defs
+public import ArmFull.SpecializationV1
+public import ArmFull.AbstractReal
+public import ArmFull.ArmExtrasFork set_option backward.proofsInPublic true @[expose] public section
 
 set_option maxHeartbeats 1_000_000_000
 set_option maxRecDepth 1_000_000
@@ -103,6 +103,10 @@ open Barrier
 open ArchVersion
 open AccessType
 open ATAccess
+
+def Mk_MAIRType (v : (BitVec 64)) : (BitVec 64) :=
+  v
+
 
 def _get_MAIRType_Attr0 (v : (BitVec 64)) : (BitVec 8) :=
   (Sail.BitVec.extractLsb v 7 0)
@@ -897,10 +901,6 @@ def _get_POR_EL3_Type_Perm1 (v : (BitVec 64)) : (BitVec 4) :=
 
 
 def _get_S1PORType_Perm1 (v : (BitVec 64)) : (BitVec 4) :=
-  (Sail.BitVec.extractLsb v 7 4)
-
-
-def _get_S2PIRType_Perm1 (v : (BitVec 64)) : (BitVec 4) :=
   (Sail.BitVec.extractLsb v 7 4)
 
 
