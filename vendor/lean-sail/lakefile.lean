@@ -2,7 +2,7 @@ import Lake
 open Lake DSL
 
 package «lean-sail» where
-  moreLeanArgs := #["-j1", "-M12288", "-DElab.async=false"]
+  moreLeanArgs := #["-j1", "-M12288"]
 
 require «lean-buildtools» from "../lean-buildtools"
 

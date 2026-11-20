@@ -2,7 +2,7 @@ import Lake
 open Lake DSL
 
 package ArmFull where
-  moreLeanArgs := #["-j1", "-M12288", "-DElab.async=false", "-EhasSorry", "--tstack=400000"]
+  moreLeanArgs := #["-j1", "-M12288", "-EhasSorry", "--tstack=400000"]
 
 require «lean-buildtools» from "../vendor/lean-buildtools"
 require «lean-sail» from "../vendor/lean-sail"

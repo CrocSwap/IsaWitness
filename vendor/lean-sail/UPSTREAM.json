@@ -85,7 +85,7 @@
   "configuration": [
     {
       "path": "lakefile.lean",
-      "sha256": "7376d5793fdea37feb37228f3262d6a07586ea513ad8f5f1ad4a0fc8adb44e7c"
+      "sha256": "592e6d4f5dc1365710e1bb5258e41cda16a4d8059b871e2322fca215e903f289"
     },
     {
       "path": "lean-toolchain",
@@ -146,5 +146,5 @@
     "gate.json": "6da8dd8e412c2cb01688180f4ca698030648433f3d78fe13d5c232bb17089ad1",
     "lakefile.lean": "7376d5793fdea37feb37228f3262d6a07586ea513ad8f5f1ad4a0fc8adb44e7c"
   },
-  "edits_sha256": "4b67ccb90f27d6e8adf6ab24917245da943acbe663058372e2e3295ce952337c"
+  "edits_sha256": "5e676d95081935a0bef7f76203aee0a8948687d9d2e214d65591826e6bfaca27"
 }
